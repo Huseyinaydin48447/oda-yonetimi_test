@@ -12,6 +12,14 @@
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
   }
+  .wa-btn{
+  color:#25D366;
+  border-color:#b7f0c8;
+  background:#eafaf0;
+}
+.wa-btn:active{
+  background:#dff5e7;
+}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
   .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg)}
@@ -483,6 +491,23 @@ const LB = {
   isPinching:false,pinchStartDist:0,pinchStartScale:1,pinchMidX:0,pinchMidY:0,pinchStartTX:0,pinchStartTY:0,
   lastTapTime:0,lastTapX:0,lastTapY:0,
 };
+
+function goWhatsApp(el){
+  // örnek: numarayı sabit yazabilirsin
+  const phone = "905XXXXXXXXX";
+
+  // istersen entry içinden veri de çekebilirsin
+  const entryEl = el.closest('.entry-card');
+
+  // örnek mesaj
+  const msg = encodeURIComponent("Merhaba, fotoğraf ile ilgili bilgi almak istiyorum");
+
+  const url = `https://wa.me/${phone}?text=${msg}`;
+
+  window.open(url, '_blank');
+}
+
+  
 const lbWrap=()=>document.getElementById('lb-img-wrap');
 const lbImg=()=>document.getElementById('lb-img');
 function lbApplyTransform(animate){const img=lbImg();if(animate){img.classList.remove('no-transition');}else{img.classList.add('no-transition');}img.style.transform=`translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;document.getElementById('lb-zoom-badge').textContent=Math.round(LB.scale*100)+'%';}
@@ -682,6 +707,7 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
       <div class="entry-footer">
         <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
         <div class="entry-footer-actions">
+        <button class="link-btn wa-btn" onclick="goWhatsApp(this)">WhatsApp</button>
           <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             Link
