@@ -492,21 +492,9 @@ const LB = {
   lastTapTime:0,lastTapX:0,lastTapY:0,
 };
 
-function goWhatsApp(el){
-  // örnek: numarayı sabit yazabilirsin
-  const phone = "905XXXXXXXXX";
-
-  // istersen entry içinden veri de çekebilirsin
-  const entryEl = el.closest('.entry-card');
-
-  // örnek mesaj
-  const msg = encodeURIComponent("Merhaba, fotoğraf ile ilgili bilgi almak istiyorum");
-
-  const url = `https://wa.me/${phone}?text=${msg}`;
-
-  window.open(url, '_blank');
+function goWhatsApp(){
+  window.open("https://web.whatsapp.com/", "_blank");
 }
-
   
 const lbWrap=()=>document.getElementById('lb-img-wrap');
 const lbImg=()=>document.getElementById('lb-img');
