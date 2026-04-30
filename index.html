@@ -893,29 +893,37 @@ async function doSearch(val,silent=false){
       el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg><strong>${val}</strong> bulunamadı<small>Ekle sekmesinden yeni giriş ekleyebilirsiniz</small></div>`;
       return;
     }
+    
+    // --- FOTOĞRAFI OLMAYAN KAYITLARI FİLTRELE ---
+    const filteredData = data.filter(entry => entry.photo_urls && entry.photo_urls.length > 0);
+    
+    if(!filteredData.length){
+      openEntries.clear();
+      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg><strong>${val}</strong> için fotoğraflı kayıt bulunamadı<small>Fotoğrafsız kayıtlar gösterilmez</small></div>`;
+      return;
+    }
+    
     const isE=mode==='elektrik';
-    const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    const totalP=filteredData.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
     entryImages={};
     entryData={};
     
-    // Aynı tarihteki kayıtları grupla (giriş/çıkış aynı tarihte yan yana dursun)
+    // Aynı tarihteki kayıtları grupla
     const groupedByDate = {};
-    data.forEach(entry => {
+    filteredData.forEach(entry => {
       const dateKey = entry.checkin_date;
       if(!groupedByDate[dateKey]) groupedByDate[dateKey] = [];
       groupedByDate[dateKey].push(entry);
     });
     
-    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>
+    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${filteredData.length} giriş · ${totalP} fotoğraf</span></div></div>
                 <div class="export-bar"><button id="export-zip-${val}" class="export-btn zip" onclick="exportZIP('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>ZIP İndir</button><button id="export-pdf-${val}" class="export-btn pdf" onclick="exportPDF('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>PDF Raporu</button></div>`;
     
-    // Tarihlere göre grid halinde göster
     const sortedDates = Object.keys(groupedByDate).sort((a,b) => new Date(b) - new Date(a));
     let globalIdx = 0;
     
     for(const dateKey of sortedDates) {
       const entriesOnDate = groupedByDate[dateKey];
-      // Eğer aynı tarihte birden fazla kayıt varsa (giriş+çıkış) yan yana grid yap
       if(entriesOnDate.length > 1) {
         html += `<div style="margin-bottom:14px">
                    <div class="date-badge${isE?' e':''}" style="display:inline-flex; margin-bottom:10px">
@@ -928,7 +936,6 @@ async function doSearch(val,silent=false){
         }
         html += `</div></div>`;
       } else {
-        // Tek kayıt varsa normal göster
         html += buildEntryCard(entriesOnDate[0], globalIdx++, isE, false);
       }
     }
