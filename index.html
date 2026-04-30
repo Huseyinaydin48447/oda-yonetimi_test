@@ -800,12 +800,13 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
   const imgs=urls.map((u,i)=>`
   <div class="img-thumb" onclick="openLb(${globalIdx},${i})">
     <img src="${u}" loading="lazy"/>
-    
-        ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
-
+    ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
-  const isOpen=openEntries.has(globalIdx);
+  
+  // Giriş kartları varsayılan olarak AÇIK, çıkış kartları KAPALI
+  const isOpen = (entry.type === 'giris') ? true : openEntries.has(globalIdx);
+  
   const roomNumBadge=showRoomNum
     ?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`
     :'';
@@ -829,13 +830,11 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
       <div class="entry-footer">
         <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
         <div class="entry-footer-actions">
-        
-        <button class="link-btn wa-btn" onclick="goWhatsApp(this)">WhatsApp</button>
+          <button class="link-btn wa-btn" onclick="goWhatsApp(this)">WhatsApp</button>
           <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             Link
           </button>
-          
           <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${globalIdx})">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             Duzenle
