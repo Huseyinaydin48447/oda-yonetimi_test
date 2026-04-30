@@ -813,12 +813,12 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
   return `<div class="entry-card">
     <div class="entry-head" data-ei="${globalIdx}" onclick="toggleEntry(this)">
       ${roomNumBadge}
-    <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
+<div class="date-badge${isE?' e':''}" style="flex-shrink:0">
   ${entry.type === 'cikis' ? 
     '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12m0 0l-3-3m3 3l3-3M5 21h14"/></svg>' :
     '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V9m0 0l-3 3m3-3l3 3M5 3h14"/></svg>'
   }
-  ${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}
+  ${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_date)}
 </div>
       <div class="entry-meta">
         ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
@@ -1079,7 +1079,7 @@ async function showReadonlyEntry(oda,mod,tarih){const label=mod==='elektrik'?'Sa
     '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12m0 0l-3-3m3 3l3-3M5 21h14"/></svg>' :
     '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V9m0 0l-3 3m3-3l3 3M5 3h14"/></svg>'
   }
-  ${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}
+${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_date)}
 </div>
 </div><div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}</div></div>`;});el.innerHTML=html;}catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}}
 
