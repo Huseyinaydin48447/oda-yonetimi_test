@@ -20,6 +20,16 @@
 .wa-btn:active{
   background:#dff5e7;
 }
+
+.entries-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.entry-card {
+  margin-bottom: 0;
+}
+  
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
   .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg)}
@@ -865,8 +875,69 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
   </div>`;
 }
 
-async function doSearch(val,silent=false){val=String(val).trim();lastVal=val;const el=q('sresult');if(!val){openEntries.clear();el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Numara girin<small>Tüm girişler tarihe göre sıralı gelir</small></div>`;return;}if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;try{const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);const data=await res.json();if(!data.length){openEntries.clear();el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg><strong>${val}</strong> bulunamadı<small>Ekle sekmesinden yeni giriş ekleyebilirsiniz</small></div>`;return;}const isE=mode==='elektrik';const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);entryImages={};entryData={};let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div><div class="export-bar"><button id="export-zip-${val}" class="export-btn zip" onclick="exportZIP('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>ZIP İndir</button><button id="export-pdf-${val}" class="export-btn pdf" onclick="exportPDF('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>PDF Raporu</button></div>`;data.forEach((entry,ei)=>{html+=buildEntryCard(entry,ei,isE,false);});el.innerHTML=html;}catch(e){if(!silent)el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;}}
-
+async function doSearch(val,silent=false){
+  val=String(val).trim();
+  lastVal=val;
+  const el=q('sresult');
+  if(!val){
+    openEntries.clear();
+    el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Numara girin<small>Tüm girişler tarihe göre sıralı gelir</small></div>`;
+    return;
+  }
+  if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;
+  try{
+    const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);
+    const data=await res.json();
+    if(!data.length){
+      openEntries.clear();
+      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg><strong>${val}</strong> bulunamadı<small>Ekle sekmesinden yeni giriş ekleyebilirsiniz</small></div>`;
+      return;
+    }
+    const isE=mode==='elektrik';
+    const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    entryImages={};
+    entryData={};
+    
+    // Aynı tarihteki kayıtları grupla (giriş/çıkış aynı tarihte yan yana dursun)
+    const groupedByDate = {};
+    data.forEach(entry => {
+      const dateKey = entry.checkin_date;
+      if(!groupedByDate[dateKey]) groupedByDate[dateKey] = [];
+      groupedByDate[dateKey].push(entry);
+    });
+    
+    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>
+                <div class="export-bar"><button id="export-zip-${val}" class="export-btn zip" onclick="exportZIP('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>ZIP İndir</button><button id="export-pdf-${val}" class="export-btn pdf" onclick="exportPDF('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>PDF Raporu</button></div>`;
+    
+    // Tarihlere göre grid halinde göster
+    const sortedDates = Object.keys(groupedByDate).sort((a,b) => new Date(b) - new Date(a));
+    let globalIdx = 0;
+    
+    for(const dateKey of sortedDates) {
+      const entriesOnDate = groupedByDate[dateKey];
+      // Eğer aynı tarihte birden fazla kayıt varsa (giriş+çıkış) yan yana grid yap
+      if(entriesOnDate.length > 1) {
+        html += `<div style="margin-bottom:14px">
+                   <div class="date-badge${isE?' e':''}" style="display:inline-flex; margin-bottom:10px">
+                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                     ${fmtDate(dateKey)}
+                   </div>
+                   <div class="entries-grid">`;
+        for(const entry of entriesOnDate) {
+          html += buildEntryCard(entry, globalIdx++, isE, false);
+        }
+        html += `</div></div>`;
+      } else {
+        // Tek kayıt varsa normal göster
+        html += buildEntryCard(entriesOnDate[0], globalIdx++, isE, false);
+      }
+    }
+    
+    el.innerHTML=html;
+  } catch(e){
+    if(!silent)el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;
+  }
+}
 async function doDateSearch(silent=false){const from=q('d-from').value;const to=q('d-to').value;const el=q('sresult');if(!from||!to){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Başlangıç ve bitiş tarihi seçin<small>Seçilen aralıkta giriş yapan odalar listelenir</small></div>`;return;}if(from>to){el.innerHTML=`<div class="empty">Başlangıç tarihi bitiş tarihinden büyük olamaz.</div>`;return;}if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;try{const res=await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc,room_no.asc`);const data=await res.json();if(!data.length){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarih aralığında kayıt yok<small>${fmtDate(from)} – ${fmtDate(to)}</small></div>`;return;}const isE=mode==='elektrik';const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const grouped={};data.forEach(e=>{if(!grouped[e.room_no])grouped[e.room_no]=[];grouped[e.room_no].push(e);});const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));entryImages={};entryData={};let imgIdx=0;let html=`<div class="room-header" style="margin-bottom:12px"><div class="room-num${isE?' e':''}" style="font-size:16px;padding:6px 10px">${rooms.length} oda</div><div class="room-summary"><strong>${fmtDate(from)} – ${fmtDate(to)}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>`;rooms.forEach(rno=>{const entries=grouped[rno];entries.forEach(entry=>{html+=buildEntryCard(entry,imgIdx++,isE,true);});});el.innerHTML=html;}catch(e){if(!silent)el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;}}
 
 function toggleEntry(head){const ei=parseInt(head.dataset.ei);const body=head.nextElementSibling;const chev=head.querySelector('.chevron');const isOpen=body.classList.contains('open');if(isOpen){body.classList.remove('open');chev.classList.remove('open');openEntries.delete(ei);}else{body.classList.add('open');chev.classList.add('open');openEntries.add(ei);}}
