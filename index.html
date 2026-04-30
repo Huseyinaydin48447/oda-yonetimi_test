@@ -814,13 +814,12 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
   
- const meterHtml = (isE && entry.meter_values) ? 
+ const meterHtml = (isE && entry.meter_values && (entry.meter_values.l1 > 0 || entry.meter_values.l2 > 0 || entry.meter_values.l3 > 0)) ? 
   `<div style="display:flex; gap:6px; margin-top:6px; font-size:12px; font-family:'DM Mono',monospace;">
-    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L1: ${(entry.meter_values.l1/1000).toFixed(2)}</span>
-    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L2: ${(entry.meter_values.l2/1000).toFixed(2)}</span>
-    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L3: ${(entry.meter_values.l3/1000).toFixed(2)}</span>
+    <span style="background:${entry.type === 'cikis' ? 'var(--danger-light)' : 'var(--accent-light)'}; color:${entry.type === 'cikis' ? 'var(--danger)' : 'var(--accent)'}; padding:3px 8px; border-radius:6px; font-weight:500;">L1: ${((entry.meter_values.l1 || 0)/1000).toFixed(2)}</span>
+    <span style="background:${entry.type === 'cikis' ? 'var(--danger-light)' : 'var(--accent-light)'}; color:${entry.type === 'cikis' ? 'var(--danger)' : 'var(--accent)'}; padding:3px 8px; border-radius:6px; font-weight:500;">L2: ${((entry.meter_values.l2 || 0)/1000).toFixed(2)}</span>
+    <span style="background:${entry.type === 'cikis' ? 'var(--danger-light)' : 'var(--accent-light)'}; color:${entry.type === 'cikis' ? 'var(--danger)' : 'var(--accent)'}; padding:3px 8px; border-radius:6px; font-weight:500;">L3: ${((entry.meter_values.l3 || 0)/1000).toFixed(2)}</span>
   </div>` : '';
-
   const isOpen=openEntries.has(globalIdx);
   const roomNumBadge=showRoomNum
     ?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`
@@ -903,7 +902,7 @@ async function doSearch(val,silent=false){
   }
   if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;
   try{
-    const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);
+   const res=await api(`/rest/v1/entries?select=*&room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);
     const data=await res.json();
     if(!data.length){
       openEntries.clear();
