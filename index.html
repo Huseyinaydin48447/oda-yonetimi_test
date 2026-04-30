@@ -908,26 +908,19 @@ async function saveEntry(){
       progressBar.style.width = Math.round((i+1)/pending.length*100)+'%';
     }
 
-    // --- AYNI ODA + AYNI TARİH kontrol et (type dikkate alınmaz) ---
-    const existingRes = await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}&limit=1`);
+    // --- AYNI ODA + AYNI TARİH + AYNI TYPE kontrol et ---
+    let filter = `room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}`;
+    if (mode === 'elektrik' && type) {
+      filter += `&type=eq.${encodeURIComponent(type)}`;
+    }
+    
+    const existingRes = await api(`/rest/v1/entries?${filter}&limit=1`);
     const existingData = await existingRes.json();
 
     if (existingData.length > 0) {
-      // Aynı oda ve aynı tarih varsa → FOTOĞRAFLARI BİRLEŞTİR
+      // Aynı oda + aynı tarih + aynı type varsa → FOTOĞRAFLARI BİRLEŞTİR
       const existing = existingData[0];
       const mergedUrls = [...(existing.photo_urls || []), ...urls];
-      
-      // type bilgisi: eğer mevcut kayıtta type yoksa veya boşsa yeni type'ı ekle
-      // Amaç: hem giriş hem çıkış fotoğrafları aynı kartta gösterilsin
-      let existingType = existing.type;
-      if (mode === 'elektrik') {
-        // Eğer farklı type'lar varsa, "karışık" olarak işaretle veya boş bırak
-        if (existingType && existingType !== type) {
-          existingType = 'karışık'; // veya null da yapabilirsiniz
-        } else if (!existingType) {
-          existingType = type;
-        }
-      }
       
       await api(`/rest/v1/entries?id=eq.${existing.id}`, {
         method: 'PATCH',
@@ -935,12 +928,12 @@ async function saveEntry(){
           photo_urls: mergedUrls,
           note: note || existing.note,
           category: selTags.join(',') || existing.category,
-          type: existingType  // type'ı koru veya güncelle
+          type: type  // type aynı kalır
         })
       });
       showToast('Fotoğraflar mevcut kayda eklendi!','success');
     } else {
-      // Aynı oda ve aynı tarih yoksa → YENİ KAYIT OLUŞTUR
+      // Aynı oda + aynı tarih + farklı type veya hiç kayıt yoksa → YENİ KAYIT OLUŞTUR
       await api('/rest/v1/entries', {
         method: 'POST',
         body: JSON.stringify({
