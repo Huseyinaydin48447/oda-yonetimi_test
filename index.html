@@ -814,12 +814,13 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
   
-const meterHtml = (isE && entry.meter_values) ? 
-  `<div style="display:flex; gap:6px; margin-top:8px; font-size:12px; font-family:'DM Mono',monospace;">
-    <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span>
-    <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span>
-    <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span>
-  </div>` : '';
+  // Sayaç Kutucukları (L1, L2, L3)
+  const meterHtml = (isE && entry.meter_values) ? 
+    `<div style="display:flex; gap:6px; margin-top:8px; font-size:12px; font-family:'DM Mono',monospace;">
+      <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span>
+      <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span>
+      <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span>
+    </div>` : '';
 
   const isOpen=openEntries.has(globalIdx);
   const roomNumBadge=showRoomNum
@@ -830,70 +831,27 @@ const meterHtml = (isE && entry.meter_values) ?
     <div class="entry-head" data-ei="${globalIdx}" onclick="toggleEntry(this)">
       ${roomNumBadge}
       <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
-        ${entry.type === 'cikis' ? 
-          '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12m0 0l-3-3m3 3l3-3M5 21h14"/></svg>' :
-          '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V9m0 0l-3 3m3-3l3 3M5 3h14"/></svg>'
-        }
         ${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_date)}
       </div>
-    <div class="entry-meta">
-  ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
-  ${entry.note?`<div class="nt">${entry.note}</div>`:''}
-</div>
-<span class="entry-count">${urls.length} foto</span>
-${meterHtml}
+      <div class="entry-meta">
+        ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
+        ${entry.note?`<div class="nt">${entry.note}</div>`:''}
+      </div>
+      <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
     <div class="entry-body${isOpen?' open':''}">
       ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotograf yok</div>'}
-      <div class="entry-footer">
-        <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
-        <div class="entry-footer">
-  <div style="display:flex; flex-direction:column;">
-    <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
-    ${meterHtml} 
-  </div>
-  <div class="entry-footer-actions">
-     
+      <div class="entry-footer" style="display:block;">
+        <div style="display:flex; flex-direction:column; margin-bottom:10px;">
+          <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
+          ${meterHtml}
+        </div>
         <div class="entry-footer-actions">
           <button class="link-btn wa-btn" onclick="goWhatsApp(this)">WhatsApp</button>
-          <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            Link
-          </button>
-          <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${globalIdx})">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Duzenle
-          </button>
-          <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${globalIdx})">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-            Sil
-          </button>
-        </div>
-      </div>
-      <div class="edit-panel" id="edit-panel-${entry.id}" style="display:none">
-        <div class="field">
-          <span class="label">Tarih</span>
-          <input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date||''}"/>
-        </div>
-        <div class="field">
-          <span class="label">Kategori</span>
-          <div class="tags-row" id="edit-tags-${entry.id}"></div>
-        </div>
-        <div class="field">
-          <span class="label">Not</span>
-          <textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea>
-        </div>
-        <div class="field">
-          <span class="label">Yeni fotograf ekle</span>
-          <input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple style="font-size:13px;padding:8px 10px;background:var(--surface2)"/>
-        </div>
-        <div class="edit-panel-actions">
-          <button class="btn" onclick="q('edit-panel-${entry.id}').style.display='none'">Iptal</button>
-          <button class="btn btn-primary" id="edit-save-${entry.id}" onclick="saveEdit('${entry.id}',${globalIdx})" style="flex:2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            Kaydet
-          </button>
+          <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">Link</button>
+          <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${globalIdx})">Duzenle</button>
+          <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${globalIdx})">Sil</button>
         </div>
       </div>
     </div>
@@ -905,34 +863,20 @@ async function doSearch(val,silent=false){
   const el=q('sresult');
   if(!val){
     openEntries.clear();
-    el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Numara girin<small>Tüm girişler tarihe göre sıralı gelir</small></div>`;
+    el.innerHTML=`<div class="empty">Numara girin</div>`;
     return;
   }
-  if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;
+  if(!silent) el.innerHTML=`<div class="empty">Aranıyor...</div>`;
   try{
     const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);
     const data=await res.json();
-    if(!data.length){
-      openEntries.clear();
-      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg><strong>${val}</strong> bulunamadı<small>Ekle sekmesinden yeni giriş ekleyebilirsiniz</small></div>`;
-      return;
-    }
+    if(!data.length){ el.innerHTML=`<div class="empty">Kayıt bulunamadı</div>`; return; }
     
-    // --- FOTOĞRAFI OLMAYAN KAYITLARI FİLTRELE ---
     const filteredData = data.filter(entry => entry.photo_urls && entry.photo_urls.length > 0);
-    
-    if(!filteredData.length){
-      openEntries.clear();
-      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg><strong>${val}</strong> için fotoğraflı kayıt bulunamadı<small>Fotoğrafsız kayıtlar gösterilmez</small></div>`;
-      return;
-    }
-    
     const isE=mode==='elektrik';
     const totalP=filteredData.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    entryImages={};
-    entryData={};
     
-    // Aynı tarihteki kayıtları grupla
+    // Tarihe göre grupla
     const groupedByDate = {};
     filteredData.forEach(entry => {
       const dateKey = entry.checkin_date;
@@ -940,33 +884,33 @@ async function doSearch(val,silent=false){
       groupedByDate[dateKey].push(entry);
     });
     
-    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${filteredData.length} giriş · ${totalP} fotoğraf</span></div></div>
-                <div class="export-bar"><button id="export-zip-${val}" class="export-btn zip" onclick="exportZIP('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>ZIP İndir</button><button id="export-pdf-${val}" class="export-btn pdf" onclick="exportPDF('${val}', Object.values(entryData))"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>PDF Raporu</button></div>`;
+    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${filteredData.length} giriş · ${totalP} fotoğraf</span></div></div>`;
     
     const sortedDates = Object.keys(groupedByDate).sort((a,b) => new Date(b) - new Date(a));
     let globalIdx = 0;
     
     for(const dateKey of sortedDates) {
       const entriesOnDate = groupedByDate[dateKey];
+      // Tarih Başlığı
+      html += `<div style="margin-top:15px; margin-bottom:8px; font-size:13px; font-weight:600; color:var(--muted); display:flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                ${fmtDate(dateKey)}
+               </div>`;
+
+      // Eğer o tarihte birden fazla kayıt (giriş-çıkış) varsa yan yana koy
       if(entriesOnDate.length > 1) {
-        html += `<div style="margin-bottom:14px">
-                   <div class="date-badge${isE?' e':''}" style="display:inline-flex; margin-bottom:10px">
-                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                     ${fmtDate(dateKey)}
-                   </div>
-                   <div class="entries-grid">`;
+        html += `<div class="entries-grid">`;
         for(const entry of entriesOnDate) {
           html += buildEntryCard(entry, globalIdx++, isE, false);
         }
-        html += `</div></div>`;
+        html += `</div>`;
       } else {
         html += buildEntryCard(entriesOnDate[0], globalIdx++, isE, false);
       }
     }
-    
     el.innerHTML=html;
   } catch(e){
-    if(!silent)el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;
+    if(!silent) el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;
   }
 }
 async function doDateSearch(silent=false){const from=q('d-from').value;const to=q('d-to').value;const el=q('sresult');if(!from||!to){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Başlangıç ve bitiş tarihi seçin<small>Seçilen aralıkta giriş yapan odalar listelenir</small></div>`;return;}if(from>to){el.innerHTML=`<div class="empty">Başlangıç tarihi bitiş tarihinden büyük olamaz.</div>`;return;}if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;try{const res=await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc,room_no.asc`);const data=await res.json();if(!data.length){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarih aralığında kayıt yok<small>${fmtDate(from)} – ${fmtDate(to)}</small></div>`;return;}const isE=mode==='elektrik';const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const grouped={};data.forEach(e=>{if(!grouped[e.room_no])grouped[e.room_no]=[];grouped[e.room_no].push(e);});const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));entryImages={};entryData={};let imgIdx=0;let html=`<div class="room-header" style="margin-bottom:12px"><div class="room-num${isE?' e':''}" style="font-size:16px;padding:6px 10px">${rooms.length} oda</div><div class="room-summary"><strong>${fmtDate(from)} – ${fmtDate(to)}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>`;rooms.forEach(rno=>{const entries=grouped[rno];entries.forEach(entry=>{html+=buildEntryCard(entry,imgIdx++,isE,true);});});el.innerHTML=html;}catch(e){if(!silent)el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;}}
