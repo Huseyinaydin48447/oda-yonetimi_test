@@ -814,13 +814,12 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
   
-  // Sayaç değerleri varsa göster
-  const meterHtml = (isE && entry.meter_values) ? 
-    `<div style="display:flex; gap:8px; margin-top:4px; font-size:11px; font-family:'DM Mono',monospace;">
-      <span style="background:var(--surface2); padding:2px 6px; border-radius:4px;">L1: ${entry.meter_values.l1 || '000'}</span>
-      <span style="background:var(--surface2); padding:2px 6px; border-radius:4px;">L2: ${entry.meter_values.l2 || '000'}</span>
-      <span style="background:var(--surface2); padding:2px 6px; border-radius:4px;">L3: ${entry.meter_values.l3 || '000'}</span>
-    </div>` : '';
+ const meterHtml = (isE && entry.meter_values) ? 
+  `<div style="display:flex; gap:6px; margin-top:6px; font-size:12px; font-family:'DM Mono',monospace;">
+    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L1: ${(entry.meter_values.l1/1000).toFixed(2)}</span>
+    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L2: ${(entry.meter_values.l2/1000).toFixed(2)}</span>
+    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L3: ${(entry.meter_values.l3/1000).toFixed(2)}</span>
+  </div>` : '';
 
   const isOpen=openEntries.has(globalIdx);
   const roomNumBadge=showRoomNum
@@ -840,9 +839,9 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
       <div class="entry-meta">
         ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
         ${entry.note?`<div class="nt">${entry.note}</div>`:''}
-        ${meterHtml}
       </div>
       <span class="entry-count">${urls.length} foto</span>
+      ${meterHtml}
       <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
     <div class="entry-body${isOpen?' open':''}">
