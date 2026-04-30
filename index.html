@@ -699,7 +699,7 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
   <div class="img-thumb" onclick="openLb(${globalIdx},${i})">
     <img src="${u}" loading="lazy"/>
     
-    ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
+     <div class="img-label giris">TEST</div>
 
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
