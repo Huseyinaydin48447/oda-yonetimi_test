@@ -900,6 +900,7 @@ async function saveEntry(){
   progressBar.style.width = '0%';
 
   try{
+    // Fotoğrafları yükle
     const urls = [];
     for(let i = 0; i < pending.length; i++){
       const u = await uploadImg(pending[i].file, roomNo);
@@ -907,19 +908,53 @@ async function saveEntry(){
       progressBar.style.width = Math.round((i+1)/pending.length*100)+'%';
     }
 
-    // --- YENİ KAYIT OLUŞTUR (ESKİYİ KONTROL ETME, BİRLEŞTİRME YOK) ---
-    await api('/rest/v1/entries', {
-      method: 'POST',
-      body: JSON.stringify({
-        room_no: roomNo,
-        mode: mode,
-        checkin_date: date,
-        category: selTags.join(','),
-        note: note,
-        photo_urls: urls,
-        type: type,       // giriş veya çıkış
-      })
-    });
+    // --- AYNI ODA + AYNI TARİH kontrol et (type dikkate alınmaz) ---
+    const existingRes = await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}&limit=1`);
+    const existingData = await existingRes.json();
+
+    if (existingData.length > 0) {
+      // Aynı oda ve aynı tarih varsa → FOTOĞRAFLARI BİRLEŞTİR
+      const existing = existingData[0];
+      const mergedUrls = [...(existing.photo_urls || []), ...urls];
+      
+      // type bilgisi: eğer mevcut kayıtta type yoksa veya boşsa yeni type'ı ekle
+      // Amaç: hem giriş hem çıkış fotoğrafları aynı kartta gösterilsin
+      let existingType = existing.type;
+      if (mode === 'elektrik') {
+        // Eğer farklı type'lar varsa, "karışık" olarak işaretle veya boş bırak
+        if (existingType && existingType !== type) {
+          existingType = 'karışık'; // veya null da yapabilirsiniz
+        } else if (!existingType) {
+          existingType = type;
+        }
+      }
+      
+      await api(`/rest/v1/entries?id=eq.${existing.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          photo_urls: mergedUrls,
+          note: note || existing.note,
+          category: selTags.join(',') || existing.category,
+          type: existingType  // type'ı koru veya güncelle
+        })
+      });
+      showToast('Fotoğraflar mevcut kayda eklendi!','success');
+    } else {
+      // Aynı oda ve aynı tarih yoksa → YENİ KAYIT OLUŞTUR
+      await api('/rest/v1/entries', {
+        method: 'POST',
+        body: JSON.stringify({
+          room_no: roomNo,
+          mode: mode,
+          checkin_date: date,
+          category: selTags.join(','),
+          note: note,
+          photo_urls: urls,
+          type: type,
+        })
+      });
+      showToast('Yeni kayıt oluşturuldu!','success');
+    }
 
     // Formu temizle
     pending = [];
@@ -930,9 +965,8 @@ async function saveEntry(){
     q('f-date').value = today();
     q('prev-row').innerHTML = '';
     q('compress-status').innerHTML = '';
-    showToast('Kaydedildi!','success');
 
-    // Arama sonuçlarını yenile (eğer aynı oda aranıyorsa)
+    // Arama sonuçlarını yenile
     const currentSearchVal = q('sinput')?.value.trim();
     if(currentSearchVal == roomNo) {
       openEntries.clear();
