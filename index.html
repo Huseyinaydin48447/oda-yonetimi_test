@@ -25,6 +25,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  align-items: start; 
 }
 .entry-card {
   margin-bottom: 0;
@@ -840,9 +841,9 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
       <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
-    <div class="entry-body${isOpen?' open':''}">
+    <div class="entry-body${isOpen ? ' open' : ''}"> <!-- 'open' kısmını isOpen kontrolüne bağladık -->
       ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotograf yok</div>'}
-      <div class="entry-footer" style="display:block;">
+      <div class="entry-footer">
         <div style="display:flex; flex-direction:column; margin-bottom:10px;">
           <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
           ${meterHtml}
