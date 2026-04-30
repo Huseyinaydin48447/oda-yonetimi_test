@@ -356,14 +356,14 @@
     <option value="cikis">Çıkış</option>
   </select>
 </div>
-    <div class="field" id="meter-values-field" style="display:none;">
+<div class="field" id="meter-values-field" style="display:none;">
   <span class="label">Sayaç Değerleri (L1, L2, L3)</span>
   <div style="display:flex; gap:8px;">
-    <input type="text" id="f-l1" placeholder="L1" maxlength="3" style="text-align:center" value="000">
-    <input type="text" id="f-l2" placeholder="L2" maxlength="3" style="text-align:center" value="000">
-    <input type="text" id="f-l3" placeholder="L3" maxlength="3" style="text-align:center" value="000">
+    <input type="number" step="0.01" id="f-l1" placeholder="L1" style="text-align:center" value="0.00">
+    <input type="number" step="0.01" id="f-l2" placeholder="L2" style="text-align:center" value="0.00">
+    <input type="number" step="0.01" id="f-l3" placeholder="L3" style="text-align:center" value="0.00">
   </div>
-  <div style="font-size:11px; color:var(--muted); margin-top:4px;">Format: 000 (üç haneli)</div>
+  <div style="font-size:11px; color:var(--muted); margin-top:4px;">Örnek: 0.14 veya 1.50</div>
 </div>
     <div class="field">
       <span class="label" id="f-room-label">Oda numarası *</span>
@@ -814,11 +814,11 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
   
- const meterHtml = (isE && entry.meter_values) ? 
-  `<div style="display:flex; gap:6px; margin-top:6px; font-size:12px; font-family:'DM Mono',monospace;">
-    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L1: ${(entry.meter_values.l1/1000).toFixed(2)}</span>
-    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L2: ${(entry.meter_values.l2/1000).toFixed(2)}</span>
-    <span style="background:var(--accent-light); color:var(--accent); padding:3px 8px; border-radius:6px; font-weight:500;">L3: ${(entry.meter_values.l3/1000).toFixed(2)}</span>
+const meterHtml = (isE && entry.meter_values) ? 
+  `<div style="display:flex; gap:6px; margin-top:8px; font-size:12px; font-family:'DM Mono',monospace;">
+    <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span>
+    <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span>
+    <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span>
   </div>` : '';
 
   const isOpen=openEntries.has(globalIdx);
@@ -848,6 +848,13 @@ ${meterHtml}
       ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotograf yok</div>'}
       <div class="entry-footer">
         <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
+        <div class="entry-footer">
+  <div style="display:flex; flex-direction:column;">
+    <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
+    ${meterHtml} 
+  </div>
+  <div class="entry-footer-actions">
+     ... (diğer butonlar)
         <div class="entry-footer-actions">
           <button class="link-btn wa-btn" onclick="goWhatsApp(this)">WhatsApp</button>
           <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">
@@ -984,12 +991,13 @@ async function saveEntry(){
   const note = q('f-note').value.trim();
 
    // Sayaç değerlerini al
+ // Sayaç değerlerini al (Ondalıklı sayı desteği için parseFloat kullanıyoruz)
   let meterValues = null;
   if (mode === 'elektrik') {
     meterValues = {
-      l1: q('f-l1').value.padStart(3,'0').slice(0,3),
-      l2: q('f-l2').value.padStart(3,'0').slice(0,3),
-      l3: q('f-l3').value.padStart(3,'0').slice(0,3)
+      l1: parseFloat(q('f-l1').value) || 0,
+      l2: parseFloat(q('f-l2').value) || 0,
+      l3: parseFloat(q('f-l3').value) || 0
     };
   }
   if(!roomNo){ showToast('Numara gerekli!','error'); return; }
@@ -1012,11 +1020,10 @@ async function saveEntry(){
       progressBar.style.width = Math.round((i+1)/pending.length*100)+'%';
     }
 
-    // --- AYNI ODA + AYNI TARİH + AYNI TYPE kontrol et ---
-    let filter = `room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}`;
-    if (mode === 'elektrik' && type) {
-      filter += `&type=eq.${encodeURIComponent(type)}`;
-    }
+   let filter = `room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}`;
+if (mode === 'elektrik' && type) {
+  filter += `&type=eq.${encodeURIComponent(type)}`;
+}
     
     const existingRes = await api(`/rest/v1/entries?${filter}&limit=1`);
     const existingData = await existingRes.json();
