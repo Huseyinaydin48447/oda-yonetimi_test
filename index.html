@@ -696,10 +696,13 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
   entryData[globalIdx]=entry;
   const cats=entry.category?entry.category.split(',').filter(Boolean):[];
   const imgs=urls.map((u,i)=>`
-    <div class="img-thumb" onclick="openLb(${globalIdx},${i})">
-      <img src="${u}" loading="lazy"/>
-      <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
-    </div>`).join('');
+  <div class="img-thumb" onclick="openLb(${globalIdx},${i})">
+    <img src="${u}" loading="lazy"/>
+    
+    ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
+
+    <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
+  </div>`).join('');
   const isOpen=openEntries.has(globalIdx);
   const roomNumBadge=showRoomNum
     ?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`
@@ -805,7 +808,7 @@ function showAccessError(){document.querySelector('.nav').style.display='none';d
 async function showReadonlyEntry(oda,mod,tarih){const label=mod==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;const el=q('sresult');el.innerHTML='<div class="empty">Yükleniyor...</div>';try{const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`);const data=await res.json();if(!data.length){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarihe ait kayıt bulunamadı</div>`;return;}const isE=mod==='elektrik';const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>`;data.forEach((entry,ei)=>{const urls=entry.photo_urls||[];entryImages[ei]=urls;const cats=entry.category?entry.category.split(',').filter(Boolean):[];const imgs = urls.map((u,i)=>`
   <div class="img-thumb" onclick="openLb(${ei},${i})">
     <img src="${u}" loading="lazy"/>
-    ${entry.type ? `<div class="img-label ${entry.type}">${entry.type}</div>` : ''}
+   ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
   </div>
 `).join('');html+=`<div class="entry-card"><div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)"><div class="date-badge${isE?' e':''}" style="flex-shrink:0"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${fmtDate(entry.checkin_date)}</div><div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}</div></div>`;});el.innerHTML=html;}catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}}
 
