@@ -804,8 +804,8 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
     <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
   </div>`).join('');
   
-  // Giriş kartları varsayılan olarak AÇIK, çıkış kartları KAPALI
   const isOpen = (entry.type === 'giris') ? true : openEntries.has(globalIdx);
+  
   
   const roomNumBadge=showRoomNum
     ?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`
