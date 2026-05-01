@@ -766,13 +766,25 @@ async function saveEdit(entryId, ei){
       }
     }
     
-    // Güncellenecek nesne
-    const updateBody = {
+  const updateBody = {
       note,
       checkin_date: date,
       category: tags,
       photo_urls: newUrls
     };
+    
+    if (mode === 'elektrik') {
+      const l1El = document.getElementById(`edit-l1-${entryId}`);
+      const l2El = document.getElementById(`edit-l2-${entryId}`);
+      const l3El = document.getElementById(`edit-l3-${entryId}`);
+      if (l1El && l2El && l3El) {
+        updateBody.meter_values = {
+          l1: parseFloat(l1El.value) || 0,
+          l2: parseFloat(l2El.value) || 0,
+          l3: parseFloat(l3El.value) || 0
+        };
+      }
+    }
     
     // Sayaç modundaysa type'ı da ekle
     if (mode === 'elektrik' && typeValue !== null) {
@@ -784,8 +796,9 @@ async function saveEdit(entryId, ei){
       body: JSON.stringify(updateBody)
     });
     if(!r.ok) throw new Error('Kayit basarisiz');
-    const updated = {...entry, note, checkin_date: date, category: tags, photo_urls: newUrls};
+   const updated = {...entry, note, checkin_date: date, category: tags, photo_urls: newUrls};
     if (mode === 'elektrik' && typeValue !== null) updated.type = typeValue;
+    if (updateBody.meter_values) updated.meter_values = updateBody.meter_values;
     entryData[ei] = updated;
     entryImages[ei] = newUrls;
     refreshCard(ei, updated);
@@ -869,6 +882,15 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
         <span class="label">Kategori</span>
         <div class="tags-row" id="edit-tags-${entry.id}"></div>
       </div>
+      ${isE ? `
+      <div class="field">
+        <span class="label">Sayaç Değerleri (L1, L2, L3)</span>
+        <div style="display:flex;gap:8px;">
+          <input type="number" step="0.01" id="edit-l1-${entry.id}" placeholder="L1" style="text-align:center" value="${entry.meter_values?.l1 ?? 0}">
+          <input type="number" step="0.01" id="edit-l2-${entry.id}" placeholder="L2" style="text-align:center" value="${entry.meter_values?.l2 ?? 0}">
+          <input type="number" step="0.01" id="edit-l3-${entry.id}" placeholder="L3" style="text-align:center" value="${entry.meter_values?.l3 ?? 0}">
+        </div>
+      </div>` : ''}
       <div class="field">
         <span class="label">Yeni fotoğraf ekle</span>
         <input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple/>
