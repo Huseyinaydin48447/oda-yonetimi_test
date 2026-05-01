@@ -853,10 +853,30 @@ function buildEntryCard(entry,globalIdx,isE,showRoomNum){
           <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">Link</button>
           <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${globalIdx})">Duzenle</button>
           <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${globalIdx})">Sil</button>
-        </div>
+ </div>
       </div>
     </div>
+    <div id="edit-panel-${entry.id}" style="display:none;padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2)">
+      <div class="field">
+        <span class="label">Tarih</span>
+        <input type="date" id="edit-date-${entry.id}"/>
+      </div>
+      <div class="field">
+        <span class="label">Not</span>
+        <textarea id="edit-note-${entry.id}" rows="2" placeholder="Not..."></textarea>
+      </div>
+      <div class="field">
+        <span class="label">Kategori</span>
+        <div class="tags-row" id="edit-tags-${entry.id}"></div>
+      </div>
+      <div class="field">
+        <span class="label">Yeni fotoğraf ekle</span>
+        <input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple/>
+      </div>
+      <button class="btn btn-primary" id="edit-save-${entry.id}" onclick="event.stopPropagation();saveEdit('${entry.id}',${globalIdx})">Kaydet</button>
+    </div>
   </div>`;
+}
 }
 async function doSearch(val,silent=false){
   val=String(val).trim();
