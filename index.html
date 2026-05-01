@@ -689,51 +689,13 @@ function openEditPanel(entryId, ei){
   if(!entry) return;
   const panel = document.getElementById(`edit-panel-${entryId}`);
   if(!panel) return;
+  
   if(panel.style.display === 'block'){
     panel.style.display = 'none';
     const card = panel.closest('.entry-card');
     if(card) card.querySelector('.img-scroll')?.classList.remove('edit-mode');
     return;
   }
-  
-  document.getElementById(`edit-note-${entryId}`).value = entry.note || '';
-  document.getElementById(`edit-date-${entryId}`).value = entry.checkin_date || '';
-  
-  const tagWrap = document.getElementById(`edit-tags-${entryId}`);
-  const cfg = MODES[mode];
-  const selCats = entry.category ? entry.category.split(',').filter(Boolean) : [];
-  tagWrap.innerHTML = cfg.tags.map(t => `<span class="tag${selCats.includes(t) ? ' on' : ''}" onclick="togTagEdit(this)">${t}</span>`).join('');
-  
-  // === SADECE SAYAÇ MODU İÇİN GİRİŞ/ÇIKIŞ SEÇİCİSİ EKLE ===
-  if (mode === 'elektrik') {
-    let typeSelect = document.getElementById(`edit-type-${entryId}`);
-    if (!typeSelect) {
-      const typeField = document.createElement('div');
-      typeField.className = 'field';
-      typeField.innerHTML = `
-        <span class="label">İşlem Türü</span>
-        <select id="edit-type-${entryId}">
-          <option value="giris" ${entry.type === 'giris' ? 'selected' : ''}>Giriş</option>
-          <option value="cikis" ${entry.type === 'cikis' ? 'selected' : ''}>Çıkış</option>
-        </select>
-      `;
-      // Tarih alanından sonra, kategori alanından önce ekle
-      const dateField = panel.querySelector('.field:first-child');
-      dateField.insertAdjacentElement('afterend', typeField);
-    } else {
-      typeSelect.value = entry.type || 'giris';
-    }
-  } else {
-    // Demirbaş moduysa varsa kaldır
-    const existingType = document.getElementById(`edit-type-${entryId}`);
-    if(existingType) existingType.closest('.field')?.remove();
-  }
-  // ================================================
-  
-  panel.style.display = 'block';
-  const card = panel.closest('.entry-card');
-  if(card) card.querySelector('.img-scroll')?.classList.add('edit-mode');
-}
 
 async function saveEdit(entryId, ei){
   const entry = entryData[ei];
@@ -742,56 +704,58 @@ async function saveEdit(entryId, ei){
   const tagWrap = document.getElementById(`edit-tags-${entryId}`);
   const tags = [...tagWrap.querySelectorAll('.tag.on')].map(t => t.textContent).join(',');
   
-  // === SAYAÇ MODU İÇİN TYPE DEĞERİNİ AL ===
-  let typeValue = null;
-  if (mode === 'elektrik') {
-    const typeSelect = document.getElementById(`edit-type-${entryId}`);
-    if (typeSelect) typeValue = typeSelect.value;
-  }
-  // =======================================
-  
   const saveBtn = document.getElementById(`edit-save-${entryId}`);
   const orig = saveBtn.innerHTML;
   saveBtn.innerHTML = '<span class="loader" style="border-top-color:#fff"></span> Kaydediliyor...';
   saveBtn.disabled = true;
-  try{
+
+  try {
+    // SAYAÇ VERİLERİNİ TOPLA
+    let updateBody = {
+      note: note,
+      checkin_date: date,
+      category: tags
+    };
+
+    if (mode === 'elektrik') {
+      const typeVal = document.getElementById(`edit-type-${entryId}`).value;
+      const l1 = parseFloat(document.getElementById(`edit-l1-${entryId}`).value) || 0;
+      const l2 = parseFloat(document.getElementById(`edit-l2-${entryId}`).value) || 0;
+      const l3 = parseFloat(document.getElementById(`edit-l3-${entryId}`).value) || 0;
+      
+      updateBody.type = typeVal;
+      updateBody.meter_values = { l1, l2, l3 };
+    }
+
+    // Fotoğrafları kontrol et
     const newPhotoInput = document.getElementById(`edit-photos-${entryId}`);
     let newUrls = [...(entry.photo_urls || [])];
     if(newPhotoInput && newPhotoInput.files.length){
-      const files = [...newPhotoInput.files];
-      for(const f of files){
+      for(const f of newPhotoInput.files){
         const {file: compressed} = await compressImage(f);
         const u = await uploadImg(compressed, entry.room_no);
         newUrls.push(u);
       }
     }
-    
-    // Güncellenecek nesne
-    const updateBody = {
-      note,
-      checkin_date: date,
-      category: tags,
-      photo_urls: newUrls
-    };
-    
-    // Sayaç modundaysa type'ı da ekle
-    if (mode === 'elektrik' && typeValue !== null) {
-      updateBody.type = typeValue;
-    }
-    
+    updateBody.photo_urls = newUrls;
+
+    // Veritabanını güncelle
     const r = await api(`/rest/v1/entries?id=eq.${entryId}`, {
       method: 'PATCH',
       body: JSON.stringify(updateBody)
     });
-    if(!r.ok) throw new Error('Kayit basarisiz');
-    const updated = {...entry, note, checkin_date: date, category: tags, photo_urls: newUrls};
-    if (mode === 'elektrik' && typeValue !== null) updated.type = typeValue;
+    
+    if(!r.ok) throw new Error('Güncelleme başarısız');
+
+    // Yerel veriyi güncelle ve arayüzü yenile
+    const updated = { ...entry, ...updateBody };
     entryData[ei] = updated;
     entryImages[ei] = newUrls;
+    
     refreshCard(ei, updated);
-    showToast('Guncellendi!','success');
-  }catch(e){
-    showToast('Hata: '+e.message,'error');
+    showToast('Başarıyla güncellendi!', 'success');
+  } catch(e) {
+    showToast('Hata: ' + e.message, 'error');
     saveBtn.innerHTML = orig;
     saveBtn.disabled = false;
   }
