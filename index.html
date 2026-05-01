@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Oda Yönetimi</title>
+  
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
   :root {
@@ -12,6 +13,9 @@
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
   }
+
+
+  
   .wa-btn{
   color:#25D366;
   border-color:#b7f0c8;
@@ -287,6 +291,20 @@
   .confirm-sheet p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px}
   .confirm-actions{display:flex;gap:8px}
   .confirm-actions .btn{flex:1;justify-content:center}
+
+
+  /* Sayaç Tablosu Özel Stilleri */
+.meter-table-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow-x: auto; margin-top:10px; }
+.meter-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
+.meter-table th { background: #f9f8f4; padding: 12px 10px; text-align: left; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+.meter-table td { padding: 12px 10px; border-bottom: 1px solid #f0f0eb; vertical-align: middle; }
+.badge-oda { background: var(--accent-light); color: var(--accent); padding: 4px 8px; border-radius: 6px; font-weight: 600; font-family: 'DM Mono', monospace; }
+.badge-oda.cikis { background: var(--amber-light); color: var(--amber); }
+.badge-kat { background: #f0f0eb; color: var(--muted); padding: 3px 8px; border-radius: 12px; font-size: 10px; }
+.status-cell { display: flex; align-items: center; gap: 5px; }
+.dot-s { width: 8px; height: 8px; border-radius: 50%; }
+.dot-s.giris { background: #1a5c3a; }
+.dot-s.cikis { background: #b45309; }
 </style>
 </head>
 <body>
@@ -309,7 +327,9 @@
   <div class="nav">
     <button class="nav-btn active" onclick="goTab(0)">Ara</button>
     <button class="nav-btn" onclick="goTab(1)">Ekle</button>
-    <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
+   <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
+<!-- Yeni eklenen buton -->
+<button class="nav-btn" id="nav-meter-list" style="display:none;" onclick="goTab(3)">Sayaç Listesi</button>
   </div>
 
   <!-- SEARCH TAB -->
@@ -414,6 +434,40 @@
   <div class="screen" id="s2">
     <div id="rlist"><div class="empty">Yükleniyor...</div></div>
   </div>
+  <!-- SAYAÇ LİSTESİ EKRANI (TAB 3) -->
+<div class="screen" id="s3">
+  <div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
+    <input type="text" id="m-search" placeholder="Oda, kat ara..." oninput="renderMeterTable()" style="margin-bottom:0">
+    <div style="display: flex; gap: 8px;">
+      <select id="m-floor-filter" onchange="renderMeterTable()" style="width:130px; padding:7px">
+        <option value="">Tüm katlar</option>
+      </select>
+      <div style="display: flex; background: var(--surface2); padding: 2px; border-radius: 8px; margin-left:auto; border:1px solid var(--border)">
+        <button class="t-btn active" id="btn-all" onclick="setMeterFilter('all', this)" style="border:none; background:none; padding:5px 10px; font-size:11px; cursor:pointer">Tümü</button>
+        <button class="t-btn" onclick="setMeterFilter('giris', this)" style="border:none; background:none; padding:5px 10px; font-size:11px; cursor:pointer">Giriş</button>
+        <button class="t-btn" onclick="setMeterFilter('cikis', this)" style="border:none; background:none; padding:5px 10px; font-size:11px; cursor:pointer">Çıkış</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="meter-table-card">
+    <table class="meter-table">
+      <thead>
+        <tr>
+          <th>Oda</th>
+          <th>Kat</th>
+          <th>Tarih</th>
+          <th>Tür</th>
+          <th>L1</th>
+          <th>L2</th>
+          <th>L3</th>
+          <th>Fark</th>
+        </tr>
+      </thead>
+      <tbody id="meter-body"></tbody>
+    </table>
+  </div>
+</div>
 
 </div>
 
@@ -528,6 +582,82 @@
 
 <!-- LIGHTBOX ZOOM MOTORU -->
 <script>
+  let mFilter = 'all';
+
+// 1. setMode fonksiyonunu güncelle (Butonu göstermek için)
+const originalSetMode = setMode;
+setMode = function(m) {
+    originalSetMode(m);
+    q('nav-meter-list').style.display = (m === 'elektrik') ? 'block' : 'none';
+    if(m === 'elektrik') {
+        const cfg = MODES['elektrik'];
+        q('m-floor-filter').innerHTML = '<option value="">Tüm katlar</option>' + cfg.tags.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+};
+
+// 2. Tabloyu çizme ve Fark hesaplama
+async function renderMeterTable() {
+    const body = q('meter-body');
+    body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px">Yükleniyor...</td></tr>';
+    
+    try {
+        const res = await api(`/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc`);
+        const data = await res.json();
+        
+        const search = q('m-search').value.toLowerCase();
+        const floor = q('m-floor-filter').value;
+
+        let filtered = data.filter(e => {
+            const mSearch = e.room_no.toString().includes(search) || (e.category && e.category.toLowerCase().includes(search));
+            const mFloor = floor === "" || e.category === floor;
+            const mType = mFilter === 'all' || e.type === mFilter;
+            return mSearch && mFloor && mType;
+          });
+
+        body.innerHTML = filtered.map(e => {
+            const l1 = e.meter_values?.l1 || 0;
+            const l2 = e.meter_values?.l2 || 0;
+            const l3 = e.meter_values?.l3 || 0;
+            
+            // FARK HESABI: Çıkış ise bir önceki girişi bul
+            let fark = "—";
+            if(e.type === 'cikis') {
+                const prev = data.find(p => p.room_no === e.room_no && p.type === 'giris' && p.checkin_date <= e.checkin_date && p.id !== e.id);
+                if(prev) {
+                    const totalNow = l1 + l2 + l3;
+                    const totalOld = (prev.meter_values?.l1 || 0) + (prev.meter_values?.l2 || 0) + (prev.meter_values?.l3 || 0);
+                    fark = (totalNow - totalOld).toFixed(1);
+                }
+            }
+
+            return `<tr>
+                <td><span class="badge-oda ${e.type === 'cikis' ? 'cikis' : ''}">${e.room_no}</span></td>
+                <td><span class="badge-kat">${e.category || '-'}</span></td>
+                <td style="color:#666">${fmtDate(e.checkin_date)}</td>
+                <td><div class="status-cell"><span class="dot-s ${e.type}"></span>${e.type === 'giris' ? 'Giriş' : 'Çıkış'}</div></td>
+                <td>${l1.toFixed(1)}</td>
+                <td>${l2.toFixed(1)}</td>
+                <td>${l3.toFixed(1)}</td>
+                <td style="font-weight:600; color:${fark !== "—" ? 'var(--danger)' : '#ccc'}">${fark}</td>
+            </tr>`;
+        }).join('');
+    } catch (e) { body.innerHTML = '<tr><td colspan="8">Hata oluştu.</td></tr>'; }
+}
+
+function setMeterFilter(t, btn) {
+    mFilter = t;
+    qs('.t-btn').forEach(b => { b.classList.remove('active'); b.style.background = 'none'; });
+    btn.classList.add('active');
+    btn.style.background = '#fff';
+    renderMeterTable();
+}
+
+// 3. goTab fonksiyonunu 4. sekmeyi destekleyecek şekilde güncelle
+const originalGoTab = goTab;
+goTab = function(i) {
+    originalGoTab(i);
+    if(i === 3) renderMeterTable();
+};
 const LB = {
   scale:1,minScale:1,maxScale:5,translateX:0,translateY:0,
   isDragging:false,dragStartX:0,dragStartY:0,dragStartTX:0,dragStartTY:0,
@@ -638,14 +768,22 @@ function setMode(m){
   q('f-note').placeholder=cfg.np;
   q('f-tags').innerHTML=cfg.tags.map(t=>`<span class="tag" onclick="togTag(this)">${t}</span>`).join('');
   selTags=[];
-  q('mode-d').classList.toggle('active',m==='demirbaş');
-  q('mode-e').classList.toggle('active',m==='elektrik');
-  openEntries.clear();
+q('mode-d').classList.toggle('active',m==='demirbaş');
+q('mode-e').classList.toggle('active',m==='elektrik');
+
+// YENİ: Sayaç Listesi butonunu sadece elektrik modunda göster
+q('nav-meter-list').style.display = (m === 'elektrik') ? 'block' : 'none';
+if(m === 'elektrik') {
+    // Kat filtresini (1. kat, 2. kat...) otomatik doldur
+    q('m-floor-filter').innerHTML = '<option value="">Tüm katlar</option>' + cfg.tags.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
+openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
   if(tab===2)loadAll(true);
 }
 
-function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();startTimer();}
+function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i === 3) renderMeterTable();startTimer();}
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);},3000);}
 
 /* ═══════════════════════════════════════════════
@@ -1117,6 +1255,62 @@ ${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_da
 
 if(_oda&&_token){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Yükleniyor...';q('topbar-sub').textContent='Doğrulanıyor...';q('s1').remove();q('s2').remove();document.querySelector('#s0 > div:first-child').style.display='none';document.querySelector('#stab-room-content').style.display='none';document.querySelector('#stab-date-content').style.display='none';q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';const _m=(_mod==='elektrik'?'elektrik':'demirbaş');mode=_m;let tokenQuery=`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`;api(tokenQuery).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tokenRow=data[0];if(_tarih){if(tokenRow.entry_date&&tokenRow.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{const label=_m==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${_oda}`;q('topbar-sub').textContent='Salt okunur görünüm';doSearch(_oda);}}).catch(()=>showAccessError());}else if(_oda&&!_token){showAccessError();}else{q('f-date').value=today();let savedMode = localStorage.getItem('activeMode') || 'demirbaş';
 setMode(savedMode);checkConn();try{const saved=parseInt(localStorage.getItem('activeTab'));if(!isNaN(saved)&&saved>=0&&saved<=2)goTab(saved);else startTimer();}catch(e){startTimer();}}
+  let mFilter = 'all';
+
+function setMeterFilter(t, btn) {
+  mFilter = t;
+  document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMeterTable();
+}
+
+async function renderMeterTable() {
+  const body = q('meter-body');
+  body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px">Yükleniyor...</td></tr>';
+  
+  try {
+    const res = await api(`/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc`);
+    const data = await res.json();
+    
+    const search = q('m-search').value.toLowerCase();
+    const floor = q('m-floor-filter').value;
+
+    let filtered = data.filter(e => {
+      const matchSearch = e.room_no.toString().includes(search) || (e.category && e.category.toLowerCase().includes(search));
+      const matchFloor = floor === "" || e.category === floor;
+      const matchType = mFilter === 'all' || e.type === mFilter;
+      return matchSearch && matchFloor && matchType;
+    });
+
+    body.innerHTML = filtered.map(e => {
+      const l1 = e.meter_values?.l1 || 0;
+      const l2 = e.meter_values?.l2 || 0;
+      const l3 = e.meter_values?.l3 || 0;
+      
+      // FARK HESAPLAMA (ÇIKIŞ - BİR ÖNCEKİ GİRİŞ)
+      let fark = "—";
+      if(e.type === 'cikis') {
+        const prev = data.find(p => p.room_no === e.room_no && p.type === 'giris' && p.checkin_date <= e.checkin_date && p.id !== e.id);
+        if(prev) {
+          const totalNow = l1 + l2 + l3;
+          const totalOld = (prev.meter_values?.l1 || 0) + (prev.meter_values?.l2 || 0) + (prev.meter_values?.l3 || 0);
+          fark = (totalNow - totalOld).toFixed(1);
+        }
+      }
+
+      return `<tr>
+        <td><span class="badge-oda ${e.type === 'cikis' ? 'cikis' : ''}">${e.room_no}</span></td>
+        <td><span class="badge-kat">${e.category || '-'}</span></td>
+        <td style="color:#666">${fmtDate(e.checkin_date)}</td>
+        <td><div class="status-cell"><span class="dot-s ${e.type}"></span>${e.type === 'giris' ? 'Giriş' : 'Çıkış'}</div></td>
+        <td>${l1.toFixed(1)}</td>
+        <td>${l2.toFixed(1)}</td>
+        <td>${l3.toFixed(1)}</td>
+        <td style="font-weight:600; color:${fark !== "—" ? 'var(--danger)' : '#ccc'}">${fark}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) { body.innerHTML = '<tr><td colspan="8">Veri yüklenemedi.</td></tr>'; }
+}
 </script>
 </body>
 </html>
