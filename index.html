@@ -486,6 +486,8 @@ let mode='demirbaş',tab=0,lastVal='',pending=[],selTags=[],timer=null;
 let entryImages={},entryData={},openEntries=new Set();
 let searchTab='room',confirmCallback=null,activePdfOpt=null;
 let mlAllData=[],mlFiltered=[],mlTypeFilter='all';
+  let mlSortKey = null;
+let mlSortDir = 1;
 const CMAX=1600,CQ=0.82;
 
 function q(id){return document.getElementById(id)}
@@ -776,7 +778,50 @@ function mlFilter(){
   });
   renderMeterList();
 }
+  function mlSort(key) {
+  if (mlSortKey === key) {
+    mlSortDir *= -1; // aynı kolona tekrar basınca ters sıralar
+  } else {
+    mlSortKey = key;
+    mlSortDir = 1;
+  }
 
+  mlFiltered.sort((a, b) => {
+    let v1, v2;
+
+    switch (key) {
+      case 'room':
+        v1 = Number(a.room_no);
+        v2 = Number(b.room_no);
+        break;
+
+      case 'kat':
+        v1 = a.category || '';
+        v2 = b.category || '';
+        break;
+
+      case 'date':
+        v1 = new Date(a.checkin_date);
+        v2 = new Date(b.checkin_date);
+        break;
+
+      case 'type':
+        v1 = a.type || '';
+        v2 = b.type || '';
+        break;
+    }
+
+    if (v1 > v2) return 1 * mlSortDir;
+    if (v1 < v2) return -1 * mlSortDir;
+    return 0;
+  });
+
+  renderMeterList(); // ⛔ BURASI ÇOK ÖNEMLİ
+}
+
+  if (mlSortKey) {
+  mlSort(mlSortKey);
+}
 function renderMeterList(){
   const wrap=q('ml-wrap'),statsEl=q('ml-stats');
   if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
@@ -816,7 +861,11 @@ function renderMeterList(){
     </div>`;
   });
 
-  wrap.innerHTML=`<div class="ml-head"><span>Oda</span><span>Kat</span><span>Tarih</span><span>Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span></div>${rows}`;
+  wrap.innerHTML=`<div class="ml-head">
+  <span onclick="mlSort('room')">Oda</span>
+  <span onclick="mlSort('kat')">Kat</span>
+  <span onclick="mlSort('date')">Tarih</span>
+  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span></div>${rows}`;
 }
 
 /* PDF exports */
