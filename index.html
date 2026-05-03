@@ -236,6 +236,7 @@
     <button class="nav-btn" onclick="goTab(1)">Ekle</button>
     <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
     <button class="nav-btn" id="nav-sayac" style="display:none" onclick="goTab(3)">Sayaç Listesi</button>
+    <button class="nav-btn" id="nav-hesapla" style="display:none" onclick="goTab(4)">Fark Hesapla</button>
   </div>
 
   <!-- ARA -->
@@ -349,7 +350,36 @@
     <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
   </div>
 </div>
-
+<div class="screen" id="s4">
+  <div class="field">
+    <span class="label">Daire Tipi</span>
+    <select id="daireType" onchange="onTipChange()">
+      <option value="1+1">1+1</option>
+      <option value="2+1">2+1</option>
+    </select>
+  </div>
+  <div style="display:flex; gap:8px" class="field">
+    <div style="flex:1"><span class="label">Giriş Tarihi</span><input type="date" id="girisDate" onchange="onDateChange()"></div>
+    <div style="flex:1"><span class="label">Çıkış Tarihi</span><input type="date" id="cikisDate" onchange="onDateChange()"></div>
+  </div>
+  <div class="field">
+    <span class="label">Devre Tarifesi</span>
+    <div class="tags-row" id="tarifeWrap"></div>
+  </div>
+  <div style="display:flex; gap:8px" class="field">
+    <div style="flex:1"><span class="label">Giriş kW</span><input type="number" id="girisKw" step="0.01"></div>
+    <div style="flex:1"><span class="label">Çıkış kW</span><input type="number" id="cikisKw" step="0.01"></div>
+  </div>
+  <button class="btn btn-primary" onclick="hesaplaFark()">Hesapla</button>
+  <div id="sonucWrap" style="display:none; margin-top:15px; padding:15px; border-radius:10px; color:#fff;">
+    <h3 id="heroLabel"></h3>
+    <div style="font-size:24px; font-weight:600"><span id="heroVal"></span> kW/H</div>
+    <div id="heroSub" style="font-size:12px; margin-bottom:10px"></div>
+    <div id="bedelBox" style="border-top:1px solid rgba(255,255,255,0.2); padding-top:10px">
+      Bedel: <span id="bToplam" style="font-size:20px; font-weight:600"></span> ₺
+    </div>
+  </div>
+</div>
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lb">
   <div class="lb-topbar">
@@ -537,8 +567,8 @@ function setMode(m){
   selTags=[];
   q('mode-d').classList.toggle('active',!isE);
   q('mode-e').classList.toggle('active',isE);
-  q('nav-sayac').style.display=isE?'':'none';
-  if(!isE&&tab===3)goTab(0);
+  q('nav-hesapla').style.display = isE ? '' : 'none'; // Ekle
+  if (!isE && (tab === 3 || tab === 4)) goTab(0);    // Düzelt
   openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
   if(tab===2)loadAll(true);
@@ -546,7 +576,17 @@ function setMode(m){
 }
 
 /* tabs */
-function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();startTimer();}
+function goTab(i) {
+  tab = i;
+  try { localStorage.setItem('activeTab', i); } catch (e) {}
+  qs('.nav-btn').forEach((b, j) => b.classList.toggle('active', i === j));
+  qs('.screen').forEach((s, j) => s.classList.toggle('active', i === j));
+  
+  if (i === 2) loadAll();
+  if (i === 3) loadMeterList();
+  if (i === 4) { tarifeCiz(); q('girisDate').value = today(); q('cikisDate').value = today(); } // Ekle
+  startTimer();
+}
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterList(true);},3000);}
 
 /* tags */
@@ -956,6 +996,33 @@ else{
   let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
   setMode(savedMode);checkConn();
   try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=3){if(sv===3&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
+}
+
+
+  const TARIFELER_H = { '7gun': { label: '7 Gün', '1+1': 15, '2+1': 18 }, '15gun': { label: '15 Gün', '1+1': 30, '2+1': 40 } };
+let seciliDevir_H = '7gun', seciliTip_H = '1+1';
+
+function tarifeCiz() {
+  q('tarifeWrap').innerHTML = Object.entries(TARIFELER_H).map(([k, v]) => 
+    `<span class="tag${k===seciliDevir_H?' on':''}" onclick="seciliDevir_H='${k}';tarifeCiz()">${v.label} (${v[seciliTip_H]}kW)</span>`
+  ).join('');
+}
+function onTipChange() { seciliTip_H = q('daireType').value; tarifeCiz(); }
+function onDateChange() {} 
+
+function hesaplaFark() {
+  const g = parseFloat(q('girisKw').value), c = parseFloat(q('cikisKw').value);
+  const limit = TARIFELER_H[seciliDevir_H][seciliTip_H];
+  if (isNaN(g) || isNaN(c)) return showToast('Değer girin', 'error');
+  const tuk = c - g, fark = tuk - limit, asmis = fark > 0;
+  
+  q('sonucWrap').style.display = 'block';
+  q('sonucWrap').style.background = asmis ? 'var(--amber)' : 'var(--accent)';
+  q('heroLabel').textContent = asmis ? 'Limit Aşıldı' : 'Limit Dahilinde';
+  q('heroVal').textContent = (asmis ? fark : tuk).toFixed(2);
+  q('heroSub').textContent = `Toplam Tüketim: ${tuk.toFixed(2)} kW (Limit: ${limit})`;
+  q('bedelBox').style.display = asmis ? 'block' : 'none';
+  if(asmis) q('bToplam').textContent = (fark * 30).toLocaleString('tr-TR');
 }
 </script>
 </body>
