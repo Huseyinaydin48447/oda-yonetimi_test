@@ -12,84 +12,10 @@
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
   }
-  .wa-btn{
-  color:#25D366;
-  border-color:#b7f0c8;
-  background:#eafaf0;
-}
-.wa-btn:active{
-  background:#dff5e7;
-}
-
-.meter-table-card {
-  background: #fff;
-  border: 1px solid #e2e1d9;
-  border-radius: 12px;
-  overflow-x: auto;
-}
-
-.meter-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  min-width: 600px;
-}
-
-.meter-table th {
-  background: #f9f8f4;
-  padding: 12px 10px;
-  text-align: left;
-  color: #7a7a72;
-  font-weight: 600;
-  border-bottom: 1px solid #e2e1d9;
-}
-
-.meter-table td {
-  padding: 12px 10px;
-  border-bottom: 1px solid #f0f0eb;
-}
-
-.badge-oda {
-  background: #e8f2ec;
-  color: #1a5c3a;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-weight: 600;
-}
-
-.badge-kat {
-  background: #f0f0eb;
-  color: #7a7a72;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 10px;
-}
-
-.status-cell {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.dot-s {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.dot-s.giris { background: #1a5c3a; }
-.dot-s.cikis { background: #b45309; }
-  
-.entries-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  align-items: start; 
-}
-.entry-card {
-  margin-bottom: 0;
-}
-  
+  .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
+  .wa-btn:active{background:#dff5e7;}
+  .entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
+  .entry-card{margin-bottom:0;}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
   .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg)}
@@ -100,8 +26,8 @@
   .mode-btns{display:flex;gap:5px;flex-shrink:0}
   .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
   .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
-  .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99}
-  .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s}
+  .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;}
+  .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
   .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
   .screen{display:none;padding:16px}
   .screen.active{display:block}
@@ -148,7 +74,6 @@
   .img-thumb:active img{transform:scale(1.05)}
   .img-thumb-del{display:none;position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(192,57,43,.9);color:#fff;font-size:11px;align-items:center;justify-content:center;cursor:pointer;font-weight:700;z-index:2;border:none;font-family:'DM Sans',sans-serif}
   .edit-mode .img-thumb-del{display:flex}
-  .note-text{font-size:12px;color:var(--muted);padding:8px 14px;border-top:1px solid var(--border);font-style:italic}
   .status-bar{background:var(--accent-light);border:1px solid #b8ddc8;border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:6px}
   .status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
   .tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
@@ -171,125 +96,43 @@
   .toast.show{display:block}
   .toast.success{background:var(--accent)}
   .toast.error{background:var(--danger)}
-
-  .lightbox{
-    display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);
-    z-index:200;align-items:center;justify-content:center;
-    flex-direction:column;padding:0;overflow:hidden;
-  }
-
-
-.img-label{
-  position:absolute;
-  bottom:4px;
-  left:4px;
-  background:rgba(0,0,0,0.6);
-  color:#fff;
-  font-size:10px;
-  padding:2px 6px;
-  border-radius:6px;
-}
-.img-label.giris{background:#1a5c3a;}
-.img-label.cikis{background:#c0392b;}
-
-  
+  .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:0;overflow:hidden;}
+  .img-label{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;}
+  .img-label.giris{background:#1a5c3a;}
+  .img-label.cikis{background:#c0392b;}
   .lightbox.open{display:flex}
-  .lb-img-wrap{
-    flex:1;width:100%;display:flex;align-items:center;justify-content:center;
-    overflow:hidden;position:relative;cursor:grab;
-  }
+  .lb-img-wrap{flex:1;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:grab;}
   .lb-img-wrap.grabbing{cursor:grabbing;}
   .lb-img-wrap.zoomed{cursor:move;}
-  #lb-img{
-    max-width:100%;max-height:100%;
-    object-fit:contain;
-    transform-origin:center center;
-    transition:transform .25s ease;
-    pointer-events:none;
-    border-radius:4px;
-    user-select:none;
-    -webkit-user-drag:none;
-  }
+  #lb-img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;transition:transform .25s ease;pointer-events:none;border-radius:4px;user-select:none;-webkit-user-drag:none;}
   #lb-img.no-transition{transition:none!important;}
-  .lb-topbar{
-    width:100%;display:flex;align-items:center;justify-content:space-between;
-    padding:12px 16px;flex-shrink:0;
-    background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);
-    position:absolute;top:0;left:0;z-index:10;
-  }
+  .lb-topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0;background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);position:absolute;top:0;left:0;z-index:10;}
   .lb-lbl{color:rgba(255,255,255,.7);font-size:12px;font-family:'DM Mono',monospace;}
   .lb-zoom-row{display:flex;align-items:center;gap:8px;}
-  .lb-zoom-badge{
-    background:rgba(255,255,255,.15);backdrop-filter:blur(6px);
-    color:#fff;font-size:12px;font-weight:600;font-family:'DM Mono',monospace;
-    padding:4px 10px;border-radius:99px;min-width:48px;text-align:center;
-    transition:opacity .2s;
-  }
-  .lb-reset-btn{
-    background:rgba(255,255,255,.15);backdrop-filter:blur(6px);
-    border:none;color:#fff;font-size:14px;cursor:pointer;
-    width:30px;height:30px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    transition:background .15s;
-  }
-  .lb-reset-btn:hover{background:rgba(255,255,255,.28);}
-  .lb-close{
-    background:rgba(255,255,255,.15);backdrop-filter:blur(6px);
-    border:none;color:#fff;font-size:18px;cursor:pointer;
-    width:34px;height:34px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    transition:background .15s;flex-shrink:0;
-  }
-  .lb-close:hover{background:rgba(255,255,255,.28);}
-  .lb-nav{
-    width:100%;display:flex;gap:12px;padding:14px 16px;align-items:center;
-    justify-content:center;flex-shrink:0;
-    background:linear-gradient(to top,rgba(0,0,0,.6),transparent);
-    position:absolute;bottom:0;left:0;
-  }
-  .lb-btn{
-    padding:9px 20px;border-radius:var(--radius-sm);
-    border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);
-    backdrop-filter:blur(6px);color:#fff;font-size:13px;cursor:pointer;
-    font-family:'DM Sans',sans-serif;transition:background .15s;
-  }
-  .lb-btn:hover{background:rgba(255,255,255,.2);}
+  .lb-zoom-badge{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);color:#fff;font-size:12px;font-weight:600;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:99px;min-width:48px;text-align:center;}
+  .lb-reset-btn{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:none;color:#fff;font-size:14px;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .lb-close{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:none;color:#fff;font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .lb-nav{width:100%;display:flex;gap:12px;padding:14px 16px;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);position:absolute;bottom:0;left:0;}
+  .lb-btn{padding:9px 20px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);backdrop-filter:blur(6px);color:#fff;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;}
   .lb-btn:disabled{opacity:.3;cursor:default;}
   .lb-counter{color:rgba(255,255,255,.65);font-size:13px;font-family:'DM Mono',monospace;}
-  .lb-hint{
-    position:absolute;bottom:70px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:rgba(255,255,255,.75);
-    font-size:11px;padding:5px 12px;border-radius:99px;
-    pointer-events:none;opacity:1;transition:opacity 1s ease;white-space:nowrap;
-  }
+  .lb-hint{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:rgba(255,255,255,.75);font-size:11px;padding:5px 12px;border-radius:99px;pointer-events:none;opacity:1;transition:opacity 1s ease;white-space:nowrap;}
   .lb-hint.hide{opacity:0;}
-
   .loader{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   .entry-footer{border-top:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface2);flex-wrap:wrap}
   .entry-footer-info{font-size:11px;color:var(--muted)}
   .entry-footer-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .link-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+  .link-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;}
   .link-btn:active{background:var(--accent-light)}
-  .edit-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+  .edit-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;}
   .edit-btn:active{background:var(--amber-light)}
-  .del-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid #f5c6c2;background:var(--danger-light);color:var(--danger);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+  .del-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid #f5c6c2;background:var(--danger-light);color:var(--danger);cursor:pointer;font-family:'DM Sans',sans-serif;}
   .del-btn:active{background:#fae5e2}
-  .edit-panel{background:var(--surface);border-top:1px solid var(--border);padding:14px}
-  .edit-panel .field{margin-bottom:10px}
-  .edit-panel-actions{display:flex;gap:8px;margin-top:10px}
-  .edit-panel-actions .btn{flex:1;justify-content:center}
   .compress-info{font-size:11px;color:var(--accent);background:var(--accent-light);border-radius:99px;padding:2px 10px;display:inline-flex;align-items:center;gap:4px;margin-top:6px}
-  .export-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-  .export-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;flex:1;justify-content:center}
-  .export-btn:active{background:var(--surface2)}
-  .export-btn:disabled{opacity:.5;cursor:not-allowed}
-  .export-btn.zip{color:var(--accent);border-color:#b8ddc8;background:var(--accent-light)}
-  .export-btn.pdf{color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)}
   .progress-bar-wrap{height:4px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:8px;display:none}
   .progress-bar-wrap.show{display:block}
   .progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .2s;width:0}
-
   .pdf-panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:flex-end;justify-content:center;padding:16px}
   .pdf-panel-overlay.open{display:flex}
   .pdf-panel{background:var(--surface);border-radius:var(--radius);width:100%;max-width:448px;overflow:hidden;box-shadow:0 -4px 32px rgba(0,0,0,.12)}
@@ -308,13 +151,10 @@
   .pdf-sub-panel{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--surface2)}
   .pdf-sub-panel.open{display:block}
   .pdf-sub-panel .field{margin-bottom:10px}
-  .pdf-sub-panel .field:last-child{margin-bottom:0}
   .pdf-sub-panel input{font-size:14px;padding:9px 12px}
-  .pdf-sub-btn{width:100%;padding:12px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;transition:all .15s}
+  .pdf-sub-btn{width:100%;padding:12px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;}
   .pdf-sub-btn:disabled{background:var(--muted);cursor:not-allowed}
-  .pdf-sub-btn:active{background:#8a3d08}
   .pdf-option.active-opt{background:var(--surface2)}
-
   .dl-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:flex-end;justify-content:center;padding:16px}
   .dl-overlay.open{display:flex}
   .dl-sheet{background:var(--surface);border-radius:var(--radius);width:100%;max-width:448px;padding:20px;box-shadow:0 -4px 32px rgba(0,0,0,.15)}
@@ -326,19 +166,7 @@
   .dl-stats{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:16px}
   .dl-percent{font-size:20px;font-weight:600;color:var(--text);text-align:center;margin-bottom:4px}
   .dl-step{font-size:12px;color:var(--muted);text-align:center;margin-bottom:16px;min-height:18px}
-  .dl-done-icon{width:48px;height:48px;background:var(--accent-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
-
-  .bulk-bar{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
-  .bulk-bar-right{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
-  .sel-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
-  .sel-btn:active{background:var(--surface2)}
-  .sel-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .all-card.selected .all-card-inner{background:var(--accent-light);}
-  .all-card.selected{border-color:var(--accent-mid);}
-  .check-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-  .all-card.selected .check-circle{background:var(--accent);border-color:var(--accent)}
-  .check-circle svg{display:none}
-  .all-card.selected .check-circle svg{display:block}
+  .sel-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;}
   .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center;padding:16px}
   .confirm-overlay.open{display:flex}
   .confirm-sheet{background:var(--surface);border-radius:var(--radius);padding:20px;width:100%;max-width:448px}
@@ -346,11 +174,49 @@
   .confirm-sheet p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px}
   .confirm-actions{display:flex;gap:8px}
   .confirm-actions .btn{flex:1;justify-content:center}
+
+  /* SAYAC LISTESI */
+  .ml-toolbar{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .ml-row1{display:flex;gap:8px;}
+  .ml-row1 input{flex:1;font-size:14px;padding:9px 12px;}
+  .ml-row2{display:flex;gap:6px;align-items:center;}
+  .ml-row2 select{flex:1;font-size:13px;padding:8px 10px;}
+  .ml-typebts{display:flex;gap:4px;}
+  .mt-btn{padding:7px 13px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
+  .mt-btn.sel-all{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .mt-btn.sel-giris{background:var(--accent-light);color:var(--accent);border-color:var(--accent-mid);}
+  .mt-btn.sel-cikis{background:var(--amber-light);color:var(--amber);border-color:#e8a020;}
+  .ml-stats{display:flex;gap:8px;margin-bottom:10px;}
+  .ml-stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;}
+  .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
+  .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
+  .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px;background:var(--surface2);border-bottom:1px solid var(--border);}
+  .ml-head span{font-size:11px;font-weight:600;color:var(--muted);padding:9px 5px;text-align:center;}
+  .ml-head span:first-child{text-align:left;padding-left:10px;}
+  .ml-row{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;}
+  .ml-row:last-child{border-bottom:none;}
+  .ml-row:active{background:var(--surface2);}
+  .ml-row.gr{border-left:3px solid var(--accent);}
+  .ml-row.cr{border-left:3px solid var(--amber);}
+  .ml-c{font-size:12px;padding:9px 5px;text-align:center;color:var(--text);}
+  .ml-c:first-child{text-align:left;padding-left:8px;}
+  .ml-c.rb span{display:inline-block;padding:3px 7px;border-radius:6px;background:var(--accent-light);color:var(--accent);font-family:'DM Mono',monospace;font-weight:600;font-size:13px;}
+  .ml-c.rb span.eb{background:var(--amber-light);color:var(--amber);}
+  .ml-c.kb span{display:inline-block;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--muted);font-size:11px;border:1px solid var(--border);}
+  .ml-c.tc{font-size:11px;font-weight:600;}
+  .ml-c.tc .gd{color:var(--accent);}
+  .ml-c.tc .cd{color:var(--amber);}
+  .ml-c.vc{font-family:'DM Mono',monospace;font-size:12px;}
+  .ml-c.fc{font-family:'DM Mono',monospace;font-size:12px;}
+  .ml-c.fc.pos{color:var(--accent);font-weight:600;}
+  .ml-c.fc.neg{color:var(--danger);font-weight:600;}
+  .ml-c.fc.none{color:var(--muted);}
+  .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
 </style>
 </head>
 <body>
 <div class="app">
-
   <div class="topbar">
     <div class="topbar-icon">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
@@ -365,28 +231,25 @@
     </div>
   </div>
 
-  <div class="nav">
+  <div class="nav" id="main-nav">
     <button class="nav-btn active" onclick="goTab(0)">Ara</button>
     <button class="nav-btn" onclick="goTab(1)">Ekle</button>
     <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
+    <button class="nav-btn" id="nav-sayac" style="display:none" onclick="goTab(3)">Sayaç Listesi</button>
   </div>
 
-  <!-- SEARCH TAB -->
+  <!-- ARA -->
   <div class="screen active" id="s0">
     <div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
       <button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent);" onclick="setSTab('room')">Oda No</button>
       <button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted);" onclick="setSTab('date')">Tarih Aralığı</button>
     </div>
-
     <div id="stab-room-content">
       <div class="search-wrap">
-        <input id="sinput" type="number" placeholder="Oda no girin (ör: 307)"
-          oninput="doSearch(this.value)" onkeydown="if(event.key==='Enter')doSearch(this.value)"/>
-        <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);"
-          onclick="doSearch(document.getElementById('sinput').value)">Ara</button>
+        <input id="sinput" type="number" placeholder="Oda no girin (ör: 307)" oninput="doSearch(this.value)" onkeydown="if(event.key==='Enter')doSearch(this.value)"/>
+        <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);" onclick="doSearch(document.getElementById('sinput').value)">Ara</button>
       </div>
     </div>
-
     <div id="stab-date-content" style="display:none">
       <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-end">
         <div style="flex:1"><span class="label">Başlangıç</span><input id="d-from" type="date" onchange="doDateSearch()"/></div>
@@ -394,7 +257,6 @@
         <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);flex-shrink:0" onclick="doDateSearch()">Ara</button>
       </div>
     </div>
-
     <div id="sresult">
       <div class="empty">
         <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -403,28 +265,22 @@
     </div>
   </div>
 
-  <!-- ADD TAB -->
+  <!-- EKLE -->
   <div class="screen" id="s1">
-    <div class="status-bar">
-      <div class="status-dot"></div>
-      <span id="conn-text">Bağlanıyor...</span>
-    </div>
+    <div class="status-bar"><div class="status-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
     <div class="field" id="io-type-field" style="display:none;">
-  <span class="label">İşlem Türü</span>
-  <select id="f-type">
-    <option value="giris">Giriş</option>
-    <option value="cikis">Çıkış</option>
-  </select>
-</div>
-<div class="field" id="meter-values-field" style="display:none;">
-  <span class="label">Sayaç Değerleri (L1, L2, L3)</span>
-  <div style="display:flex; gap:8px;">
-    <input type="number" step="0.01" id="f-l1" placeholder="L1" style="text-align:center" value="0.00">
-    <input type="number" step="0.01" id="f-l2" placeholder="L2" style="text-align:center" value="0.00">
-    <input type="number" step="0.01" id="f-l3" placeholder="L3" style="text-align:center" value="0.00">
-  </div>
-  <div style="font-size:11px; color:var(--muted); margin-top:4px;">Örnek: 0.14 veya 1.50</div>
-</div>
+      <span class="label">İşlem Türü</span>
+      <select id="f-type"><option value="giris">Giriş</option><option value="cikis">Çıkış</option></select>
+    </div>
+    <div class="field" id="meter-values-field" style="display:none;">
+      <span class="label">Sayaç Değerleri (L1, L2, L3)</span>
+      <div style="display:flex;gap:8px;">
+        <input type="number" step="0.01" id="f-l1" placeholder="L1" style="text-align:center" value="0.00">
+        <input type="number" step="0.01" id="f-l2" placeholder="L2" style="text-align:center" value="0.00">
+        <input type="number" step="0.01" id="f-l3" placeholder="L3" style="text-align:center" value="0.00">
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Örnek: 0.14 veya 1.50</div>
+    </div>
     <div class="field">
       <span class="label" id="f-room-label">Oda numarası *</span>
       <input id="f-room" type="number" placeholder="ör: 307"/>
@@ -464,58 +320,34 @@
       <div class="prev-row" id="prev-row"></div>
       <div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
     </div>
-    <button class="btn btn-primary" id="save-btn" onclick="saveEntry()">
-      <span id="save-label">Kaydet</span>
-    </button>
+    <button class="btn btn-primary" id="save-btn" onclick="saveEntry()"><span id="save-label">Kaydet</span></button>
   </div>
 
-  <!-- ALL ROOMS TAB -->
+  <!-- TÜM ODALAR -->
   <div class="screen" id="s2">
     <div id="rlist"><div class="empty">Yükleniyor...</div></div>
   </div>
-<hr style="margin:20px 0">
 
-<!-- SAYAÇ LİSTESİ -->
-<div id="s3-list">
-
-  <!-- FİLTRE -->
-  <div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
-    <input type="text" id="m-search" placeholder="Oda, kat ara...">
-
-    <div style="display: flex; gap: 8px;">
-      <select id="m-floor-filter" style="width:130px; padding:7px">
-        <option value="">Tüm katlar</option>
-      </select>
-
-      <div style="display: flex; background: #f0efe9; padding: 2px; border-radius: 8px; margin-left:auto; border:1px solid #e2e1d9">
-        <button class="t-btn active">Tümü</button>
-        <button class="t-btn">Giriş</button>
-        <button class="t-btn">Çıkış</button>
+  <!-- SAYAÇ LİSTESİ -->
+  <div class="screen" id="s3">
+    <div class="ml-toolbar">
+      <div class="ml-row1">
+        <input id="ml-search" type="text" placeholder="Oda, kat ara..." oninput="mlFilter()"/>
+      </div>
+      <div class="ml-row2">
+        <select id="ml-kat" onchange="mlFilter()">
+          <option value="">Tüm katlar</option>
+        </select>
+        <div class="ml-typebts">
+          <button class="mt-btn sel-all" id="mt-all" onclick="mlSetType('all')">Tümü</button>
+          <button class="mt-btn" id="mt-giris" onclick="mlSetType('giris')">Giriş</button>
+          <button class="mt-btn" id="mt-cikis" onclick="mlSetType('cikis')">Çıkış</button>
+        </div>
       </div>
     </div>
+    <div class="ml-stats" id="ml-stats"></div>
+    <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
   </div>
-
-  <!-- TABLO -->
-  <div class="meter-table-card">
-    <table class="meter-table">
-      <thead>
-        <tr>
-          <th>Oda</th>
-          <th>Kat</th>
-          <th>Tarih</th>
-          <th>Tür</th>
-          <th>L1</th>
-          <th>L2</th>
-          <th>L3</th>
-          <th>Fark</th>
-        </tr>
-      </thead>
-      <tbody id="meter-body">
-      </tbody>
-    </table>
-  </div>
-
-</div>
 </div>
 
 <!-- LIGHTBOX -->
@@ -524,7 +356,7 @@
     <span class="lb-lbl" id="lb-lbl"></span>
     <div class="lb-zoom-row">
       <span class="lb-zoom-badge" id="lb-zoom-badge">%100</span>
-      <button class="lb-reset-btn" id="lb-reset-btn" title="Sıfırla" onclick="lbResetZoom()">↺</button>
+      <button class="lb-reset-btn" onclick="lbResetZoom()">↺</button>
       <button class="lb-close" onclick="closeLb()">✕</button>
     </div>
   </div>
@@ -539,7 +371,7 @@
   </div>
 </div>
 
-<!-- Confirm Dialog -->
+<!-- Confirm -->
 <div class="confirm-overlay" id="confirm-overlay" onclick="if(event.target===this)closeConfirm()">
   <div class="confirm-sheet">
     <h3 id="confirm-title">Emin misiniz?</h3>
@@ -551,7 +383,7 @@
   </div>
 </div>
 
-<!-- PDF Export Panel -->
+<!-- PDF Panel -->
 <div class="pdf-panel-overlay" id="pdf-panel-overlay" onclick="if(event.target===this)closePdfPanel()">
   <div class="pdf-panel">
     <div class="pdf-panel-header">
@@ -559,65 +391,44 @@
       <button class="pdf-panel-close" onclick="closePdfPanel()">✕</button>
     </div>
     <div class="pdf-option" id="pdf-opt-all" onclick="selectPdfOpt('all')">
-      <div class="pdf-option-icon all">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a5c3a" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
-      </div>
+      <div class="pdf-option-icon all"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a5c3a" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg></div>
       <div class="pdf-option-text"><strong>Hepsini İndir</strong><span>Tüm odaların kayıtları tek PDF'te</span></div>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
     </div>
     <div class="pdf-sub-panel" id="pdf-sub-all">
-      <button class="pdf-sub-btn" id="pdf-all-btn" onclick="runPdfAll()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Tüm Odaları PDF İndir
-      </button>
+      <button class="pdf-sub-btn" id="pdf-all-btn" onclick="runPdfAll()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tüm Odaları PDF İndir</button>
     </div>
     <div class="pdf-option" id="pdf-opt-date" onclick="selectPdfOpt('date')">
-      <div class="pdf-option-icon date">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      </div>
+      <div class="pdf-option-icon date"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
       <div class="pdf-option-text"><strong>Tarih Aralığında İndir</strong><span>Seçtiğin tarihler arasındaki kayıtlar</span></div>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
     </div>
     <div class="pdf-sub-panel" id="pdf-sub-date">
       <div class="field"><span class="label">Başlangıç tarihi</span><input type="date" id="pdf-date-from"/></div>
       <div class="field"><span class="label">Bitiş tarihi</span><input type="date" id="pdf-date-to"/></div>
-      <button class="pdf-sub-btn" id="pdf-date-btn" onclick="runPdfDate()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Tarihe Göre PDF İndir
-      </button>
+      <button class="pdf-sub-btn" id="pdf-date-btn" onclick="runPdfDate()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tarihe Göre PDF İndir</button>
     </div>
     <div class="pdf-option" id="pdf-opt-rooms" onclick="selectPdfOpt('rooms')">
-      <div class="pdf-option-icon rooms">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      </div>
+      <div class="pdf-option-icon rooms"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
       <div class="pdf-option-text"><strong>Oda Numarasına Göre İndir</strong><span>Belirli oda numaralarını yaz, PDF al</span></div>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
     </div>
     <div class="pdf-sub-panel" id="pdf-sub-rooms">
-      <div class="field"><span class="label">Oda numaraları (virgülle ayırın)</span><input type="text" id="pdf-rooms-input" placeholder="ör: 101, 205, 307, 412"/></div>
-      <button class="pdf-sub-btn" id="pdf-rooms-btn" onclick="runPdfRooms()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Seçili Odaları PDF İndir
-      </button>
+      <div class="field"><span class="label">Oda numaraları (virgülle ayırın)</span><input type="text" id="pdf-rooms-input" placeholder="ör: 101, 205, 307"/></div>
+      <button class="pdf-sub-btn" id="pdf-rooms-btn" onclick="runPdfRooms()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Seçili Odaları PDF İndir</button>
     </div>
     <div style="height:8px"></div>
   </div>
 </div>
 
-<!-- Download Progress Overlay -->
+<!-- Download Overlay -->
 <div class="dl-overlay" id="dl-overlay">
   <div class="dl-sheet">
-    <div class="dl-title">
-      <span class="loader" id="dl-spinner" style="border-top-color:var(--accent);width:14px;height:14px;border-width:2px"></span>
-      <span id="dl-title-text">İndiriliyor...</span>
-    </div>
-    <div class="dl-subtitle" id="dl-subtitle">Lütfen bekleyin, sayfadan ayrılmayın</div>
+    <div class="dl-title"><span class="loader" id="dl-spinner" style="border-top-color:var(--accent);width:14px;height:14px;border-width:2px"></span><span id="dl-title-text">İndiriliyor...</span></div>
+    <div class="dl-subtitle" id="dl-subtitle">Lütfen bekleyin</div>
     <div class="dl-percent" id="dl-percent">0%</div>
     <div class="dl-bar-wrap"><div class="dl-bar" id="dl-bar"></div></div>
-    <div class="dl-stats">
-      <span id="dl-stats-left">0 / 0 fotoğraf</span>
-      <span id="dl-stats-right">Hazırlanıyor...</span>
-    </div>
+    <div class="dl-stats"><span id="dl-stats-left">0 / 0 fotoğraf</span><span id="dl-stats-right">Hazırlanıyor...</span></div>
     <div class="dl-step" id="dl-step"></div>
   </div>
 </div>
@@ -627,49 +438,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<!-- LIGHTBOX ZOOM MOTORU -->
 <script>
-const LB = {
-  scale:1,minScale:1,maxScale:5,translateX:0,translateY:0,
-  isDragging:false,dragStartX:0,dragStartY:0,dragStartTX:0,dragStartTY:0,
-  isPinching:false,pinchStartDist:0,pinchStartScale:1,pinchMidX:0,pinchMidY:0,pinchStartTX:0,pinchStartTY:0,
-  lastTapTime:0,lastTapX:0,lastTapY:0,
-};
-
-function goWhatsApp(){
-  window.open("https://web.whatsapp.com/", "_blank");
-}
-  
+/* ── LIGHTBOX ── */
+const LB={scale:1,minScale:1,maxScale:5,translateX:0,translateY:0,isDragging:false,dragStartX:0,dragStartY:0,dragStartTX:0,dragStartTY:0,isPinching:false,pinchStartDist:0,pinchStartScale:1,pinchMidX:0,pinchMidY:0,lastTapTime:0,lastTapX:0,lastTapY:0};
+function goWhatsApp(){window.open("https://web.whatsapp.com/","_blank");}
 const lbWrap=()=>document.getElementById('lb-img-wrap');
 const lbImg=()=>document.getElementById('lb-img');
-function lbApplyTransform(animate){const img=lbImg();if(animate){img.classList.remove('no-transition');}else{img.classList.add('no-transition');}img.style.transform=`translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;document.getElementById('lb-zoom-badge').textContent=Math.round(LB.scale*100)+'%';}
-function lbClampTranslate(){const wrap=lbWrap();const img=lbImg();const wW=wrap.clientWidth;const wH=wrap.clientHeight;const iW=img.naturalWidth||img.offsetWidth;const iH=img.naturalHeight||img.offsetHeight;const ratio=Math.min(wW/iW,wH/iH);const dispW=iW*ratio*LB.scale;const dispH=iH*ratio*LB.scale;const maxX=Math.max(0,(dispW-wW)/2);const maxY=Math.max(0,(dispH-wH)/2);LB.translateX=Math.max(-maxX,Math.min(maxX,LB.translateX));LB.translateY=Math.max(-maxY,Math.min(maxY,LB.translateY));}
-function lbZoomTo(newScale,originX,originY,animate){const wrap=lbWrap();const rect=wrap.getBoundingClientRect();const cx=(originX-rect.left)-rect.width/2;const cy=(originY-rect.top)-rect.height/2;const factor=newScale/LB.scale;LB.translateX=cx-factor*(cx-LB.translateX);LB.translateY=cy-factor*(cy-LB.translateY);LB.scale=newScale;lbClampTranslate();lbApplyTransform(animate);lbWrap().classList.toggle('zoomed',LB.scale>1.05);}
-function lbResetZoom(animate){LB.scale=1;LB.translateX=0;LB.translateY=0;lbApplyTransform(animate!==false);lbWrap().classList.remove('zoomed');}
-function lbOnWheel(e){e.preventDefault();const delta=e.deltaY>0?0.85:1.18;const newSc=Math.max(LB.minScale,Math.min(LB.maxScale,LB.scale*delta));lbZoomTo(newSc,e.clientX,e.clientY,false);}
-function lbOnMouseDown(e){if(LB.scale<=1.05)return;LB.isDragging=true;LB.dragStartX=e.clientX;LB.dragStartY=e.clientY;LB.dragStartTX=LB.translateX;LB.dragStartTY=LB.translateY;lbWrap().classList.add('grabbing');}
-function lbOnMouseMove(e){if(!LB.isDragging)return;LB.translateX=LB.dragStartTX+(e.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(e.clientY-LB.dragStartY);lbClampTranslate();lbApplyTransform(false);}
-function lbOnMouseUp(){LB.isDragging=false;lbWrap().classList.remove('grabbing');}
-function lbOnDblClick(e){if(LB.scale>1.3){lbResetZoom();}else{lbZoomTo(2.5,e.clientX,e.clientY,true);}}
-function lbTouchDist(t){const dx=t[0].clientX-t[1].clientX;const dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
-function lbTouchMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
-function lbOnTouchStart(e){if(e.touches.length===2){e.preventDefault();LB.isPinching=true;LB.isDragging=false;LB.pinchStartDist=lbTouchDist(e.touches);LB.pinchStartScale=LB.scale;const mid=lbTouchMid(e.touches);LB.pinchMidX=mid.x;LB.pinchMidY=mid.y;LB.pinchStartTX=LB.translateX;LB.pinchStartTY=LB.translateY;}else if(e.touches.length===1){const now=Date.now();const t=e.touches[0];if(now-LB.lastTapTime<300&&Math.abs(t.clientX-LB.lastTapX)<30&&Math.abs(t.clientY-LB.lastTapY)<30){e.preventDefault();if(LB.scale>1.3){lbResetZoom(true);}else{lbZoomTo(2.5,t.clientX,t.clientY,true);}LB.lastTapTime=0;return;}LB.lastTapTime=now;LB.lastTapX=t.clientX;LB.lastTapY=t.clientY;if(LB.scale>1.05){LB.isDragging=true;LB.dragStartX=t.clientX;LB.dragStartY=t.clientY;LB.dragStartTX=LB.translateX;LB.dragStartTY=LB.translateY;}}}
-function lbOnTouchMove(e){if(LB.isPinching&&e.touches.length===2){e.preventDefault();const dist=lbTouchDist(e.touches);const newSc=Math.max(LB.minScale,Math.min(LB.maxScale,LB.pinchStartScale*(dist/LB.pinchStartDist)));lbZoomTo(newSc,LB.pinchMidX,LB.pinchMidY,false);}else if(LB.isDragging&&e.touches.length===1&&LB.scale>1.05){e.preventDefault();const t=e.touches[0];LB.translateX=LB.dragStartTX+(t.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(t.clientY-LB.dragStartY);lbClampTranslate();lbApplyTransform(false);}}
-function lbOnTouchEnd(e){if(e.touches.length<2)LB.isPinching=false;if(e.touches.length===0)LB.isDragging=false;}
-function lbBindEvents(){const wrap=lbWrap();wrap.addEventListener('wheel',lbOnWheel,{passive:false});wrap.addEventListener('mousedown',lbOnMouseDown);window.addEventListener('mousemove',lbOnMouseMove);window.addEventListener('mouseup',lbOnMouseUp);wrap.addEventListener('dblclick',lbOnDblClick);wrap.addEventListener('touchstart',lbOnTouchStart,{passive:false});wrap.addEventListener('touchmove',lbOnTouchMove,{passive:false});wrap.addEventListener('touchend',lbOnTouchEnd);}
+function lbApply(anim){const img=lbImg();anim?img.classList.remove('no-transition'):img.classList.add('no-transition');img.style.transform=`translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;document.getElementById('lb-zoom-badge').textContent=Math.round(LB.scale*100)+'%';}
+function lbClamp(){const wrap=lbWrap();const img=lbImg();const wW=wrap.clientWidth,wH=wrap.clientHeight;const iW=img.naturalWidth||img.offsetWidth,iH=img.naturalHeight||img.offsetHeight;const ratio=Math.min(wW/iW,wH/iH);const dispW=iW*ratio*LB.scale,dispH=iH*ratio*LB.scale;const maxX=Math.max(0,(dispW-wW)/2),maxY=Math.max(0,(dispH-wH)/2);LB.translateX=Math.max(-maxX,Math.min(maxX,LB.translateX));LB.translateY=Math.max(-maxY,Math.min(maxY,LB.translateY));}
+function lbZoomTo(s,ox,oy,anim){const wrap=lbWrap();const rect=wrap.getBoundingClientRect();const cx=(ox-rect.left)-rect.width/2,cy=(oy-rect.top)-rect.height/2;const f=s/LB.scale;LB.translateX=cx-f*(cx-LB.translateX);LB.translateY=cy-f*(cy-LB.translateY);LB.scale=s;lbClamp();lbApply(anim);lbWrap().classList.toggle('zoomed',LB.scale>1.05);}
+function lbResetZoom(anim){LB.scale=1;LB.translateX=0;LB.translateY=0;lbApply(anim!==false);lbWrap().classList.remove('zoomed');}
+function lbOnWheel(e){e.preventDefault();const ns=Math.max(LB.minScale,Math.min(LB.maxScale,LB.scale*(e.deltaY>0?0.85:1.18)));lbZoomTo(ns,e.clientX,e.clientY,false);}
+function lbOnMD(e){if(LB.scale<=1.05)return;LB.isDragging=true;LB.dragStartX=e.clientX;LB.dragStartY=e.clientY;LB.dragStartTX=LB.translateX;LB.dragStartTY=LB.translateY;lbWrap().classList.add('grabbing');}
+function lbOnMM(e){if(!LB.isDragging)return;LB.translateX=LB.dragStartTX+(e.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(e.clientY-LB.dragStartY);lbClamp();lbApply(false);}
+function lbOnMU(){LB.isDragging=false;lbWrap().classList.remove('grabbing');}
+function lbOnDbl(e){LB.scale>1.3?lbResetZoom():lbZoomTo(2.5,e.clientX,e.clientY,true);}
+function lbTDist(t){const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
+function lbTMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
+function lbOnTS(e){if(e.touches.length===2){e.preventDefault();LB.isPinching=true;LB.isDragging=false;LB.pinchStartDist=lbTDist(e.touches);LB.pinchStartScale=LB.scale;const m=lbTMid(e.touches);LB.pinchMidX=m.x;LB.pinchMidY=m.y;}else if(e.touches.length===1){const now=Date.now(),t=e.touches[0];if(now-LB.lastTapTime<300&&Math.abs(t.clientX-LB.lastTapX)<30&&Math.abs(t.clientY-LB.lastTapY)<30){e.preventDefault();LB.scale>1.3?lbResetZoom(true):lbZoomTo(2.5,t.clientX,t.clientY,true);LB.lastTapTime=0;return;}LB.lastTapTime=now;LB.lastTapX=t.clientX;LB.lastTapY=t.clientY;if(LB.scale>1.05){LB.isDragging=true;LB.dragStartX=t.clientX;LB.dragStartY=t.clientY;LB.dragStartTX=LB.translateX;LB.dragStartTY=LB.translateY;}}}
+function lbOnTM(e){if(LB.isPinching&&e.touches.length===2){e.preventDefault();const ns=Math.max(LB.minScale,Math.min(LB.maxScale,LB.pinchStartScale*(lbTDist(e.touches)/LB.pinchStartDist)));lbZoomTo(ns,LB.pinchMidX,LB.pinchMidY,false);}else if(LB.isDragging&&e.touches.length===1&&LB.scale>1.05){e.preventDefault();const t=e.touches[0];LB.translateX=LB.dragStartTX+(t.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(t.clientY-LB.dragStartY);lbClamp();lbApply(false);}}
+function lbOnTE(e){if(e.touches.length<2)LB.isPinching=false;if(e.touches.length===0)LB.isDragging=false;}
+function lbBind(){const w=lbWrap();w.addEventListener('wheel',lbOnWheel,{passive:false});w.addEventListener('mousedown',lbOnMD);window.addEventListener('mousemove',lbOnMM);window.addEventListener('mouseup',lbOnMU);w.addEventListener('dblclick',lbOnDbl);w.addEventListener('touchstart',lbOnTS,{passive:false});w.addEventListener('touchmove',lbOnTM,{passive:false});w.addEventListener('touchend',lbOnTE);}
 let lbImgs=[],lbIdx=0;
-function openLb(ei,ii){lbImgs=entryImages[ei]||[];lbIdx=ii;updateLb();document.getElementById('lb').classList.add('open');const hint=document.getElementById('lb-hint');hint.classList.remove('hide');setTimeout(()=>hint.classList.add('hide'),3000);}
+function openLb(ei,ii){lbImgs=entryImages[ei]||[];lbIdx=ii;updLb();document.getElementById('lb').classList.add('open');const h=document.getElementById('lb-hint');h.classList.remove('hide');setTimeout(()=>h.classList.add('hide'),3000);}
 function closeLb(){document.getElementById('lb').classList.remove('open');lbResetZoom(false);}
-function lbMove(d){lbIdx=Math.max(0,Math.min(lbImgs.length-1,lbIdx+d));lbResetZoom(false);updateLb();}
-function updateLb(){document.getElementById('lb-img').src=lbImgs[lbIdx];document.getElementById('lb-lbl').textContent=(lbIdx+1)+'. fotoğraf';document.getElementById('lb-counter').textContent=(lbIdx+1)+' / '+lbImgs.length;document.getElementById('lb-prev').disabled=lbIdx===0;document.getElementById('lb-next').disabled=lbIdx===lbImgs.length-1;}
+function lbMove(d){lbIdx=Math.max(0,Math.min(lbImgs.length-1,lbIdx+d));lbResetZoom(false);updLb();}
+function updLb(){document.getElementById('lb-img').src=lbImgs[lbIdx];document.getElementById('lb-lbl').textContent=(lbIdx+1)+'. fotoğraf';document.getElementById('lb-counter').textContent=(lbIdx+1)+' / '+lbImgs.length;document.getElementById('lb-prev').disabled=lbIdx===0;document.getElementById('lb-next').disabled=lbIdx===lbImgs.length-1;}
 document.getElementById('lb').addEventListener('click',function(e){if(e.target===this)closeLb();});
-document.addEventListener('DOMContentLoaded',lbBindEvents);
-if(document.readyState!=='loading')lbBindEvents();
+document.addEventListener('DOMContentLoaded',lbBind);
+if(document.readyState!=='loading')lbBind();
 </script>
 
 <script>
 function getExifOrientation(blob){return new Promise(resolve=>{const reader=new FileReader();reader.onload=e=>{const view=new DataView(e.target.result);if(view.getUint16(0,false)!==0xFFD8){resolve(1);return;}let offset=2;while(offset<view.byteLength){if(view.getUint16(offset,false)===0xFFE1){offset+=4;if(view.getUint32(offset,false)!==0x45786966){resolve(1);return;}const little=view.getUint16(offset+=6,false)===0x4949;offset+=view.getUint32(offset+4,little);const tags=view.getUint16(offset,little);offset+=2;for(let i=0;i<tags;i++){if(view.getUint16(offset+(i*12),little)===0x0112){resolve(view.getUint16(offset+(i*12)+8,little));return;}}}else if((view.getUint16(offset,false)&0xFF00)!==0xFF00)break;else offset+=2+view.getUint16(offset+2,false);}resolve(1);};reader.onerror=()=>resolve(1);reader.readAsArrayBuffer(blob.slice(0,65536));});}
-async function fixOrientation(blob,dataUrl,pw,ph){const orientation=await getExifOrientation(blob);if(orientation<=1)return{dataUrl,pw,ph};return new Promise(resolve=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');let sw=pw,sh=ph;const needsSwap=[5,6,7,8].includes(orientation);canvas.width=needsSwap?sh:sw;canvas.height=needsSwap?sw:sh;const ctx=canvas.getContext('2d');ctx.save();switch(orientation){case 2:ctx.translate(sw,0);ctx.scale(-1,1);break;case 3:ctx.translate(sw,sh);ctx.rotate(Math.PI);break;case 4:ctx.translate(0,sh);ctx.scale(1,-1);break;case 5:ctx.rotate(Math.PI/2);ctx.scale(1,-1);break;case 6:ctx.translate(sh,0);ctx.rotate(Math.PI/2);break;case 7:ctx.translate(sh,sw);ctx.rotate(Math.PI/2);ctx.scale(1,-1);break;case 8:ctx.translate(0,sw);ctx.rotate(-Math.PI/2);break;}ctx.drawImage(img,0,0,sw,sh);ctx.restore();const fixed=canvas.toDataURL('image/jpeg',0.92);resolve({dataUrl:fixed,pw:canvas.width,ph:canvas.height});};img.onerror=()=>resolve({dataUrl,pw,ph});img.src=dataUrl;});}
+async function fixOrientation(blob,dataUrl,pw,ph){const o=await getExifOrientation(blob);if(o<=1)return{dataUrl,pw,ph};return new Promise(resolve=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');const needsSwap=[5,6,7,8].includes(o);canvas.width=needsSwap?ph:pw;canvas.height=needsSwap?pw:ph;const ctx=canvas.getContext('2d');ctx.save();switch(o){case 2:ctx.translate(pw,0);ctx.scale(-1,1);break;case 3:ctx.translate(pw,ph);ctx.rotate(Math.PI);break;case 4:ctx.translate(0,ph);ctx.scale(1,-1);break;case 5:ctx.rotate(Math.PI/2);ctx.scale(1,-1);break;case 6:ctx.translate(ph,0);ctx.rotate(Math.PI/2);break;case 7:ctx.translate(ph,pw);ctx.rotate(Math.PI/2);ctx.scale(1,-1);break;case 8:ctx.translate(0,pw);ctx.rotate(-Math.PI/2);break;}ctx.drawImage(img,0,0,pw,ph);ctx.restore();resolve({dataUrl:canvas.toDataURL('image/jpeg',0.92),pw:canvas.width,ph:canvas.height});};img.onerror=()=>resolve({dataUrl,pw,ph});img.src=dataUrl;});}
 </script>
 
 <script>
@@ -677,60 +479,52 @@ const SB='https://tpfdsmexywjnsbkfphwq.supabase.co';
 const KEY='sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
 const BUCKETS={'demirbaş':'photos','elektrik':'meters'};
 const MODES={
-  'demirbaş':{title:'Demirbaş Takibi',ph:'Oda no girin (ör: 307)',rl:'Oda numarası *',dl:'Giriş tarihi *',nl:'Not',np:'Açıklama (isteğe bağlı)...',tags:['1+1','2+1']},
+  'demirbaş':{title:'Demirbaş Takibi',ph:'Oda no girin (ör: 307)',rl:'Oda numarası *',dl:'Giriş tarihi *',nl:'Not',np:'Açıklama...',tags:['1+1','2+1']},
   'elektrik':{title:'Elektrik Sayacı',ph:'Sayaç / oda no girin',rl:'Sayaç / Oda no *',dl:'Okuma tarihi *',nl:'Endeks / Not',np:'Endeks değeri veya not...',tags:['1. Kat','2. Kat','3. Kat','4. Kat','5. Kat','6. Kat','7. Kat','8. Kat']}
 };
-
 let mode='demirbaş',tab=0,lastVal='',pending=[],selTags=[],timer=null;
+let entryImages={},entryData={},openEntries=new Set();
+let searchTab='room',confirmCallback=null,activePdfOpt=null;
+let mlAllData=[],mlFiltered=[],mlTypeFilter='all';
+const CMAX=1600,CQ=0.82;
 
-function dlOpen(title,isPdf){q('dl-title-text').textContent=title;q('dl-subtitle').textContent='Lütfen bekleyin, sayfadan ayrilmayin';q('dl-percent').textContent='0%';q('dl-stats-left').textContent='0 / ? fotograf';q('dl-stats-right').textContent='Hazirlaniyor...';q('dl-step').textContent='';const bar=q('dl-bar');bar.style.width='0%';bar.className='dl-bar'+(isPdf?' pdf-mode':'');q('dl-spinner').style.borderTopColor=isPdf?'var(--amber)':'var(--accent)';q('dl-overlay').classList.add('open');}
-function dlUpdate(done,total,stepText){const pct=total>0?Math.round(done/total*100):0;q('dl-percent').textContent=pct+'%';q('dl-bar').style.width=pct+'%';q('dl-stats-left').textContent=done+' / '+total+' fotograf';if(stepText)q('dl-step').textContent=stepText;}
-function dlStage(text){q('dl-stats-right').textContent=text;}
+function q(id){return document.getElementById(id)}
+function qs(s){return document.querySelectorAll(s)}
+async function api(path,opts={}){return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}});}
+
+/* DL overlay */
+function dlOpen(title,isPdf){q('dl-title-text').textContent=title;q('dl-subtitle').textContent='Lütfen bekleyin';q('dl-percent').textContent='0%';q('dl-stats-left').textContent='0 / ? fotoğraf';q('dl-stats-right').textContent='Hazırlanıyor...';q('dl-step').textContent='';const bar=q('dl-bar');bar.style.width='0%';bar.className='dl-bar'+(isPdf?' pdf-mode':'');q('dl-spinner').style.borderTopColor=isPdf?'var(--amber)':'var(--accent)';q('dl-overlay').classList.add('open');}
+function dlUpdate(done,total,step){const p=total>0?Math.round(done/total*100):0;q('dl-percent').textContent=p+'%';q('dl-bar').style.width=p+'%';q('dl-stats-left').textContent=done+' / '+total+' fotoğraf';if(step)q('dl-step').textContent=step;}
+function dlStage(t){q('dl-stats-right').textContent=t;}
 function dlClose(){q('dl-overlay').classList.remove('open');}
 
-let entryImages={};
-let entryData={};
-let openEntries=new Set();
-let searchTab='room';
-let confirmCallback=null;
-let activePdfOpt=null;
-
-const COMPRESS_MAX_PX=1600;
-const COMPRESS_QUALITY=0.82;
-
-async function compressImage(file){return new Promise((resolve)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{let{width,height}=img;const origSize=file.size;if(width<=COMPRESS_MAX_PX&&height<=COMPRESS_MAX_PX&&origSize<500*1024){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize,newSize:origSize});return;}if(width>height){if(width>COMPRESS_MAX_PX){height=Math.round(height*COMPRESS_MAX_PX/width);width=COMPRESS_MAX_PX;}}else{if(height>COMPRESS_MAX_PX){width=Math.round(width*COMPRESS_MAX_PX/height);height=COMPRESS_MAX_PX;}}const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,width,height);URL.revokeObjectURL(url);canvas.toBlob((blob)=>{const newFile=new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'});resolve({file:newFile,compressed:true,origSize,newSize:blob.size});},'image/jpeg',COMPRESS_QUALITY);};img.src=url;});}
-function fmtBytes(b){if(b<1024)return b+'B';if(b<1024*1024)return(b/1024).toFixed(0)+'KB';return(b/1024/1024).toFixed(1)+'MB';}
-function q(id){return document.getElementById(id)}
-function qs(sel){return document.querySelectorAll(sel)}
-
+/* PDF panel */
 function openPdfPanel(){activePdfOpt=null;['all','date','rooms'].forEach(k=>{q('pdf-sub-'+k).classList.remove('open');q('pdf-opt-'+k).classList.remove('active-opt');});q('pdf-panel-overlay').classList.add('open');}
 function closePdfPanel(){q('pdf-panel-overlay').classList.remove('open');}
 function selectPdfOpt(key){if(activePdfOpt===key){q('pdf-sub-'+key).classList.remove('open');q('pdf-opt-'+key).classList.remove('active-opt');activePdfOpt=null;return;}['all','date','rooms'].forEach(k=>{q('pdf-sub-'+k).classList.remove('open');q('pdf-opt-'+k).classList.remove('active-opt');});activePdfOpt=key;q('pdf-sub-'+key).classList.add('open');q('pdf-opt-'+key).classList.add('active-opt');}
 
-async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const res=await api(`/rest/v1/entries?mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`);const data=await res.json();if(!data.length){showToast('Kayıt bulunamadı','error');return;}closePdfPanel();const rooms=[...new Set(data.map(e=>e.room_no))];await exportBulkPDFFromEntries(rooms,data,`tum_odalar_${today()}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
-async function runPdfDate(){const from=q('pdf-date-from').value;const to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi bitiş tarihinden büyük olamaz','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const res=await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`);const data=await res.json();if(!data.length){showToast('Bu tarih aralığında kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const rooms=[...new Set(data.map(e=>e.room_no))];await exportBulkPDFFromEntries(rooms,data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
-async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);if(!rooms.length){showToast('Geçerli oda numarası girin','error');return;}const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const allEntries=[];for(const rno of rooms){const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);const data=await res.json();data.forEach(e=>allEntries.push(e));}if(!allEntries.length){showToast('Bu oda numaralarında kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,allEntries,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
-
-async function exportBulkPDFFromEntries(rooms,allEntries,filename,btnRef,origLabel){if(typeof window.jspdf==='undefined'){showToast('jsPDF yuklenemedi','error');return;}const titleText2=rooms.length===1?'Oda '+rooms[0]+' PDF':rooms.length+' Oda PDF Raporu';dlOpen(titleText2,true);function safe(str){if(!str)return'';return str.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const rawDataUrl=await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.readAsDataURL(blob);});const dims=await new Promise(resolve=>{const img=new Image();img.onload=()=>resolve({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>resolve({w:4,h:3});img.src=rawDataUrl;});const fixed=await fixOrientation(blob,rawDataUrl,dims.w,dims.h);return{dataUrl:fixed.dataUrl,fmt:'JPEG',pw:fixed.pw,ph:fixed.ph};}try{const{jsPDF}=window.jspdf;const label=mode==='elektrik'?'Sayac':'Oda';const totalPhotos=allEntries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});const PW=210,margin=15;doc.setFillColor(26,92,58);doc.rect(0,0,PW,44,'F');doc.setTextColor(255,255,255);doc.setFontSize(22);doc.setFont(undefined,'bold');const titleText=rooms.length===1?`${label} ${rooms[0]}`:`${rooms.length} Oda Raporu`;doc.text(titleText,PW/2,22,{align:'center'});doc.setFontSize(8.5);doc.setFont(undefined,'normal');doc.text(fmtDatePDF(today()),PW/2,36,{align:'center'});doc.setTextColor(0,0,0);let sy=58;doc.setFontSize(10);doc.setFont(undefined,'bold');doc.text('Ozet',margin,sy);sy+=8;doc.setFont(undefined,'normal');doc.setFontSize(9);if(rooms.length>1){doc.setTextColor(100,100,100);doc.text('Secilen odalar:',margin,sy);sy+=6;doc.setTextColor(0,0,0);const odaStr=rooms.join(', ');const odaLines=doc.splitTextToSize(odaStr,PW-margin*2);odaLines.forEach(line=>{doc.text(line,margin,sy);sy+=6;});sy+=2;}const dates=allEntries.map(e=>e.checkin_date).sort();if(dates.length){doc.setTextColor(100,100,100);doc.text('Tarih araligi:',margin,sy);doc.setTextColor(0,0,0);doc.text(`${fmtDatePDF(dates[0])}  -  ${fmtDatePDF(dates[dates.length-1])}`,margin+35,sy);sy+=7;}doc.setTextColor(100,100,100);doc.text('Toplam giris:',margin,sy);doc.setTextColor(0,0,0);doc.text(`${allEntries.length}`,margin+35,sy);sy+=7;doc.setTextColor(100,100,100);doc.text('Toplam fotograf:',margin,sy);doc.setTextColor(0,0,0);doc.text(`${totalPhotos}`,margin+35,sy);sy+=14;doc.setFontSize(8.5);let lastRno=null;allEntries.forEach((entry,i)=>{if(entry.room_no!==lastRno){if(lastRno!==null)sy+=4;doc.setFont(undefined,'bold');doc.setFontSize(9);doc.setTextColor(26,92,58);doc.text(`${label} ${entry.room_no}`,margin,sy);sy+=7;doc.setFont(undefined,'normal');doc.setFontSize(8.5);doc.setTextColor(0,0,0);lastRno=entry.room_no;}const pCount=(entry.photo_urls||[]).length;doc.setFillColor(i%2===0?248:255,i%2===0?248:255,i%2===0?248:255);doc.rect(margin,sy-4,PW-margin*2,7,'F');doc.setTextColor(80,80,80);doc.text(fmtDatePDF(entry.checkin_date),margin+4,sy);if(entry.category){doc.setTextColor(45,122,82);doc.text(safe(entry.category),margin+44,sy);}if(entry.note){doc.setTextColor(60,60,60);const n=safe(entry.note.length>35?entry.note.slice(0,32)+'...':entry.note);doc.text(n,margin+84,sy);}doc.setTextColor(26,92,58);doc.setFont(undefined,'bold');doc.text(`${pCount} foto`,PW-margin-2,sy,{align:'right'});doc.setFont(undefined,'normal');doc.setTextColor(0,0,0);sy+=8;if(sy>270){doc.addPage();sy=20;}});let done=0,globalPage=0;dlUpdate(0,totalPhotos,'Fotograflar PDF\'e ekleniyor...');for(const entry of allEntries){const urls=entry.photo_urls||[];for(let i=0;i<urls.length;i++){dlStage('Oda '+entry.room_no+' · '+(i+1)+'/'+urls.length);try{const photo=await loadPhoto(urls[i]);let{dataUrl,fmt,pw,ph}=photo;if(ph>pw){try{const canvas=document.createElement('canvas');canvas.width=ph;canvas.height=pw;const ctx=canvas.getContext('2d');const img=new Image();img.src=dataUrl;ctx.translate(ph/2,pw/2);ctx.rotate(Math.PI/2);ctx.drawImage(img,-pw/2,-ph/2,pw,ph);dataUrl=canvas.toDataURL('image/jpeg',0.92);fmt='JPEG';const tmp=pw;pw=ph;ph=tmp;}catch(e2){}}doc.addPage([297,210],'landscape');const PPW=297,PPH=210;const HEADER_H=10,mg=6;doc.setFillColor(26,92,58);doc.rect(0,0,PPW,HEADER_H,'F');doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont(undefined,'bold');doc.text(`${label} ${entry.room_no}`,mg,7);doc.setFont(undefined,'normal');doc.setFontSize(7.5);doc.text(fmtDatePDF(entry.checkin_date),PPW/2,7,{align:'center'});globalPage++;doc.text(`${globalPage}/${totalPhotos}`,PPW-mg,7,{align:'right'});doc.setTextColor(0,0,0);const photoTop=HEADER_H+2;const availW=PPW-mg*2,availH=PPH-photoTop-mg;const ratio=pw/ph;let drawW,drawH;if(availW/availH>ratio){drawH=availH;drawW=drawH*ratio;}else{drawW=availW;drawH=drawW/ratio;}const x=mg+(availW-drawW)/2,y=photoTop+(availH-drawH)/2;doc.addImage(dataUrl,fmt,x,y,drawW,drawH,'','FAST');}catch(e){}done++;dlUpdate(done,totalPhotos,'Fotograflar PDF\'e ekleniyor...');if(btnRef)btnRef.innerHTML='<span class="loader"></span> Fotograf: '+done+'/'+totalPhotos;}}dlStage('PDF kaydediliyor...');doc.save(filename);dlClose();showToast('PDF indirildi!','success');}catch(e){dlClose();showToast('PDF hatasi: '+e.message,'error');}finally{if(btnRef){btnRef.innerHTML=origLabel;btnRef.disabled=false;}}}
-
-function setSTab(t){searchTab=t;const isRoom=t==='room';q('stab-room-content').style.display=isRoom?'block':'none';q('stab-date-content').style.display=isRoom?'none':'block';q('stab-room').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(isRoom?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');q('stab-date').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(!isRoom?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');q('sresult').innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>${isRoom?'Numara girin':'Tarih aralığı seçin'}<small>${isRoom?'Tüm girişler tarihe göre sıralı gelir':'Seçilen aralıkta giriş yapan odalar listelenir'}</small></div>`;openEntries.clear();lastVal='';}
-
-async function api(path,opts={}){return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}});}
-async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-text').textContent='Supabase bağlantısı aktif';q('topbar-sub').textContent='Veriler bulutta saklanıyor';}else throw 0;}catch{q('conn-text').textContent='Bağlantı hatası';q('topbar-sub').textContent='Bağlantı sorunu';}}
+/* helpers */
 function today(){return new Date().toISOString().slice(0,10)}
-function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y}`;}
+function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y}`;}
+function fmtShort(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y.slice(2)}`;}
 function fmtDatePDF(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Oca','Sub','Mar','Nis','May','Haz','Tem','Agu','Eyl','Eki','Kas','Ara'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y}`;}
+function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(0)+'KB';return(b/1048576).toFixed(1)+'MB';}
+function safe(s){if(!s)return'';return s.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}
+function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);}
 
+async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-text').textContent='Supabase bağlantısı aktif';q('topbar-sub').textContent='Veriler bulutta saklanıyor';}else throw 0;}catch{q('conn-text').textContent='Bağlantı hatası';q('topbar-sub').textContent='Bağlantı sorunu';}}
+function showToast(msg,type=''){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3000);}
+function openConfirm(title,msg,okLabel,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;q('confirm-ok').textContent=okLabel;confirmCallback=cb;q('confirm-overlay').classList.add('open');}
+function closeConfirm(){q('confirm-overlay').classList.remove('open');confirmCallback=null;}
+q('confirm-ok').addEventListener('click',()=>{if(confirmCallback)confirmCallback();closeConfirm();});
+
+/* mode */
 function setMode(m){
   mode=m;
-    // EKLE
-  try {
-    localStorage.setItem('activeMode', m);
-  } catch(e){}
-  
-  const cfg=MODES[m];
-  q('io-type-field').style.display = (m === 'elektrik') ? 'block' : 'none';
-    q('meter-values-field').style.display = (m === 'elektrik') ? 'block' : 'none'; 
+  try{localStorage.setItem('activeMode',m);}catch(e){}
+  const cfg=MODES[m],isE=m==='elektrik';
+  q('io-type-field').style.display=isE?'block':'none';
+  q('meter-values-field').style.display=isE?'block':'none';
   q('topbar-title').textContent=cfg.title;
   q('sinput').placeholder=cfg.ph;
   q('f-room-label').textContent=cfg.rl;
@@ -739,485 +533,381 @@ function setMode(m){
   q('f-note').placeholder=cfg.np;
   q('f-tags').innerHTML=cfg.tags.map(t=>`<span class="tag" onclick="togTag(this)">${t}</span>`).join('');
   selTags=[];
-  q('mode-d').classList.toggle('active',m==='demirbaş');
-  q('mode-e').classList.toggle('active',m==='elektrik');
+  q('mode-d').classList.toggle('active',!isE);
+  q('mode-e').classList.toggle('active',isE);
+  q('nav-sayac').style.display=isE?'':'none';
+  if(!isE&&tab===3)goTab(0);
   openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
   if(tab===2)loadAll(true);
+  if(tab===3&&isE)loadMeterList(true);
 }
 
-function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();startTimer();}
-function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);},3000);}
+/* tabs */
+function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();startTimer();}
+function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterList(true);},3000);}
 
-/* ═══════════════════════════════════════════════
-   togTag — Tek seçim (radio) davranışı
-   Aynı tag'e tekrar tıklanırsa seçim kaldırılır.
-═══════════════════════════════════════════════ */
-function togTag(el){
-  const tagsRow = el.closest('.tags-row');
-  const wasOn = el.classList.contains('on');
-  // Aynı gruptaki tüm tag'leri kapat
-  tagsRow.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  // Global selTags'ı da sıfırla
-  selTags = [];
-  if(!wasOn){
-    // Sadece tıklananı aç
-    el.classList.add('on');
-    selTags = [el.textContent];
-  }
+/* tags */
+function togTag(el){const tr=el.closest('.tags-row'),wasOn=el.classList.contains('on');tr.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));selTags=[];if(!wasOn){el.classList.add('on');selTags=[el.textContent];}}
+function togTagEdit(el){const tr=el.closest('.tags-row'),wasOn=el.classList.contains('on');tr.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));if(!wasOn)el.classList.add('on');}
+
+/* search tab */
+function setSTab(t){searchTab=t;const isR=t==='room';q('stab-room-content').style.display=isR?'block':'none';q('stab-date-content').style.display=isR?'none':'block';q('stab-room').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(isR?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');q('stab-date').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(!isR?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');q('sresult').innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>${isR?'Numara girin':'Tarih aralığı seçin'}</div>`;openEntries.clear();lastVal='';}
+
+/* card refresh */
+function refreshCard(ei,updated){const oh=document.querySelector(`.entry-head[data-ei="${ei}"]`);if(!oh)return;const oc=oh.closest('.entry-card');if(!oc)return;openEntries.add(ei);const showRN=!!oc.querySelector('.room-num');const tmp=document.createElement('div');tmp.innerHTML=buildEntryCard(updated,ei,mode==='elektrik',showRN);const nc=tmp.firstElementChild;const nb=nc.querySelector('.entry-body'),nch=nc.querySelector('.chevron');if(nb)nb.classList.add('open');if(nch)nch.classList.add('open');oc.replaceWith(nc);}
+
+/* delete */
+async function deleteEntry(entryId,ei){openConfirm('Girişi sil','Bu giriş ve tüm fotoğrafları kalıcı olarak silinecek.','Evet, sil',async()=>{try{const entry=entryData[ei];const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'DELETE'});if(!r.ok)throw new Error('Silme başarısız');if(entry&&entry.photo_urls){for(const url of entry.photo_urls){const path=url.split('/object/public/')[1];if(path){const[bucket,...rest]=path.split('/');await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});}}}document.querySelector(`.entry-head[data-ei="${ei}"]`)?.closest('.entry-card')?.remove();delete entryData[ei];delete entryImages[ei];openEntries.delete(ei);showToast('Giriş silindi','success');}catch(e){showToast('Hata: '+e.message,'error');}});}
+async function deletePhoto(entryId,photoUrl,ei){openConfirm('Fotoğrafı sil','Bu fotoğraf kalıcı olarak silinecek.','Sil',async()=>{try{const entry=entryData[ei];const newUrls=(entry.photo_urls||[]).filter(u=>u!==photoUrl);await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify({photo_urls:newUrls})});const path=photoUrl.split('/object/public/')[1];if(path){const[bucket,...rest]=path.split('/');await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});}const upd={...entry,photo_urls:newUrls};entryData[ei]=upd;entryImages[ei]=newUrls;refreshCard(ei,upd);showToast('Fotoğraf silindi','success');}catch(e){showToast('Hata: '+e.message,'error');}});}
+
+/* edit */
+function openEditPanel(entryId,ei){
+  const entry=entryData[ei];if(!entry)return;
+  const panel=document.getElementById(`edit-panel-${entryId}`);if(!panel)return;
+  if(panel.style.display==='block'){panel.style.display='none';panel.closest('.entry-card')?.querySelector('.img-scroll')?.classList.remove('edit-mode');return;}
+  document.getElementById(`edit-note-${entryId}`).value=entry.note||'';
+  document.getElementById(`edit-date-${entryId}`).value=entry.checkin_date||'';
+  const tw=document.getElementById(`edit-tags-${entryId}`);
+  const sc=entry.category?entry.category.split(',').filter(Boolean):[];
+  tw.innerHTML=MODES[mode].tags.map(t=>`<span class="tag${sc.includes(t)?' on':''}" onclick="togTagEdit(this)">${t}</span>`).join('');
+  if(mode==='elektrik'){let ts=document.getElementById(`edit-type-${entryId}`);if(!ts){const tf=document.createElement('div');tf.className='field';tf.innerHTML=`<span class="label">İşlem Türü</span><select id="edit-type-${entryId}"><option value="giris" ${entry.type==='giris'?'selected':''}>Giriş</option><option value="cikis" ${entry.type==='cikis'?'selected':''}>Çıkış</option></select>`;panel.querySelector('.field:first-child').insertAdjacentElement('afterend',tf);}else ts.value=entry.type||'giris';}
+  else{const et=document.getElementById(`edit-type-${entryId}`);if(et)et.closest('.field')?.remove();}
+  panel.style.display='block';
+  panel.closest('.entry-card')?.querySelector('.img-scroll')?.classList.add('edit-mode');
 }
-
-/* Edit paneli için ayrı radio fonksiyonu (context'e bağlı) */
-function togTagEdit(el){
-  const tagsRow = el.closest('.tags-row');
-  const wasOn = el.classList.contains('on');
-  tagsRow.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  if(!wasOn) el.classList.add('on');
-}
-
-function openConfirm(title,msg,okLabel,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;q('confirm-ok').textContent=okLabel;confirmCallback=cb;q('confirm-overlay').classList.add('open');}
-function closeConfirm(){q('confirm-overlay').classList.remove('open');confirmCallback=null;}
-q('confirm-ok').addEventListener('click',()=>{if(confirmCallback)confirmCallback();closeConfirm();});
-
-function refreshCard(ei,updatedEntry){const isE=mode==='elektrik';const oldHead=document.querySelector(`.entry-head[data-ei="${ei}"]`);if(!oldHead)return;const oldCard=oldHead.closest('.entry-card');if(!oldCard)return;openEntries.add(ei);const showRoomNum=!!oldCard.querySelector('.room-num');const tmp=document.createElement('div');tmp.innerHTML=buildEntryCard(updatedEntry,ei,isE,showRoomNum);const newCard=tmp.firstElementChild;const newBody=newCard.querySelector('.entry-body');const newChev=newCard.querySelector('.chevron');if(newBody)newBody.classList.add('open');if(newChev)newChev.classList.add('open');oldCard.replaceWith(newCard);}
-
-async function deleteEntry(entryId,ei){openConfirm('Girisi sil','Bu giris ve tum fotograflari kalici olarak silinecek.','Evet, sil',async()=>{try{const entry=entryData[ei];const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'DELETE'});if(!r.ok)throw new Error('Silme basarisiz');if(entry&&entry.photo_urls){for(const url of entry.photo_urls){const path=url.split('/object/public/')[1];if(path){const[bucket,...rest]=path.split('/');await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});}}}const oldHead=document.querySelector(`.entry-head[data-ei="${ei}"]`);if(oldHead)oldHead.closest('.entry-card')?.remove();delete entryData[ei];delete entryImages[ei];openEntries.delete(ei);showToast('Giris silindi','success');}catch(e){showToast('Hata: '+e.message,'error');}});}
-
-async function deletePhoto(entryId,photoUrl,ei){openConfirm('Fotografı sil','Bu fotograf kalici olarak silinecek.','Sil',async()=>{try{const entry=entryData[ei];const newUrls=(entry.photo_urls||[]).filter(u=>u!==photoUrl);const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify({photo_urls:newUrls})});if(!r.ok)throw new Error('Guncelleme basarisiz');const path=photoUrl.split('/object/public/')[1];if(path){const[bucket,...rest]=path.split('/');await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});}const updated={...entry,photo_urls:newUrls};entryData[ei]=updated;entryImages[ei]=newUrls;refreshCard(ei,updated);showToast('Fotograf silindi','success');}catch(e){showToast('Hata: '+e.message,'error');}});}
-
-function openEditPanel(entryId, ei){
-  const entry = entryData[ei];
-  if(!entry) return;
-  const panel = document.getElementById(`edit-panel-${entryId}`);
-  if(!panel) return;
-  if(panel.style.display === 'block'){
-    panel.style.display = 'none';
-    const card = panel.closest('.entry-card');
-    if(card) card.querySelector('.img-scroll')?.classList.remove('edit-mode');
-    return;
-  }
-  
-  document.getElementById(`edit-note-${entryId}`).value = entry.note || '';
-  document.getElementById(`edit-date-${entryId}`).value = entry.checkin_date || '';
-  
-  const tagWrap = document.getElementById(`edit-tags-${entryId}`);
-  const cfg = MODES[mode];
-  const selCats = entry.category ? entry.category.split(',').filter(Boolean) : [];
-  tagWrap.innerHTML = cfg.tags.map(t => `<span class="tag${selCats.includes(t) ? ' on' : ''}" onclick="togTagEdit(this)">${t}</span>`).join('');
-  
-  // === SADECE SAYAÇ MODU İÇİN GİRİŞ/ÇIKIŞ SEÇİCİSİ EKLE ===
-  if (mode === 'elektrik') {
-    let typeSelect = document.getElementById(`edit-type-${entryId}`);
-    if (!typeSelect) {
-      const typeField = document.createElement('div');
-      typeField.className = 'field';
-      typeField.innerHTML = `
-        <span class="label">İşlem Türü</span>
-        <select id="edit-type-${entryId}">
-          <option value="giris" ${entry.type === 'giris' ? 'selected' : ''}>Giriş</option>
-          <option value="cikis" ${entry.type === 'cikis' ? 'selected' : ''}>Çıkış</option>
-        </select>
-      `;
-      // Tarih alanından sonra, kategori alanından önce ekle
-      const dateField = panel.querySelector('.field:first-child');
-      dateField.insertAdjacentElement('afterend', typeField);
-    } else {
-      typeSelect.value = entry.type || 'giris';
-    }
-  } else {
-    // Demirbaş moduysa varsa kaldır
-    const existingType = document.getElementById(`edit-type-${entryId}`);
-    if(existingType) existingType.closest('.field')?.remove();
-  }
-  // ================================================
-  
-  panel.style.display = 'block';
-  const card = panel.closest('.entry-card');
-  if(card) card.querySelector('.img-scroll')?.classList.add('edit-mode');
-}
-
-async function saveEdit(entryId, ei){
-  const entry = entryData[ei];
-  const note = document.getElementById(`edit-note-${entryId}`).value.trim();
-  const date = document.getElementById(`edit-date-${entryId}`).value;
-  const tagWrap = document.getElementById(`edit-tags-${entryId}`);
-  const tags = [...tagWrap.querySelectorAll('.tag.on')].map(t => t.textContent).join(',');
-  
-  // === SAYAÇ MODU İÇİN TYPE DEĞERİNİ AL ===
-  let typeValue = null;
-  if (mode === 'elektrik') {
-    const typeSelect = document.getElementById(`edit-type-${entryId}`);
-    if (typeSelect) typeValue = typeSelect.value;
-  }
-  // =======================================
-  
-  const saveBtn = document.getElementById(`edit-save-${entryId}`);
-  const orig = saveBtn.innerHTML;
-  saveBtn.innerHTML = '<span class="loader" style="border-top-color:#fff"></span> Kaydediliyor...';
-  saveBtn.disabled = true;
+async function saveEdit(entryId,ei){
+  const entry=entryData[ei];
+  const note=document.getElementById(`edit-note-${entryId}`).value.trim();
+  const date=document.getElementById(`edit-date-${entryId}`).value;
+  const tw=document.getElementById(`edit-tags-${entryId}`);
+  const tags=[...tw.querySelectorAll('.tag.on')].map(t=>t.textContent).join(',');
+  let tv=null;if(mode==='elektrik'){const ts=document.getElementById(`edit-type-${entryId}`);if(ts)tv=ts.value;}
+  const sb=document.getElementById(`edit-save-${entryId}`);const orig=sb.innerHTML;sb.innerHTML='<span class="loader" style="border-top-color:#fff"></span> Kaydediliyor...';sb.disabled=true;
   try{
-    const newPhotoInput = document.getElementById(`edit-photos-${entryId}`);
-    let newUrls = [...(entry.photo_urls || [])];
-    if(newPhotoInput && newPhotoInput.files.length){
-      const files = [...newPhotoInput.files];
-      for(const f of files){
-        const {file: compressed} = await compressImage(f);
-        const u = await uploadImg(compressed, entry.room_no);
-        newUrls.push(u);
-      }
-    }
-    
-  const updateBody = {
-      note,
-      checkin_date: date,
-      category: tags,
-      photo_urls: newUrls
-    };
-    
-    if (mode === 'elektrik') {
-      const l1El = document.getElementById(`edit-l1-${entryId}`);
-      const l2El = document.getElementById(`edit-l2-${entryId}`);
-      const l3El = document.getElementById(`edit-l3-${entryId}`);
-      if (l1El && l2El && l3El) {
-        updateBody.meter_values = {
-          l1: parseFloat(l1El.value) || 0,
-          l2: parseFloat(l2El.value) || 0,
-          l3: parseFloat(l3El.value) || 0
-        };
-      }
-    }
-    
-    // Sayaç modundaysa type'ı da ekle
-    if (mode === 'elektrik' && typeValue !== null) {
-      updateBody.type = typeValue;
-    }
-    
-    const r = await api(`/rest/v1/entries?id=eq.${entryId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updateBody)
-    });
-    if(!r.ok) throw new Error('Kayit basarisiz');
-   const updated = {...entry, note, checkin_date: date, category: tags, photo_urls: newUrls};
-    if (mode === 'elektrik' && typeValue !== null) updated.type = typeValue;
-    if (updateBody.meter_values) updated.meter_values = updateBody.meter_values;
-    entryData[ei] = updated;
-    entryImages[ei] = newUrls;
-    refreshCard(ei, updated);
-    showToast('Guncellendi!','success');
-  }catch(e){
-    showToast('Hata: '+e.message,'error');
-    saveBtn.innerHTML = orig;
-    saveBtn.disabled = false;
-  }
+    const np=document.getElementById(`edit-photos-${entryId}`);let newUrls=[...(entry.photo_urls||[])];
+    if(np&&np.files.length){for(const f of [...np.files]){const{file:c}=await compressImage(f);newUrls.push(await uploadImg(c,entry.room_no));}}
+    const body={note,checkin_date:date,category:tags,photo_urls:newUrls};
+    if(mode==='elektrik'){const l1=document.getElementById(`edit-l1-${entryId}`);const l2=document.getElementById(`edit-l2-${entryId}`);const l3=document.getElementById(`edit-l3-${entryId}`);if(l1&&l2&&l3)body.meter_values={l1:parseFloat(l1.value)||0,l2:parseFloat(l2.value)||0,l3:parseFloat(l3.value)||0};}
+    if(mode==='elektrik'&&tv!==null)body.type=tv;
+    const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify(body)});if(!r.ok)throw new Error('Kayıt başarısız');
+    const upd={...entry,note,checkin_date:date,category:tags,photo_urls:newUrls};
+    if(mode==='elektrik'&&tv!==null)upd.type=tv;if(body.meter_values)upd.meter_values=body.meter_values;
+    entryData[ei]=upd;entryImages[ei]=newUrls;refreshCard(ei,upd);showToast('Güncellendi!','success');
+  }catch(e){showToast('Hata: '+e.message,'error');sb.innerHTML=orig;sb.disabled=false;}
 }
-function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);}
-async function createEntryLink(roomNo,date,mod,btnEl){const orig=btnEl.innerHTML;btnEl.innerHTML='<span class="loader" style="border-top-color:var(--accent)"></span>';btnEl.disabled=true;try{const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(date)}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});const r=await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:mod,token:token,entry_date:date})});if(!r.ok)throw new Error('Token kaydedilemedi');const base=location.origin+location.pathname;const url=`${base}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandi!','success')).catch(()=>{prompt('Linki kopyalayin:',url);});}catch(e){showToast('Hata: '+e.message,'error');}finally{btnEl.innerHTML=orig;btnEl.disabled=false;}}
 
-async function exportZIP(roomNo,entries){if(typeof JSZip==='undefined'){showToast('JSZip yuklenemedi','error');return;}const btn=q('export-zip-'+roomNo);const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader" style="border-top-color:var(--accent)"></span> Hazirlaniyor...';dlOpen('ZIP Indiriliyor',false);try{const zip=new JSZip();let total=0,done=0;for(const entry of entries)total+=(entry.photo_urls||[]).length;dlUpdate(0,total,'Fotograflar indiriliyor...');for(const entry of entries){const urls=entry.photo_urls||[];const folder=zip.folder(`${entry.checkin_date}_oda${entry.room_no}`);for(let i=0;i<urls.length;i++){try{dlStage('Oda '+entry.room_no+' · '+(i+1)+'/'+urls.length);const res=await fetch(urls[i]);const blob=await res.blob();const ext=blob.type==='image/png'?'png':'jpg';folder.file(`foto_${i+1}.${ext}`,blob);}catch(e){}done++;dlUpdate(done,total,'Fotograflar indiriliyor...');btn.innerHTML='<span class="loader" style="border-top-color:var(--accent)"></span> '+done+'/'+total;}}dlUpdate(total,total,'ZIP paketi olusturuluyor...');dlStage('ZIP paketi hazirlaniyor...');const content=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},(meta)=>{q('dl-step').textContent='Sikistiriliyor: %'+Math.round(meta.percent);});const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download=`oda_${roomNo}_${today()}.zip`;a.click();dlClose();showToast('ZIP indirildi!','success');}catch(e){dlClose();showToast('ZIP hatasi: '+e.message,'error');}finally{btn.disabled=false;btn.innerHTML=orig;}}
+/* link */
+async function createEntryLink(roomNo,date,mod,btnEl){const orig=btnEl.innerHTML;btnEl.innerHTML='<span class="loader" style="border-top-color:var(--accent)"></span>';btnEl.disabled=true;try{const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(date)}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});const r=await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:mod,token:token,entry_date:date})});if(!r.ok)throw new Error('Token kaydedilemedi');const url=`${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!','success')).catch(()=>{prompt('Linki kopyalayın:',url);});}catch(e){showToast('Hata: '+e.message,'error');}finally{btnEl.innerHTML=orig;btnEl.disabled=false;}}
 
-async function exportPDF(roomNo,entries){if(typeof window.jspdf==='undefined'){showToast('jsPDF yuklenemedi','error');return;}const btn=q('export-pdf-'+roomNo);const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader" style="border-top-color:var(--amber)"></span> Olusturuluyor...';dlOpen('PDF Raporu Olusturuluyor',true);function safe(str){if(!str)return'';return str.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const rawDataUrl=await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.readAsDataURL(blob);});const dims=await new Promise(resolve=>{const img=new Image();img.onload=()=>resolve({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>resolve({w:4,h:3});img.src=rawDataUrl;});const fixed=await fixOrientation(blob,rawDataUrl,dims.w,dims.h);return{dataUrl:fixed.dataUrl,fmt:'JPEG',pw:fixed.pw,ph:fixed.ph};}function addPhotoPage(doc,photo,entry,pageNum,totalPages){let{dataUrl,fmt,pw,ph}=photo;if(ph>pw){try{const canvas=document.createElement('canvas');canvas.width=ph;canvas.height=pw;const ctx=canvas.getContext('2d');const img=new Image();img.src=dataUrl;ctx.translate(ph/2,pw/2);ctx.rotate(Math.PI/2);ctx.drawImage(img,-pw/2,-ph/2,pw,ph);dataUrl=canvas.toDataURL('image/jpeg',0.92);fmt='JPEG';const tmp=pw;pw=ph;ph=tmp;}catch(e){}}doc.addPage([297,210],'landscape');const PW=297,PH=210;const HEADER_H=10,margin=6;doc.setFillColor(26,92,58);doc.rect(0,0,PW,HEADER_H,'F');doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont(undefined,'bold');const label=mode==='elektrik'?'Sayac':'Oda';doc.text(`${label} ${entry.room_no}`,margin,7);doc.setFont(undefined,'normal');doc.setFontSize(7.5);doc.text(fmtDatePDF(entry.checkin_date),PW/2,7,{align:'center'});doc.text(`${pageNum} / ${totalPages}`,PW-margin,7,{align:'right'});doc.setTextColor(0,0,0);const photoTop=HEADER_H+2;const availW=PW-margin*2;const availH=PH-photoTop-margin;const ratio=pw/ph;let drawW,drawH;if(availW/availH>ratio){drawH=availH;drawW=drawH*ratio;}else{drawW=availW;drawH=drawW/ratio;}const x=margin+(availW-drawW)/2;const y=photoTop+(availH-drawH)/2;doc.addImage(dataUrl,fmt,x,y,drawW,drawH,'','FAST');}try{const{jsPDF}=window.jspdf;const label=mode==='elektrik'?'Sayac':'Oda';const totalPhotos=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});const PW=210,margin=15;doc.setFillColor(26,92,58);doc.rect(0,0,PW,44,'F');doc.setTextColor(255,255,255);doc.setFontSize(26);doc.setFont(undefined,'bold');doc.text(`${label} ${roomNo}`,PW/2,22,{align:'center'});doc.setFontSize(8.5);doc.setFont(undefined,'normal');doc.text(fmtDatePDF(today()),PW/2,36,{align:'center'});doc.setTextColor(0,0,0);let sy=64;doc.setFontSize(10);doc.setFont(undefined,'bold');doc.text('Giris Ozeti',margin,sy);sy+=8;doc.setFont(undefined,'normal');doc.setFontSize(9);const dates=entries.map(e=>e.checkin_date).sort();if(dates.length){doc.setTextColor(100,100,100);doc.text('Tarih araligi:',margin,sy);doc.setTextColor(0,0,0);doc.text(`${fmtDatePDF(dates[0])}  –  ${fmtDatePDF(dates[dates.length-1])}`,margin+35,sy);sy+=7;}doc.setTextColor(100,100,100);doc.text('Toplam giris:',margin,sy);doc.setTextColor(0,0,0);doc.text(`${entries.length}`,margin+35,sy);sy+=7;doc.setTextColor(100,100,100);doc.text('Toplam fotograf:',margin,sy);doc.setTextColor(0,0,0);doc.text(`${totalPhotos}`,margin+35,sy);sy+=14;doc.setFontSize(8.5);entries.forEach((entry,i)=>{const pCount=(entry.photo_urls||[]).length;doc.setFillColor(i%2===0?248:255,i%2===0?248:255,i%2===0?248:255);doc.rect(margin,sy-4,PW-margin*2,7,'F');doc.setTextColor(80,80,80);doc.text(`${i+1}.`,margin+2,sy);doc.text(fmtDatePDF(entry.checkin_date),margin+12,sy);if(entry.category){doc.setTextColor(45,122,82);doc.text(safe(entry.category),margin+52,sy);}if(entry.note){doc.setTextColor(60,60,60);const n=safe(entry.note.length>40?entry.note.slice(0,37)+'...':entry.note);doc.text(n,margin+90,sy);}doc.setTextColor(26,92,58);doc.setFont(undefined,'bold');doc.text(`${pCount} foto`,PW-margin-2,sy,{align:'right'});doc.setFont(undefined,'normal');doc.setTextColor(0,0,0);sy+=8;if(sy>210-20){doc.addPage();sy=20;}});let done=0,globalPage=0;dlUpdate(0,totalPhotos,'Fotograflar PDF\'e ekleniyor...');for(let ei=0;ei<entries.length;ei++){const entry=entries[ei];const urls=entry.photo_urls||[];for(let i=0;i<urls.length;i++){dlStage('Oda '+entry.room_no+' · '+(i+1)+'/'+urls.length);try{const photo=await loadPhoto(urls[i]);globalPage++;addPhotoPage(doc,photo,entry,globalPage,totalPhotos);}catch(e){}done++;dlUpdate(done,totalPhotos,'Fotograflar PDF\'e ekleniyor...');btn.innerHTML='<span class="loader" style="border-top-color:var(--amber)"></span> '+done+'/'+totalPhotos;}}dlStage('PDF kaydediliyor...');doc.save(`oda_${roomNo}_rapor_${today()}.pdf`);dlClose();showToast('PDF indirildi!','success');}catch(e){dlClose();showToast('PDF hatasi: '+e.message,'error');}finally{btn.disabled=false;btn.innerHTML=orig;}}
+/* image helpers */
+async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
+async function addFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);pending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++;}renderPrev();if(cc>0){const s=Math.round((1-tn/to)*100);se.innerHTML=`<div class="compress-info"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>${cc} fotoğraf sıkıştırıldı · %${s} küçültüldü (${fmtBytes(to)} → ${fmtBytes(tn)})</div>`;}}
+function renderPrev(){q('prev-row').innerHTML=pending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"/><div class="prev-del" onclick="delPrev(${i})">✕</div></div>`).join('');}
+function delPrev(i){pending.splice(i,1);renderPrev();}
+function dzOver(e){e.preventDefault();q('dropz').classList.add('over');}
+function dzLeave(){q('dropz').classList.remove('over');}
+function dzDrop(e){e.preventDefault();dzLeave();addFiles(e.dataTransfer.files);}
+async function uploadImg(file,roomNo){const bucket=BUCKETS[mode];const ext=file.name.split('.').pop();const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});if(!r.ok)throw new Error('Yükleme başarısız');return`${SB}/storage/v1/object/public/${bucket}/${path}`;}
 
-function buildEntryCard(entry,globalIdx,isE,showRoomNum){
+/* build card */
+function buildEntryCard(entry,gi,isE,showRN){
   const urls=entry.photo_urls||[];
-  entryImages[globalIdx]=urls;
-  entryData[globalIdx]=entry;
+  entryImages[gi]=urls;entryData[gi]=entry;
   const cats=entry.category?entry.category.split(',').filter(Boolean):[];
-  const imgs=urls.map((u,i)=>`
-  <div class="img-thumb" onclick="openLb(${globalIdx},${i})">
-    <img src="${u}" loading="lazy"/>
-    ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
-    <button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${globalIdx})" title="Fotografı sil">✕</button>
-  </div>`).join('');
-  
-  // Sayaç Kutucukları (L1, L2, L3)
-  const meterHtml = (isE && entry.meter_values) ? 
-    `<div style="display:flex; gap:6px; margin-top:8px; font-size:12px; font-family:'DM Mono',monospace;">
-      <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span>
-      <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span>
-      <span style="background:var(--accent-light); color:var(--accent); padding:4px 10px; border-radius:6px; font-weight:600; border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span>
-    </div>` : '';
-
-  const isOpen=openEntries.has(globalIdx);
-  const roomNumBadge=showRoomNum
-    ?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`
-    :'';
-
-  return `<div class="entry-card">
-    <div class="entry-head" data-ei="${globalIdx}" onclick="toggleEntry(this)">
-      ${roomNumBadge}
-      <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
-        ${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_date)}
-      </div>
-      <div class="entry-meta">
-        ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
-        ${entry.note?`<div class="nt">${entry.note}</div>`:''}
-      </div>
+  const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${gi},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}<button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${gi})">✕</button></div>`).join('');
+  const mv=isE&&entry.meter_values?`<div style="display:flex;gap:6px;margin-top:8px;font-size:12px;font-family:'DM Mono',monospace;"><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span></div>`:'';
+  const isOpen=openEntries.has(gi);
+  const rnb=showRN?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`:'';
+  return`<div class="entry-card">
+    <div class="entry-head" data-ei="${gi}" onclick="toggleEntry(this)">${rnb}
+      <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
+      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
       <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
-    <div class="entry-body${isOpen ? ' open' : ''}"> <!-- 'open' kısmını isOpen kontrolüne bağladık -->
-      ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotograf yok</div>'}
+    <div class="entry-body${isOpen?' open':''}">
+      ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
       <div class="entry-footer">
-        <div style="display:flex; flex-direction:column; margin-bottom:10px;">
-          <span class="entry-footer-info">${urls.length} fotograf · ${fmtDate(entry.checkin_date)}</span>
-          ${meterHtml}
-        </div>
+        <div style="display:flex;flex-direction:column;margin-bottom:10px;"><span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>${mv}</div>
         <div class="entry-footer-actions">
-          <button class="link-btn wa-btn" onclick="goWhatsApp(this)">WhatsApp</button>
+          <button class="link-btn wa-btn" onclick="goWhatsApp()">WhatsApp</button>
           <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">Link</button>
-          <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${globalIdx})">Duzenle</button>
-          <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${globalIdx})">Sil</button>
- </div>
+          <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${gi})">Düzenle</button>
+          <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${gi})">Sil</button>
+        </div>
       </div>
     </div>
     <div id="edit-panel-${entry.id}" style="display:none;padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2)">
-      <div class="field">
-        <span class="label">Tarih</span>
-        <input type="date" id="edit-date-${entry.id}"/>
-      </div>
-      <div class="field">
-        <span class="label">Not</span>
-        <textarea id="edit-note-${entry.id}" rows="2" placeholder="Not..."></textarea>
-      </div>
-      <div class="field">
-        <span class="label">Kategori</span>
-        <div class="tags-row" id="edit-tags-${entry.id}"></div>
-      </div>
-      ${isE ? `
-      <div class="field">
-        <span class="label">Sayaç Değerleri (L1, L2, L3)</span>
-        <div style="display:flex;gap:8px;">
-          <input type="number" step="0.01" id="edit-l1-${entry.id}" placeholder="L1" style="text-align:center" value="${entry.meter_values?.l1 ?? 0}">
-          <input type="number" step="0.01" id="edit-l2-${entry.id}" placeholder="L2" style="text-align:center" value="${entry.meter_values?.l2 ?? 0}">
-          <input type="number" step="0.01" id="edit-l3-${entry.id}" placeholder="L3" style="text-align:center" value="${entry.meter_values?.l3 ?? 0}">
-        </div>
-      </div>` : ''}
-      <div class="field">
-        <span class="label">Yeni fotoğraf ekle</span>
-        <input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple/>
-      </div>
-      <button class="btn btn-primary" id="edit-save-${entry.id}" onclick="event.stopPropagation();saveEdit('${entry.id}',${globalIdx})">Kaydet</button>
+      <div class="field"><span class="label">Tarih</span><input type="date" id="edit-date-${entry.id}"/></div>
+      <div class="field"><span class="label">Not</span><textarea id="edit-note-${entry.id}" rows="2" placeholder="Not..."></textarea></div>
+      <div class="field"><span class="label">Kategori</span><div class="tags-row" id="edit-tags-${entry.id}"></div></div>
+      ${isE?`<div class="field"><span class="label">Sayaç Değerleri (L1, L2, L3)</span><div style="display:flex;gap:8px;"><input type="number" step="0.01" id="edit-l1-${entry.id}" placeholder="L1" style="text-align:center" value="${entry.meter_values?.l1??0}"><input type="number" step="0.01" id="edit-l2-${entry.id}" placeholder="L2" style="text-align:center" value="${entry.meter_values?.l2??0}"><input type="number" step="0.01" id="edit-l3-${entry.id}" placeholder="L3" style="text-align:center" value="${entry.meter_values?.l3??0}"></div></div>`:''}
+      <div class="field"><span class="label">Yeni fotoğraf ekle</span><input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple/></div>
+      <button class="btn btn-primary" id="edit-save-${entry.id}" onclick="event.stopPropagation();saveEdit('${entry.id}',${gi})">Kaydet</button>
     </div>
   </div>`;
 }
 
+/* search */
 async function doSearch(val,silent=false){
-  val=String(val).trim();
-  lastVal=val;
+  val=String(val).trim();lastVal=val;
   const el=q('sresult');
-  if(!val){
-    openEntries.clear();
-    el.innerHTML=`<div class="empty">Numara girin</div>`;
-    return;
-  }
-  if(!silent) el.innerHTML=`<div class="empty">Aranıyor...</div>`;
+  if(!val){openEntries.clear();el.innerHTML='<div class="empty">Numara girin</div>';return;}
+  if(!silent)el.innerHTML='<div class="empty">Aranıyor...</div>';
   try{
     const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);
     const data=await res.json();
-    if(!data.length){ el.innerHTML=`<div class="empty">Kayıt bulunamadı</div>`; return; }
-    
-    const filteredData = data.filter(entry => entry.photo_urls && entry.photo_urls.length > 0);
+    if(!data.length){el.innerHTML='<div class="empty">Kayıt bulunamadı</div>';return;}
+    const fd=data.filter(e=>e.photo_urls&&e.photo_urls.length>0);
     const isE=mode==='elektrik';
-    const totalP=filteredData.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    
-    // Tarihe göre grupla
-    const groupedByDate = {};
-    filteredData.forEach(entry => {
-      const dateKey = entry.checkin_date;
-      if(!groupedByDate[dateKey]) groupedByDate[dateKey] = [];
-      groupedByDate[dateKey].push(entry);
+    const tp=fd.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    const gbd={};fd.forEach(e=>{if(!gbd[e.checkin_date])gbd[e.checkin_date]=[];gbd[e.checkin_date].push(e);});
+    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${fd.length} giriş · ${tp} fotoğraf</span></div></div>`;
+    let gi=0;
+    Object.keys(gbd).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
+      const arr=gbd[dk];
+      html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDate(dk)}</div>`;
+      if(arr.length>1){html+=`<div class="entries-grid">`;arr.forEach(e=>{html+=buildEntryCard(e,gi++,isE,false);});html+=`</div>`;}
+      else html+=buildEntryCard(arr[0],gi++,isE,false);
     });
-    
-    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${filteredData.length} giriş · ${totalP} fotoğraf</span></div></div>`;
-    
-    const sortedDates = Object.keys(groupedByDate).sort((a,b) => new Date(b) - new Date(a));
-    let globalIdx = 0;
-    
-    for(const dateKey of sortedDates) {
-      const entriesOnDate = groupedByDate[dateKey];
-      // Tarih Başlığı
-      html += `<div style="margin-top:15px; margin-bottom:8px; font-size:13px; font-weight:600; color:var(--muted); display:flex; align-items:center; gap:6px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                ${fmtDate(dateKey)}
-               </div>`;
-
-      // Eğer o tarihte birden fazla kayıt (giriş-çıkış) varsa yan yana koy
-      if(entriesOnDate.length > 1) {
-        html += `<div class="entries-grid">`;
-        for(const entry of entriesOnDate) {
-          html += buildEntryCard(entry, globalIdx++, isE, false);
-        }
-        html += `</div>`;
-      } else {
-        html += buildEntryCard(entriesOnDate[0], globalIdx++, isE, false);
-      }
-    }
     el.innerHTML=html;
-  } catch(e){
-    if(!silent) el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;
-  }
+  }catch(e){if(!silent)el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
 }
-async function doDateSearch(silent=false){const from=q('d-from').value;const to=q('d-to').value;const el=q('sresult');if(!from||!to){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Başlangıç ve bitiş tarihi seçin<small>Seçilen aralıkta giriş yapan odalar listelenir</small></div>`;return;}if(from>to){el.innerHTML=`<div class="empty">Başlangıç tarihi bitiş tarihinden büyük olamaz.</div>`;return;}if(!silent)el.innerHTML=`<div class="empty">Aranıyor...</div>`;try{const res=await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc,room_no.asc`);const data=await res.json();if(!data.length){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarih aralığında kayıt yok<small>${fmtDate(from)} – ${fmtDate(to)}</small></div>`;return;}const isE=mode==='elektrik';const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const grouped={};data.forEach(e=>{if(!grouped[e.room_no])grouped[e.room_no]=[];grouped[e.room_no].push(e);});const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));entryImages={};entryData={};let imgIdx=0;let html=`<div class="room-header" style="margin-bottom:12px"><div class="room-num${isE?' e':''}" style="font-size:16px;padding:6px 10px">${rooms.length} oda</div><div class="room-summary"><strong>${fmtDate(from)} – ${fmtDate(to)}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>`;rooms.forEach(rno=>{const entries=grouped[rno];entries.forEach(entry=>{html+=buildEntryCard(entry,imgIdx++,isE,true);});});el.innerHTML=html;}catch(e){if(!silent)el.innerHTML=`<div class="empty">Bağlantı hatası.</div>`;}}
+
+async function doDateSearch(silent=false){
+  const from=q('d-from').value,to=q('d-to').value,el=q('sresult');
+  if(!from||!to){el.innerHTML='<div class="empty">Başlangıç ve bitiş tarihi seçin</div>';return;}
+  if(from>to){el.innerHTML='<div class="empty">Başlangıç tarihi bitiş tarihinden büyük olamaz.</div>';return;}
+  if(!silent)el.innerHTML='<div class="empty">Aranıyor...</div>';
+  try{
+    const res=await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc,room_no.asc`);
+    const data=await res.json();
+    if(!data.length){el.innerHTML=`<div class="empty">Bu tarih aralığında kayıt yok</div>`;return;}
+    const isE=mode==='elektrik';const tp=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    const grouped={};data.forEach(e=>{if(!grouped[e.room_no])grouped[e.room_no]=[];grouped[e.room_no].push(e);});
+    const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));
+    entryImages={};entryData={};let gi=0;
+    let html=`<div class="room-header" style="margin-bottom:12px"><div class="room-num${isE?' e':''}" style="font-size:16px;padding:6px 10px">${rooms.length} oda</div><div class="room-summary"><strong>${fmtDate(from)} – ${fmtDate(to)}</strong><span>${data.length} giriş · ${tp} fotoğraf</span></div></div>`;
+    rooms.forEach(rno=>grouped[rno].forEach(e=>{html+=buildEntryCard(e,gi++,isE,true);}));
+    el.innerHTML=html;
+  }catch(e){if(!silent)el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
+}
 
 function toggleEntry(head){const ei=parseInt(head.dataset.ei);const body=head.nextElementSibling;const chev=head.querySelector('.chevron');const isOpen=body.classList.contains('open');if(isOpen){body.classList.remove('open');chev.classList.remove('open');openEntries.delete(ei);}else{body.classList.add('open');chev.classList.add('open');openEntries.add(ei);}}
 
-async function addFiles(files){const statusEl=q('compress-status');statusEl.innerHTML='';let totalOrig=0,totalNew=0,compressedCount=0;for(const f of files){const result=await compressImage(f);pending.push({file:result.file,url:URL.createObjectURL(result.file)});totalOrig+=result.origSize;totalNew+=result.newSize;if(result.compressed)compressedCount++;}renderPrev();if(compressedCount>0){const saved=Math.round((1-totalNew/totalOrig)*100);statusEl.innerHTML=`<div class="compress-info"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>${compressedCount} fotoğraf sıkıştırıldı · %${saved} küçültüldü (${fmtBytes(totalOrig)} → ${fmtBytes(totalNew)})</div>`;}}
-
-function renderPrev(){q('prev-row').innerHTML=pending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"/><div class="prev-del" onclick="delPrev(${i})">✕</div></div>`).join('');}
-function delPrev(i){pending.splice(i,1);renderPrev();}
-function dzOver(e){e.preventDefault();q('dropz').classList.add('over');}
-  
-function dzLeave(){q('dropz').classList.remove('over');}
-function dzDrop(e){e.preventDefault();dzLeave();addFiles(e.dataTransfer.files);}
-
-async function uploadImg(file,roomNo){const bucket=BUCKETS[mode];const ext=file.name.split('.').pop();const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});if(!r.ok)throw new Error('Yükleme başarısız');return`${SB}/storage/v1/object/public/${bucket}/${path}`;}
-
+/* save */
 async function saveEntry(){
-  const type = (mode === 'elektrik') ? q('f-type').value : null;
-  const roomNo = q('f-room').value.trim();
-  const date = q('f-date').value;
-  const note = q('f-note').value.trim();
-
-   // Sayaç değerlerini al
- // Sayaç değerlerini al (Ondalıklı sayı desteği için parseFloat kullanıyoruz)
-  let meterValues = null;
-  if (mode === 'elektrik') {
-    meterValues = {
-      l1: parseFloat(q('f-l1').value) || 0,
-      l2: parseFloat(q('f-l2').value) || 0,
-      l3: parseFloat(q('f-l3').value) || 0
-    };
-  }
-  if(!roomNo){ showToast('Numara gerekli!','error'); return; }
-  if(!date){ showToast('Tarih gerekli!','error'); return; }
-  if(!pending.length){ showToast('En az bir fotoğraf ekleyin!','error'); return; }
-
-  const btn = q('save-btn'), lbl = q('save-label');
-  const progressWrap = q('progress-wrap'), progressBar = q('progress-bar');
-  btn.disabled = true;
-  lbl.innerHTML = '<span class="loader"></span> Yükleniyor...';
-  progressWrap.classList.add('show');
-  progressBar.style.width = '0%';
-
+  const type=mode==='elektrik'?q('f-type').value:null;
+  const roomNo=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim();
+  let mv=null;if(mode==='elektrik')mv={l1:parseFloat(q('f-l1').value)||0,l2:parseFloat(q('f-l2').value)||0,l3:parseFloat(q('f-l3').value)||0};
+  if(!roomNo){showToast('Numara gerekli!','error');return;}
+  if(!date){showToast('Tarih gerekli!','error');return;}
+  if(!pending.length){showToast('En az bir fotoğraf ekleyin!','error');return;}
+  const btn=q('save-btn'),lbl=q('save-label'),pw=q('progress-wrap'),pb=q('progress-bar');
+  btn.disabled=true;lbl.innerHTML='<span class="loader"></span> Yükleniyor...';pw.classList.add('show');pb.style.width='0%';
   try{
-    // Fotoğrafları yükle
-    const urls = [];
-    for(let i = 0; i < pending.length; i++){
-      const u = await uploadImg(pending[i].file, roomNo);
-      urls.push(u);
-      progressBar.style.width = Math.round((i+1)/pending.length*100)+'%';
-    }
-
-   let filter = `room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}`;
-if (mode === 'elektrik' && type) {
-  filter += `&type=eq.${encodeURIComponent(type)}`;
-}
-    
-    const existingRes = await api(`/rest/v1/entries?${filter}&limit=1`);
-    const existingData = await existingRes.json();
-
-  // Kayıt yaparken:
-  const bodyData = {
-    room_no: roomNo,
-    mode: mode,
-    checkin_date: date,
-    category: selTags.join(','),
-    note: note,
-    photo_urls: urls,
-    type: type,
-  };
-    if (existingData.length > 0) {
-      // Aynı oda + aynı tarih + aynı type varsa → FOTOĞRAFLARI BİRLEŞTİR
-      const existing = existingData[0];
-      const mergedUrls = [...(existing.photo_urls || []), ...urls];
-      
-      await api(`/rest/v1/entries?id=eq.${existing.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          photo_urls: mergedUrls,
-          note: note || existing.note,
-          category: selTags.join(',') || existing.category,
-          type: type  // type aynı kalır
-        })
-      });
-      showToast('Fotoğraflar mevcut kayda eklendi!','success');
-    } else {
-  // YENİ KAYIT OLUŞTUR
-  const newEntryBody = {
-    room_no: roomNo,
-    mode: mode,
-    checkin_date: date,
-    category: selTags.join(','),
-    note: note,
-    photo_urls: urls,
-    type: type,
-  };
-  if (mode === 'elektrik') {
-    newEntryBody.meter_values = meterValues;
-  }
-  await api('/rest/v1/entries', {
-    method: 'POST',
-    body: JSON.stringify(newEntryBody)
-  });
-  showToast('Yeni kayıt oluşturuldu!','success');
+    const urls=[];for(let i=0;i<pending.length;i++){urls.push(await uploadImg(pending[i].file,roomNo));pb.style.width=Math.round((i+1)/pending.length*100)+'%';}
+    let filter=`room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}`;
+    if(mode==='elektrik'&&type)filter+=`&type=eq.${encodeURIComponent(type)}`;
+    const ex=await(await api(`/rest/v1/entries?${filter}&limit=1`)).json();
+    if(ex.length>0){const merged=[...(ex[0].photo_urls||[]),...urls];await api(`/rest/v1/entries?id=eq.${ex[0].id}`,{method:'PATCH',body:JSON.stringify({photo_urls:merged,note:note||ex[0].note,category:selTags.join(',')||ex[0].category,type})});showToast('Fotoğraflar mevcut kayda eklendi!','success');}
+    else{const body={room_no:roomNo,mode,checkin_date:date,category:selTags.join(','),note,photo_urls:urls,type};if(mode==='elektrik')body.meter_values=mv;await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});showToast('Yeni kayıt oluşturuldu!','success');}
+    pending=[];selTags=[];qs('.tag').forEach(t=>t.classList.remove('on'));
+    q('f-room').value='';q('f-note').value='';q('f-date').value=today();q('prev-row').innerHTML='';q('compress-status').innerHTML='';
+    const sv=q('sinput')?.value.trim();if(sv==roomNo){openEntries.clear();doSearch(roomNo,true);}
+    if(tab===2)loadAll(true);if(tab===3)loadMeterList(true);
+  }catch(e){showToast('Hata: '+e.message,'error');}
+  finally{btn.disabled=false;lbl.textContent='Kaydet';pw.classList.remove('show');pb.style.width='0%';}
 }
 
-    // Formu temizle
-    pending = [];
-    selTags = [];
-    document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-    q('f-room').value = '';
-    q('f-note').value = '';
-    q('f-date').value = today();
-    q('prev-row').innerHTML = '';
-    q('compress-status').innerHTML = '';
-
-    // Arama sonuçlarını yenile
-    const currentSearchVal = q('sinput')?.value.trim();
-    if(currentSearchVal == roomNo) {
-      openEntries.clear();
-      doSearch(roomNo, true);
-    }
-    if(tab === 2) loadAll(true);
-
-  } catch(e){
-    showToast('Hata: '+e.message,'error');
-  } finally {
-    btn.disabled = false;
-    lbl.textContent = 'Kaydet';
-    progressWrap.classList.remove('show');
-    progressBar.style.width = '0%';
-  }
+/* all rooms */
+async function loadAll(silent=false){
+  const el=q('rlist');if(!silent)el.innerHTML='<div class="empty">Yükleniyor...</div>';
+  try{
+    const res=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls,type&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`);
+    const data=await res.json();
+    if(!data.length){el.innerHTML='<div class="empty">Henüz kayıt yok</div>';return;}
+    const grouped={};data.forEach(r=>{if(!grouped[r.room_no])grouped[r.room_no]=[];grouped[r.room_no].push(r);});
+    const isE=mode==='elektrik';
+    const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));
+    const cards=rooms.map(rno=>{const entries=grouped[rno];const latest=entries[0];const tp=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const cover=(latest.photo_urls||[])[0];const cEl=cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:var(--radius-sm);flex-shrink:0" loading="lazy"/>`:`<div style="width:56px;height:56px;border-radius:var(--radius-sm);background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>`;return`<div class="all-card" onclick="goRoom('${rno}')"><div class="all-card-inner">${cEl}<div style="flex:1;min-width:0"><div style="font-weight:500;font-size:15px">${isE?'Sayaç':'Oda'} ${rno}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${entries.length} giriş · ${tp} fotoğraf</div><div class="date-badge${isE?' e':''}" style="margin-top:5px;font-size:11px;display:inline-flex">Son: ${fmtDate(latest.checkin_date)}</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg></div></div>`;}).join('');
+    el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:13px;color:var(--muted)">${rooms.length} oda</span><button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Dışa Aktar</button></div>${cards}`;
+  }catch(e){if(!silent)el.innerHTML='<div class="empty">Bağlantı hatası</div>';}
 }
-async function loadAll(silent=false){const el=q('rlist');if(!silent)el.innerHTML='<div class="empty">Yükleniyor...</div>';try{const res=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls,type&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`);const data=await res.json();if(!data.length){el.innerHTML='<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Henüz kayıt yok</div>';return;}const grouped={};data.forEach(r=>{if(!grouped[r.room_no])grouped[r.room_no]=[];grouped[r.room_no].push(r);});const isE=mode==='elektrik';const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));const cardsHtml=rooms.map(rno=>{const entries=grouped[rno];const latest=entries[0];const totalP=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);const cover=(latest.photo_urls||[])[0];const cEl=cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:var(--radius-sm);flex-shrink:0" loading="lazy"/>`:`<div style="width:56px;height:56px;border-radius:var(--radius-sm);background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>`;return`<div class="all-card" onclick="goRoom('${rno}')"><div class="all-card-inner">${cEl}<div style="flex:1;min-width:0"><div style="font-weight:500;font-size:15px">${isE?'Sayaç':'Oda'} ${rno}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${entries.length} giriş · ${totalP} fotoğraf</div><div class="date-badge${isE?' e':''}" style="margin-top:5px;font-size:11px;display:inline-flex"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Son: ${fmtDate(latest.checkin_date)}</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg></div></div>`;}).join('');el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:13px;color:var(--muted)">${rooms.length} oda</span><button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Dışa Aktar</button></div>${cardsHtml}`;}catch(e){if(!silent)el.innerHTML='<div class="empty">Bağlantı hatası</div>';}}
 
 function goRoom(rno){openEntries.clear();q('sinput').value=rno;goTab(0);doSearch(rno);}
-function showToast(msg,type=''){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3000);}
 
-const _params=new URLSearchParams(location.search);
-const _oda=_params.get('oda');
-const _mod=_params.get('mod');
-const _token=_params.get('token');
-const _tarih=_params.get('tarih');
+/* ═══ SAYAÇ LİSTESİ ═══ */
+function mlSetType(t){
+  mlTypeFilter=t;
+  ['all','giris','cikis'].forEach(k=>{
+    const b=q('mt-'+k);
+    b.className='mt-btn'+(t===k?' sel-'+k:'');
+  });
+  mlFilter();
+}
 
-function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('topbar-sub').textContent='Geçersiz veya süresi dolmuş link';q('s1').remove();q('s2').remove();document.querySelector('#s0 > div:first-child').style.display='none';document.querySelector('#stab-room-content').style.display='none';document.querySelector('#stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="width:64px;height:64px;margin:0 auto 20px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted);line-height:1.6">Geçersiz veya süresi dolmuş bir link kullandınız.<br/>Lütfen size gönderilen linki kontrol edin.</div></div>`;}
+async function loadMeterList(silent=false){
+  const wrap=q('ml-wrap');
+  if(!silent)wrap.innerHTML='<div class="ml-empty">Yükleniyor...</div>';
+  try{
+    const res=await api('/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type,meter_values,photo_urls');
+    mlAllData=await res.json();
+    /* kat listesini doldur */
+    const katSet=new Set();
+    mlAllData.forEach(e=>{if(e.category)e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim()));});
+    const sel=q('ml-kat'),cur=sel.value;
+    sel.innerHTML='<option value="">Tüm katlar</option>';
+    [...katSet].sort().forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});
+    if(cur&&katSet.has(cur))sel.value=cur;
+    mlFilter();
+  }catch(e){wrap.innerHTML='<div class="ml-empty">Bağlantı hatası</div>';}
+}
 
-async function showReadonlyEntry(oda,mod,tarih){const label=mod==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;const el=q('sresult');el.innerHTML='<div class="empty">Yükleniyor...</div>';try{const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`);const data=await res.json();if(!data.length){el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarihe ait kayıt bulunamadı</div>`;return;}const isE=mod==='elektrik';const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} giriş · ${totalP} fotoğraf</span></div></div>`;data.forEach((entry,ei)=>{const urls=entry.photo_urls||[];entryImages[ei]=urls;const cats=entry.category?entry.category.split(',').filter(Boolean):[];const imgs = urls.map((u,i)=>`
-  <div class="img-thumb" onclick="openLb(${ei},${i})">
-    <img src="${u}" loading="lazy"/>
-   ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
-  </div>
-`).join('');html+=`<div class="entry-card"><div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)"><div class="date-badge${isE?' e':''}" style="flex-shrink:0">
-  ${entry.type === 'cikis' ? 
-    '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12m0 0l-3-3m3 3l3-3M5 21h14"/></svg>' :
-    '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V9m0 0l-3 3m3-3l3 3M5 3h14"/></svg>'
-  }
-${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_date)}
-</div>
-</div><div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}</div></div>`;});el.innerHTML=html;}catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}}
+function mlFilter(){
+  const search=(q('ml-search')?.value||'').toLowerCase().trim();
+  const kat=q('ml-kat')?.value||'';
+  mlFiltered=mlAllData.filter(e=>{
+    if(mlTypeFilter!=='all'&&e.type!==mlTypeFilter)return false;
+    if(kat&&!(e.category||'').includes(kat))return false;
+    if(search){const rno=String(e.room_no).toLowerCase();const cat=(e.category||'').toLowerCase();const nt=(e.note||'').toLowerCase();if(!rno.includes(search)&&!cat.includes(search)&&!nt.includes(search))return false;}
+    return true;
+  });
+  renderMeterList();
+}
 
-if(_oda&&_token){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Yükleniyor...';q('topbar-sub').textContent='Doğrulanıyor...';q('s1').remove();q('s2').remove();document.querySelector('#s0 > div:first-child').style.display='none';document.querySelector('#stab-room-content').style.display='none';document.querySelector('#stab-date-content').style.display='none';q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';const _m=(_mod==='elektrik'?'elektrik':'demirbaş');mode=_m;let tokenQuery=`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`;api(tokenQuery).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tokenRow=data[0];if(_tarih){if(tokenRow.entry_date&&tokenRow.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{const label=_m==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${_oda}`;q('topbar-sub').textContent='Salt okunur görünüm';doSearch(_oda);}}).catch(()=>showAccessError());}else if(_oda&&!_token){showAccessError();}else{q('f-date').value=today();let savedMode = localStorage.getItem('activeMode') || 'demirbaş';
-setMode(savedMode);checkConn();try{const saved=parseInt(localStorage.getItem('activeTab'));if(!isNaN(saved)&&saved>=0&&saved<=2)goTab(saved);else startTimer();}catch(e){startTimer();}}
+function renderMeterList(){
+  const wrap=q('ml-wrap'),statsEl=q('ml-stats');
+  if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
+
+  /* giriş-çıkış fark hesabı */
+  const byRoom={};
+  [...mlAllData].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)).forEach(e=>{if(!byRoom[e.room_no])byRoom[e.room_no]=[];byRoom[e.room_no].push(e);});
+  const farkMap={};
+  Object.values(byRoom).forEach(arr=>{let lastG=null;arr.forEach(e=>{const mv=e.meter_values;if(!mv){farkMap[e.id]=null;return;}const tot=(mv.l1||0)+(mv.l2||0)+(mv.l3||0);if(e.type==='giris'){lastG=tot;farkMap[e.id]=null;}else if(e.type==='cikis'&&lastG!==null){farkMap[e.id]=(tot-lastG).toFixed(2);lastG=null;}else farkMap[e.id]=null;});});
+
+  /* stats */
+  const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
+  const tC=mlFiltered.filter(e=>e.type==='cikis').length;
+  const odalar=new Set(mlFiltered.map(e=>e.room_no));
+  statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
+
+  let rows='';
+  mlFiltered.forEach(e=>{
+    const mv=e.meter_values;
+    const l1=mv??(mv?.l1??'—');const l2=mv?.l2??'—';const l3=mv?.l3??'—';
+    const L1=mv?mv.l1??'—':'—',L2=mv?mv.l2??'—':'—',L3=mv?mv.l3??'—':'—';
+    const fark=farkMap[e.id];
+    const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:parseFloat(fark)>=0?`<div class="ml-c fc pos">+${fark}</div>`:`<div class="ml-c fc neg">${fark}</div>`;
+    const cats=(e.category||'').split(',').filter(Boolean);
+    const katL=cats.length?cats[0]:'—';
+    const isG=e.type!=='cikis';
+    const typeDot=isG?`<span class="gd">●</span> Giriş`:`<span class="cd">●</span> Çıkış`;
+    rows+=`<div class="ml-row ${isG?'gr':'cr'}" onclick="goRoom('${e.room_no}')">
+      <div class="ml-c rb"><span class="${isG?'':'eb'}">${e.room_no}</span></div>
+      <div class="ml-c kb"><span>${katL}</span></div>
+      <div class="ml-c" style="font-size:11px;color:var(--muted)">${fmtShort(e.checkin_date)}</div>
+      <div class="ml-c tc">${typeDot}</div>
+      <div class="ml-c vc">${L1}</div>
+      <div class="ml-c vc">${L2}</div>
+      <div class="ml-c vc">${L3}</div>
+      ${farkHtml}
+    </div>`;
+  });
+
+  wrap.innerHTML=`<div class="ml-head"><span>Oda</span><span>Kat</span><span>Tarih</span><span>Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span></div>${rows}`;
+}
+
+/* PDF exports */
+async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const raw=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(blob);});const dims=await new Promise(r=>{const img=new Image();img.onload=()=>r({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>r({w:4,h:3});img.src=raw;});const fx=await fixOrientation(blob,raw,dims.w,dims.h);return{dataUrl:fx.dataUrl,fmt:'JPEG',pw:fx.pw,ph:fx.ph};}
+
+async function exportBulkPDFFromEntries(rooms,allEntries,filename,btnRef,origLabel){
+  if(typeof window.jspdf==='undefined'){showToast('jsPDF yüklenemedi','error');return;}
+  const tt=rooms.length===1?'Oda '+rooms[0]+' PDF':rooms.length+' Oda PDF';
+  dlOpen(tt,true);
+  try{
+    const{jsPDF}=window.jspdf,label=mode==='elektrik'?'Sayac':'Oda';
+    const tp=allEntries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const PW=210,mg=15;
+    doc.setFillColor(26,92,58);doc.rect(0,0,PW,44,'F');doc.setTextColor(255,255,255);doc.setFontSize(22);doc.setFont(undefined,'bold');
+    doc.text(rooms.length===1?`${label} ${rooms[0]}`:`${rooms.length} Oda Raporu`,PW/2,22,{align:'center'});
+    doc.setFontSize(8.5);doc.setFont(undefined,'normal');doc.text(fmtDatePDF(today()),PW/2,36,{align:'center'});doc.setTextColor(0,0,0);
+    let sy=58;doc.setFontSize(10);doc.setFont(undefined,'bold');doc.text('Ozet',mg,sy);sy+=8;doc.setFont(undefined,'normal');doc.setFontSize(9);
+    if(rooms.length>1){doc.setTextColor(100,100,100);doc.text('Secilen odalar:',mg,sy);sy+=6;doc.setTextColor(0,0,0);doc.splitTextToSize(rooms.join(', '),PW-mg*2).forEach(l=>{doc.text(l,mg,sy);sy+=6;});sy+=2;}
+    const dates=allEntries.map(e=>e.checkin_date).sort();if(dates.length){doc.setTextColor(100,100,100);doc.text('Tarih araligi:',mg,sy);doc.setTextColor(0,0,0);doc.text(`${fmtDatePDF(dates[0])} - ${fmtDatePDF(dates[dates.length-1])}`,mg+35,sy);sy+=7;}
+    doc.setTextColor(100,100,100);doc.text('Toplam giris:',mg,sy);doc.setTextColor(0,0,0);doc.text(`${allEntries.length}`,mg+35,sy);sy+=7;
+    doc.setTextColor(100,100,100);doc.text('Toplam fotograf:',mg,sy);doc.setTextColor(0,0,0);doc.text(`${tp}`,mg+35,sy);sy+=14;
+    doc.setFontSize(8.5);let lastRno=null;
+    allEntries.forEach((entry,i)=>{
+      if(entry.room_no!==lastRno){if(lastRno!==null)sy+=4;doc.setFont(undefined,'bold');doc.setFontSize(9);doc.setTextColor(26,92,58);doc.text(`${label} ${entry.room_no}`,mg,sy);sy+=7;doc.setFont(undefined,'normal');doc.setFontSize(8.5);doc.setTextColor(0,0,0);lastRno=entry.room_no;}
+      const pc=(entry.photo_urls||[]).length;doc.setFillColor(i%2===0?248:255,i%2===0?248:255,i%2===0?248:255);doc.rect(mg,sy-4,PW-mg*2,7,'F');
+      doc.setTextColor(80,80,80);doc.text(fmtDatePDF(entry.checkin_date),mg+4,sy);
+      if(entry.category){doc.setTextColor(45,122,82);doc.text(safe(entry.category),mg+44,sy);}
+      if(entry.note){doc.setTextColor(60,60,60);doc.text(safe(entry.note.length>35?entry.note.slice(0,32)+'...':entry.note),mg+84,sy);}
+      doc.setTextColor(26,92,58);doc.setFont(undefined,'bold');doc.text(`${pc} foto`,PW-mg-2,sy,{align:'right'});doc.setFont(undefined,'normal');doc.setTextColor(0,0,0);sy+=8;if(sy>270){doc.addPage();sy=20;}
+    });
+    let done=0,gp=0;dlUpdate(0,tp,'Fotograflar ekleniyor...');
+    for(const entry of allEntries){
+      const urls=entry.photo_urls||[];
+      for(let i=0;i<urls.length;i++){
+        dlStage('Oda '+entry.room_no+' · '+(i+1)+'/'+urls.length);
+        try{
+          let{dataUrl,fmt,pw,ph}=await loadPhoto(urls[i]);
+          if(ph>pw){try{const c=document.createElement('canvas');c.width=ph;c.height=pw;const ctx=c.getContext('2d');const img=new Image();img.src=dataUrl;ctx.translate(ph/2,pw/2);ctx.rotate(Math.PI/2);ctx.drawImage(img,-pw/2,-ph/2,pw,ph);dataUrl=c.toDataURL('image/jpeg',0.92);const tmp=pw;pw=ph;ph=tmp;}catch(err){}}
+          doc.addPage([297,210],'landscape');const PPW=297,PPH=210,HH=10,mmg=6;
+          doc.setFillColor(26,92,58);doc.rect(0,0,PPW,HH,'F');doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont(undefined,'bold');doc.text(`${label} ${entry.room_no}`,mmg,7);doc.setFont(undefined,'normal');doc.setFontSize(7.5);doc.text(fmtDatePDF(entry.checkin_date),PPW/2,7,{align:'center'});gp++;doc.text(`${gp}/${tp}`,PPW-mmg,7,{align:'right'});doc.setTextColor(0,0,0);
+          const aW=PPW-mmg*2,aH=PPH-HH-2-mmg,ratio=pw/ph;let dW,dH;if(aW/aH>ratio){dH=aH;dW=dH*ratio;}else{dW=aW;dH=dW/ratio;}
+          doc.addImage(dataUrl,'JPEG',mmg+(aW-dW)/2,HH+2+(aH-dH)/2,dW,dH,'','FAST');
+        }catch(err){}
+        done++;dlUpdate(done,tp,'Fotograflar ekleniyor...');if(btnRef)btnRef.innerHTML='<span class="loader"></span> '+done+'/'+tp;
+      }
+    }
+    dlStage('PDF kaydediliyor...');doc.save(filename);dlClose();showToast('PDF indirildi!','success');
+  }catch(e){dlClose();showToast('PDF hatası: '+e.message,'error');}
+  finally{if(btnRef){btnRef.innerHTML=origLabel;btnRef.disabled=false;}}
+}
+
+async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Kayıt bulunamadı','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tum_odalar_${today()}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
+async function runPdfDate(){const from=q('pdf-date-from').value,to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi daha küçük olmalı','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Bu aralıkta kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
+async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const all=[];for(const rno of rooms){const d=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`)).json();d.forEach(e=>all.push(e));}if(!all.length){showToast('Bu odalarda kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,all,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
+
+/* readonly / token */
+const _p=new URLSearchParams(location.search);
+const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih');
+
+function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
+
+async function showReadonlyEntry(oda,mod,tarih){
+  const label=mod==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
+  const el=q('sresult');el.innerHTML='<div class="empty">Yükleniyor...</div>';
+  try{
+    const data=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`)).json();
+    if(!data.length){el.innerHTML='<div class="empty">Kayıt bulunamadı</div>';return;}
+    const isE=mod==='elektrik',tp=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} giriş · ${tp} fotoğraf</span></div></div>`;
+    data.forEach((entry,ei)=>{const urls=entry.photo_urls||[];entryImages[ei]=urls;const cats=entry.category?entry.category.split(',').filter(Boolean):[];const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}</div>`).join('');html+=`<div class="entry-card"><div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)"><div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div><div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}</div></div>`;});
+    el.innerHTML=html;
+  }catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
+}
+
+/* init */
+if(_oda&&_token){
+  document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';
+  q('s1').remove();q('s2').remove();q('s3').remove();
+  document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
+  q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
+  const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
+  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
+    .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{q('topbar-title').textContent=(_m==='elektrik'?'Sayaç':'Oda')+' '+_oda;q('topbar-sub').textContent='Salt okunur';doSearch(_oda);}}).catch(()=>showAccessError());
+}else if(_oda&&!_token){showAccessError();}
+else{
+  q('f-date').value=today();
+  let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
+  setMode(savedMode);checkConn();
+  try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=3){if(sv===3&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
+}
 </script>
 </body>
 </html>
