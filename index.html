@@ -12,6 +12,13 @@
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
   }
+  .sort-icon {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+  
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
   .entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
@@ -490,6 +497,8 @@ let mlAllData=[],mlFiltered=[],mlTypeFilter='all';
 let mlSortDir = 1;
 const CMAX=1600,CQ=0.82;
 
+
+  
 function q(id){return document.getElementById(id)}
 function qs(s){return document.querySelectorAll(s)}
 async function api(path,opts={}){return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}});}
@@ -544,7 +553,20 @@ function setMode(m){
   if(tab===2)loadAll(true);
   if(tab===3&&isE)loadMeterList(true);
 }
+function updateSortIcons() {
+  const keys = ['room','kat','date','type'];
 
+  keys.forEach(k => {
+    const el = document.getElementById('sort-' + k);
+    if (!el) return;
+
+    if (mlSortKey === k) {
+      el.textContent = mlSortDir === 1 ? '▲' : '▼';
+    } else {
+      el.textContent = ''; // diğerlerini temizle
+    }
+  });
+}
 /* tabs */
 function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();startTimer();}
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterList(true);},3000);}
@@ -784,6 +806,7 @@ function mlFilter(){
   } else {
     mlSortKey = key;
     mlSortDir = 1;
+    
   }
 
   mlFiltered.sort((a, b) => {
@@ -815,7 +838,7 @@ function mlFilter(){
     if (v1 < v2) return -1 * mlSortDir;
     return 0;
   });
-
+updateSortIcons();
   renderMeterList(); // ⛔ BURASI ÇOK ÖNEMLİ
 }
 
@@ -862,9 +885,9 @@ function renderMeterList(){
   });
 
   wrap.innerHTML=`<div class="ml-head">
-  <span onclick="mlSort('room')">Oda</span>
-  <span onclick="mlSort('kat')">Kat</span>
-  <span onclick="mlSort('date')">Tarih</span>
+  <span onclick="mlSort('room')">Oda <span class="sort-icon" id="sort-room"></span></span>
+  <span onclick="mlSort('kat')">Kat <span class="sort-icon" id="sort-kat"></span></span>
+  <span onclick="mlSort('date')">Tarih <span class="sort-icon" id="sort-date"></span></span>
   <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span></div>${rows}`;
 }
 
