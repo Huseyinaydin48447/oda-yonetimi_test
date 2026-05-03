@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Oda Yönetimi</title>
+<title>Oda Yönetimi · Demirbaş & Elektrik</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
   :root {
@@ -11,6 +11,7 @@
     --text:#1a1a18;--muted:#7a7a72;--accent:#1a5c3a;--accent-light:#e8f2ec;
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
+    --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
   }
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
@@ -213,6 +214,69 @@
   .ml-c.fc.neg{color:var(--danger);font-weight:600;}
   .ml-c.fc.none{color:var(--muted);}
   .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
+
+  /* SAYAÇ HESAPLAMA STILLERI */
+  .tarife-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .tarife-btn{border:2px solid var(--border);background:var(--surface2);border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;transition:all .15s;position:relative}
+  .tarife-btn:active{transform:scale(.97)}
+  .tarife-btn .tb-devir{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px}
+  .tarife-btn .tb-tip{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .tarife-btn .tb-kw{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--muted);line-height:1}
+  .tarife-btn .tb-unit{font-size:10px;color:var(--muted)}
+  .tarife-btn.active{border-color:var(--accent);background:var(--accent-light)}
+  .tarife-btn.active .tb-devir{color:var(--accent-mid)}
+  .tarife-btn.active .tb-tip{color:var(--accent)}
+  .tarife-btn.active .tb-kw{color:var(--accent)}
+  .tarife-btn.active .tb-unit{color:var(--accent-mid)}
+  .tarife-btn .check{display:none;position:absolute;top:8px;right:8px;width:16px;height:16px;background:var(--accent);border-radius:50%;align-items:center;justify-content:center}
+  .tarife-btn.active .check{display:flex}
+  .btn-calc{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;box-shadow:0 2px 8px rgba(26,92,58,.25)}
+  .btn-calc:active{transform:scale(.98);background:#144d31}
+  .btn-reset{width:100%;padding:11px;background:var(--surface);color:var(--muted);border:1px solid var(--border);border-radius:9px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+  .btn-reset:active{background:var(--surface2)}
+  .result-hero{border-radius:var(--radius);padding:20px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+  .result-hero.green{background:linear-gradient(135deg,#1a5c3a 0%,#2d7a52 100%)}
+  .result-hero.amber{background:linear-gradient(135deg,#92400e 0%,#b45309 100%)}
+  .result-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:130px;height:130px;background:rgba(255,255,255,.06);border-radius:50%}
+  .result-hero::after{content:'';position:absolute;bottom:-20px;left:-20px;width:90px;height:90px;background:rgba(255,255,255,.04);border-radius:50%}
+  .rh-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+  .rh-val{font-family:'DM Mono',monospace;font-size:44px;font-weight:500;color:#fff;line-height:1}
+  .rh-unit{font-size:14px;color:rgba(255,255,255,.65);margin-left:3px}
+  .rh-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:6px;line-height:1.5}
+  .rh-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;margin-top:10px}
+  .rh-badge.ok{background:rgba(255,255,255,.15);color:#fff}
+  .rh-badge.warn{background:rgba(255,220,80,.22);color:#ffe066}
+  .rh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .rh-mini{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px}
+  .rh-mini .ml{font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px}
+  .rh-mini .mv{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#fff}
+  .rh-mini .mu{font-size:10px;color:rgba(255,255,255,.55)}
+  .bedel-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .bedel-head{background:var(--amber-light);padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #fcd34d}
+  .bedel-head span{font-size:12px;font-weight:600;color:var(--amber)}
+  .bedel-body{padding:0 14px}
+  .bedel-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .bedel-row:last-child{border-bottom:none}
+  .bedel-row .bk{color:var(--muted)}
+  .bedel-row .bv{font-family:'DM Mono',monospace;font-weight:600;color:var(--text)}
+  .bedel-total{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--amber-light);border-top:2px solid #fcd34d}
+  .bedel-total .bt-k{font-size:13px;font-weight:600;color:var(--amber)}
+  .bedel-total .bt-v{font-family:'DM Mono',monospace;font-size:24px;font-weight:600;color:var(--amber)}
+  .bedel-total .bt-u{font-size:13px;color:var(--amber);margin-left:3px}
+  .detay-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .detay-row:last-child{border-bottom:none}
+  .detay-row .dk{color:var(--muted);font-size:12px}
+  .detay-row .dv{font-weight:500}
+  .uyari{background:var(--amber-light);border:1px solid #fcd34d;border-radius:9px;padding:10px 12px;font-size:12px;color:var(--amber);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+  .kw-info{background:var(--accent-light);border-radius:9px;padding:9px 12px;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:6px;font-weight:500;margin-top:8px}
+  .input-suf{position:relative}
+  .input-suf input{padding-right:44px;font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--accent);text-align:right}
+  .input-suf.amber input{color:var(--amber)}
+  .input-suf .suf{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--muted);pointer-events:none;font-family:'DM Mono',monospace}
+  @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .anim{animation:slideUp .3s ease both}
+  .hidden{display:none!important}
+  .spacer{height:80px}
 </style>
 </head>
 <body>
@@ -232,14 +296,15 @@
   </div>
 
   <div class="nav" id="main-nav">
-    <button class="nav-btn active" onclick="goTab(0)">Ara</button>
+    <button class="nav-btn" onclick="goTab(0)">Ara</button>
     <button class="nav-btn" onclick="goTab(1)">Ekle</button>
     <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
     <button class="nav-btn" id="nav-sayac" style="display:none" onclick="goTab(3)">Sayaç Listesi</button>
+    <button class="nav-btn" id="nav-hesap" style="display:none" onclick="goTab(4)">📊 Hesapla</button>
   </div>
 
   <!-- ARA -->
-  <div class="screen active" id="s0">
+  <div class="screen" id="s0">
     <div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
       <button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent);" onclick="setSTab('room')">Oda No</button>
       <button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted);" onclick="setSTab('date')">Tarih Aralığı</button>
@@ -347,6 +412,139 @@
     </div>
     <div class="ml-stats" id="ml-stats"></div>
     <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
+  </div>
+
+  <!-- SAYAÇ HESAPLAMA -->
+  <div class="screen" id="s4">
+    <div class="content" style="padding:0;display:flex;flex-direction:column;gap:14px">
+
+      <!-- DAİRE BİLGİLERİ -->
+      <div class="card anim" style="animation-delay:.04s">
+        <div class="card-head">
+          <div class="card-icon g">🏠</div>
+          <div><h2>Daire Bilgileri</h2><span>No, tip ve konaklama tarihleri</span></div>
+        </div>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label class="label">Daire No</label>
+              <input type="text" id="daireNo" placeholder="Örn: E-12"/>
+            </div>
+            <div class="field">
+              <label class="label">Daire Tipi</label>
+              <select id="daireType" onchange="onTipChange()">
+                <option value="1+1">1+1</option>
+                <option value="2+1">2+1</option>
+              </select>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label class="label">Giriş Tarihi</label>
+              <input type="date" id="girisDate" onchange="onDateChange()"/>
+            </div>
+            <div class="field">
+              <label class="label">Çıkış Tarihi</label>
+              <input type="date" id="cikisDate" onchange="onDateChange()"/>
+            </div>
+          </div>
+          <div class="kw-info hidden" id="kwInfo">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            <span id="kwInfoText"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARİFE SEÇİCİ -->
+      <div class="card anim" style="animation-delay:.08s">
+        <div class="card-head">
+          <div class="card-icon b">📋</div>
+          <div><h2>Devre Tarifesi</h2><span>Yönetim kurulu kararı · Aşım bedeli 30 ₺/kW/H</span></div>
+        </div>
+        <div class="card-body">
+          <div class="tarife-wrap" id="tarifeWrap"></div>
+          <div class="uyari">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Limiti aşan tüketim <strong>kW/H başına 30 ₺</strong> olarak tahsil edilir. Malzeme talep edilmemesi halinde odada bulunacağınız personele bildirilir.
+          </div>
+        </div>
+      </div>
+
+      <!-- SAYAÇ DEĞERLERİ -->
+      <div class="card anim" style="animation-delay:.12s">
+        <div class="card-head">
+          <div class="card-icon a">⚡</div>
+          <div><h2>Sayaç Değerleri</h2><span>Giriş ve çıkış kW/H değerleri</span></div>
+        </div>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label class="label">Giriş Sayacı</label>
+              <div class="input-suf">
+                <input type="number" id="girisKw" placeholder="0" min="0" step="0.01" inputmode="decimal"/>
+                <span class="suf">kW</span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Çıkış Sayacı</label>
+              <div class="input-suf amber">
+                <input type="number" id="cikisKw" placeholder="0" min="0" step="0.01" inputmode="decimal"/>
+                <span class="suf">kW</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calc anim" style="animation-delay:.16s" onclick="hesapla()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Hesapla
+      </button>
+
+      <!-- SONUÇ -->
+      <div id="sonucWrap" class="hidden" style="display:flex;flex-direction:column;gap:12px">
+        <div class="result-hero green anim" id="heroCard">
+          <div class="rh-label" id="heroLabel">Toplam Tüketim</div>
+          <div><span class="rh-val" id="heroVal">0</span><span class="rh-unit">kW/H</span></div>
+          <div class="rh-sub" id="heroSub"></div>
+          <div class="rh-badge ok" id="heroBadge">✓ Limit Dahilinde</div>
+          <div class="rh-grid">
+            <div class="rh-mini"><div class="ml">Toplam Tüketim</div><div><span class="mv" id="m1">—</span> <span class="mu">kW/H</span></div></div>
+            <div class="rh-mini"><div class="ml">Tanınan Limit</div><div><span class="mv" id="m2">—</span> <span class="mu">kW/H</span></div></div>
+            <div class="rh-mini"><div class="ml">Giriş Sayacı</div><div><span class="mv" id="m3">—</span> <span class="mu">kW</span></div></div>
+            <div class="rh-mini"><div class="ml">Çıkış Sayacı</div><div><span class="mv" id="m4">—</span> <span class="mu">kW</span></div></div>
+          </div>
+        </div>
+
+        <div class="bedel-box hidden" id="bedelBox">
+          <div class="bedel-head">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <span>Tahsil Edilecek Bedel</span>
+          </div>
+          <div class="bedel-body">
+            <div class="bedel-row"><span class="bk">Aşılan Miktar</span><span class="bv" id="bAsan">—</span></div>
+            <div class="bedel-row"><span class="bk">Birim Fiyat</span><span class="bv">30 ₺ / kW/H</span></div>
+          </div>
+          <div class="bedel-total">
+            <span class="bt-k">Toplam Bedel</span>
+            <div><span class="bt-v" id="bToplam">—</span><span class="bt-u">₺</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="detay-row"><span class="dk">Daire</span><span class="dv" id="dDaire" style="font-family:'DM Mono',monospace">—</span></div>
+            <div class="detay-row"><span class="dk">Giriş – Çıkış</span><span class="dv" id="dTarih">—</span></div>
+            <div class="detay-row"><span class="dk">Konaklama Süresi</span><span class="dv" id="dGun" style="color:var(--accent);font-weight:600">—</span></div>
+            <div class="detay-row"><span class="dk">Devre / Limit</span><span class="dv" id="dDevre">—</span></div>
+            <div class="detay-row"><span class="dk">Durum</span><span class="dv" id="dDurum">—</span></div>
+          </div>
+        </div>
+
+        <button class="btn-reset" onclick="sifirla()">↩ Yeni Hesaplama</button>
+      </div>
+      <div class="spacer"></div>
+    </div>
   </div>
 </div>
 
@@ -486,7 +684,7 @@ let mode='demirbaş',tab=0,lastVal='',pending=[],selTags=[],timer=null;
 let entryImages={},entryData={},openEntries=new Set();
 let searchTab='room',confirmCallback=null,activePdfOpt=null;
 let mlAllData=[],mlFiltered=[],mlTypeFilter='all';
-  let mlSortKey = null;
+let mlSortKey = null;
 let mlSortDir = 1;
 const CMAX=1600,CQ=0.82;
 
@@ -538,7 +736,9 @@ function setMode(m){
   q('mode-d').classList.toggle('active',!isE);
   q('mode-e').classList.toggle('active',isE);
   q('nav-sayac').style.display=isE?'':'none';
+  q('nav-hesap').style.display=isE?'':'none';
   if(!isE&&tab===3)goTab(0);
+  if(!isE&&tab===4)goTab(0);
   openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
   if(tab===2)loadAll(true);
@@ -546,7 +746,14 @@ function setMode(m){
 }
 
 /* tabs */
-function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();startTimer();}
+function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();if(i===4)initHesapTab();startTimer();}
+function initHesapTab(){
+  if(typeof tarifeCiz !== 'undefined'){
+    document.getElementById('girisDate').value = today();
+    document.getElementById('cikisDate').value = today();
+    tarifeCiz();
+  }
+}
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterList(true);},3000);}
 
 /* tags */
@@ -756,7 +963,6 @@ async function loadMeterList(silent=false){
   try{
     const res=await api('/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type,meter_values,photo_urls');
     mlAllData=await res.json();
-    /* kat listesini doldur */
     const katSet=new Set();
     mlAllData.forEach(e=>{if(e.category)e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim()));});
     const sel=q('ml-kat'),cur=sel.value;
@@ -778,70 +984,41 @@ function mlFilter(){
   });
   renderMeterList();
 }
-  function mlSort(key) {
+function mlSort(key) {
   if (mlSortKey === key) {
-    mlSortDir *= -1; // aynı kolona tekrar basınca ters sıralar
+    mlSortDir *= -1;
   } else {
     mlSortKey = key;
     mlSortDir = 1;
   }
-
   mlFiltered.sort((a, b) => {
     let v1, v2;
-
     switch (key) {
-      case 'room':
-        v1 = Number(a.room_no);
-        v2 = Number(b.room_no);
-        break;
-
-      case 'kat':
-        v1 = a.category || '';
-        v2 = b.category || '';
-        break;
-
-      case 'date':
-        v1 = new Date(a.checkin_date);
-        v2 = new Date(b.checkin_date);
-        break;
-
-      case 'type':
-        v1 = a.type || '';
-        v2 = b.type || '';
-        break;
+      case 'room': v1 = Number(a.room_no); v2 = Number(b.room_no); break;
+      case 'kat': v1 = a.category || ''; v2 = b.category || ''; break;
+      case 'date': v1 = new Date(a.checkin_date); v2 = new Date(b.checkin_date); break;
+      case 'type': v1 = a.type || ''; v2 = b.type || ''; break;
     }
-
     if (v1 > v2) return 1 * mlSortDir;
     if (v1 < v2) return -1 * mlSortDir;
     return 0;
   });
-
-  renderMeterList(); // ⛔ BURASI ÇOK ÖNEMLİ
-}
-
-  if (mlSortKey) {
-  mlSort(mlSortKey);
+  renderMeterList();
 }
 function renderMeterList(){
   const wrap=q('ml-wrap'),statsEl=q('ml-stats');
   if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
-
-  /* giriş-çıkış fark hesabı */
   const byRoom={};
   [...mlAllData].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)).forEach(e=>{if(!byRoom[e.room_no])byRoom[e.room_no]=[];byRoom[e.room_no].push(e);});
   const farkMap={};
   Object.values(byRoom).forEach(arr=>{let lastG=null;arr.forEach(e=>{const mv=e.meter_values;if(!mv){farkMap[e.id]=null;return;}const tot=(mv.l1||0)+(mv.l2||0)+(mv.l3||0);if(e.type==='giris'){lastG=tot;farkMap[e.id]=null;}else if(e.type==='cikis'&&lastG!==null){farkMap[e.id]=(tot-lastG).toFixed(2);lastG=null;}else farkMap[e.id]=null;});});
-
-  /* stats */
   const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
   const tC=mlFiltered.filter(e=>e.type==='cikis').length;
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
   statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
-
   let rows='';
   mlFiltered.forEach(e=>{
     const mv=e.meter_values;
-    const l1=mv??(mv?.l1??'—');const l2=mv?.l2??'—';const l3=mv?.l3??'—';
     const L1=mv?mv.l1??'—':'—',L2=mv?mv.l2??'—':'—',L3=mv?mv.l3??'—':'—';
     const fark=farkMap[e.id];
     const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:parseFloat(fark)>=0?`<div class="ml-c fc pos">+${fark}</div>`:`<div class="ml-c fc neg">${fark}</div>`;
@@ -860,7 +1037,6 @@ function renderMeterList(){
       ${farkHtml}
     </div>`;
   });
-
   wrap.innerHTML=`<div class="ml-head">
   <span onclick="mlSort('room')">Oda</span>
   <span onclick="mlSort('kat')">Kat</span>
@@ -922,11 +1098,138 @@ async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;b
 async function runPdfDate(){const from=q('pdf-date-from').value,to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi daha küçük olmalı','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Bu aralıkta kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const all=[];for(const rno of rooms){const d=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`)).json();d.forEach(e=>all.push(e));}if(!all.length){showToast('Bu odalarda kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,all,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 
+/* ========= SAYAÇ HESAPLAMA FONKSİYONLARI ========= */
+const TARIFELER = {
+  '7gun':  { label: '7 Günlük',  '1+1': 15, '2+1': 18 },
+  '15gun': { label: '15 Günlük', '1+1': 30, '2+1': 40 }
+};
+const BIRIM = 30;
+let seciliDevir = '7gun';
+let seciliTip = '1+1';
+
+function tarifeCiz() {
+  const wrap = document.getElementById('tarifeWrap');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  Object.entries(TARIFELER).forEach(([key, tar]) => {
+    const kw = tar[seciliTip];
+    const isActive = key === seciliDevir;
+    const div = document.createElement('div');
+    div.className = 'tarife-btn' + (isActive ? ' active' : '');
+    div.onclick = () => { seciliDevir = key; tarifeCiz(); kwInfoGuncelle(); };
+    div.innerHTML =
+      '<div class="check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+      '<div class="tb-devir">' + tar.label + '</div>' +
+      '<div class="tb-tip">' + seciliTip + '</div>' +
+      '<div class="tb-kw">' + kw + '<span class="tb-unit"> kW/H</span></div>';
+    wrap.appendChild(div);
+  });
+}
+
+function onTipChange() {
+  seciliTip = document.getElementById('daireType').value;
+  tarifeCiz();
+  kwInfoGuncelle();
+}
+
+function onDateChange() { kwInfoGuncelle(); }
+
+function kwInfoGuncelle() {
+  const g = document.getElementById('girisDate')?.value;
+  const c = document.getElementById('cikisDate')?.value;
+  const info = document.getElementById('kwInfo');
+  if (!info) return;
+  if (g && c && c >= g) {
+    const gun = Math.round((new Date(c) - new Date(g)) / 86400000);
+    const limit = TARIFELER[seciliDevir][seciliTip];
+    info.classList.remove('hidden');
+    document.getElementById('kwInfoText').textContent =
+      gun + ' günlük konaklama · ' + TARIFELER[seciliDevir].label + ' devre · Limit: ' + limit + ' kW/H';
+  } else {
+    info.classList.add('hidden');
+  }
+}
+
+const fmtNum = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:0, maximumFractionDigits:2});
+const fmtTL = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtDateTr = d => { if(!d) return '—'; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; };
+
+function hesapla() {
+  const girisKw = parseFloat(document.getElementById('girisKw').value);
+  const cikisKw = parseFloat(document.getElementById('cikisKw').value);
+  const girisDate = document.getElementById('girisDate').value;
+  const cikisDate = document.getElementById('cikisDate').value;
+  const daireNo = document.getElementById('daireNo').value.trim() || '—';
+
+  if (isNaN(girisKw) || isNaN(cikisKw)) { alert('Lütfen sayaç değerlerini giriniz.'); return; }
+  if (!girisDate || !cikisDate) { alert('Lütfen tarihleri seçiniz.'); return; }
+  if (cikisKw < girisKw) { alert('Çıkış sayacı giriş sayacından küçük olamaz.'); return; }
+
+  const tuketim = cikisKw - girisKw;
+  const limit = TARIFELER[seciliDevir][seciliTip];
+  const fark = tuketim - limit;
+  const asmis = fark > 0;
+  const gun = Math.round((new Date(cikisDate) - new Date(girisDate)) / 86400000);
+  const bedel = asmis ? fark * BIRIM : 0;
+
+  const hero = document.getElementById('heroCard');
+  hero.className = 'result-hero anim ' + (asmis ? 'amber' : 'green');
+  document.getElementById('heroLabel').textContent = asmis ? 'Aşılan Tüketim' : 'Toplam Tüketim';
+  document.getElementById('heroVal').textContent = fmtNum(asmis ? fark : tuketim);
+  document.getElementById('heroSub').textContent = asmis
+    ? fmtNum(tuketim) + ' kW/H tüketildi — limitin ' + fmtNum(fark) + ' kW/H üzerinde'
+    : fmtNum(limit - tuketim) + ' kW/H kullanılmamış limit kaldı';
+
+  const badge = document.getElementById('heroBadge');
+  badge.className = 'rh-badge ' + (asmis ? 'warn' : 'ok');
+  badge.textContent = asmis ? '⚠ Limit Aşıldı — Fark Bedeli Tahsil Edilecek' : '✓ Limit Dahilinde';
+
+  document.getElementById('m1').textContent = fmtNum(tuketim);
+  document.getElementById('m2').textContent = fmtNum(limit);
+  document.getElementById('m3').textContent = fmtNum(girisKw);
+  document.getElementById('m4').textContent = fmtNum(cikisKw);
+
+  const bedelBox = document.getElementById('bedelBox');
+  if (asmis) {
+    bedelBox.classList.remove('hidden');
+    document.getElementById('bAsan').textContent = fmtNum(fark) + ' kW/H';
+    document.getElementById('bToplam').textContent = fmtTL(bedel);
+  } else {
+    bedelBox.classList.add('hidden');
+  }
+
+  document.getElementById('dDaire').textContent = daireNo + '  (' + seciliTip + ')';
+  document.getElementById('dTarih').textContent = fmtDateTr(girisDate) + ' – ' + fmtDateTr(cikisDate);
+  document.getElementById('dGun').textContent = gun + ' gün';
+  document.getElementById('dDevre').textContent = TARIFELER[seciliDevir].label + ' · ' + limit + ' kW/H';
+  const dDurum = document.getElementById('dDurum');
+  dDurum.textContent = asmis ? '⚠ ' + fmtNum(fark) + ' kW/H aşıldı · ' + fmtTL(bedel) + ' ₺ bedel' : '✓ Limit dahilinde';
+  dDurum.style.color = asmis ? 'var(--amber)' : 'var(--accent)';
+
+  const wrap = document.getElementById('sonucWrap');
+  wrap.classList.remove('hidden');
+  wrap.style.display = 'flex';
+  setTimeout(() => wrap.scrollIntoView({behavior:'smooth',block:'start'}), 50);
+}
+
+function sifirla() {
+  document.getElementById('girisKw').value = '';
+  document.getElementById('cikisKw').value = '';
+  document.getElementById('daireNo').value = '';
+  document.getElementById('girisDate').value = today();
+  document.getElementById('cikisDate').value = today();
+  const wrap = document.getElementById('sonucWrap');
+  wrap.classList.add('hidden');
+  wrap.style.display = 'none';
+  document.getElementById('kwInfo').classList.add('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 /* readonly / token */
 const _p=new URLSearchParams(location.search);
 const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih');
 
-function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
+function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
 async function showReadonlyEntry(oda,mod,tarih){
   const label=mod==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
@@ -944,7 +1247,7 @@ async function showReadonlyEntry(oda,mod,tarih){
 /* init */
 if(_oda&&_token){
   document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';
-  q('s1').remove();q('s2').remove();q('s3').remove();
+  q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
@@ -955,7 +1258,7 @@ else{
   q('f-date').value=today();
   let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
   setMode(savedMode);checkConn();
-  try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=3){if(sv===3&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
+  try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=4){if(sv===3&&savedMode!=='elektrik')goTab(0);else if(sv===4&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
 }
 </script>
 </body>
