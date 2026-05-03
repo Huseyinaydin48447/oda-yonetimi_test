@@ -16,6 +16,34 @@
   .wa-btn:active{background:#dff5e7;}
   .entries-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start;}
   .entry-card {margin-bottom: 0;}
+
+.meter-table-card {
+  background: #fff;
+  border: 1px solid #e2e1d9;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.meter-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 600px;
+}
+
+.meter-table th {
+  background: #f9f8f4;
+  padding: 12px 10px;
+  text-align: left;
+  color: #7a7a72;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e1d9;
+}
+
+.meter-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f0f0eb;
+}
   
   /* SAYAÇ TABLOSU ÖZEL STİLLERİ (GÖRSELDEKİ GİBİ) */
   .meter-table-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow-x: auto; margin-top:10px; }
@@ -165,6 +193,32 @@
 
   <!-- SAYAÇ LİSTESİ (S3) -->
   <div class="screen" id="s3">
+    <!-- SAYAÇ LİSTESİ TABLO -->
+<div style="margin-top:20px">
+
+  <h3 style="margin-bottom:10px;">Sayaç Listesi</h3>
+
+  <div class="meter-table-card">
+    <table class="meter-table">
+      <thead>
+        <tr>
+          <th>Oda</th>
+          <th>Kat</th>
+          <th>Tarih</th>
+          <th>Tür</th>
+          <th>L1</th>
+          <th>L2</th>
+          <th>L3</th>
+          <th>Fark</th>
+        </tr>
+      </thead>
+      <tbody id="meter-body">
+        <!-- BURAYI JS dolduracak -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
     <div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
       <input type="text" id="m-search" placeholder="Oda, kat ara..." oninput="renderMeterTable()">
       <div style="display: flex; gap: 8px;">
