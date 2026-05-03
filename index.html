@@ -216,6 +216,12 @@
   .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
 
   /* SAYAÇ HESAPLAMA STILLERI */
+  .meter-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:0;}
+  .meter-label{font-size:10px;color:var(--muted);text-align:center;margin-bottom:4px;display:block;}
+  .meter-input{width:100%;padding:10px 4px;text-align:center;font-family:'DM Mono',monospace;font-size:16px;font-weight:500;border:1px solid var(--border);border-radius:8px;background:var(--surface);}
+  .meter-input:focus{outline:none;border-color:var(--accent);}
+  .meter-group{background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:12px;}
+  .meter-group-title{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:.3px;display:flex;align-items:center;gap:6px;}
   .tarife-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
   .tarife-btn{border:2px solid var(--border);background:var(--surface2);border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;transition:all .15s;position:relative}
   .tarife-btn:active{transform:scale(.97)}
@@ -269,10 +275,6 @@
   .detay-row .dv{font-weight:500}
   .uyari{background:var(--amber-light);border:1px solid #fcd34d;border-radius:9px;padding:10px 12px;font-size:12px;color:var(--amber);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
   .kw-info{background:var(--accent-light);border-radius:9px;padding:9px 12px;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:6px;font-weight:500;margin-top:8px}
-  .input-suf{position:relative}
-  .input-suf input{padding-right:44px;font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--accent);text-align:right}
-  .input-suf.amber input{color:var(--amber)}
-  .input-suf .suf{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--muted);pointer-events:none;font-family:'DM Mono',monospace}
   @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
   .anim{animation:slideUp .3s ease both}
   .hidden{display:none!important}
@@ -465,32 +467,40 @@
           <div class="tarife-wrap" id="tarifeWrap"></div>
           <div class="uyari">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Limiti aşan tüketim <strong>kW/H başına 30 ₺</strong> olarak tahsil edilir.
+            Limiti aşan tüketim <strong>kW/H başına 30 ₺</strong> olarak tahsil edilir. Malzeme talep edilmemesi halinde odada bulunacağınız personele bildirilir.
           </div>
         </div>
       </div>
 
-      <!-- SAYAÇ DEĞERLERİ -->
+      <!-- SAYAÇ DEĞERLERİ - L1 L2 L3 -->
       <div class="card anim" style="animation-delay:.12s">
         <div class="card-head">
           <div class="card-icon a">⚡</div>
-          <div><h2>Sayaç Değerleri</h2><span>Giriş ve çıkış kW/H değerleri</span></div>
+          <div><h2>Sayaç Değerleri</h2><span>Giriş ve çıkış L1 · L2 · L3 değerleri</span></div>
         </div>
         <div class="card-body">
-          <div class="row2">
-            <div class="field">
-              <label class="label">Giriş Sayacı</label>
-              <div class="input-suf">
-                <input type="number" id="girisKw" placeholder="0" min="0" step="0.01" inputmode="decimal"/>
-                <span class="suf">kW</span>
-              </div>
+          <!-- GİRİŞ SAYACI -->
+          <div class="meter-group">
+            <div class="meter-group-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Giriş Sayacı
             </div>
-            <div class="field">
-              <label class="label">Çıkış Sayacı</label>
-              <div class="input-suf amber">
-                <input type="number" id="cikisKw" placeholder="0" min="0" step="0.01" inputmode="decimal"/>
-                <span class="suf">kW</span>
-              </div>
+            <div class="meter-row3">
+              <div><div class="meter-label">L1</div><input type="number" id="girisL1" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
+              <div><div class="meter-label">L2</div><input type="number" id="girisL2" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
+              <div><div class="meter-label">L3</div><input type="number" id="girisL3" class="meter-input" step="0.1" min="0" max="99.9" value="0" placeholder="0.0"/></div>
+            </div>
+          </div>
+          <!-- ÇIKIŞ SAYACI -->
+          <div class="meter-group">
+            <div class="meter-group-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Çıkış Sayacı
+            </div>
+            <div class="meter-row3">
+              <div><div class="meter-label">L1</div><input type="number" id="cikisL1" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
+              <div><div class="meter-label">L2</div><input type="number" id="cikisL2" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
+              <div><div class="meter-label">L3</div><input type="number" id="cikisL3" class="meter-input" step="0.1" min="0" max="99.9" value="0" placeholder="0.0"/></div>
             </div>
           </div>
         </div>
@@ -1098,7 +1108,7 @@ async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;b
 async function runPdfDate(){const from=q('pdf-date-from').value,to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi daha küçük olmalı','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Bu aralıkta kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const all=[];for(const rno of rooms){const d=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`)).json();d.forEach(e=>all.push(e));}if(!all.length){showToast('Bu odalarda kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,all,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 
-/* ========= SAYAÇ HESAPLAMA FONKSİYONLARI ========= */
+/* ========= SAYAÇ HESAPLAMA FONKSİYONLARI (L1-L2-L3) ========= */
 const TARIFELER = {
   '7gun':  { label: '7 Günlük',  '1+1': 15, '2+1': 18 },
   '15gun': { label: '15 Günlük', '1+1': 30, '2+1': 40 }
@@ -1150,22 +1160,60 @@ function kwInfoGuncelle() {
   }
 }
 
-const fmtNum = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:0, maximumFractionDigits:2});
+// Kilowatt saat hesaplama (L1-L2-L3 ile)
+// L3 max 99.9, geçince L2 artar. L2 max 99, geçince L1 artar.
+function meterToKWH(l1, l2, l3) {
+  return (l1 * 100 * 100) + (l2 * 100) + l3;
+}
+
+function kwhToMeter(kwh) {
+  let total = kwh;
+  let l3 = total % 100;
+  total = Math.floor(total / 100);
+  let l2 = total % 100;
+  let l1 = Math.floor(total / 100);
+  return { l1, l2, l3: parseFloat(l3.toFixed(1)) };
+}
+
+function hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3) {
+  let gKWH = meterToKWH(gL1, gL2, gL3);
+  let cKWH = meterToKWH(cL1, cL2, cL3);
+  
+  if (cKWH >= gKWH) {
+    return cKWH - gKWH;
+  } else {
+    // Sayaç sıfırlamış (tour complet)
+    let maxKWH = meterToKWH(9999, 99, 99.9);
+    return (maxKWH - gKWH) + cKWH;
+  }
+}
+
+const fmtNum = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtNumInt = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:0, maximumFractionDigits:2});
 const fmtTL = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
 const fmtDateTr = d => { if(!d) return '—'; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; };
 
 function hesapla() {
-  const girisKw = parseFloat(document.getElementById('girisKw').value);
-  const cikisKw = parseFloat(document.getElementById('cikisKw').value);
+  const gL1 = parseInt(document.getElementById('girisL1').value) || 0;
+  const gL2 = parseInt(document.getElementById('girisL2').value) || 0;
+  const gL3 = parseFloat(document.getElementById('girisL3').value) || 0;
+  const cL1 = parseInt(document.getElementById('cikisL1').value) || 0;
+  const cL2 = parseInt(document.getElementById('cikisL2').value) || 0;
+  const cL3 = parseFloat(document.getElementById('cikisL3').value) || 0;
+  
   const girisDate = document.getElementById('girisDate').value;
   const cikisDate = document.getElementById('cikisDate').value;
   const daireNo = document.getElementById('daireNo').value.trim() || '—';
 
-  if (isNaN(girisKw) || isNaN(cikisKw)) { alert('Lütfen sayaç değerlerini giriniz.'); return; }
   if (!girisDate || !cikisDate) { alert('Lütfen tarihleri seçiniz.'); return; }
-  if (cikisKw < girisKw) { alert('Çıkış sayacı giriş sayacından küçük olamaz.'); return; }
+  
+  // L3 kontrolü (0-99.9)
+  if (gL3 > 99.9 || cL3 > 99.9) {
+    alert('L3 değeri 99.9\'dan büyük olamaz!');
+    return;
+  }
 
-  const tuketim = cikisKw - girisKw;
+  const tuketim = hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3);
   const limit = TARIFELER[seciliDevir][seciliTip];
   const fark = tuketim - limit;
   const asmis = fark > 0;
@@ -1175,35 +1223,35 @@ function hesapla() {
   const hero = document.getElementById('heroCard');
   hero.className = 'result-hero anim ' + (asmis ? 'amber' : 'green');
   document.getElementById('heroLabel').textContent = asmis ? 'Aşılan Tüketim' : 'Toplam Tüketim';
-  document.getElementById('heroVal').textContent = fmtNum(asmis ? fark : tuketim);
-  document.getElementById('heroSub').textContent = asmis
-    ? fmtNum(tuketim) + ' kW/H tüketildi — limitin ' + fmtNum(fark) + ' kW/H üzerinde'
-    : fmtNum(limit - tuketim) + ' kW/H kullanılmamış limit kaldı';
+  document.getElementById('heroVal').textContent = fmtNumInt(asmis ? fark : tuketim);
+  document.getElementById('heroSub').innerHTML = asmis
+    ? fmtNumInt(tuketim) + ' kW/H tüketildi — limitin <strong>' + fmtNumInt(fark) + ' kW/H</strong> üzerinde'
+    : '<strong>' + fmtNumInt(limit - tuketim) + ' kW/H</strong> kullanılmamış limit kaldı';
 
   const badge = document.getElementById('heroBadge');
   badge.className = 'rh-badge ' + (asmis ? 'warn' : 'ok');
   badge.textContent = asmis ? '⚠ Limit Aşıldı — Fark Bedeli Tahsil Edilecek' : '✓ Limit Dahilinde';
 
-  document.getElementById('m1').textContent = fmtNum(tuketim);
-  document.getElementById('m2').textContent = fmtNum(limit);
-  document.getElementById('m3').textContent = fmtNum(girisKw);
-  document.getElementById('m4').textContent = fmtNum(cikisKw);
+  document.getElementById('m1').textContent = fmtNumInt(tuketim);
+  document.getElementById('m2').textContent = fmtNumInt(limit);
+  document.getElementById('m3').innerHTML = `${gL1}.${gL2}.${gL3.toFixed(1)}`;
+  document.getElementById('m4').innerHTML = `${cL1}.${cL2}.${cL3.toFixed(1)}`;
 
   const bedelBox = document.getElementById('bedelBox');
   if (asmis) {
     bedelBox.classList.remove('hidden');
-    document.getElementById('bAsan').textContent = fmtNum(fark) + ' kW/H';
+    document.getElementById('bAsan').textContent = fmtNumInt(fark) + ' kW/H';
     document.getElementById('bToplam').textContent = fmtTL(bedel);
   } else {
     bedelBox.classList.add('hidden');
   }
 
-  document.getElementById('dDaire').textContent = daireNo + '  (' + seciliTip + ')';
+  document.getElementById('dDaire').innerHTML = daireNo + '  <span style="font-size:11px;color:var(--muted)">(' + seciliTip + ')</span>';
   document.getElementById('dTarih').textContent = fmtDateTr(girisDate) + ' – ' + fmtDateTr(cikisDate);
   document.getElementById('dGun').textContent = gun + ' gün';
   document.getElementById('dDevre').textContent = TARIFELER[seciliDevir].label + ' · ' + limit + ' kW/H';
   const dDurum = document.getElementById('dDurum');
-  dDurum.textContent = asmis ? '⚠ ' + fmtNum(fark) + ' kW/H aşıldı · ' + fmtTL(bedel) + ' ₺ bedel' : '✓ Limit dahilinde';
+  dDurum.innerHTML = asmis ? '⚠ ' + fmtNumInt(fark) + ' kW/H aşıldı · ' + fmtTL(bedel) + ' ₺ bedel' : '✓ Limit dahilinde, bedel yok';
   dDurum.style.color = asmis ? 'var(--amber)' : 'var(--accent)';
 
   const wrap = document.getElementById('sonucWrap');
@@ -1213,8 +1261,12 @@ function hesapla() {
 }
 
 function sifirla() {
-  document.getElementById('girisKw').value = '';
-  document.getElementById('cikisKw').value = '';
+  document.getElementById('girisL1').value = '0';
+  document.getElementById('girisL2').value = '0';
+  document.getElementById('girisL3').value = '0';
+  document.getElementById('cikisL1').value = '0';
+  document.getElementById('cikisL2').value = '0';
+  document.getElementById('cikisL3').value = '0';
   document.getElementById('daireNo').value = '';
   document.getElementById('girisDate').value = today();
   document.getElementById('cikisDate').value = today();
