@@ -1021,7 +1021,45 @@ function renderMeterList(){
   const byRoom={};
   [...mlAllData].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)).forEach(e=>{if(!byRoom[e.room_no])byRoom[e.room_no]=[];byRoom[e.room_no].push(e);});
   const farkMap={};
-  Object.values(byRoom).forEach(arr=>{let lastG=null;arr.forEach(e=>{const mv=e.meter_values;if(!mv){farkMap[e.id]=null;return;}const tot=(mv.l1||0)+(mv.l2||0)+(mv.l3||0);if(e.type==='giris'){lastG=tot;farkMap[e.id]=null;}else if(e.type==='cikis'&&lastG!==null){farkMap[e.id]=(tot-lastG).toFixed(2);lastG=null;}else farkMap[e.id]=null;});});
+  // --- YENİ HESAPLAMA MANTIĞI ---
+  Object.values(byRoom).forEach(arr => {
+    // Odadaki kayıtları tarihe göre eskididen yeniye sıralıyoruz
+    arr.sort((a, b) => new Date(a.checkin_date) - new Date(b.checkin_date));
+    
+    let sonGirisDegeri = null;
+
+    arr.forEach(e => {
+      const mv = e.meter_values;
+      if (!mv) {
+        farkMap[e.id] = null;
+        return;
+      }
+
+      // Hesapla sekmesindeki formülün aynısı: L1*10000 + L2*100 + L3
+      const guncelKWH = ( (parseInt(mv.l1)||0) * 10000 ) + ( (parseInt(mv.l2)||0) * 100 ) + (parseFloat(mv.l3)||0);
+
+      if (e.type === 'giris') {
+        sonGirisDegeri = guncelKWH; // Çıkış yaparken baz alacağımız son giriş
+        farkMap[e.id] = null;
+      } 
+      else if (e.type === 'cikis') {
+        if (sonGirisDegeri !== null) {
+          let fark;
+          if (guncelKWH >= sonGirisDegeri) {
+            fark = guncelKWH - sonGirisDegeri;
+          } else {
+            // Sayaç sıfırlanmışsa (Tour Complet) durumu
+            let maxKWH = (9999 * 10000) + (99 * 100) + 99.9;
+            fark = (maxKWH - sonGirisDegeri) + guncelKWH;
+          }
+          farkMap[e.id] = fark.toFixed(2);
+        } else {
+          farkMap[e.id] = null; // Öncesinde giriş kaydı yoksa fark yazma
+        }
+      }
+    });
+  });
+
   const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
   const tC=mlFiltered.filter(e=>e.type==='cikis').length;
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
