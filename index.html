@@ -15,24 +15,37 @@
   }
   /* Sayaç Listesi Sabitleme Ayarları */
 /* Sayaç Listesi Sabitleme Ayarları */
+/* Sayaç Listesi Sabitleme Ayarları */
 #s3 {
-  padding-top: 0; /* İçerideki yapışkan başlık ile çakışmaması için */
+  padding-top: 0; 
 }
 
+/* Arama ve İstatistik Paneli */
 .ml-sticky-header {
   position: sticky;
-  top: 105px; /* Topbar (62px) + Nav (yaklaşık 43px) toplamı */
-  background: var(--bg); /* Arkadaki odaların görünmemesi için */
-  z-index: 50;
-  padding: 16px 0 10px 0; /* Üst ve alt boşluk */
+  top: 105px; /* Topbar + Nav altı */
+  z-index: 98;
+  background: var(--bg); 
+  padding: 10px 0 5px 0; /* Boşlukları daralttık */
   margin-bottom: 0;
 }
 
-/* Tablo başlığının da hemen bunların altında sabit kalmasını isterseniz (Opsiyonel) */
+/* Tablo Başlıkları (Oda, Kat, Tarih, L1... olan satır) */
 .ml-head {
   position: sticky;
-  top: 255px; /* Toolbar ve Stats yüksekliği kadar aşağıda sabitlenir */
-  z-index: 89;
+  top: 272px; /* Arama paneli ve istatistiklerin hemen bittiği yer */
+  z-index: 97;
+  background: var(--surface2); /* Arka plan rengi */
+  border-bottom: 2px solid var(--border);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Altına hafif gölge */
+}
+
+/* Tablo içeriğinin düzgün kayması için wrap ayarı */
+.ml-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: visible; /* Sticky özelliğinin çalışması için burası visible olmalı */
 }
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
@@ -212,7 +225,7 @@
   .ml-stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;}
   .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
   .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
-  .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+ 
   .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px;background:var(--surface2);border-bottom:1px solid var(--border);}
   .ml-head span{font-size:11px;font-weight:600;color:var(--muted);padding:9px 5px;text-align:center;}
   .ml-head span:first-child{text-align:left;padding-left:10px;}
