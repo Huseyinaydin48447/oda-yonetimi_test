@@ -949,82 +949,48 @@ function mlSort(key) {
   renderMeterList();
 }
 function renderMeterList(){
-  const listBody = q('ml-list-body');
+  const listBody = q('ml-list-body'); // Burası değişti: ml-wrap yerine ml-list-body
   const statsEl = q('ml-stats');
 
-  // Eğer veri yoksa veya yüklenmemişse
   if(!mlFiltered.length){
-    if(listBody) listBody.innerHTML = '<div class="ml-empty">Kayıt bulunamadı</div>';
+    listBody.innerHTML = '<div class="ml-empty">Kayıt bulunamadı</div>';
     if(statsEl) statsEl.innerHTML = '';
     return;
   }
 
-  // 1. ADIM: Tüm veriyi zaman sırasına diz (Aynı günse önce Giriş sonra Çıkış gelsin)
-  // Bu işlem, farkın doğru hesaplanması için arka planda yapılır.
+  // Kronolojik sıralama (fark hesabı için)
   const chronologicalData = [...mlAllData].sort((a, b) => {
     const dA = new Date(a.checkin_date);
     const dB = new Date(b.checkin_date);
     if (dA - dB !== 0) return dA - dB;
-    // Aynı gün içindeki kayıtlarda Giriş (-1) Çıkıştan (1) önce gelsin
     return a.type === 'giris' ? -1 : 1;
   });
 
   const farkMap = {};
-  const odaSonGirisDegerleri = {}; // Her odanın en son giriş kwh değerini tutar
+  const odaSonGirisDegerleri = {};
 
-  // 2. ADIM: "Hesapla" sekmesindeki formüle göre farkları bul
   chronologicalData.forEach(e => {
     const mv = e.meter_values;
-    const rno = e.room_no;
-    
-    if (!mv) {
-      farkMap[e.id] = null;
-      return;
-    }
-
-    // "Hesapla" sekmesindeki ağırlıklı formül: L1*10000 + L2*100 + L3
+    if (!mv) return;
     const guncelKWH = ( (parseInt(mv.l1)||0) * 10000 ) + ( (parseInt(mv.l2)||0) * 100 ) + (parseFloat(mv.l3)||0);
-
     if (e.type === 'giris' || !e.type) {
-      // Bu bir giriş kaydı, bunu hafızaya al
-      odaSonGirisDegerleri[rno] = guncelKWH;
-      farkMap[e.id] = null; // Giriş satırında fark gösterilmez
-    } 
-    else if (e.type === 'cikis') {
-      // Bu bir çıkış kaydı, bu odanın hafızadaki son girişini bul
-      const baslangicKWH = odaSonGirisDegerleri[rno];
-      
-      if (baslangicKWH !== undefined && baslangicKWH !== null) {
-        let diff;
-        if (guncelKWH >= baslangicKWH) {
-          diff = guncelKWH - baslangicKWH;
-        } else {
-          // Sayaç sıfırlanmış (Tour Complet) durumu
-          const maxKWH = (9999 * 10000) + (99 * 100) + 99.9;
-          diff = (maxKWH - baslangicKWH) + guncelKWH;
-        }
+      odaSonGirisDegerleri[e.room_no] = guncelKWH;
+    } else if (e.type === 'cikis') {
+      const bas = odaSonGirisDegerleri[e.room_no];
+      if (bas != null) {
+        let diff = (guncelKWH >= bas) ? (guncelKWH - bas) : ((9999*10000+99*100+99.9) - bas + guncelKWH);
         farkMap[e.id] = diff.toFixed(2);
-      } else {
-        farkMap[e.id] = null; // Öncesinde hiç giriş kaydı yoksa fark yazma
       }
     }
   });
 
-  // 3. ADIM: İstatistik Paneli Kartlarını Güncelle
+  // İstatistikleri güncelle
   const tG = mlFiltered.filter(e => e.type === 'giris' || !e.type).length;
   const tC = mlFiltered.filter(e => e.type === 'cikis').length;
   const odalar = new Set(mlFiltered.map(e => e.room_no));
-  
-  if(statsEl) {
-    statsEl.innerHTML = `
-      <div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div>
-      <div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div>
-      <div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div>
-      <div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>
-    `;
-  }
+  statsEl.innerHTML = `<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
 
-  // 4. ADIM: Tablo Satırlarını Oluştur (ml-list-body içine basılacak)
+  // Sadece satırları oluştur
   let rows = '';
   mlFiltered.forEach(e => {
     const mv = e.meter_values;
@@ -1032,23 +998,17 @@ function renderMeterList(){
     const L2 = mv ? mv.l2 ?? '0' : '0';
     const L3 = mv ? mv.l3 ?? '0.0' : '0.0';
     const fark = farkMap[e.id];
-    
-    // Fark varsa yeşil renkle göster, yoksa tire koy
-    const farkHtml = (fark === null || fark === undefined)
-      ? `<div class="ml-c fc none">—</div>`
-      : `<div class="ml-c fc pos">+${fark}</div>`;
-
+    const farkHtml = (fark == null) ? `<div class="ml-c fc none">—</div>` : `<div class="ml-c fc pos">+${fark}</div>`;
     const cats = (e.category || '').split(',').filter(Boolean);
     const katL = cats.length ? cats[0] : '—';
     const isG = e.type !== 'cikis';
-    const typeDot = isG ? `<span class="gd">●</span> Giriş` : `<span class="cd">●</span> Çıkış`;
 
     rows += `
       <div class="ml-row ${isG ? 'gr' : 'cr'}" onclick="goRoom('${e.room_no}')">
         <div class="ml-c rb"><span class="${isG ? '' : 'eb'}">${e.room_no}</span></div>
         <div class="ml-c kb"><span>${katL}</span></div>
         <div class="ml-c" style="font-size:11px;color:var(--muted)">${fmtShort(e.checkin_date)}</div>
-        <div class="ml-c tc">${typeDot}</div>
+        <div class="ml-c tc">${isG ? '<span class="gd">●</span> Giriş' : '<span class="cd">●</span> Çıkış'}</div>
         <div class="ml-c vc">${parseInt(L1)}</div>
         <div class="ml-c vc">${parseInt(L2)}</div>
         <div class="ml-c vc">${parseFloat(L3).toFixed(1)}</div>
@@ -1056,10 +1016,8 @@ function renderMeterList(){
       </div>`;
   });
 
-  // Sonuçları HTML'e aktar
-  if(listBody) listBody.innerHTML = rows;
+  listBody.innerHTML = rows; // Sadece listeyi günceller, başlığa dokunmaz.
 }
-
 /* PDF exports */
 async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const raw=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(blob);});const dims=await new Promise(r=>{const img=new Image();img.onload=()=>r({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>r({w:4,h:3});img.src=raw;});const fx=await fixOrientation(blob,raw,dims.w,dims.h);return{dataUrl:fx.dataUrl,fmt:'JPEG',pw:fx.pw,ph:fx.ph};}
 
