@@ -14,16 +14,17 @@
     --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
   }
 
-/* Sayaç Listesi Sabitleme Ayarları */
+/* Sayaç Listesi Sabitleme */
 #s3 { padding: 0 16px; }
 
 .ml-sticky-header {
   position: sticky;
-  top: 106px; /* Topbar (62) + Nav (44) */
-  z-index: 100;
-  background: var(--bg); /* Sayfa arka plan rengiyle aynı, arkadakileri gizler */
-  padding-top: 16px;
-  margin: 0 -16px; /* Kenarlara tam sıfırlanması için */
+  top: 105px; /* Topbar(62) + Nav(43) */
+  z-index: 150;
+  background: var(--bg); /* Arkadan geçen odaları bu renk gizler */
+  padding-top: 14px;
+  padding-bottom: 0;
+  margin: 0 -16px; /* Ekrana tam yayılması için */
   padding-left: 16px;
   padding-right: 16px;
 }
@@ -33,17 +34,16 @@
   grid-template-columns: 46px 58px 84px 50px 1fr 1fr 1fr 52px;
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-bottom: 2px solid var(--border);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  margin-top: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-top: 8px;
 }
 
 .ml-head span {
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
-  padding: 12px 5px;
+  padding: 10px 2px;
   text-align: center;
 }
 
@@ -51,13 +51,12 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-top: none;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  overflow: visible; /* Sticky'nin bozulmaması için */
-  margin-bottom: 100px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: visible !important;
+  margin-bottom: 80px;
 }
 
-/* Satırların kenarlıkları */
 .ml-row {
   display: grid;
   grid-template-columns: 46px 58px 84px 50px 1fr 1fr 1fr 52px;
@@ -312,44 +311,43 @@
   </div>
 
 <!-- SAYAÇ LİSTESİ -->
-  <div class="screen" id="s3">
-    <!-- Sabit kalacak Üst Blok -->
-    <div class="ml-sticky-header">
-      <div class="ml-toolbar">
-        <div class="ml-row1">
-          <input id="ml-search" type="text" placeholder="Oda, kat ara..." oninput="mlFilter()"/>
-        </div>
-        <div class="ml-row2">
-          <select id="ml-kat" onchange="mlFilter()">
-            <option value="">Tüm katlar</option>
-          </select>
-          <div class="ml-typebts">
-            <button class="mt-btn sel-all" id="mt-all" onclick="mlSetType('all')">Tümü</button>
-            <button class="mt-btn" id="mt-giris" onclick="mlSetType('giris')">Giriş</button>
-            <button class="mt-btn" id="mt-cikis" onclick="mlSetType('cikis')">Çıkış</button>
-          </div>
-        </div>
+<div class="screen" id="s3">
+  <!-- YAPISKAN ÜST PANEL: Arama + İstatistik + Başlıklar -->
+  <div class="ml-sticky-header">
+    <div class="ml-toolbar">
+      <div class="ml-row1">
+        <input id="ml-search" type="text" placeholder="Oda, kat ara..." oninput="mlFilter()"/>
       </div>
-      <div class="ml-stats" id="ml-stats"></div>
-      
-      <!-- Tablo Başlıkları Artık Burada Sabit -->
-      <div class="ml-head">
-        <span onclick="mlSort('room')">Oda</span>
-        <span onclick="mlSort('kat')">Kat</span>
-        <span onclick="mlSort('date')">Tarih</span>
-        <span onclick="mlSort('type')">Tür</span>
-        <span>L1</span><span>L2</span><span>L3</span>
-        <span>Fark</span>
+      <div class="ml-row2">
+        <select id="ml-kat" onchange="mlFilter()">
+          <option value="">Tüm katlar</option>
+        </select>
+        <div class="ml-typebts">
+          <button class="mt-btn sel-all" id="mt-all" onclick="mlSetType('all')">Tümü</button>
+          <button class="mt-btn" id="mt-giris" onclick="mlSetType('giris')">Giriş</button>
+          <button class="mt-btn" id="mt-cikis" onclick="mlSetType('cikis')">Çıkış</button>
+        </div>
       </div>
     </div>
+    <div class="ml-stats" id="ml-stats"></div>
     
-    <!-- Sadece Verilerin (Satırların) Kayacağı Alan -->
-    <div class="ml-wrap">
-       <div id="ml-list-body">
-          <div class="ml-empty">Yükleniyor...</div>
-       </div>
+    <!-- Tablo Başlıkları (Bu kısım artık hep burada kalacak) -->
+    <div class="ml-head">
+      <span onclick="mlSort('room')">Oda</span>
+      <span onclick="mlSort('kat')">Kat</span>
+      <span onclick="mlSort('date')">Tarih</span>
+      <span onclick="mlSort('type')">Tür</span>
+      <span>L1</span><span>L2</span><span>L3</span><span>Fark</span>
     </div>
   </div>
+  
+  <!-- Sadece satırların (verilerin) görüneceği alan -->
+  <div class="ml-wrap">
+     <div id="ml-list-body">
+        <div class="ml-empty">Yükleniyor...</div>
+     </div>
+  </div>
+</div>
 
   <!-- SAYAÇ HESAPLAMA -->
   <div class="screen" id="s4">
