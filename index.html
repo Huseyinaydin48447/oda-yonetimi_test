@@ -14,39 +14,56 @@
     --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
   }
 
-  /* --- SAYAÇ LİSTESİ STICKY (SABİTLEME) AYARLARI --- */
-  #s3 { padding-top: 0; }
+/* Sayaç Listesi Sabitleme Ayarları */
+#s3 { padding: 0 16px; }
 
-  /* Arama Çubuğu ve İstatistik Kartlarını kapsayan alan */
-  .ml-sticky-header {
-    position: sticky;
-    top: 105px; /* Topbar (62) + Nav (43) */
-    z-index: 110;
-    background: var(--bg);
-    padding: 12px 0 6px 0;
-    margin-bottom: 0;
-  }
+.ml-sticky-header {
+  position: sticky;
+  top: 106px; /* Topbar (62) + Nav (44) */
+  z-index: 100;
+  background: var(--bg); /* Sayfa arka plan rengiyle aynı, arkadakileri gizler */
+  padding-top: 16px;
+  margin: 0 -16px; /* Kenarlara tam sıfırlanması için */
+  padding-left: 16px;
+  padding-right: 16px;
+}
 
-  /* Tablo Başlıkları (Oda, Kat, Tarih...) */
-  .ml-head {
-    position: sticky;
-    top: 253px; /* Header panelinin hemen altında bittiği nokta */
-    z-index: 105;
-    background: var(--surface2);
-    border-bottom: 2px solid var(--border);
-    display: grid;
-    grid-template-columns: 46px 58px 84px 50px 1fr 1fr 1fr 52px;
-    box-shadow: 0 4px 6px -2px rgba(0,0,0,0.05);
-  }
+.ml-head {
+  display: grid;
+  grid-template-columns: 46px 58px 84px 50px 1fr 1fr 1fr 52px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  margin-top: 10px;
+}
 
-  /* Tablo sarmalayıcısı - Sticky için overflow: visible şart */
-  .ml-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: visible !important; 
-    margin-top: 5px;
-  }
+.ml-head span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 12px 5px;
+  text-align: center;
+}
+
+.ml-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  overflow: visible; /* Sticky'nin bozulmaması için */
+  margin-bottom: 100px;
+}
+
+/* Satırların kenarlıkları */
+.ml-row {
+  display: grid;
+  grid-template-columns: 46px 58px 84px 50px 1fr 1fr 1fr 52px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
 
   /* --- GENEL SİSTEM STİLLERİ --- */
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
@@ -294,9 +311,9 @@
     <div id="rlist"><div class="empty">Yükleniyor...</div></div>
   </div>
 
-  <!-- SAYAÇ LİSTESİ -->
+<!-- SAYAÇ LİSTESİ -->
   <div class="screen" id="s3">
-    <!-- Sabit kalacak kısım başlangıcı -->
+    <!-- Sabit kalacak Üst Blok -->
     <div class="ml-sticky-header">
       <div class="ml-toolbar">
         <div class="ml-row1">
@@ -314,10 +331,24 @@
         </div>
       </div>
       <div class="ml-stats" id="ml-stats"></div>
+      
+      <!-- Tablo Başlıkları Artık Burada Sabit -->
+      <div class="ml-head">
+        <span onclick="mlSort('room')">Oda</span>
+        <span onclick="mlSort('kat')">Kat</span>
+        <span onclick="mlSort('date')">Tarih</span>
+        <span onclick="mlSort('type')">Tür</span>
+        <span>L1</span><span>L2</span><span>L3</span>
+        <span>Fark</span>
+      </div>
     </div>
-    <!-- Sabit kalacak kısım bitişi -->
     
-    <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
+    <!-- Sadece Verilerin (Satırların) Kayacağı Alan -->
+    <div class="ml-wrap">
+       <div id="ml-list-body">
+          <div class="ml-empty">Yükleniyor...</div>
+       </div>
+    </div>
   </div>
 
   <!-- SAYAÇ HESAPLAMA -->
@@ -920,22 +951,30 @@ function mlSort(key) {
   renderMeterList();
 }
 function renderMeterList(){
-  const wrap=q('ml-wrap'),statsEl=q('ml-stats');
-  if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
+  const listBody = q('ml-list-body');
+  const statsEl = q('ml-stats');
 
-  // 1. ADIM: Tüm veriyi kronolojik olarak sırala (Tarih aynıysa önce Giriş sonra Çıkış gelsin)
+  // Eğer veri yoksa veya yüklenmemişse
+  if(!mlFiltered.length){
+    if(listBody) listBody.innerHTML = '<div class="ml-empty">Kayıt bulunamadı</div>';
+    if(statsEl) statsEl.innerHTML = '';
+    return;
+  }
+
+  // 1. ADIM: Tüm veriyi zaman sırasına diz (Aynı günse önce Giriş sonra Çıkış gelsin)
+  // Bu işlem, farkın doğru hesaplanması için arka planda yapılır.
   const chronologicalData = [...mlAllData].sort((a, b) => {
-    const dateA = new Date(a.checkin_date);
-    const dateB = new Date(b.checkin_date);
-    if (dateA - dateB !== 0) return dateA - dateB;
-    // Tarihler aynıysa: Giriş her zaman önce gelmeli ki Çıkış onu hesaplayabilsin
+    const dA = new Date(a.checkin_date);
+    const dB = new Date(b.checkin_date);
+    if (dA - dB !== 0) return dA - dB;
+    // Aynı gün içindeki kayıtlarda Giriş (-1) Çıkıştan (1) önce gelsin
     return a.type === 'giris' ? -1 : 1;
   });
 
   const farkMap = {};
-  const sonGirisDegerleri = {}; // Oda bazlı son giriş değerlerini tutar
+  const odaSonGirisDegerleri = {}; // Her odanın en son giriş kwh değerini tutar
 
-  // 2. ADIM: Farkları hesapla
+  // 2. ADIM: "Hesapla" sekmesindeki formüle göre farkları bul
   chronologicalData.forEach(e => {
     const mv = e.meter_values;
     const rno = e.room_no;
@@ -945,67 +984,82 @@ function renderMeterList(){
       return;
     }
 
-    // "Hesapla" sekmesindeki standart formül: L1.L2.L3 -> L1*10000 + L2*100 + L3
+    // "Hesapla" sekmesindeki ağırlıklı formül: L1*10000 + L2*100 + L3
     const guncelKWH = ( (parseInt(mv.l1)||0) * 10000 ) + ( (parseInt(mv.l2)||0) * 100 ) + (parseFloat(mv.l3)||0);
 
     if (e.type === 'giris' || !e.type) {
-      sonGirisDegerleri[rno] = guncelKWH;
-      farkMap[e.id] = null;
+      // Bu bir giriş kaydı, bunu hafızaya al
+      odaSonGirisDegerleri[rno] = guncelKWH;
+      farkMap[e.id] = null; // Giriş satırında fark gösterilmez
     } 
     else if (e.type === 'cikis') {
-      const baslangicKWH = sonGirisDegerleri[rno];
+      // Bu bir çıkış kaydı, bu odanın hafızadaki son girişini bul
+      const baslangicKWH = odaSonGirisDegerleri[rno];
       
       if (baslangicKWH !== undefined && baslangicKWH !== null) {
         let diff;
         if (guncelKWH >= baslangicKWH) {
           diff = guncelKWH - baslangicKWH;
         } else {
-          // Sayaç sıfırlanmış (9999'dan başa dönmüş) durumu
+          // Sayaç sıfırlanmış (Tour Complet) durumu
           const maxKWH = (9999 * 10000) + (99 * 100) + 99.9;
           diff = (maxKWH - baslangicKWH) + guncelKWH;
         }
         farkMap[e.id] = diff.toFixed(2);
       } else {
-        farkMap[e.id] = null; 
+        farkMap[e.id] = null; // Öncesinde hiç giriş kaydı yoksa fark yazma
       }
     }
   });
 
-  // İstatistikleri güncelle
-  const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
-  const tC=mlFiltered.filter(e=>e.type==='cikis').length;
-  const odalar=new Set(mlFiltered.map(e=>e.room_no));
-  statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
+  // 3. ADIM: İstatistik Paneli Kartlarını Güncelle
+  const tG = mlFiltered.filter(e => e.type === 'giris' || !e.type).length;
+  const tC = mlFiltered.filter(e => e.type === 'cikis').length;
+  const odalar = new Set(mlFiltered.map(e => e.room_no));
+  
+  if(statsEl) {
+    statsEl.innerHTML = `
+      <div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div>
+      <div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div>
+      <div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div>
+      <div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>
+    `;
+  }
 
-  // Tabloyu oluştur
-  let rows='';
-  mlFiltered.forEach(e=>{
-    const mv=e.meter_values;
-    const L1=mv?mv.l1??'0':'0',L2=mv?mv.l2??'0':'0',L3=mv?mv.l3??'0.0':'0.0';
-    const fark=farkMap[e.id];
-    const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
-    const cats=(e.category||'').split(',').filter(Boolean);
-    const katL=cats.length?cats[0]:'—';
-    const isG=e.type!=='cikis';
-    const typeDot=isG?`<span class="gd">●</span> Giriş`:`<span class="cd">●</span> Çıkış`;
+  // 4. ADIM: Tablo Satırlarını Oluştur (ml-list-body içine basılacak)
+  let rows = '';
+  mlFiltered.forEach(e => {
+    const mv = e.meter_values;
+    const L1 = mv ? mv.l1 ?? '0' : '0';
+    const L2 = mv ? mv.l2 ?? '0' : '0';
+    const L3 = mv ? mv.l3 ?? '0.0' : '0.0';
+    const fark = farkMap[e.id];
+    
+    // Fark varsa yeşil renkle göster, yoksa tire koy
+    const farkHtml = (fark === null || fark === undefined)
+      ? `<div class="ml-c fc none">—</div>`
+      : `<div class="ml-c fc pos">+${fark}</div>`;
 
-    rows+=`<div class="ml-row ${isG?'gr':'cr'}" onclick="goRoom('${e.room_no}')">
-      <div class="ml-c rb"><span class="${isG?'':'eb'}">${e.room_no}</span></div>
-      <div class="ml-c kb"><span>${katL}</span></div>
-      <div class="ml-c" style="font-size:11px;color:var(--muted)">${fmtShort(e.checkin_date)}</div>
-      <div class="ml-c tc">${typeDot}</div>
-      <div class="ml-c vc">${parseInt(L1)}</div>
-      <div class="ml-c vc">${parseInt(L2)}</div>
-      <div class="ml-c vc">${parseFloat(L3).toFixed(1)}</div>
-      ${farkHtml}
-    </div>`;
+    const cats = (e.category || '').split(',').filter(Boolean);
+    const katL = cats.length ? cats[0] : '—';
+    const isG = e.type !== 'cikis';
+    const typeDot = isG ? `<span class="gd">●</span> Giriş` : `<span class="cd">●</span> Çıkış`;
+
+    rows += `
+      <div class="ml-row ${isG ? 'gr' : 'cr'}" onclick="goRoom('${e.room_no}')">
+        <div class="ml-c rb"><span class="${isG ? '' : 'eb'}">${e.room_no}</span></div>
+        <div class="ml-c kb"><span>${katL}</span></div>
+        <div class="ml-c" style="font-size:11px;color:var(--muted)">${fmtShort(e.checkin_date)}</div>
+        <div class="ml-c tc">${typeDot}</div>
+        <div class="ml-c vc">${parseInt(L1)}</div>
+        <div class="ml-c vc">${parseInt(L2)}</div>
+        <div class="ml-c vc">${parseFloat(L3).toFixed(1)}</div>
+        ${farkHtml}
+      </div>`;
   });
 
-  wrap.innerHTML=`<div class="ml-head">
-  <span onclick="mlSort('room')">Oda</span>
-  <span onclick="mlSort('kat')">Kat</span>
-  <span onclick="mlSort('date')">Tarih</span>
-  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span></div>${rows}`;
+  // Sonuçları HTML'e aktar
+  if(listBody) listBody.innerHTML = rows;
 }
 
 /* PDF exports */
