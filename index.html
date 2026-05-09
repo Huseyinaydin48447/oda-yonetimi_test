@@ -13,6 +13,26 @@
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
     --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
   }
+  /* Sayaç Listesi Sabitleme Ayarları */
+#s3 {
+  padding-top: 0; /* İçerideki yapışkan başlık ile çakışmaması için */
+}
+
+.ml-sticky-header {
+  position: sticky;
+  top: 105px; /* Topbar (62px) + Nav (yaklaşık 43px) toplamı */
+  background: var(--bg); /* Arkadaki odaların görünmemesi için */
+  z-index: 90;
+  padding: 16px 0 10px 0; /* Üst ve alt boşluk */
+  margin-bottom: 0;
+}
+
+/* Tablo başlığının da hemen bunların altında sabit kalmasını isterseniz (Opsiyonel) */
+.ml-head {
+  position: sticky;
+  top: 255px; /* Toolbar ve Stats yüksekliği kadar aşağıda sabitlenir */
+  z-index: 89;
+}
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
   .entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
@@ -397,22 +417,27 @@
 
   <!-- SAYAÇ LİSTESİ -->
   <div class="screen" id="s3">
-    <div class="ml-toolbar">
-      <div class="ml-row1">
-        <input id="ml-search" type="text" placeholder="Oda, kat ara..." oninput="mlFilter()"/>
-      </div>
-      <div class="ml-row2">
-        <select id="ml-kat" onchange="mlFilter()">
-          <option value="">Tüm katlar</option>
-        </select>
-        <div class="ml-typebts">
-          <button class="mt-btn sel-all" id="mt-all" onclick="mlSetType('all')">Tümü</button>
-          <button class="mt-btn" id="mt-giris" onclick="mlSetType('giris')">Giriş</button>
-          <button class="mt-btn" id="mt-cikis" onclick="mlSetType('cikis')">Çıkış</button>
+    <!-- Sabit kalacak kısım başlangıcı -->
+    <div class="ml-sticky-header">
+      <div class="ml-toolbar">
+        <div class="ml-row1">
+          <input id="ml-search" type="text" placeholder="Oda, kat ara..." oninput="mlFilter()"/>
+        </div>
+        <div class="ml-row2">
+          <select id="ml-kat" onchange="mlFilter()">
+            <option value="">Tüm katlar</option>
+          </select>
+          <div class="ml-typebts">
+            <button class="mt-btn sel-all" id="mt-all" onclick="mlSetType('all')">Tümü</button>
+            <button class="mt-btn" id="mt-giris" onclick="mlSetType('giris')">Giriş</button>
+            <button class="mt-btn" id="mt-cikis" onclick="mlSetType('cikis')">Çıkış</button>
+          </div>
         </div>
       </div>
+      <div class="ml-stats" id="ml-stats"></div>
     </div>
-    <div class="ml-stats" id="ml-stats"></div>
+    <!-- Sabit kalacak kısım bitişi -->
+    
     <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
   </div>
 
