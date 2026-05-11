@@ -334,40 +334,41 @@
 
   <!-- EKLE -->
   <div class="screen" id="s1">
-    
     <div class="status-bar"><div class="status-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
     
+    <!-- Dönem Aralığı - sadece Demirbaş modunda görünür -->
+    <div class="field" id="donem-field" style="display:none;">
+      <span class="label">Dönem Aralığı</span>
+      <select id="f-donem">
+        <option value="">Seçiniz</option>
+        <option value="1 - 15 Ocak">1. Dönem: 1 - 15 Ocak</option>
+        <option value="16 - 30 Ocak">2. Dönem: 16 - 30 Ocak</option>
+        <option value="31 Ocak - 14 Şubat">3. Dönem: 31 Ocak - 14 Şubat</option>
+        <option value="15 Şubat - 1 Mart">4. Dönem: 15 Şubat - 1 Mart</option>
+        <option value="2 - 16 Mart">5. Dönem: 2 - 16 Mart</option>
+        <option value="17 - 31 Mart">6. Dönem: 17 - 31 Mart</option>
+        <option value="1 - 15 Nisan">7. Dönem: 1 - 15 Nisan</option>
+        <option value="16 - 30 Nisan">8. Dönem: 16 - 30 Nisan</option>
+        <option value="1 - 15 Mayıs">9. Dönem: 1 - 15 Mayıs</option>
+        <option value="16 - 30 Mayıs">10. Dönem: 16 - 30 Mayıs</option>
+        <option value="31 Mayıs - 14 Haziran">11. Dönem: 31 Mayıs - 14 Haziran</option>
+        <option value="15 - 29 Haziran">12. Dönem: 15 - 29 Haziran</option>
+        <option value="30 Haziran - 14 Temmuz">13. Dönem: 30 Haziran - 14 Temmuz</option>
+        <option value="15 - 29 Temmuz">14. Dönem: 15 - 29 Temmuz</option>
+        <option value="30 Temmuz - 13 Ağustos">15. Dönem: 30 Temmuz - 13 Ağustos</option>
+        <option value="14 - 28 Ağustos">16. Dönem: 14 - 28 Ağustos</option>
+        <option value="29 Ağustos - 12 Eylül">17. Dönem: 29 Ağustos - 12 Eylül</option>
+        <option value="13 - 27 Eylül">18. Dönem: 13 - 27 Eylül</option>
+        <option value="28 Eylül - 12 Ekim">19. Dönem: 28 Eylül - 12 Ekim</option>
+        <option value="13 - 27 Ekim">20. Dönem: 13 - 27 Ekim</option>
+        <option value="2 - 16 Kasım">21. Dönem: 2 - 16 Kasım</option>
+        <option value="17 Kasım - 1 Aralık">22. Dönem: 17 Kasım - 1 Aralık</option>
+        <option value="2 - 16 Aralık">23. Dönem: 2 - 16 Aralık</option>
+        <option value="17 - 31 Aralık">24. Dönem: 17 - 31 Aralık</option>
+      </select>
+    </div>
+    
     <div class="field" id="io-type-field" style="display:none;">
-      <div class="field" id="donem-field" style="display:none;">
-  <span class="label">Dönem Aralığı</span>
-  <select id="f-donem">
-    <option value="">Seçiniz</option>
-    <option value="1.1 - 15 Ocak">1. Dönem: 1 - 15 Ocak</option>
-    <option value="16 - 30 Ocak">2. Dönem: 16 - 30 Ocak</option>
-    <option value="31 Ocak - 14 Şubat">3. Dönem: 31 Ocak - 14 Şubat</option>
-    <option value="15 Şubat - 1 Mart">4. Dönem: 15 Şubat - 1 Mart</option>
-    <option value="2 - 16 Mart">5. Dönem: 2 - 16 Mart</option>
-    <option value="17 - 31 Mart">6. Dönem: 17 - 31 Mart</option>
-    <option value="1 - 15 Nisan">7. Dönem: 1 - 15 Nisan</option>
-    <option value="16 - 30 Nisan">8. Dönem: 16 - 30 Nisan</option>
-    <option value="1 - 15 Mayıs">9. Dönem: 1 - 15 Mayıs</option>
-    <option value="16 - 30 Mayıs">10. Dönem: 16 - 30 Mayıs</option>
-    <option value="31 Mayıs - 14 Haziran">11. Dönem: 31 Mayıs - 14 Haziran</option>
-    <option value="15 - 29 Haziran">12. Dönem: 15 - 29 Haziran</option>
-    <option value="30 Haziran - 14 Temmuz">13. Dönem: 30 Haziran - 14 Temmuz</option>
-    <option value="15 - 29 Temmuz">14. Dönem: 15 - 29 Temmuz</option>
-    <option value="30 Temmuz - 13 Ağustos">15. Dönem: 30 Temmuz - 13 Ağustos</option>
-    <option value="14 - 28 Ağustos">16. Dönem: 14 - 28 Ağustos</option>
-    <option value="29 Ağustos - 12 Eylül">17. Dönem: 29 Ağustos - 12 Eylül</option>
-    <option value="13 - 27 Eylül">18. Dönem: 13 - 27 Eylül</option>
-    <option value="28 Eylül - 12 Ekim">19. Dönem: 28 Eylül - 12 Ekim</option>
-    <option value="13 - 27 Ekim">20. Dönem: 13 - 27 Ekim</option>
-    <option value="2 - 16 Kasım">21. Dönem: 2 - 16 Kasım</option>
-    <option value="17 Kasım - 1 Aralık">22. Dönem: 17 Kasım - 1 Aralık</option>
-    <option value="2 - 16 Aralık">23. Dönem: 2 - 16 Aralık</option>
-    <option value="17 - 31 Aralık">24. Dönem: 17 - 31 Aralık</option>
-  </select>
-</div>
       <span class="label">İşlem Türü</span>
       <select id="f-type"><option value="giris">Giriş</option><option value="cikis">Çıkış</option></select>
     </div>
@@ -1053,19 +1054,16 @@ function renderMeterList(){
   const wrap=q('ml-wrap'),statsEl=q('ml-stats');
   if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
 
-  // 1. ADIM: Tüm veriyi kronolojik olarak sırala (Tarih aynıysa önce Giriş sonra Çıkış gelsin)
   const chronologicalData = [...mlAllData].sort((a, b) => {
     const dateA = new Date(a.checkin_date);
     const dateB = new Date(b.checkin_date);
     if (dateA - dateB !== 0) return dateA - dateB;
-    // Tarihler aynıysa: Giriş her zaman önce gelmeli ki Çıkış onu hesaplayabilsin
     return a.type === 'giris' ? -1 : 1;
   });
 
   const farkMap = {};
-  const sonGirisDegerleri = {}; // Oda bazlı son giriş değerlerini tutar
+  const sonGirisDegerleri = {};
 
-  // 2. ADIM: Farkları hesapla
   chronologicalData.forEach(e => {
     const mv = e.meter_values;
     const rno = e.room_no;
@@ -1075,7 +1073,6 @@ function renderMeterList(){
       return;
     }
 
-    // "Hesapla" sekmesindeki standart formül: L1.L2.L3 -> L1*10000 + L2*100 + L3
     const guncelKWH = ( (parseInt(mv.l1)||0) * 10000 ) + ( (parseInt(mv.l2)||0) * 100 ) + (parseFloat(mv.l3)||0);
 
     if (e.type === 'giris' || !e.type) {
@@ -1090,7 +1087,6 @@ function renderMeterList(){
         if (guncelKWH >= baslangicKWH) {
           diff = guncelKWH - baslangicKWH;
         } else {
-          // Sayaç sıfırlanmış (9999'dan başa dönmüş) durumu
           const maxKWH = (9999 * 10000) + (99 * 100) + 99.9;
           diff = (maxKWH - baslangicKWH) + guncelKWH;
         }
@@ -1101,13 +1097,11 @@ function renderMeterList(){
     }
   });
 
-  // İstatistikleri güncelle
   const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
   const tC=mlFiltered.filter(e=>e.type==='cikis').length;
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
   statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
 
-  // Tabloyu oluştur
   let rows='';
   mlFiltered.forEach(e=>{
     const mv=e.meter_values;
@@ -1244,8 +1238,6 @@ function kwInfoGuncelle() {
   }
 }
 
-// Kilowatt saat hesaplama (L1-L2-L3 ile)
-// L3 max 99.9, geçince L2 artar. L2 max 99, geçince L1 artar.
 function meterToKWH(l1, l2, l3) {
   return (l1 * 100 * 100) + (l2 * 100) + l3;
 }
@@ -1266,7 +1258,6 @@ function hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3) {
   if (cKWH >= gKWH) {
     return cKWH - gKWH;
   } else {
-    // Sayaç sıfırlamış (tour complet)
     let maxKWH = meterToKWH(9999, 99, 99.9);
     return (maxKWH - gKWH) + cKWH;
   }
@@ -1291,7 +1282,6 @@ function hesapla() {
 
   if (!girisDate || !cikisDate) { alert('Lütfen tarihleri seçiniz.'); return; }
   
-  // L3 kontrolü (0-99.9)
   if (gL3 > 99.9 || cL3 > 99.9) {
     alert('L3 değeri 99.9\'dan büyük olamaz!');
     return;
