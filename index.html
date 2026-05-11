@@ -840,7 +840,7 @@ async function saveEdit(entryId,ei){
   try{
     const np=document.getElementById(`edit-photos-${entryId}`);let newUrls=[...(entry.photo_urls||[])];
     if(np&&np.files.length){for(const f of [...np.files]){const{file:c}=await compressImage(f);newUrls.push(await uploadImg(c,entry.room_no));}}
-     const body={note,checkin_date:date,category:tags,photo_urls:newUrls};
+    const body={note,checkin_date:date,category:tags,photo_urls:newUrls};
     if(mode==='demirbaş'){const ed=document.getElementById(`edit-donem-${entryId}`);if(ed)body.donem=ed.value;}
     if(mode==='elektrik'){const l1=document.getElementById(`edit-l1-${entryId}`);const l2=document.getElementById(`edit-l2-${entryId}`);const l3=document.getElementById(`edit-l3-${entryId}`);if(l1&&l2&&l3)body.meter_values={l1:parseFloat(l1.value)||0,l2:parseFloat(l2.value)||0,l3:parseFloat(l3.value)||0};}
     if(mode==='elektrik'&&tv!==null)body.type=tv;
@@ -877,7 +877,7 @@ function buildEntryCard(entry,gi,isE,showRN){
   return`<div class="entry-card">
     <div class="entry-head" data-ei="${gi}" onclick="toggleEntry(this)">${rnb}
       <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
-      <div class="entry-meta">${cats.length?`      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.donem?`<div class="nt" style="color:var(--amber);font-weight:500;">📅 ${entry.donem}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
+          <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.donem?`<div class="nt" style="color:var(--amber);font-weight:500;">📅 ${entry.donem}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
       <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
