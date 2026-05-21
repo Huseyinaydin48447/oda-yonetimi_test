@@ -465,7 +465,8 @@
           <div class="row2">
             <div class="field">
               <label class="label">Daire No</label>
-              <input type="text" id="daireNo" placeholder="Örn: E-12"/>
+              <input type="text" id="daireNo" placeholder="ör: 102, 301..." oninput="onDaireNoChange(this.value)"/>
+              <div id="daireNoHint" style="font-size:11px;margin-top:4px;font-weight:500;"></div>
             </div>
             <div class="field">
               <label class="label">Daire Tipi</label>
@@ -756,6 +757,27 @@ function fmtDatePDF(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=[
 function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(0)+'KB';return(b/1048576).toFixed(1)+'MB';}
 function safe(s){if(!s)return'';return s.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}
 function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);}
+
+/* ═══ ODA TİPİ & DOĞRULAMA ═══ */
+// 2+1 odalar: her katta XX2, XX9, XX10, XX18 (son 2 rakam: 02,09,10,18)
+// 1+1 odalar: her katta geri kalanlar (01,03,04,05,06,07,11,13,14,15,16,17)
+const ODA_2P1_SONEKLER = [2, 9, 10, 18];
+const ODA_1P1_SONEKLER = [1, 3, 4, 5, 6, 7, 11, 13, 14, 15, 16, 17];
+const TUM_SONEKLER = [...ODA_2P1_SONEKLER, ...ODA_1P1_SONEKLER];
+
+function odaTipiGetir(odaNo) {
+  const n = parseInt(odaNo);
+  if (!n || isNaN(n)) return null;
+  const kat = Math.floor(n / 100);
+  const sonek = n % 100;
+  if (kat < 1 || kat > 15) return null;
+  if (!TUM_SONEKLER.includes(sonek)) return null;
+  return ODA_2P1_SONEKLER.includes(sonek) ? '2+1' : '1+1';
+}
+
+function odaGecerliMi(odaNo) {
+  return odaTipiGetir(odaNo) !== null;
+}
 
 async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-text').textContent='Supabase bağlantısı aktif';q('topbar-sub').textContent='Veriler bulutta saklanıyor';}else throw 0;}catch{q('conn-text').textContent='Bağlantı hatası';q('topbar-sub').textContent='Bağlantı sorunu';}}
 function showToast(msg,type=''){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3000);}
@@ -1193,6 +1215,14 @@ function mlGoHesapla(roomNo, girisDate, cikisDate, gL1, gL2, gL3, cL1, cL2, cL3)
     if(dNo)dNo.value=roomNo;
     if(gDate)gDate.value=girisDate||today();
     if(cDate)cDate.value=cikisDate||today();
+    // Daire tipini otomatik belirle
+    const tip=odaTipiGetir(roomNo);
+    if(tip){
+      document.getElementById('daireType').value=tip;
+      seciliTip=tip;
+      const info=document.getElementById('daireNoHint');
+      if(info){info.textContent=tip+' daire';info.style.color='var(--accent)';}
+    }
     // Giriş sayaç değerleri
     const girisL1=document.getElementById('girisL1');
     const girisL2=document.getElementById('girisL2');
@@ -1300,6 +1330,23 @@ function onTipChange() {
   kwInfoGuncelle();
 }
 
+function onDaireNoChange(val) {
+  const tip = odaTipiGetir(val);
+  const sel = document.getElementById('daireType');
+  const info = document.getElementById('daireNoHint');
+  if (tip) {
+    sel.value = tip;
+    seciliTip = tip;
+    tarifeCiz();
+    kwInfoGuncelle();
+    if (info) { info.textContent = tip + ' daire'; info.style.color = 'var(--accent)'; }
+  } else if (val && val.length >= 3) {
+    if (info) { info.textContent = 'Geçersiz oda no'; info.style.color = 'var(--danger)'; }
+  } else {
+    if (info) { info.textContent = ''; }
+  }
+}
+
 function onDateChange() { kwInfoGuncelle(); }
 
 function kwInfoGuncelle() {
@@ -1361,6 +1408,21 @@ function hesapla() {
   const daireNo = document.getElementById('daireNo').value.trim() || '—';
 
   if (!girisDate || !cikisDate) { alert('Lütfen tarihleri seçiniz.'); return; }
+
+  // Oda no doğrulama
+  if (daireNo !== '—' && daireNo !== '') {
+    if (!odaGecerliMi(daireNo)) {
+      showToast('Geçersiz oda numarası! (101-1518 arası ve geçerli oda olmalı)', 'error');
+      return;
+    }
+    // Tipi otomatik güncelle
+    const otomatikTip = odaTipiGetir(daireNo);
+    if (otomatikTip) {
+      seciliTip = otomatikTip;
+      document.getElementById('daireType').value = otomatikTip;
+      tarifeCiz();
+    }
+  }
   
   if (gL3 > 99.9 || cL3 > 99.9) {
     alert('L3 değeri 99.9\'dan büyük olamaz!');
