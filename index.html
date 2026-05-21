@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-
-
-
 <html lang="tr">
 <head>
 <meta charset="UTF-8"/>
@@ -1146,14 +1143,26 @@ function renderMeterList(){
     const isG=e.type!=='cikis';
     const typeDot=isG?`<span class="gd">●</span> Giriş`:`<span class="cd">●</span> Çıkış`;
 
-    // For cikis rows, find the matching giris entry to get the checkin date
+    // For cikis rows, find the matching giris entry to get the checkin date and meter values
     let girisDate='',cikisDate=e.checkin_date||'';
+    let girisMv=null;
     if(!isG){
-      // find the most recent giris for this room before this cikis
       const roomEntries=mlAllData.filter(x=>x.room_no===e.room_no&&(x.type==='giris'||!x.type)&&x.checkin_date<=e.checkin_date);
-      if(roomEntries.length){roomEntries.sort((a,b)=>new Date(b.checkin_date)-new Date(a.checkin_date));girisDate=roomEntries[0].checkin_date||'';}
+      if(roomEntries.length){
+        roomEntries.sort((a,b)=>new Date(b.checkin_date)-new Date(a.checkin_date));
+        const girisEntry=roomEntries[0];
+        girisDate=girisEntry.checkin_date||'';
+        girisMv=girisEntry.meter_values||null;
+      }
     }
-    const hesaplaCol=!isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${girisDate}','${cikisDate}')">Hesapla</button></div>`:'<div class="ml-c"></div>';
+    const cikisMv=e.meter_values||null;
+    const gL1=girisMv?parseInt(girisMv.l1)||0:0;
+    const gL2=girisMv?parseInt(girisMv.l2)||0:0;
+    const gL3=girisMv?parseFloat(girisMv.l3)||0:0;
+    const cL1=cikisMv?parseInt(cikisMv.l1)||0:0;
+    const cL2=cikisMv?parseInt(cikisMv.l2)||0:0;
+    const cL3=cikisMv?parseFloat(cikisMv.l3)||0:0;
+    const hesaplaCol=!isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${girisDate}','${cikisDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`:'<div class="ml-c"></div>';
     rows+=`<div class="ml-row ${isG?'gr':'cr'}" onclick="goRoom('${e.room_no}')">
       <div class="ml-c rb"><span class="${isG?'':'eb'}">${e.room_no}</span></div>
       <div class="ml-c kb"><span>${katL}</span></div>
@@ -1175,7 +1184,7 @@ function renderMeterList(){
 }
 
 /* Sayaç listesinden Hesaplama tab'ına git ve doldur */
-function mlGoHesapla(roomNo, girisDate, cikisDate){
+function mlGoHesapla(roomNo, girisDate, cikisDate, gL1, gL2, gL3, cL1, cL2, cL3){
   goTab(4);
   setTimeout(()=>{
     const dNo=document.getElementById('daireNo');
@@ -1184,6 +1193,20 @@ function mlGoHesapla(roomNo, girisDate, cikisDate){
     if(dNo)dNo.value=roomNo;
     if(gDate)gDate.value=girisDate||today();
     if(cDate)cDate.value=cikisDate||today();
+    // Giriş sayaç değerleri
+    const girisL1=document.getElementById('girisL1');
+    const girisL2=document.getElementById('girisL2');
+    const girisL3=document.getElementById('girisL3');
+    if(girisL1)girisL1.value=gL1||0;
+    if(girisL2)girisL2.value=gL2||0;
+    if(girisL3)girisL3.value=gL3||0;
+    // Çıkış sayaç değerleri
+    const cikisL1=document.getElementById('cikisL1');
+    const cikisL2=document.getElementById('cikisL2');
+    const cikisL3=document.getElementById('cikisL3');
+    if(cikisL1)cikisL1.value=cL1||0;
+    if(cikisL2)cikisL2.value=cL2||0;
+    if(cikisL3)cikisL3.value=cL3||0;
     tarifeCiz();
     kwInfoGuncelle();
   },80);
