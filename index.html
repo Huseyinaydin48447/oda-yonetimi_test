@@ -798,7 +798,29 @@ function initHesapTab(){
     tarifeCiz();
   }
 }
-function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterList(true);},3000);}
+function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterListSilentCheck();},3000);}
+
+async function loadMeterListSilentCheck(){
+  try{
+    const res=await api('/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type,meter_values,photo_urls');
+    const newData=await res.json();
+    const newSig=JSON.stringify(newData.map(e=>e.id+':'+(e.checkin_date||'')+(e.type||'')+(e.note||'')+(JSON.stringify(e.meter_values||{}))));
+    const oldSig=JSON.stringify(mlAllData.map(e=>e.id+':'+(e.checkin_date||'')+(e.type||'')+(e.note||'')+(JSON.stringify(e.meter_values||{}))));
+    if(newSig===oldSig)return;
+    const scrollTop=q('ml-wrap')?.scrollTop||0;
+    const katVal=q('ml-kat')?.value||'';
+    const searchVal=q('ml-search')?.value||'';
+    mlAllData=newData;
+    const katSet=new Set();
+    mlAllData.forEach(e=>{if(e.category)e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim()));});
+    const sel=q('ml-kat');
+    sel.innerHTML='<option value="">Tüm katlar</option>';
+    [...katSet].sort().forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});
+    if(katVal&&katSet.has(katVal))sel.value=katVal;
+    mlFilter();
+    setTimeout(()=>{if(q('ml-wrap'))q('ml-wrap').scrollTop=scrollTop;},10);
+  }catch(e){}
+}
 
 /* tags */
 function togTag(el){const tr=el.closest('.tags-row'),wasOn=el.classList.contains('on');tr.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));selTags=[];if(!wasOn){el.classList.add('on');selTags=[el.textContent];}}
@@ -1007,17 +1029,20 @@ function mlSetType(t){
 
 async function loadMeterList(silent=false){
   const wrap=q('ml-wrap');
+  const scrollTop=wrap?.scrollTop||0;
+  const katVal=q('ml-kat')?.value||'';
   if(!silent)wrap.innerHTML='<div class="ml-empty">Yükleniyor...</div>';
   try{
     const res=await api('/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type,meter_values,photo_urls');
     mlAllData=await res.json();
     const katSet=new Set();
     mlAllData.forEach(e=>{if(e.category)e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim()));});
-    const sel=q('ml-kat'),cur=sel.value;
+    const sel=q('ml-kat'),cur=silent?katVal:sel.value;
     sel.innerHTML='<option value="">Tüm katlar</option>';
     [...katSet].sort().forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});
     if(cur&&katSet.has(cur))sel.value=cur;
     mlFilter();
+    if(silent)setTimeout(()=>{if(q('ml-wrap'))q('ml-wrap').scrollTop=scrollTop;},10);
   }catch(e){wrap.innerHTML='<div class="ml-empty">Bağlantı hatası</div>';}
 }
 
