@@ -192,10 +192,10 @@
   .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
   .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
   .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-  .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px;background:var(--surface2);border-bottom:1px solid var(--border);}
+  .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px;background:var(--surface2);border-bottom:1px solid var(--border);}
   .ml-head span{font-size:11px;font-weight:600;color:var(--muted);padding:9px 5px;text-align:center;}
   .ml-head span:first-child{text-align:left;padding-left:10px;}
-  .ml-row{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;}
+  .ml-row{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;}
   .ml-row:last-child{border-bottom:none;}
   .ml-row:active{background:var(--surface2);}
   .ml-row.gr{border-left:3px solid var(--accent);}
@@ -214,6 +214,8 @@
   .ml-c.fc.neg{color:var(--danger);font-weight:600;}
   .ml-c.fc.none{color:var(--muted);}
   .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
+  .ml-calc-btn{padding:5px 8px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid var(--accent-mid);background:var(--accent-light);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.2;}
+  .ml-calc-btn:active{background:#c5e0d0;}
 
   /* SAYAÇ HESAPLAMA STILLERI */
   .meter-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:0;}
@@ -1141,6 +1143,14 @@ function renderMeterList(){
     const isG=e.type!=='cikis';
     const typeDot=isG?`<span class="gd">●</span> Giriş`:`<span class="cd">●</span> Çıkış`;
 
+    // For cikis rows, find the matching giris entry to get the checkin date
+    let girisDate='',cikisDate=e.checkin_date||'';
+    if(!isG){
+      // find the most recent giris for this room before this cikis
+      const roomEntries=mlAllData.filter(x=>x.room_no===e.room_no&&(x.type==='giris'||!x.type)&&x.checkin_date<=e.checkin_date);
+      if(roomEntries.length){roomEntries.sort((a,b)=>new Date(b.checkin_date)-new Date(a.checkin_date));girisDate=roomEntries[0].checkin_date||'';}
+    }
+    const hesaplaCol=!isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${girisDate}','${cikisDate}')">Hesapla</button></div>`:'<div class="ml-c"></div>';
     rows+=`<div class="ml-row ${isG?'gr':'cr'}" onclick="goRoom('${e.room_no}')">
       <div class="ml-c rb"><span class="${isG?'':'eb'}">${e.room_no}</span></div>
       <div class="ml-c kb"><span>${katL}</span></div>
@@ -1150,6 +1160,7 @@ function renderMeterList(){
       <div class="ml-c vc">${parseInt(L2)}</div>
       <div class="ml-c vc">${parseFloat(L3).toFixed(1)}</div>
       ${farkHtml}
+      ${hesaplaCol}
     </div>`;
   });
 
@@ -1157,7 +1168,22 @@ function renderMeterList(){
   <span onclick="mlSort('room')">Oda</span>
   <span onclick="mlSort('kat')">Kat</span>
   <span onclick="mlSort('date')">Tarih</span>
-  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span></div>${rows}`;
+  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span><span></span></div>${rows}`;
+}
+
+/* Sayaç listesinden Hesaplama tab'ına git ve doldur */
+function mlGoHesapla(roomNo, girisDate, cikisDate){
+  goTab(4);
+  setTimeout(()=>{
+    const dNo=document.getElementById('daireNo');
+    const gDate=document.getElementById('girisDate');
+    const cDate=document.getElementById('cikisDate');
+    if(dNo)dNo.value=roomNo;
+    if(gDate)gDate.value=girisDate||today();
+    if(cDate)cDate.value=cikisDate||today();
+    tarifeCiz();
+    kwInfoGuncelle();
+  },80);
 }
 
 /* PDF exports */
