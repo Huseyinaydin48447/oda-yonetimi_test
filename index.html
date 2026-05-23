@@ -191,32 +191,39 @@
   .ml-stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;}
   .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
   .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
-  .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-  .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px 78px;background:var(--surface2);border-bottom:1px solid var(--border);}
-  .ml-head span{font-size:11px;font-weight:600;color:var(--muted);padding:9px 5px;text-align:center;}
-  .ml-head span:first-child{text-align:left;padding-left:10px;}
-  .ml-row{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px 78px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;}
+  .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto;}
+  /* Paired row: Oda | Kat | GirisTarih | gL1 | gL2 | gL3 | CikisTarih | cL1 | cL2 | cL3 | Fark | Aksiyon */
+  .ml-head{display:grid;grid-template-columns:44px 50px 68px 38px 38px 38px 68px 38px 38px 38px 52px 72px;background:var(--surface2);border-bottom:1px solid var(--border);min-width:580px;}
+  .ml-head span{font-size:10px;font-weight:600;color:var(--muted);padding:7px 3px;text-align:center;white-space:nowrap;}
+  .ml-head span:first-child{text-align:left;padding-left:8px;}
+  .ml-head .hg{color:var(--accent);}
+  .ml-head .hc{color:var(--amber);}
+  .ml-row{display:grid;grid-template-columns:44px 50px 68px 38px 38px 38px 68px 38px 38px 38px 52px 72px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;min-width:580px;}
   .ml-row:last-child{border-bottom:none;}
   .ml-row:active{background:var(--surface2);}
   .ml-row.gr{border-left:3px solid var(--accent);}
-  .ml-row.cr{border-left:3px solid var(--amber);}
-  .ml-c{font-size:12px;padding:9px 5px;text-align:center;color:var(--text);}
-  .ml-c:first-child{text-align:left;padding-left:8px;}
-  .ml-c.rb span{display:inline-block;padding:3px 7px;border-radius:6px;background:var(--accent-light);color:var(--accent);font-family:'DM Mono',monospace;font-weight:600;font-size:13px;}
-  .ml-c.rb span.eb{background:var(--amber-light);color:var(--amber);}
-  .ml-c.kb span{display:inline-block;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--muted);font-size:11px;border:1px solid var(--border);}
-  .ml-c.tc{font-size:11px;font-weight:600;}
-  .ml-c.tc .gd{color:var(--accent);}
-  .ml-c.tc .cd{color:var(--amber);}
-  .ml-c.vc{font-family:'DM Mono',monospace;font-size:12px;}
-  .ml-c.fc{font-family:'DM Mono',monospace;font-size:12px;}
+  .ml-row.paired{border-left:3px solid #d97706;}
+  .ml-row.cr{border-left:3px solid var(--amber);background:rgba(180,83,9,.03);}
+  .ml-c{font-size:11px;padding:8px 3px;text-align:center;color:var(--text);}
+  .ml-c:first-child{text-align:left;padding-left:7px;}
+  .ml-c.rb span{display:inline-block;padding:3px 6px;border-radius:6px;background:var(--accent-light);color:var(--accent);font-family:'DM Mono',monospace;font-weight:600;font-size:12px;}
+  .ml-c.rb span.paired{background:rgba(217,119,6,.15);color:#d97706;}
+  .ml-c.kb span{display:inline-block;padding:2px 5px;border-radius:99px;background:var(--surface2);color:var(--muted);font-size:10px;border:1px solid var(--border);}
+  .ml-c.vc{font-family:'DM Mono',monospace;font-size:11px;}
+  .ml-c.vc.gc{color:var(--accent);}
+  .ml-c.vc.cc{color:var(--amber);}
+  .ml-c.dt{font-size:10px;font-weight:600;padding:4px 3px;}
+  .ml-c.dt.gdt{color:var(--accent);}
+  .ml-c.dt.cdt{color:var(--amber);}
+  .ml-c.dt.empty-dt{color:var(--muted);font-weight:400;}
+  .ml-c.fc{font-family:'DM Mono',monospace;font-size:11px;}
   .ml-c.fc.pos{color:var(--accent);font-weight:600;}
   .ml-c.fc.neg{color:var(--danger);font-weight:600;}
   .ml-c.fc.none{color:var(--muted);}
   .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
-  .ml-calc-btn{padding:5px 8px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid var(--accent-mid);background:var(--accent-light);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.2;}
+  .ml-calc-btn{padding:4px 7px;font-size:10px;font-weight:600;border-radius:6px;border:1px solid var(--accent-mid);background:var(--accent-light);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.3;}
   .ml-calc-btn:active{background:#c5e0d0;}
-  .ml-cikis-btn{padding:5px 8px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.2;}
+  .ml-cikis-btn{padding:4px 7px;font-size:10px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.3;}
   .ml-cikis-btn:active{background:#fde68a;}
 
   /* SAYAÇ HESAPLAMA STILLERI */
@@ -1105,7 +1112,7 @@ function mlSort(key) {
       case 'room': v1 = Number(a.room_no); v2 = Number(b.room_no); break;
       case 'kat': v1 = a.category || ''; v2 = b.category || ''; break;
       case 'date': v1 = new Date(a.checkin_date); v2 = new Date(b.checkin_date); break;
-      case 'type': v1 = a.type || ''; v2 = b.type || ''; break;
+      default: v1=0;v2=0;
     }
     if (v1 > v2) return 1 * mlSortDir;
     if (v1 < v2) return -1 * mlSortDir;
@@ -1117,105 +1124,144 @@ function renderMeterList(){
   const wrap=q('ml-wrap'),statsEl=q('ml-stats');
   if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
 
-  const chronologicalData = [...mlAllData].sort((a, b) => {
-    const dateA = new Date(a.checkin_date);
-    const dateB = new Date(b.checkin_date);
-    if (dateA - dateB !== 0) return dateA - dateB;
-    return a.type === 'giris' ? -1 : 1;
+  // ── Kronolojik sırayla fark hesapla (tüm veri üzerinde) ──
+  const chronologicalData = [...mlAllData].sort((a,b)=>{
+    const da=new Date(a.checkin_date),db=new Date(b.checkin_date);
+    if(da-db!==0)return da-db;
+    return (a.type==='giris'||!a.type)?-1:1;
   });
-
-  const farkMap = {};
-  const sonGirisDegerleri = {};
-
-  chronologicalData.forEach(e => {
-    const mv = e.meter_values;
-    const rno = e.room_no;
-    
-    if (!mv) {
-      farkMap[e.id] = null;
-      return;
-    }
-
-    const guncelKWH = ( (parseInt(mv.l1)||0) * 10000 ) + ( (parseInt(mv.l2)||0) * 100 ) + (parseFloat(mv.l3)||0);
-
-    if (e.type === 'giris' || !e.type) {
-      sonGirisDegerleri[rno] = guncelKWH;
-      farkMap[e.id] = null;
-    } 
-    else if (e.type === 'cikis') {
-      const baslangicKWH = sonGirisDegerleri[rno];
-      
-      if (baslangicKWH !== undefined && baslangicKWH !== null) {
-        let diff;
-        if (guncelKWH >= baslangicKWH) {
-          diff = guncelKWH - baslangicKWH;
-        } else {
-          const maxKWH = (9999 * 10000) + (99 * 100) + 99.9;
-          diff = (maxKWH - baslangicKWH) + guncelKWH;
-        }
-        farkMap[e.id] = diff.toFixed(2);
-      } else {
-        farkMap[e.id] = null; 
-      }
+  const farkMap={}, sonGirisMap={};
+  chronologicalData.forEach(e=>{
+    const mv=e.meter_values, rno=e.room_no;
+    if(!mv){farkMap[e.id]=null;return;}
+    const kwh=((parseInt(mv.l1)||0)*10000)+((parseInt(mv.l2)||0)*100)+(parseFloat(mv.l3)||0);
+    if(e.type==='giris'||!e.type){
+      sonGirisMap[rno]={kwh,entry:e};
+      farkMap[e.id]=null;
+    } else if(e.type==='cikis'){
+      const base=sonGirisMap[rno];
+      if(base!==undefined){
+        let diff=kwh>=base.kwh?kwh-base.kwh:((9999*10000)+(99*100)+99.9)-base.kwh+kwh;
+        farkMap[e.id]=diff.toFixed(2);
+      } else {farkMap[e.id]=null;}
     }
   });
 
+  // ── Giriş kayıtlarına çıkış eşleştir ──
+  // Her giriş için en yakın (tarih <= giriş tarihinden sonra) çıkışı bul
+  // Aynı odada birden fazla giriş varsa, her biri kendi çıkışıyla eşleşir
+  // Eşleştirme: odaya göre kronolojik sırada, her giriş bir sonraki çıkışla eşleşir
+  const pairedMap={}; // girisId -> cikisEntry
+  const usedCikisIds=new Set();
+  const girisByRoom={}, cikisByRoom={};
+  mlAllData.forEach(e=>{
+    const rno=e.room_no;
+    if(e.type==='giris'||!e.type){
+      if(!girisByRoom[rno])girisByRoom[rno]=[];
+      girisByRoom[rno].push(e);
+    } else if(e.type==='cikis'){
+      if(!cikisByRoom[rno])cikisByRoom[rno]=[];
+      cikisByRoom[rno].push(e);
+    }
+  });
+  // Kronolojik eşleştir: her giriş → en yakın sonraki çıkış
+  Object.keys(girisByRoom).forEach(rno=>{
+    const girList=[...girisByRoom[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
+    const cikList=[...(cikisByRoom[rno]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
+    girList.forEach(g=>{
+      const match=cikList.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);
+      if(match){pairedMap[g.id]=match;usedCikisIds.add(match.id);}
+    });
+  });
+
+  // ── İstatistik ──
   const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
   const tC=mlFiltered.filter(e=>e.type==='cikis').length;
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
   statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
 
+  // ── Satır oluştur ──
+  // Filtreden geçen girişleri ve eşleşmeyen çıkışları göster
+  const shownCikisIds=new Set();
   let rows='';
+
   mlFiltered.forEach(e=>{
+    const isG=e.type==='giris'||!e.type;
     const mv=e.meter_values;
-    const L1=mv?mv.l1??'0':'0',L2=mv?mv.l2??'0':'0',L3=mv?mv.l3??'0.0':'0.0';
-    const fark=farkMap[e.id];
-    const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
     const cats=(e.category||'').split(',').filter(Boolean);
     const katL=cats.length?cats[0]:'—';
-    const isG=e.type!=='cikis';
-    const typeDot=isG?`<span class="gd">●</span> Giriş`:`<span class="cd">●</span> Çıkış`;
 
-    // For cikis rows, find the matching giris entry to get the checkin date and meter values
-    let girisDate='',cikisDate=e.checkin_date||'';
-    let girisMv=null;
-    if(!isG){
-      const roomEntries=mlAllData.filter(x=>x.room_no===e.room_no&&(x.type==='giris'||!x.type)&&x.checkin_date<=e.checkin_date);
-      if(roomEntries.length){
-        roomEntries.sort((a,b)=>new Date(b.checkin_date)-new Date(a.checkin_date));
-        const girisEntry=roomEntries[0];
-        girisDate=girisEntry.checkin_date||'';
-        girisMv=girisEntry.meter_values||null;
+    if(isG){
+      // Giriş satırı + eşleşen çıkış (aynı satırda)
+      const gL1=mv?parseInt(mv.l1)||0:0, gL2=mv?parseInt(mv.l2)||0:0, gL3=mv?parseFloat(mv.l3)||0:0;
+      const cEntry=pairedMap[e.id]||null;
+      if(cEntry)shownCikisIds.add(cEntry.id);
+
+      const cmv=cEntry?.meter_values||null;
+      const cL1=cmv?parseInt(cmv.l1)||0:0, cL2=cmv?parseInt(cmv.l2)||0:0, cL3=cmv?parseFloat(cmv.l3)||0:0;
+      const cDate=cEntry?.checkin_date||'';
+      const fark=cEntry?farkMap[cEntry.id]:null;
+      const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
+      const hasPair=!!cEntry;
+
+      // Çıkış sütunları
+      const cDateHtml=hasPair?`<div class="ml-c dt cdt">${fmtShort(cDate)}</div>`:`<div class="ml-c dt empty-dt">—</div>`;
+      const cValHtml=hasPair
+        ?`<div class="ml-c vc cc">${cL1}</div><div class="ml-c vc cc">${cL2}</div><div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>`
+        :`<div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div>`;
+
+      // Aksiyon sütunu
+      let aksiyonHtml='';
+      if(hasPair){
+        aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${e.checkin_date}','${cDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`;
+      } else {
+        aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}',${gL1},${gL2},${gL3})">Çıkış Yap</button></div>`;
       }
+
+      rows+=`<div class="ml-row ${hasPair?'paired':'gr'}" onclick="goRoom('${e.room_no}')">
+        <div class="ml-c rb"><span class="${hasPair?'paired':''}">${e.room_no}</span></div>
+        <div class="ml-c kb"><span>${katL}</span></div>
+        <div class="ml-c dt gdt">${fmtShort(e.checkin_date)}</div>
+        <div class="ml-c vc gc">${gL1}</div>
+        <div class="ml-c vc gc">${gL2}</div>
+        <div class="ml-c vc gc">${parseFloat(gL3).toFixed(1)}</div>
+        ${cDateHtml}
+        ${cValHtml}
+        ${farkHtml}
+        ${aksiyonHtml}
+      </div>`;
+
+    } else if(!shownCikisIds.has(e.id)){
+      // Eşleşmeyen (yetim) çıkış satırı — tek başına göster
+      const cL1=mv?parseInt(mv.l1)||0:0, cL2=mv?parseInt(mv.l2)||0:0, cL3=mv?parseFloat(mv.l3)||0:0;
+      const fark=farkMap[e.id];
+      const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
+      rows+=`<div class="ml-row cr" onclick="goRoom('${e.room_no}')">
+        <div class="ml-c rb"><span class="eb">${e.room_no}</span></div>
+        <div class="ml-c kb"><span>${katL}</span></div>
+        <div class="ml-c dt empty-dt">—</div>
+        <div class="ml-c vc" style="color:var(--muted)">—</div>
+        <div class="ml-c vc" style="color:var(--muted)">—</div>
+        <div class="ml-c vc" style="color:var(--muted)">—</div>
+        <div class="ml-c dt cdt">${fmtShort(e.checkin_date)}</div>
+        <div class="ml-c vc cc">${cL1}</div>
+        <div class="ml-c vc cc">${cL2}</div>
+        <div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>
+        ${farkHtml}
+        <div class="ml-c"></div>
+      </div>`;
     }
-    const cikisMv=e.meter_values||null;
-    const gL1=girisMv?parseInt(girisMv.l1)||0:0;
-    const gL2=girisMv?parseInt(girisMv.l2)||0:0;
-    const gL3=girisMv?parseFloat(girisMv.l3)||0:0;
-    const cL1=cikisMv?parseInt(cikisMv.l1)||0:0;
-    const cL2=cikisMv?parseInt(cikisMv.l2)||0:0;
-    const cL3=cikisMv?parseFloat(cikisMv.l3)||0:0;
-    const hesaplaCol=!isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${girisDate}','${cikisDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`:'<div class="ml-c"></div>';
-    const cikisCol=isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}',${parseInt(L1)||0},${parseInt(L2)||0},${parseFloat(L3)||0})">Çıkış Yap</button></div>`:'<div class="ml-c"></div>';
-    rows+=`<div class="ml-row ${isG?'gr':'cr'}" onclick="goRoom('${e.room_no}')">
-      <div class="ml-c rb"><span class="${isG?'':'eb'}">${e.room_no}</span></div>
-      <div class="ml-c kb"><span>${katL}</span></div>
-      <div class="ml-c" style="font-size:11px;color:var(--muted)">${fmtShort(e.checkin_date)}</div>
-      <div class="ml-c tc">${typeDot}</div>
-      <div class="ml-c vc">${parseInt(L1)}</div>
-      <div class="ml-c vc">${parseInt(L2)}</div>
-      <div class="ml-c vc">${parseFloat(L3).toFixed(1)}</div>
-      ${farkHtml}
-      ${hesaplaCol}
-      ${cikisCol}
-    </div>`;
   });
 
   wrap.innerHTML=`<div class="ml-head">
-  <span onclick="mlSort('room')">Oda</span>
-  <span onclick="mlSort('kat')">Kat</span>
-  <span onclick="mlSort('date')">Tarih</span>
-  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span><span></span><span>Çıkış</span></div>${rows}`;
+    <span onclick="mlSort('room')">Oda</span>
+    <span onclick="mlSort('kat')">Kat</span>
+    <span class="hg" onclick="mlSort('date')">Giriş</span>
+    <span class="hg">L1</span><span class="hg">L2</span><span class="hg">L3</span>
+    <span class="hc">Çıkış</span>
+    <span class="hc">L1</span><span class="hc">L2</span><span class="hc">L3</span>
+    <span>Fark</span><span></span>
+  </div>${rows}`;
 }
 
 /* Sayaç listesinden Hesaplama tab'ına git ve doldur */
@@ -1268,7 +1314,7 @@ function mlGoEkle(roomNo, girisDate, gL1, gL2, gL3){
     // Türü çıkış olarak seç
     const fType=q('f-type');
     if(fType)fType.value='cikis';
-    // L1 L2 L3 değerlerini sıfırla (çıkış değerleri girilecek)
+    // L1 L2 L3 değerlerini sıfırla (yeni çıkış değerleri girilecek)
     const fL1=q('f-l1'),fL2=q('f-l2'),fL3=q('f-l3');
     if(fL1)fL1.value=0;
     if(fL2)fL2.value=0;
@@ -1292,6 +1338,8 @@ function mlGoEkle(roomNo, girisDate, gL1, gL2, gL3){
         });
       }
     }
+    // Ekrana kaydır
+    window.scrollTo({top:0,behavior:'smooth'});
   },80);
 }
 
