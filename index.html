@@ -192,10 +192,10 @@
   .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
   .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
   .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-  .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px;background:var(--surface2);border-bottom:1px solid var(--border);}
+  .ml-head{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px 78px;background:var(--surface2);border-bottom:1px solid var(--border);}
   .ml-head span{font-size:11px;font-weight:600;color:var(--muted);padding:9px 5px;text-align:center;}
   .ml-head span:first-child{text-align:left;padding-left:10px;}
-  .ml-row{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;}
+  .ml-row{display:grid;grid-template-columns:46px 58px 84px 50px 1fr 1fr 1fr 52px 64px 78px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;}
   .ml-row:last-child{border-bottom:none;}
   .ml-row:active{background:var(--surface2);}
   .ml-row.gr{border-left:3px solid var(--accent);}
@@ -216,6 +216,8 @@
   .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
   .ml-calc-btn{padding:5px 8px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid var(--accent-mid);background:var(--accent-light);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.2;}
   .ml-calc-btn:active{background:#c5e0d0;}
+  .ml-cikis-btn{padding:5px 8px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.2;}
+  .ml-cikis-btn:active{background:#fde68a;}
 
   /* SAYAÇ HESAPLAMA STILLERI */
   .meter-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:0;}
@@ -338,7 +340,11 @@
   <div class="screen" id="s1">
     <div class="status-bar"><div class="status-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
     
-    <!-- Dönem Aralığı - sadece Demirbaş modunda görünür -->
+    <!-- Çıkış Yap - Giriş bilgi banner -->
+    <div id="cikis-giris-banner" style="display:none;background:var(--amber-light);border:1px solid #fcd34d;border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--amber);display:none;align-items:center;gap:8px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+      <span id="cikis-giris-banner-text"></span>
+    </div>
     <div class="field" id="donem-field" style="display:none;">
       <span class="label">Dönem Aralığı</span>
       <select id="f-donem">
@@ -814,7 +820,11 @@ function setMode(m){
 }
 
 /* tabs */
-function goTab(i){tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();if(i===4)initHesapTab();startTimer();}
+function goTab(i){
+  // Ekle tabından çıkınca banner'ı gizle
+  if(i!==1){const b=q('cikis-giris-banner');if(b)b.style.display='none';}
+  tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();if(i===4)initHesapTab();startTimer();
+}
 function initHesapTab(){
   if(typeof tarifeCiz !== 'undefined'){
     document.getElementById('girisDate').value = today();
@@ -1018,6 +1028,7 @@ async function saveEntry(){
     else{const body={room_no:roomNo,mode,checkin_date:date,category:selTags.join(','),note,photo_urls:urls,type,donem: donem || null };if(mode==='elektrik')body.meter_values=mv;await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});showToast('Yeni kayıt oluşturuldu!','success');}
     pending=[];selTags=[];qs('.tag').forEach(t=>t.classList.remove('on'));
     q('f-room').value='';q('f-note').value='';q('f-date').value=today();q('f-donem').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';
+    const cgb=q('cikis-giris-banner');if(cgb)cgb.style.display='none';
     const sv=q('sinput')?.value.trim();if(sv==roomNo){openEntries.clear();doSearch(roomNo,true);}
     if(tab===2)loadAll(true);if(tab===3)loadMeterList(true);
   }catch(e){showToast('Hata: '+e.message,'error');}
@@ -1185,6 +1196,7 @@ function renderMeterList(){
     const cL2=cikisMv?parseInt(cikisMv.l2)||0:0;
     const cL3=cikisMv?parseFloat(cikisMv.l3)||0:0;
     const hesaplaCol=!isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${girisDate}','${cikisDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`:'<div class="ml-c"></div>';
+    const cikisCol=isG?`<div class="ml-c" style="padding:5px 4px;text-align:center;"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}',${parseInt(L1)||0},${parseInt(L2)||0},${parseFloat(L3)||0})">Çıkış Yap</button></div>`:'<div class="ml-c"></div>';
     rows+=`<div class="ml-row ${isG?'gr':'cr'}" onclick="goRoom('${e.room_no}')">
       <div class="ml-c rb"><span class="${isG?'':'eb'}">${e.room_no}</span></div>
       <div class="ml-c kb"><span>${katL}</span></div>
@@ -1195,6 +1207,7 @@ function renderMeterList(){
       <div class="ml-c vc">${parseFloat(L3).toFixed(1)}</div>
       ${farkHtml}
       ${hesaplaCol}
+      ${cikisCol}
     </div>`;
   });
 
@@ -1202,7 +1215,7 @@ function renderMeterList(){
   <span onclick="mlSort('room')">Oda</span>
   <span onclick="mlSort('kat')">Kat</span>
   <span onclick="mlSort('date')">Tarih</span>
-  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span><span></span></div>${rows}`;
+  <span onclick="mlSort('type')">Tür</span><span>L1</span><span>L2</span><span>L3</span><span>Fark</span><span></span><span>Çıkış</span></div>${rows}`;
 }
 
 /* Sayaç listesinden Hesaplama tab'ına git ve doldur */
@@ -1239,6 +1252,46 @@ function mlGoHesapla(roomNo, girisDate, cikisDate, gL1, gL2, gL3, cL1, cL2, cL3)
     if(cikisL3)cikisL3.value=cL3||0;
     tarifeCiz();
     kwInfoGuncelle();
+  },80);
+}
+
+/* Sayaç listesinden Ekle tab'ına git — çıkış kaydı için */
+function mlGoEkle(roomNo, girisDate, gL1, gL2, gL3){
+  goTab(1);
+  setTimeout(()=>{
+    // Oda numarasını doldur
+    const fRoom=q('f-room');
+    if(fRoom)fRoom.value=roomNo;
+    // Tarihi bugün olarak ayarla
+    const fDate=q('f-date');
+    if(fDate)fDate.value=today();
+    // Türü çıkış olarak seç
+    const fType=q('f-type');
+    if(fType)fType.value='cikis';
+    // L1 L2 L3 değerlerini sıfırla (çıkış değerleri girilecek)
+    const fL1=q('f-l1'),fL2=q('f-l2'),fL3=q('f-l3');
+    if(fL1)fL1.value=0;
+    if(fL2)fL2.value=0;
+    if(fL3)fL3.value=0;
+    // Banner'ı göster: giriş tarihi ve değerleri
+    const banner=q('cikis-giris-banner');
+    const bannerText=q('cikis-giris-banner-text');
+    if(banner&&bannerText){
+      bannerText.textContent=`Oda ${roomNo} · Giriş: ${fmtDate(girisDate)} — L1: ${gL1}, L2: ${gL2}, L3: ${parseFloat(gL3).toFixed(1)}`;
+      banner.style.display='flex';
+    }
+    // Oda numarasına göre kat tagını otomatik seç
+    const tags=q('f-tags');
+    if(tags){
+      const kat=Math.floor(parseInt(roomNo)/100);
+      if(kat>=1){
+        const katLabel=kat+'. Kat';
+        tags.querySelectorAll('.tag').forEach(t=>{
+          t.classList.remove('on');
+          if(t.textContent===katLabel){t.classList.add('on');selTags=[katLabel];}
+        });
+      }
+    }
   },80);
 }
 
