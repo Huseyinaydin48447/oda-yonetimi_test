@@ -1679,16 +1679,85 @@ const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get
 function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
 async function showReadonlyEntry(oda,mod,tarih){
-  const label=mod==='elektrik'?'Sayaç':'Oda';q('topbar-title').textContent=`${label} ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
-  const el=q('sresult');el.innerHTML='<div class="empty">Yükleniyor...</div>';
+  const label=mod==='elektrik'?'Sayaç':'Oda';
+  const isE=mod==='elektrik';
+  q('topbar-title').textContent=`${label} ${oda}`;
+  q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
+  const el=q('sresult');
+  el.innerHTML='<div class="empty">Yükleniyor...</div>';
   try{
-    const data=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`)).json();
+    // Tüm odanın kayıtlarını getir (sadece o tarihe değil)
+    const data=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.asc`)).json();
     if(!data.length){el.innerHTML='<div class="empty">Kayıt bulunamadı</div>';return;}
-    const isE=mod==='elektrik',tp=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} giriş · ${tp} fotoğraf</span></div></div>`;
-    data.forEach((entry,ei)=>{const urls=entry.photo_urls||[];entryImages[ei]=urls;const cats=entry.category?entry.category.split(',').filter(Boolean):[];const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}</div>`).join('');html+=`<div class="entry-card"><div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)"><div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div><div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}</div></div>`;});
+    const tp=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${data.length} kayıt · ${tp} fotoğraf · Salt okunur</span></div></div>`;
+
+    if(isE){
+      // Elektrik: giriş/çıkış çiftlerini 2 sütunlu göster
+      const girisler=data.filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
+      const cikisler=data.filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
+      const usedCikisIds=new Set();
+      const pairs=[];
+      girisler.forEach(g=>{
+        const match=cikisler.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);
+        if(match){usedCikisIds.add(match.id);pairs.push({giris:g,cikis:match});}
+        else pairs.push({giris:g,cikis:null});
+      });
+      cikisler.filter(c=>!usedCikisIds.has(c.id)).forEach(c=>pairs.push({giris:null,cikis:c}));
+      pairs.sort((a,b)=>{
+        const da=a.giris?a.giris.checkin_date:(a.cikis?.checkin_date||'');
+        const db=b.giris?b.giris.checkin_date:(b.cikis?.checkin_date||'');
+        return new Date(db)-new Date(da);
+      });
+      let ei=0;
+      pairs.forEach(pair=>{
+        const {giris,cikis}=pair;
+        if(giris&&cikis){
+          const giEl=buildReadonlyCard(giris,ei++,true);
+          const ciEl=buildReadonlyCard(cikis,ei++,true);
+          html+=`<div style="margin-top:14px;"><div class="entries-grid">${giEl}${ciEl}</div></div>`;
+        } else if(giris){
+          html+=`<div style="margin-top:14px;">${buildReadonlyCard(giris,ei++,true)}</div>`;
+        } else if(cikis){
+          html+=`<div style="margin-top:14px;">${buildReadonlyCard(cikis,ei++,true)}</div>`;
+        }
+      });
+    } else {
+      // Demirbaş: tarihe göre grupla
+      const gbd={};data.forEach(e=>{if(!gbd[e.checkin_date])gbd[e.checkin_date]=[];gbd[e.checkin_date].push(e);});
+      let ei=0;
+      Object.keys(gbd).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
+        const arr=gbd[dk];
+        html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDate(dk)}</div>`;
+        if(arr.length>1){html+=`<div class="entries-grid">`;arr.forEach(e=>{html+=buildReadonlyCard(e,ei++,false);});html+=`</div>`;}
+        else html+=buildReadonlyCard(arr[0],ei++,false);
+      });
+    }
     el.innerHTML=html;
   }catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
+}
+
+function buildReadonlyCard(entry,ei,isE){
+  const urls=entry.photo_urls||[];
+  entryImages[ei]=urls;
+  const cats=entry.category?entry.category.split(',').filter(Boolean):[];
+  const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}</div>`).join('');
+  const mv=isE&&entry.meter_values?`<div style="display:flex;gap:6px;margin-top:8px;font-size:12px;font-family:'DM Mono',monospace;flex-wrap:wrap;"><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span></div>`:'';
+  const typeBadgeClass=isE?(entry.type==='cikis'?'e':''):'';
+  return`<div class="entry-card">
+    <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
+      <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
+      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
+      <span class="entry-count">${urls.length} foto</span>
+      <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="entry-body open">
+      ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
+      <div class="entry-footer">
+        <div style="display:flex;flex-direction:column;"><span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>${mv}</div>
+      </div>
+    </div>
+  </div>`;
 }
 
 /* init */
@@ -1699,7 +1768,7 @@ if(_oda&&_token){
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
   api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
-    .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{q('topbar-title').textContent=(_m==='elektrik'?'Sayaç':'Oda')+' '+_oda;q('topbar-sub').textContent='Salt okunur';doSearch(_oda);}}).catch(()=>showAccessError());
+    .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
 }else if(_oda&&!_token){showAccessError();}
 else{
   q('f-date').value=today();
