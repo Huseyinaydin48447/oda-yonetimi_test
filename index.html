@@ -985,33 +985,27 @@ async function doSearch(val,silent=false){
     let gi=0;
 
     if(isE){
-      // Elektrik modunda: giriş/çıkış çiftlerini kronolojik sırada, 2 sütunlu kart olarak göster
-      // Eşleştirme: kronolojik sırada her giriş → en yakın sonraki çıkış
+      // Elektrik modunda: giriş/çıkış çiftlerini 2 sütunlu kart olarak göster
       const girisler=[...fd].filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
       const cikisler=[...fd].filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
       const usedCikisIds=new Set();
-      const pairs=[]; // {giris, cikis|null}
+      const pairs=[];
       girisler.forEach(g=>{
         const match=cikisler.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);
         if(match){usedCikisIds.add(match.id);pairs.push({giris:g,cikis:match});}
         else pairs.push({giris:g,cikis:null});
       });
-      // Eşleşmeyen çıkışlar (yetim)
       cikisler.filter(c=>!usedCikisIds.has(c.id)).forEach(c=>pairs.push({giris:null,cikis:c}));
-      // Tarihe göre sırala (yeniden eskiye) — her çiftin giriş tarihine göre
       pairs.sort((a,b)=>{
         const da=a.giris?a.giris.checkin_date:(a.cikis?.checkin_date||'');
         const db=b.giris?b.giris.checkin_date:(b.cikis?.checkin_date||'');
         return new Date(db)-new Date(da);
       });
-
       pairs.forEach(pair=>{
         const {giris,cikis}=pair;
         if(giris&&cikis){
-          // İki sütunlu çift kart
           const giEl=buildEntryCard(giris,gi++,true,false);
           const ciEl=buildEntryCard(cikis,gi++,true,false);
-          // Hesapla butonu için değerleri hazırla
           const gmv=giris.meter_values||{};const cmv=cikis.meter_values||{};
           const gL1=parseInt(gmv.l1)||0,gL2=parseInt(gmv.l2)||0,gL3=parseFloat(gmv.l3)||0;
           const cL1=parseInt(cmv.l1)||0,cL2=parseInt(cmv.l2)||0,cL3=parseFloat(cmv.l3)||0;
@@ -1025,15 +1019,13 @@ async function doSearch(val,silent=false){
             </div>
           </div>`;
         } else if(giris){
-          // Sadece giriş var (çıkış yok)
           html+=`<div style="margin-top:14px;">${buildEntryCard(giris,gi++,true,false)}</div>`;
         } else if(cikis){
-          // Sadece çıkış var (yetim)
           html+=`<div style="margin-top:14px;">${buildEntryCard(cikis,gi++,true,false)}</div>`;
         }
       });
     } else {
-      // Demirbaş modu: eski davranış (tarihe göre grupla)
+      // Demirbaş modu: tarihe göre grupla
       const gbd={};fd.forEach(e=>{if(!gbd[e.checkin_date])gbd[e.checkin_date]=[];gbd[e.checkin_date].push(e);});
       Object.keys(gbd).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
         const arr=gbd[dk];
@@ -1144,8 +1136,9 @@ function mlFilter(){
   const search=(q('ml-search')?.value||'').toLowerCase().trim();
   const kat=q('ml-kat')?.value||'';
 
-  // Eşleşmiş çıkış ID'lerini hesapla (tüm data üzerinde)
+  // Eşleşmiş çıkış/giriş ID'lerini hesapla (tüm data üzerinde)
   const pairedCikisIds=new Set();
+  const pairedGirisIds=new Set();
   const girisByRoomF={}, cikisByRoomF={};
   mlAllData.forEach(e=>{
     const rno=e.room_no;
@@ -1156,13 +1149,28 @@ function mlFilter(){
   Object.keys(girisByRoomF).forEach(rno=>{
     const gl=[...girisByRoomF[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
     const cl=[...(cikisByRoomF[rno]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-    gl.forEach(g=>{const m=cl.find(c=>!usedF.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){usedF.add(m.id);pairedCikisIds.add(m.id);}});
+    gl.forEach(g=>{
+      const m=cl.find(c=>!usedF.has(c.id)&&c.checkin_date>=g.checkin_date);
+      if(m){usedF.add(m.id);pairedCikisIds.add(m.id);pairedGirisIds.add(g.id);}
+    });
   });
 
   mlFiltered=mlAllData.filter(e=>{
-    // Eşleşmiş çıkışlar asla ayrı satır olarak gösterilmez
-    if(e.type==='cikis'&&pairedCikisIds.has(e.id))return false;
-    if(mlTypeFilter!=='all'&&e.type!==mlTypeFilter)return false;
+    const isGiris=e.type==='giris'||!e.type;
+    const isCikis=e.type==='cikis';
+
+    // Eşleşmiş çıkışlar asla ayrı satır gösterilmez (giriş satırına dahil)
+    if(isCikis&&pairedCikisIds.has(e.id))return false;
+
+    if(mlTypeFilter==='giris'){
+      // Sadece giriş kayıtları (eşleşmiş olsun olmasın)
+      if(!isGiris)return false;
+    } else if(mlTypeFilter==='cikis'){
+      // Eşleşmiş çifti olan girişler + yetim çıkışlar
+      if(isGiris&&!pairedGirisIds.has(e.id))return false;
+    }
+    // 'all': eşleşmiş çıkışlar hariç hepsi
+
     if(kat&&!(e.category||'').includes(kat))return false;
     if(search){const rno=String(e.room_no).toLowerCase();const cat=(e.category||'').toLowerCase();const nt=(e.note||'').toLowerCase();if(!rno.includes(search)&&!cat.includes(search)&&!nt.includes(search))return false;}
     return true;
