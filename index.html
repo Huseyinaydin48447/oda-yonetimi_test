@@ -981,15 +981,67 @@ async function doSearch(val,silent=false){
     const fd=data.filter(e=>e.photo_urls&&e.photo_urls.length>0);
     const isE=mode==='elektrik';
     const tp=fd.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    const gbd={};fd.forEach(e=>{if(!gbd[e.checkin_date])gbd[e.checkin_date]=[];gbd[e.checkin_date].push(e);});
-    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${fd.length} giriş · ${tp} fotoğraf</span></div></div>`;
+    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${fd.length} kayıt · ${tp} fotoğraf</span></div></div>`;
     let gi=0;
-    Object.keys(gbd).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
-      const arr=gbd[dk];
-      html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDate(dk)}</div>`;
-      if(arr.length>1){html+=`<div class="entries-grid">`;arr.forEach(e=>{html+=buildEntryCard(e,gi++,isE,false);});html+=`</div>`;}
-      else html+=buildEntryCard(arr[0],gi++,isE,false);
-    });
+
+    if(isE){
+      // Elektrik modunda: giriş/çıkış çiftlerini kronolojik sırada, 2 sütunlu kart olarak göster
+      // Eşleştirme: kronolojik sırada her giriş → en yakın sonraki çıkış
+      const girisler=[...fd].filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
+      const cikisler=[...fd].filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
+      const usedCikisIds=new Set();
+      const pairs=[]; // {giris, cikis|null}
+      girisler.forEach(g=>{
+        const match=cikisler.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);
+        if(match){usedCikisIds.add(match.id);pairs.push({giris:g,cikis:match});}
+        else pairs.push({giris:g,cikis:null});
+      });
+      // Eşleşmeyen çıkışlar (yetim)
+      cikisler.filter(c=>!usedCikisIds.has(c.id)).forEach(c=>pairs.push({giris:null,cikis:c}));
+      // Tarihe göre sırala (yeniden eskiye) — her çiftin giriş tarihine göre
+      pairs.sort((a,b)=>{
+        const da=a.giris?a.giris.checkin_date:(a.cikis?.checkin_date||'');
+        const db=b.giris?b.giris.checkin_date:(b.cikis?.checkin_date||'');
+        return new Date(db)-new Date(da);
+      });
+
+      pairs.forEach(pair=>{
+        const {giris,cikis}=pair;
+        if(giris&&cikis){
+          // İki sütunlu çift kart
+          const giEl=buildEntryCard(giris,gi++,true,false);
+          const ciEl=buildEntryCard(cikis,gi++,true,false);
+          // Hesapla butonu için değerleri hazırla
+          const gmv=giris.meter_values||{};const cmv=cikis.meter_values||{};
+          const gL1=parseInt(gmv.l1)||0,gL2=parseInt(gmv.l2)||0,gL3=parseFloat(gmv.l3)||0;
+          const cL1=parseInt(cmv.l1)||0,cL2=parseInt(cmv.l2)||0,cL3=parseFloat(cmv.l3)||0;
+          html+=`<div style="margin-top:14px;">
+            <div class="entries-grid">${giEl}${ciEl}</div>
+            <div style="margin-top:8px;display:flex;justify-content:center;">
+              <button style="padding:9px 22px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="mlGoHesapla('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                Hesapla
+              </button>
+            </div>
+          </div>`;
+        } else if(giris){
+          // Sadece giriş var (çıkış yok)
+          html+=`<div style="margin-top:14px;">${buildEntryCard(giris,gi++,true,false)}</div>`;
+        } else if(cikis){
+          // Sadece çıkış var (yetim)
+          html+=`<div style="margin-top:14px;">${buildEntryCard(cikis,gi++,true,false)}</div>`;
+        }
+      });
+    } else {
+      // Demirbaş modu: eski davranış (tarihe göre grupla)
+      const gbd={};fd.forEach(e=>{if(!gbd[e.checkin_date])gbd[e.checkin_date]=[];gbd[e.checkin_date].push(e);});
+      Object.keys(gbd).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
+        const arr=gbd[dk];
+        html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDate(dk)}</div>`;
+        if(arr.length>1){html+=`<div class="entries-grid">`;arr.forEach(e=>{html+=buildEntryCard(e,gi++,isE,false);});html+=`</div>`;}
+        else html+=buildEntryCard(arr[0],gi++,isE,false);
+      });
+    }
     el.innerHTML=html;
   }catch(e){if(!silent)el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
 }
