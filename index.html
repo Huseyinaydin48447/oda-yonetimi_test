@@ -1686,10 +1686,9 @@ async function showReadonlyEntry(oda,mod,tarih){
   q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
   const el=q('sresult');
   el.innerHTML='<div class="empty">Yükleniyor...</div>';
-  q('s0').classList.add('active'); // Bu satırı ekleyin
   try{
-    // Tüm kayıtları getir - checkin_date filtresi olmadan
-    const url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
+    // SADECE belirtilen tarihe ait kayıtları getir
+    const url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
     console.log('API URL:', url);
     const res=await api(url);
     console.log('API response status:', res.status);
@@ -1697,63 +1696,50 @@ async function showReadonlyEntry(oda,mod,tarih){
     console.log('Data received:', data.length, 'records');
     
     if(!data.length){
-      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu odaya ait kayıt bulunamadı</div>`;
+      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarihe ait kayıt bulunamadı</div>`;
       return;
     }
     
     const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
-    
-    // Tarihe göre grupla
-    const grouped={};
-    data.forEach(e=>{
-      const key=e.checkin_date;
-      if(!grouped[key])grouped[key]=[];
-      grouped[key].push(e);
-    });
+    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
     
     let ei=0;
     entryImages={};
     entryData={};
     
-    // Tarihleri sırala (en yeni en üstte)
-    const sortedDates = Object.keys(grouped).sort((a,b)=>new Date(b)-new Date(a));
-    console.log('Sorted dates:', sortedDates);
-    
-    sortedDates.forEach(dk=>{
-      const arr=grouped[dk];
-      html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDate(dk)}</div>`;
-      arr.forEach(entry=>{
-        const urls=entry.photo_urls||[];
-        entryImages[ei]=urls;
-        entryData[ei]=entry;
-        const cats=entry.category?entry.category.split(',').filter(Boolean):[];
-        const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
-        html+=`<div class="entry-card">
-          <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
-            <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              ${fmtDate(entry.checkin_date)}
-            </div>
-            <div class="entry-meta">
-              ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
-              ${entry.note?`<div class="nt">${entry.note}</div>`:''}
-            </div>
-            <span class="entry-count">${urls.length} foto</span>
-            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    data.forEach(entry=>{
+      const urls=entry.photo_urls||[];
+      entryImages[ei]=urls;
+      entryData[ei]=entry;
+      const cats=entry.category?entry.category.split(',').filter(Boolean):[];
+      const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
+      const mv=isE&&entry.meter_values?`<div style="display:flex;gap:6px;margin-top:8px;font-size:12px;font-family:'DM Mono',monospace;flex-wrap:wrap;"><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span></div>`:'';
+      
+      html+=`<div class="entry-card">
+        <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
+          <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}
           </div>
-          <div class="entry-body">
-            ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
+          <div class="entry-meta">
+            ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
+            ${entry.note?`<div class="nt">${entry.note}</div>`:''}
           </div>
-        </div>`;
-        ei++;
-      });
+          <span class="entry-count">${urls.length} foto</span>
+          <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="entry-body open">
+          ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
+          <div class="entry-footer">
+            <div style="display:flex;flex-direction:column;"><span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>${mv}</div>
+          </div>
+        </div>
+      </div>`;
+      ei++;
     });
+    
     console.log('HTML generated, setting innerHTML');
     el.innerHTML=html;
-    // Bu 2 satırı ekleyin:
-q('s0').classList.add('active');
-q('sresult').style.display='block';
     console.log('Done!');
   }catch(e){
     console.error('Error in showReadonlyEntry:', e);
