@@ -1686,11 +1686,11 @@ async function showReadonlyEntry(oda,mod,tarih){
   const el=q('sresult');
   el.innerHTML='<div class="empty">Yükleniyor...</div>';
   try{
-    // Tüm kayıtları getir (sadece belirtilen tarih değil)
+    // ★ DÜZELTME: checkin_date filtresini KALDIR - tüm kayıtları getir
     const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`);
     const data=await res.json();
     if(!data.length){
-      el.innerHTML=`<div class="empty">Bu odaya ait kayıt bulunamadı</div>`;
+      el.innerHTML='<div class="empty">Bu odaya ait kayıt bulunamadı</div>';
       return;
     }
     const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
@@ -1699,14 +1699,16 @@ async function showReadonlyEntry(oda,mod,tarih){
     // Tarihe göre grupla
     const grouped={};
     data.forEach(e=>{
-      if(!grouped[e.checkin_date])grouped[e.checkin_date]=[];
-      grouped[e.checkin_date].push(e);
+      const key=e.checkin_date;
+      if(!grouped[key])grouped[key]=[];
+      grouped[key].push(e);
     });
     
     let ei=0;
     entryImages={};
     entryData={};
     
+    // Tarihleri sırala (en yeni en üstte)
     Object.keys(grouped).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
       const arr=grouped[dk];
       html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;">📅 ${fmtDate(dk)}</div>`;
