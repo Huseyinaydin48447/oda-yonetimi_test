@@ -945,7 +945,38 @@ async function createEntryLink(roomNo, date, mod, btnEl, entryType) {
     btnEl.disabled = false;
   }
 }
-
+async function createPairLink(roomNo, girisDate, cikisDate, mod, btnEl) {
+  const orig = btnEl.innerHTML;
+  btnEl.innerHTML = '<span class="loader" style="border-top-color:var(--accent)"></span>';
+  btnEl.disabled = true;
+  try {
+    const token = genToken();
+    // Eski çift token'ları temizle
+    await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(girisDate)}&entry_type=eq.pair`, {
+      method: 'DELETE',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY }
+    });
+    const r = await fetch(`${SB}/rest/v1/tokens`, {
+      method: 'POST',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ 
+        room_no: roomNo, mod: mod, token: token, 
+        entry_date: girisDate, entry_type: 'pair',
+        paired_date: cikisDate
+      })
+    });
+    if (!r.ok) throw new Error('Token kaydedilemedi');
+    const url = `${location.origin + location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(girisDate)}&token=${token}&type=pair`;
+    navigator.clipboard.writeText(url)
+      .then(() => showToast('Çift kayıt linki kopyalandı!', 'success'))
+      .catch(() => { prompt('Linki kopyalayın:', url); });
+  } catch (e) {
+    showToast('Hata: ' + e.message, 'error');
+  } finally {
+    btnEl.innerHTML = orig;
+    btnEl.disabled = false;
+  }
+}
 /* image helpers */
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
 async function addFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);pending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++;}renderPrev();if(cc>0){const s=Math.round((1-tn/to)*100);se.innerHTML=`<div class="compress-info"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>${cc} fotoğraf sıkıştırıldı · %${s} küçültüldü (${fmtBytes(to)} → ${fmtBytes(tn)})</div>`;}}
@@ -1037,13 +1068,16 @@ async function doSearch(val,silent=false){
           const gmv=giris.meter_values||{};const cmv=cikis.meter_values||{};
           const gL1=parseInt(gmv.l1)||0,gL2=parseInt(gmv.l2)||0,gL3=parseFloat(gmv.l3)||0;
           const cL1=parseInt(cmv.l1)||0,cL2=parseInt(cmv.l2)||0,cL3=parseFloat(cmv.l3)||0;
-          html+=`<div style="margin-top:14px;">
-            <div class="entries-grid">${giEl}${ciEl}</div>
-            <div style="margin-top:8px;display:flex;justify-content:center;">
-              <button style="padding:9px 22px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="mlGoHesapla('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                Hesapla
-              </button>
+         // Bunu şu şekilde değiştirin:
+         html+=`<div style="margin-top:8px;display:flex;justify-content:center;gap:8px;">
+          <button style="padding:9px 22px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="mlGoHesapla('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Hesapla
+          </button>
+          <button style="padding:9px 22px;background:var(--surface);color:var(--accent);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="createPairLink('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}','${mode}',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Link
+          </button>
             </div>
           </div>`;
         } else if(giris){
@@ -1707,78 +1741,96 @@ const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get
 function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
 async function showReadonlyEntry(oda, mod, tarih, entryType) {
-  console.log('showReadonlyEntry called', oda, mod, tarih);
-
-
-  const label=mod==='elektrik'?'Sayaç':'Oda';
-  const isE=mod==='elektrik';
-  q('topbar-title').textContent=`${label} ${oda}`;
-  q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
-  const el=q('sresult');
-  el.innerHTML='<div class="empty">Yükleniyor...</div>';
-  try{
-    // SADECE belirtilen tarihe ait kayıtları getir
-   let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
-    if (entryType) {
-    url += `&type=eq.${encodeURIComponent(entryType)}`;
-  }
-    console.log('API URL:', url);
-    const res=await api(url);
-    console.log('API response status:', res.status);
-    const data=await res.json();
-    console.log('Data received:', data.length, 'records');
+  
+  // ── ÇİFT KAYIT MODU ──
+  if (entryType === 'pair') {
+    // Token'dan paired_date'i al
+    const tokenData = await api(
+      `/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`
+    ).then(r => r.json()).catch(() => []);
     
-    if(!data.length){
-      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu tarihe ait kayıt bulunamadı</div>`;
-      return;
-    }
+    const cikisDate = tokenData[0]?.paired_date;
+    if (!cikisDate) { showAccessError(); return; }
     
-    const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
+    const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
+    const isE = mod === 'elektrik';
+    q('topbar-title').textContent = `${label} ${oda}`;
+    q('topbar-sub').textContent = `${fmtDate(tarih)} – ${fmtDate(cikisDate)} · Salt okunur`;
+    const el = q('sresult');
+    el.innerHTML = '<div class="empty">Yükleniyor...</div>';
     
-    let ei=0;
-    entryImages={};
-    entryData={};
-    
-    data.forEach(entry=>{
-      const urls=entry.photo_urls||[];
-      entryImages[ei]=urls;
-      entryData[ei]=entry;
-      const cats=entry.category?entry.category.split(',').filter(Boolean):[];
-      const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
-      const mv=isE&&entry.meter_values?`<div style="display:flex;gap:6px;margin-top:8px;font-size:12px;font-family:'DM Mono',monospace;flex-wrap:wrap;"><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span></div>`:'';
+    try {
+      // Giriş ve çıkış kayıtlarını ayrı ayrı çek
+      const [girisData, cikisData] = await Promise.all([
+        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&type=eq.giris`).then(r => r.json()),
+        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(cikisDate)}&mode=eq.${encodeURIComponent(mod)}&type=eq.cikis`).then(r => r.json())
+      ]);
       
-      html+=`<div class="entry-card">
-        <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
-          <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            ${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}
+      const giris = girisData[0];
+      const cikis = cikisData[0];
+      
+      if (!giris && !cikis) { 
+        el.innerHTML = '<div class="empty">Kayıt bulunamadı</div>'; 
+        return; 
+      }
+      
+      let ei = 0;
+      entryImages = {};
+      entryData = {};
+      
+      const totalP = (giris?.photo_urls?.length || 0) + (cikis?.photo_urls?.length || 0);
+      let html = `<div class="room-header"><div class="room-num e">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cikisDate)} · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
+      
+      // Giriş ve çıkış kartlarını yan yana göster
+      const girisEl = giris ? buildReadonlyCard(giris, ei++, isE) : '';
+      const cikisEl = cikis ? buildReadonlyCard(cikis, ei++, isE) : '';
+      
+      html += `<div style="margin-top:14px;">
+        <div class="entries-grid">${girisEl}${cikisEl}</div>`;
+      
+      // Hesapla butonu — değerleri doldur
+      if (giris && cikis) {
+        const gmv = giris.meter_values || {};
+        const cmv = cikis.meter_values || {};
+        const gL1 = parseInt(gmv.l1)||0, gL2 = parseInt(gmv.l2)||0, gL3 = parseFloat(gmv.l3)||0;
+        const cL1 = parseInt(cmv.l1)||0, cL2 = parseInt(cmv.l2)||0, cL3 = parseFloat(cmv.l3)||0;
+        
+        // Tüketimi hesapla ve göster
+        const tuketim = hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3);
+        const tip = odaTipiGetir(oda) || '1+1';
+        // Gün hesapla
+        const gun = Math.round((new Date(cikisDate) - new Date(tarih)) / 86400000);
+        const devir = gun <= 7 ? '7gun' : '15gun';
+        const limit = TARIFELER[devir][tip];
+        const fark = tuketim - limit;
+        const asmis = fark > 0;
+        const bedel = asmis ? fark * 30 : 0;
+        
+        html += `<div style="margin-top:12px;background:${asmis?'linear-gradient(135deg,#92400e,#b45309)':'linear-gradient(135deg,#1a5c3a,#2d7a52)'};border-radius:var(--radius);padding:16px;color:#fff;">
+          <div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">${asmis?'AŞILAN TÜKETİM':'TOPLAM TÜKETİM'}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:36px;font-weight:500;line-height:1">${fmtNumInt(asmis?fark:tuketim)}<span style="font-size:14px;color:rgba(255,255,255,.65);margin-left:4px">kW/H</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:6px">${asmis?fmtNumInt(tuketim)+' kW/H tüketildi — limitin '+fmtNumInt(fark)+' kW/H üzerinde':'Kullanılmamış limit: '+fmtNumInt(limit-tuketim)+' kW/H'}</div>
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;margin-top:10px;background:rgba(255,255,255,.15);color:#fff">${asmis?'⚠ Limit Aşıldı':'✓ Limit Dahilinde'}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Konaklama</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${gun} gün</div></div>
+            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Tanınan Limit</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${limit} kW/H</div></div>
+            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Giriş Sayacı</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${gL1}.${gL2}.${gL3.toFixed(1)}</div></div>
+            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Çıkış Sayacı</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${cL1}.${cL2}.${cL3.toFixed(1)}</div></div>
           </div>
-          <div class="entry-meta">
-            ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
-            ${entry.note?`<div class="nt">${entry.note}</div>`:''}
-          </div>
-          <span class="entry-count">${urls.length} foto</span>
-          <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="entry-body open">
-          ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
-          <div class="entry-footer">
-            <div style="display:flex;flex-direction:column;"><span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>${mv}</div>
-          </div>
-        </div>
-      </div>`;
-      ei++;
-    });
-    
-    console.log('HTML generated, setting innerHTML');
-    el.innerHTML=html;
-    console.log('Done!');
-  }catch(e){
-    console.error('Error in showReadonlyEntry:', e);
-    el.innerHTML='<div class="empty">Bağlantı hatası: '+e.message+'</div>';
+          ${asmis?`<div style="background:rgba(255,220,80,.22);border-radius:10px;padding:12px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600;color:#ffe066">Tahsil Edilecek Bedel</span><span style="font-family:'DM Mono',monospace;font-size:22px;font-weight:600;color:#ffe066">${fmtTL(bedel)} ₺</span></div>`:''}
+        </div>`;
+      }
+      
+      html += `</div>`;
+      el.innerHTML = html;
+      
+    } catch(e) {
+      el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>';
+    }
+    return; // pair modunda buradan çık, aşağıdaki normal kodu çalıştırma
   }
-}
+  
+  
 function buildReadonlyCard(entry,ei,isE){
   const urls=entry.photo_urls||[];
   entryImages[ei]=urls;
@@ -1810,7 +1862,7 @@ if(_oda&&_token){
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
-  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
+  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
     .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda, _m, _tarih, _type);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
 }else if(_oda&&!_token){showAccessError();}
 else{
