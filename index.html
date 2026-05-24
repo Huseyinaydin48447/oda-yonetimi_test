@@ -915,8 +915,36 @@ async function saveEdit(entryId,ei){
   }catch(e){showToast('Hata: '+e.message,'error');sb.innerHTML=orig;sb.disabled=false;}
 }
 
-/* link */
-async function createEntryLink(roomNo,date,mod,btnEl){const orig=btnEl.innerHTML;btnEl.innerHTML='<span class="loader" style="border-top-color:var(--accent)"></span>';btnEl.disabled=true;try{const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(date)}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});const r=await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:mod,token:token,entry_date:date})});if(!r.ok)throw new Error('Token kaydedilemedi');const url=`${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!','success')).catch(()=>{prompt('Linki kopyalayın:',url);});}catch(e){showToast('Hata: '+e.message,'error');}finally{btnEl.innerHTML=orig;btnEl.disabled=false;}}
+async function createEntryLink(roomNo, date, mod, btnEl, entryType) {
+  const orig = btnEl.innerHTML;
+  btnEl.innerHTML = '<span class="loader" style="border-top-color:var(--accent)"></span>';
+  btnEl.disabled = true;
+  try {
+    const token = genToken();
+    // Eski token'ları temizle (aynı oda+tarih+mod+type)
+    await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(date)}&entry_type=eq.${encodeURIComponent(entryType || '')}`, {
+      method: 'DELETE',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY }
+    });
+    const r = await fetch(`${SB}/rest/v1/tokens`, {
+      method: 'POST',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ room_no: roomNo, mod: mod, token: token, entry_date: date, entry_type: entryType || '' })
+    });
+    if (!r.ok) throw new Error('Token kaydedilemedi');
+    // URL'ye type parametresi ekle
+    const typeParam = entryType ? `&type=${encodeURIComponent(entryType)}` : '';
+    const url = `${location.origin + location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}${typeParam}`;
+    navigator.clipboard.writeText(url)
+      .then(() => showToast('Link kopyalandı!', 'success'))
+      .catch(() => { prompt('Linki kopyalayın:', url); });
+  } catch (e) {
+    showToast('Hata: ' + e.message, 'error');
+  } finally {
+    btnEl.innerHTML = orig;
+    btnEl.disabled = false;
+  }
+}
 
 /* image helpers */
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
@@ -950,7 +978,7 @@ function buildEntryCard(entry,gi,isE,showRN){
         <div style="display:flex;flex-direction:column;margin-bottom:10px;"><span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>${mv}</div>
         <div class="entry-footer-actions">
           <button class="link-btn wa-btn" onclick="goWhatsApp()">WhatsApp</button>
-          <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this)">Link</button>
+          <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this,'${entry.type||''}')">Link</button>
           <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${gi})">Düzenle</button>
           <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${gi})">Sil</button>
         </div>
@@ -1674,12 +1702,14 @@ function sifirla() {
 
 /* readonly / token */
 const _p=new URLSearchParams(location.search);
-const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih');
+const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih'),_type=_p.get('type');
 
 function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
-async function showReadonlyEntry(oda,mod,tarih){
+async function showReadonlyEntry(oda, mod, tarih, entryType) {
   console.log('showReadonlyEntry called', oda, mod, tarih);
+
+
   const label=mod==='elektrik'?'Sayaç':'Oda';
   const isE=mod==='elektrik';
   q('topbar-title').textContent=`${label} ${oda}`;
@@ -1688,7 +1718,10 @@ async function showReadonlyEntry(oda,mod,tarih){
   el.innerHTML='<div class="empty">Yükleniyor...</div>';
   try{
     // SADECE belirtilen tarihe ait kayıtları getir
-    const url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
+   let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
+    if (entryType) {
+    url += `&type=eq.${encodeURIComponent(entryType)}`;
+  }
     console.log('API URL:', url);
     const res=await api(url);
     console.log('API response status:', res.status);
@@ -1778,7 +1811,7 @@ if(_oda&&_token){
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
   api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
-    .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
+    .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda, _m, _tarih, _type);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
 }else if(_oda&&!_token){showAccessError();}
 else{
   q('f-date').value=today();
