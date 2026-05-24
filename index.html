@@ -1679,6 +1679,7 @@ const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get
 function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
 async function showReadonlyEntry(oda,mod,tarih){
+  console.log('showReadonlyEntry called', oda, mod, tarih);
   const label=mod==='elektrik'?'Sayaç':'Oda';
   const isE=mod==='elektrik';
   q('topbar-title').textContent=`${label} ${oda}`;
@@ -1686,13 +1687,19 @@ async function showReadonlyEntry(oda,mod,tarih){
   const el=q('sresult');
   el.innerHTML='<div class="empty">Yükleniyor...</div>';
   try{
-    // ★ DÜZELTME: checkin_date filtresini KALDIR - tüm kayıtları getir
-    const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`);
+    // Tüm kayıtları getir - checkin_date filtresi olmadan
+    const url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
+    console.log('API URL:', url);
+    const res=await api(url);
+    console.log('API response status:', res.status);
     const data=await res.json();
+    console.log('Data received:', data.length, 'records');
+    
     if(!data.length){
-      el.innerHTML='<div class="empty">Bu odaya ait kayıt bulunamadı</div>';
+      el.innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>Bu odaya ait kayıt bulunamadı</div>`;
       return;
     }
+    
     const totalP=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
     let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
     
@@ -1709,9 +1716,12 @@ async function showReadonlyEntry(oda,mod,tarih){
     entryData={};
     
     // Tarihleri sırala (en yeni en üstte)
-    Object.keys(grouped).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
+    const sortedDates = Object.keys(grouped).sort((a,b)=>new Date(b)-new Date(a));
+    console.log('Sorted dates:', sortedDates);
+    
+    sortedDates.forEach(dk=>{
       const arr=grouped[dk];
-      html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;">📅 ${fmtDate(dk)}</div>`;
+      html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDate(dk)}</div>`;
       arr.forEach(entry=>{
         const urls=entry.photo_urls||[];
         entryImages[ei]=urls;
@@ -1720,7 +1730,10 @@ async function showReadonlyEntry(oda,mod,tarih){
         const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
         html+=`<div class="entry-card">
           <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
-            <div class="date-badge${isE?' e':''}" style="flex-shrink:0">${fmtDate(entry.checkin_date)}</div>
+            <div class="date-badge${isE?' e':''}" style="flex-shrink:0">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              ${fmtDate(entry.checkin_date)}
+            </div>
             <div class="entry-meta">
               ${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}
               ${entry.note?`<div class="nt">${entry.note}</div>`:''}
@@ -1735,8 +1748,13 @@ async function showReadonlyEntry(oda,mod,tarih){
         ei++;
       });
     });
+    console.log('HTML generated, setting innerHTML');
     el.innerHTML=html;
-  }catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
+    console.log('Done!');
+  }catch(e){
+    console.error('Error in showReadonlyEntry:', e);
+    el.innerHTML='<div class="empty">Bağlantı hatası: '+e.message+'</div>';
+  }
 }
 function buildReadonlyCard(entry,ei,isE){
   const urls=entry.photo_urls||[];
