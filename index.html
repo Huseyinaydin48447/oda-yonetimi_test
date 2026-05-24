@@ -1317,8 +1317,18 @@ function renderMeterList(){
   });
 
   // ── İstatistik ──
-  const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
-  const tC=mlFiltered.filter(e=>e.type==='cikis').length;
+// Eşleşmiş çıkışları da say
+const tG = mlFiltered.filter(e => e.type === 'giris' || !e.type).length;
+const tC = mlFiltered.reduce((count, e) => {
+  const isG = e.type === 'giris' || !e.type;
+  if (isG) {
+    // Bu girişin çıkışı varsa 1 ekle
+    return count + (pairedMap[e.id] ? 1 : 0);
+  } else {
+    // Yetim çıkış
+    return count + 1;
+  }
+}, 0);
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
   statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
 
