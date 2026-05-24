@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -476,8 +475,6 @@
   <!-- SAYAÇ HESAPLAMA -->
   <div class="screen" id="s4">
     <div class="content" style="padding:0;display:flex;flex-direction:column;gap:14px">
-
-      <!-- DAİRE BİLGİLERİ -->
       <div class="card anim" style="animation-delay:.04s">
         <div class="card-head">
           <div class="card-icon g">🏠</div>
@@ -515,7 +512,6 @@
         </div>
       </div>
 
-      <!-- TARİFE SEÇİCİ -->
       <div class="card anim" style="animation-delay:.08s">
         <div class="card-head">
           <div class="card-icon b">📋</div>
@@ -525,12 +521,11 @@
           <div class="tarife-wrap" id="tarifeWrap"></div>
           <div class="uyari">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Limiti aşan tüketim <strong>kW/H başına 30 ₺</strong> olarak tahsil edilir. Malzeme talep edilmemesi halinde odada bulunacağınız personele bildirilir.
+            Limiti aşan tüketim <strong>kW/H başına 30 ₺</strong> olarak tahsil edilir.
           </div>
         </div>
       </div>
 
-      <!-- SAYAÇ DEĞERLERİ -->
       <div class="card anim" style="animation-delay:.12s">
         <div class="card-head">
           <div class="card-icon a">⚡</div>
@@ -702,9 +697,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-/* ═══════════════════════════════════════════ */
-/*               LIGHTBOX                     */
-/* ═══════════════════════════════════════════ */
+/* ── LIGHTBOX ── */
 const LB={scale:1,minScale:1,maxScale:5,translateX:0,translateY:0,isDragging:false,dragStartX:0,dragStartY:0,dragStartTX:0,dragStartTY:0,isPinching:false,pinchStartDist:0,pinchStartScale:1,pinchMidX:0,pinchMidY:0,lastTapTime:0,lastTapX:0,lastTapY:0};
 function goWhatsApp(){window.open("https://web.whatsapp.com/","_blank");}
 const lbWrap=()=>document.getElementById('lb-img-wrap');
@@ -735,17 +728,11 @@ if(document.readyState!=='loading')lbBind();
 </script>
 
 <script>
-/* ═══════════════════════════════════════════ */
-/*         EXIF & IMAGE HELPERS               */
-/* ═══════════════════════════════════════════ */
 function getExifOrientation(blob){return new Promise(resolve=>{const reader=new FileReader();reader.onload=e=>{const view=new DataView(e.target.result);if(view.getUint16(0,false)!==0xFFD8){resolve(1);return;}let offset=2;while(offset<view.byteLength){if(view.getUint16(offset,false)===0xFFE1){offset+=4;if(view.getUint32(offset,false)!==0x45786966){resolve(1);return;}const little=view.getUint16(offset+=6,false)===0x4949;offset+=view.getUint32(offset+4,little);const tags=view.getUint16(offset,little);offset+=2;for(let i=0;i<tags;i++){if(view.getUint16(offset+(i*12),little)===0x0112){resolve(view.getUint16(offset+(i*12)+8,little));return;}}}else if((view.getUint16(offset,false)&0xFF00)!==0xFF00)break;else offset+=2+view.getUint16(offset+2,false);}resolve(1);};reader.onerror=()=>resolve(1);reader.readAsArrayBuffer(blob.slice(0,65536));});}
 async function fixOrientation(blob,dataUrl,pw,ph){const o=await getExifOrientation(blob);if(o<=1)return{dataUrl,pw,ph};return new Promise(resolve=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');const needsSwap=[5,6,7,8].includes(o);canvas.width=needsSwap?ph:pw;canvas.height=needsSwap?pw:ph;const ctx=canvas.getContext('2d');ctx.save();switch(o){case 2:ctx.translate(pw,0);ctx.scale(-1,1);break;case 3:ctx.translate(pw,ph);ctx.rotate(Math.PI);break;case 4:ctx.translate(0,ph);ctx.scale(1,-1);break;case 5:ctx.rotate(Math.PI/2);ctx.scale(1,-1);break;case 6:ctx.translate(ph,0);ctx.rotate(Math.PI/2);break;case 7:ctx.translate(ph,pw);ctx.rotate(Math.PI/2);ctx.scale(1,-1);break;case 8:ctx.translate(0,pw);ctx.rotate(-Math.PI/2);break;}ctx.drawImage(img,0,0,pw,ph);ctx.restore();resolve({dataUrl:canvas.toDataURL('image/jpeg',0.92),pw:canvas.width,ph:canvas.height});};img.onerror=()=>resolve({dataUrl,pw,ph});img.src=dataUrl;});}
 </script>
 
 <script>
-/* ═══════════════════════════════════════════ */
-/*           MAIN APPLICATION                 */
-/* ═══════════════════════════════════════════ */
 const SB='https://tpfdsmexywjnsbkfphwq.supabase.co';
 const KEY='sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
 const BUCKETS={'demirbaş':'photos','elektrik':'meters'};
@@ -757,8 +744,7 @@ let mode='demirbaş',tab=0,lastVal='',pending=[],selTags=[],timer=null;
 let entryImages={},entryData={},openEntries=new Set();
 let searchTab='room',confirmCallback=null,activePdfOpt=null;
 let mlAllData=[],mlFiltered=[],mlTypeFilter='all';
-let mlSortKey = null;
-let mlSortDir = 1;
+let mlSortKey=null,mlSortDir=1;
 const CMAX=1600,CQ=0.82;
 
 function q(id){return document.getElementById(id)}
@@ -785,24 +771,12 @@ function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(
 function safe(s){if(!s)return'';return s.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}
 function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);}
 
-/* ═══ ODA TİPİ & DOĞRULAMA ═══ */
-const ODA_2P1_SONEKLER = [2, 9, 10, 18];
-const ODA_1P1_SONEKLER = [1, 3, 4, 5, 6, 7, 11, 13, 14, 15, 16, 17];
-const TUM_SONEKLER = [...ODA_2P1_SONEKLER, ...ODA_1P1_SONEKLER];
+const ODA_2P1_SONEKLER=[2,9,10,18];
+const ODA_1P1_SONEKLER=[1,3,4,5,6,7,11,13,14,15,16,17];
+const TUM_SONEKLER=[...ODA_2P1_SONEKLER,...ODA_1P1_SONEKLER];
 
-function odaTipiGetir(odaNo) {
-  const n = parseInt(odaNo);
-  if (!n || isNaN(n)) return null;
-  const kat = Math.floor(n / 100);
-  const sonek = n % 100;
-  if (kat < 1 || kat > 15) return null;
-  if (!TUM_SONEKLER.includes(sonek)) return null;
-  return ODA_2P1_SONEKLER.includes(sonek) ? '2+1' : '1+1';
-}
-
-function odaGecerliMi(odaNo) {
-  return odaTipiGetir(odaNo) !== null;
-}
+function odaTipiGetir(odaNo){const n=parseInt(odaNo);if(!n||isNaN(n))return null;const kat=Math.floor(n/100);const sonek=n%100;if(kat<1||kat>15)return null;if(!TUM_SONEKLER.includes(sonek))return null;return ODA_2P1_SONEKLER.includes(sonek)?'2+1':'1+1';}
+function odaGecerliMi(odaNo){return odaTipiGetir(odaNo)!==null;}
 
 async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-text').textContent='Supabase bağlantısı aktif';q('topbar-sub').textContent='Veriler bulutta saklanıyor';}else throw 0;}catch{q('conn-text').textContent='Bağlantı hatası';q('topbar-sub').textContent='Bağlantı sorunu';}}
 function showToast(msg,type=''){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3000);}
@@ -810,7 +784,6 @@ function openConfirm(title,msg,okLabel,cb){q('confirm-title').textContent=title;
 function closeConfirm(){q('confirm-overlay').classList.remove('open');confirmCallback=null;}
 q('confirm-ok').addEventListener('click',()=>{if(confirmCallback)confirmCallback();closeConfirm();});
 
-/* mode */
 function setMode(m){
   mode=m;
   try{localStorage.setItem('activeMode',m);}catch(e){}
@@ -838,15 +811,14 @@ function setMode(m){
   if(tab===3&&isE)loadMeterList(true);
 }
 
-/* tabs */
 function goTab(i){
   if(i!==1){const b=q('cikis-giris-banner');if(b)b.style.display='none';}
   tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();if(i===4)initHesapTab();startTimer();
 }
 function initHesapTab(){
-  if(typeof tarifeCiz !== 'undefined'){
-    document.getElementById('girisDate').value = today();
-    document.getElementById('cikisDate').value = today();
+  if(typeof tarifeCiz!=='undefined'){
+    document.getElementById('girisDate').value=today();
+    document.getElementById('cikisDate').value=today();
     tarifeCiz();
   }
 }
@@ -861,7 +833,6 @@ async function loadMeterListSilentCheck(){
     if(newSig===oldSig)return;
     const scrollTop=q('ml-wrap')?.scrollTop||0;
     const katVal=q('ml-kat')?.value||'';
-    const searchVal=q('ml-search')?.value||'';
     mlAllData=newData;
     const katSet=new Set();
     mlAllData.forEach(e=>{if(e.category)e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim()));});
@@ -874,21 +845,16 @@ async function loadMeterListSilentCheck(){
   }catch(e){}
 }
 
-/* tags */
 function togTag(el){const tr=el.closest('.tags-row'),wasOn=el.classList.contains('on');tr.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));selTags=[];if(!wasOn){el.classList.add('on');selTags=[el.textContent];}}
 function togTagEdit(el){const tr=el.closest('.tags-row'),wasOn=el.classList.contains('on');tr.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));if(!wasOn)el.classList.add('on');}
 
-/* search tab */
 function setSTab(t){searchTab=t;const isR=t==='room';q('stab-room-content').style.display=isR?'block':'none';q('stab-date-content').style.display=isR?'none':'block';q('stab-room').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(isR?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');q('stab-date').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(!isR?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');q('sresult').innerHTML=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>${isR?'Numara girin':'Tarih aralığı seçin'}</div>`;openEntries.clear();lastVal='';}
 
-/* card refresh */
 function refreshCard(ei,updated){const oh=document.querySelector(`.entry-head[data-ei="${ei}"]`);if(!oh)return;const oc=oh.closest('.entry-card');if(!oc)return;openEntries.add(ei);const showRN=!!oc.querySelector('.room-num');const tmp=document.createElement('div');tmp.innerHTML=buildEntryCard(updated,ei,mode==='elektrik',showRN);const nc=tmp.firstElementChild;const nb=nc.querySelector('.entry-body'),nch=nc.querySelector('.chevron');if(nb)nb.classList.add('open');if(nch)nch.classList.add('open');oc.replaceWith(nc);}
 
-/* delete */
 async function deleteEntry(entryId,ei){openConfirm('Girişi sil','Bu giriş ve tüm fotoğrafları kalıcı olarak silinecek.','Evet, sil',async()=>{try{const entry=entryData[ei];const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'DELETE'});if(!r.ok)throw new Error('Silme başarısız');if(entry&&entry.photo_urls){for(const url of entry.photo_urls){const path=url.split('/object/public/')[1];if(path){const[bucket,...rest]=path.split('/');await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});}}}document.querySelector(`.entry-head[data-ei="${ei}"]`)?.closest('.entry-card')?.remove();delete entryData[ei];delete entryImages[ei];openEntries.delete(ei);showToast('Giriş silindi','success');}catch(e){showToast('Hata: '+e.message,'error');}});}
 async function deletePhoto(entryId,photoUrl,ei){openConfirm('Fotoğrafı sil','Bu fotoğraf kalıcı olarak silinecek.','Sil',async()=>{try{const entry=entryData[ei];const newUrls=(entry.photo_urls||[]).filter(u=>u!==photoUrl);await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify({photo_urls:newUrls})});const path=photoUrl.split('/object/public/')[1];if(path){const[bucket,...rest]=path.split('/');await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});}const upd={...entry,photo_urls:newUrls};entryData[ei]=upd;entryImages[ei]=newUrls;refreshCard(ei,upd);showToast('Fotoğraf silindi','success');}catch(e){showToast('Hata: '+e.message,'error');}});}
 
-/* edit */
 function openEditPanel(entryId,ei){
   const entry=entryData[ei];if(!entry)return;
   const panel=document.getElementById(`edit-panel-${entryId}`);if(!panel)return;
@@ -926,10 +892,8 @@ async function saveEdit(entryId,ei){
   }catch(e){showToast('Hata: '+e.message,'error');sb.innerHTML=orig;sb.disabled=false;}
 }
 
-/* link */
 async function createEntryLink(roomNo,date,mod,btnEl){const orig=btnEl.innerHTML;btnEl.innerHTML='<span class="loader" style="border-top-color:var(--accent)"></span>';btnEl.disabled=true;try{const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(date)}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});const r=await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:mod,token:token,entry_date:date})});if(!r.ok)throw new Error('Token kaydedilemedi');const url=`${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!','success')).catch(()=>{prompt('Linki kopyalayın:',url);});}catch(e){showToast('Hata: '+e.message,'error');}finally{btnEl.innerHTML=orig;btnEl.disabled=false;}}
 
-/* image helpers */
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
 async function addFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);pending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++;}renderPrev();if(cc>0){const s=Math.round((1-tn/to)*100);se.innerHTML=`<div class="compress-info"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>${cc} fotoğraf sıkıştırıldı · %${s} küçültüldü (${fmtBytes(to)} → ${fmtBytes(tn)})</div>`;}}
 function renderPrev(){q('prev-row').innerHTML=pending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"/><div class="prev-del" onclick="delPrev(${i})">✕</div></div>`).join('');}
@@ -939,7 +903,6 @@ function dzLeave(){q('dropz').classList.remove('over');}
 function dzDrop(e){e.preventDefault();dzLeave();addFiles(e.dataTransfer.files);}
 async function uploadImg(file,roomNo){const bucket=BUCKETS[mode];const ext=file.name.split('.').pop();const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});if(!r.ok)throw new Error('Yükleme başarısız');return`${SB}/storage/v1/object/public/${bucket}/${path}`;}
 
-/* build card */
 function buildEntryCard(entry,gi,isE,showRN){
   const urls=entry.photo_urls||[];
   entryImages[gi]=urls;entryData[gi]=entry;
@@ -951,7 +914,7 @@ function buildEntryCard(entry,gi,isE,showRN){
   return`<div class="entry-card">
     <div class="entry-head" data-ei="${gi}" onclick="toggleEntry(this)">${rnb}
       <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
-          <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.donem?`<div class="nt" style="color:var(--amber);font-weight:500;">📅 ${entry.donem}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
+      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.donem?`<div class="nt" style="color:var(--amber);font-weight:500;">📅 ${entry.donem}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
       <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
@@ -969,7 +932,7 @@ function buildEntryCard(entry,gi,isE,showRN){
     </div>
     <div id="edit-panel-${entry.id}" style="display:none;padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2)">
       <div class="field"><span class="label">Tarih</span><input type="date" id="edit-date-${entry.id}"/></div>
-            ${!isE?`<div class="field"><span class="label">Dönem Aralığı</span><select id="edit-donem-${entry.id}"><option value="">Seçiniz</option><option value="1 - 15 Ocak" ${entry.donem==='1 - 15 Ocak'?'selected':''}>1. Dönem: 1 - 15 Ocak</option><option value="16 - 30 Ocak" ${entry.donem==='16 - 30 Ocak'?'selected':''}>2. Dönem: 16 - 30 Ocak</option><option value="31 Ocak - 14 Şubat" ${entry.donem==='31 Ocak - 14 Şubat'?'selected':''}>3. Dönem: 31 Ocak - 14 Şubat</option><option value="15 Şubat - 1 Mart" ${entry.donem==='15 Şubat - 1 Mart'?'selected':''}>4. Dönem: 15 Şubat - 1 Mart</option><option value="2 - 16 Mart" ${entry.donem==='2 - 16 Mart'?'selected':''}>5. Dönem: 2 - 16 Mart</option><option value="17 - 31 Mart" ${entry.donem==='17 - 31 Mart'?'selected':''}>6. Dönem: 17 - 31 Mart</option><option value="1 - 15 Nisan" ${entry.donem==='1 - 15 Nisan'?'selected':''}>7. Dönem: 1 - 15 Nisan</option><option value="16 - 30 Nisan" ${entry.donem==='16 - 30 Nisan'?'selected':''}>8. Dönem: 16 - 30 Nisan</option><option value="1 - 15 Mayıs" ${entry.donem==='1 - 15 Mayıs'?'selected':''}>9. Dönem: 1 - 15 Mayıs</option><option value="16 - 30 Mayıs" ${entry.donem==='16 - 30 Mayıs'?'selected':''}>10. Dönem: 16 - 30 Mayıs</option><option value="31 Mayıs - 14 Haziran" ${entry.donem==='31 Mayıs - 14 Haziran'?'selected':''}>11. Dönem: 31 Mayıs - 14 Haziran</option><option value="15 - 29 Haziran" ${entry.donem==='15 - 29 Haziran'?'selected':''}>12. Dönem: 15 - 29 Haziran</option><option value="30 Haziran - 14 Temmuz" ${entry.donem==='30 Haziran - 14 Temmuz'?'selected':''}>13. Dönem: 30 Haziran - 14 Temmuz</option><option value="15 - 29 Temmuz" ${entry.donem==='15 - 29 Temmuz'?'selected':''}>14. Dönem: 15 - 29 Temmuz</option><option value="30 Temmuz - 13 Ağustos" ${entry.donem==='30 Temmuz - 13 Ağustos'?'selected':''}>15. Dönem: 30 Temmuz - 13 Ağustos</option><option value="14 - 28 Ağustos" ${entry.donem==='14 - 28 Ağustos'?'selected':''}>16. Dönem: 14 - 28 Ağustos</option><option value="29 Ağustos - 12 Eylül" ${entry.donem==='29 Ağustos - 12 Eylül'?'selected':''}>17. Dönem: 29 Ağustos - 12 Eylül</option><option value="13 - 27 Eylül" ${entry.donem==='13 - 27 Eylül'?'selected':''}>18. Dönem: 13 - 27 Eylül</option><option value="28 Eylül - 12 Ekim" ${entry.donem==='28 Eylül - 12 Ekim'?'selected':''}>19. Dönem: 28 Eylül - 12 Ekim</option><option value="13 - 27 Ekim" ${entry.donem==='13 - 27 Ekim'?'selected':''}>20. Dönem: 13 - 27 Ekim</option><option value="2 - 16 Kasım" ${entry.donem==='2 - 16 Kasım'?'selected':''}>21. Dönem: 2 - 16 Kasım</option><option value="17 Kasım - 1 Aralık" ${entry.donem==='17 Kasım - 1 Aralık'?'selected':''}>22. Dönem: 17 Kasım - 1 Aralık</option><option value="2 - 16 Aralık" ${entry.donem==='2 - 16 Aralık'?'selected':''}>23. Dönem: 2 - 16 Aralık</option><option value="17 - 31 Aralık" ${entry.donem==='17 - 31 Aralık'?'selected':''}>24. Dönem: 17 - 31 Aralık</option></select></div>`:''}
+      ${!isE?`<div class="field"><span class="label">Dönem Aralığı</span><select id="edit-donem-${entry.id}"><option value="">Seçiniz</option><option value="1 - 15 Ocak" ${entry.donem==='1 - 15 Ocak'?'selected':''}>1. Dönem: 1 - 15 Ocak</option><option value="16 - 30 Ocak" ${entry.donem==='16 - 30 Ocak'?'selected':''}>2. Dönem: 16 - 30 Ocak</option><option value="31 Ocak - 14 Şubat" ${entry.donem==='31 Ocak - 14 Şubat'?'selected':''}>3. Dönem: 31 Ocak - 14 Şubat</option><option value="15 Şubat - 1 Mart" ${entry.donem==='15 Şubat - 1 Mart'?'selected':''}>4. Dönem: 15 Şubat - 1 Mart</option><option value="2 - 16 Mart" ${entry.donem==='2 - 16 Mart'?'selected':''}>5. Dönem: 2 - 16 Mart</option><option value="17 - 31 Mart" ${entry.donem==='17 - 31 Mart'?'selected':''}>6. Dönem: 17 - 31 Mart</option><option value="1 - 15 Nisan" ${entry.donem==='1 - 15 Nisan'?'selected':''}>7. Dönem: 1 - 15 Nisan</option><option value="16 - 30 Nisan" ${entry.donem==='16 - 30 Nisan'?'selected':''}>8. Dönem: 16 - 30 Nisan</option><option value="1 - 15 Mayıs" ${entry.donem==='1 - 15 Mayıs'?'selected':''}>9. Dönem: 1 - 15 Mayıs</option><option value="16 - 30 Mayıs" ${entry.donem==='16 - 30 Mayıs'?'selected':''}>10. Dönem: 16 - 30 Mayıs</option><option value="31 Mayıs - 14 Haziran" ${entry.donem==='31 Mayıs - 14 Haziran'?'selected':''}>11. Dönem: 31 Mayıs - 14 Haziran</option><option value="15 - 29 Haziran" ${entry.donem==='15 - 29 Haziran'?'selected':''}>12. Dönem: 15 - 29 Haziran</option><option value="30 Haziran - 14 Temmuz" ${entry.donem==='30 Haziran - 14 Temmuz'?'selected':''}>13. Dönem: 30 Haziran - 14 Temmuz</option><option value="15 - 29 Temmuz" ${entry.donem==='15 - 29 Temmuz'?'selected':''}>14. Dönem: 15 - 29 Temmuz</option><option value="30 Temmuz - 13 Ağustos" ${entry.donem==='30 Temmuz - 13 Ağustos'?'selected':''}>15. Dönem: 30 Temmuz - 13 Ağustos</option><option value="14 - 28 Ağustos" ${entry.donem==='14 - 28 Ağustos'?'selected':''}>16. Dönem: 14 - 28 Ağustos</option><option value="29 Ağustos - 12 Eylül" ${entry.donem==='29 Ağustos - 12 Eylül'?'selected':''}>17. Dönem: 29 Ağustos - 12 Eylül</option><option value="13 - 27 Eylül" ${entry.donem==='13 - 27 Eylül'?'selected':''}>18. Dönem: 13 - 27 Eylül</option><option value="28 Eylül - 12 Ekim" ${entry.donem==='28 Eylül - 12 Ekim'?'selected':''}>19. Dönem: 28 Eylül - 12 Ekim</option><option value="13 - 27 Ekim" ${entry.donem==='13 - 27 Ekim'?'selected':''}>20. Dönem: 13 - 27 Ekim</option><option value="2 - 16 Kasım" ${entry.donem==='2 - 16 Kasım'?'selected':''}>21. Dönem: 2 - 16 Kasım</option><option value="17 Kasım - 1 Aralık" ${entry.donem==='17 Kasım - 1 Aralık'?'selected':''}>22. Dönem: 17 Kasım - 1 Aralık</option><option value="2 - 16 Aralık" ${entry.donem==='2 - 16 Aralık'?'selected':''}>23. Dönem: 2 - 16 Aralık</option><option value="17 - 31 Aralık" ${entry.donem==='17 - 31 Aralık'?'selected':''}>24. Dönem: 17 - 31 Aralık</option></select></div>`:''}
       <div class="field"><span class="label">Not</span><textarea id="edit-note-${entry.id}" rows="2" placeholder="Not..."></textarea></div>
       <div class="field"><span class="label">Kategori</span><div class="tags-row" id="edit-tags-${entry.id}"></div></div>
       ${isE?`<div class="field"><span class="label">Sayaç Değerleri (L1, L2, L3)</span><div style="display:flex;gap:8px;"><input type="number" step="0.01" id="edit-l1-${entry.id}" placeholder="L1" style="text-align:center" value="${entry.meter_values?.l1??0}"><input type="number" step="0.01" id="edit-l2-${entry.id}" placeholder="L2" style="text-align:center" value="${entry.meter_values?.l2??0}"><input type="number" step="0.01" id="edit-l3-${entry.id}" placeholder="L3" style="text-align:center" value="${entry.meter_values?.l3??0}"></div></div>`:''}
@@ -979,7 +942,6 @@ function buildEntryCard(entry,gi,isE,showRN){
   </div>`
 }
 
-/* search */
 async function doSearch(val,silent=false){
   val=String(val).trim();lastVal=val;
   const el=q('sresult');
@@ -1068,11 +1030,10 @@ async function doDateSearch(silent=false){
 
 function toggleEntry(head){const ei=parseInt(head.dataset.ei);const body=head.nextElementSibling;const chev=head.querySelector('.chevron');const isOpen=body.classList.contains('open');if(isOpen){body.classList.remove('open');chev.classList.remove('open');openEntries.delete(ei);}else{body.classList.add('open');chev.classList.add('open');openEntries.add(ei);}}
 
-/* save */
 async function saveEntry(){
   const type=mode==='elektrik'?q('f-type').value:null;
   const roomNo=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim();
-  const donem = mode==='demirbaş' ? q('f-donem').value.trim() : null;
+  const donem=mode==='demirbaş'?q('f-donem').value.trim():null;
   let mv=null;if(mode==='elektrik')mv={l1:parseFloat(q('f-l1').value)||0,l2:parseFloat(q('f-l2').value)||0,l3:parseFloat(q('f-l3').value)||0};
   if(!roomNo){showToast('Numara gerekli!','error');return;}
   if(!date){showToast('Tarih gerekli!','error');return;}
@@ -1085,7 +1046,7 @@ async function saveEntry(){
     if(mode==='elektrik'&&type)filter+=`&type=eq.${encodeURIComponent(type)}`;
     const ex=await(await api(`/rest/v1/entries?${filter}&limit=1`)).json();
     if(ex.length>0){const merged=[...(ex[0].photo_urls||[]),...urls];await api(`/rest/v1/entries?id=eq.${ex[0].id}`,{method:'PATCH',body:JSON.stringify({photo_urls:merged,note:note||ex[0].note,category:selTags.join(',')||ex[0].category,type})});showToast('Fotoğraflar mevcut kayda eklendi!','success');}
-    else{const body={room_no:roomNo,mode,checkin_date:date,category:selTags.join(','),note,photo_urls:urls,type,donem: donem || null };if(mode==='elektrik')body.meter_values=mv;await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});showToast('Yeni kayıt oluşturuldu!','success');}
+    else{const body={room_no:roomNo,mode,checkin_date:date,category:selTags.join(','),note,photo_urls:urls,type,donem:donem||null};if(mode==='elektrik')body.meter_values=mv;await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});showToast('Yeni kayıt oluşturuldu!','success');}
     pending=[];selTags=[];qs('.tag').forEach(t=>t.classList.remove('on'));
     q('f-room').value='';q('f-note').value='';q('f-date').value=today();q('f-donem').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';
     const cgb=q('cikis-giris-banner');if(cgb)cgb.style.display='none';
@@ -1095,7 +1056,6 @@ async function saveEntry(){
   finally{btn.disabled=false;lbl.textContent='Kaydet';pw.classList.remove('show');pb.style.width='0%';}
 }
 
-/* all rooms */
 async function loadAll(silent=false){
   const el=q('rlist');if(!silent)el.innerHTML='<div class="empty">Yükleniyor...</div>';
   try{
@@ -1112,20 +1072,10 @@ async function loadAll(silent=false){
 
 function goRoom(rno){openEntries.clear();q('sinput').value=rno;goTab(0);doSearch(rno);}
 
-/* ═══ SAYAÇ LİSTESİ ═══ */
-function mlSetType(t){
-  mlTypeFilter=t;
-  ['all','giris','cikis'].forEach(k=>{
-    const b=q('mt-'+k);
-    b.className='mt-btn'+(t===k?' sel-'+k:'');
-  });
-  mlFilter();
-}
+function mlSetType(t){mlTypeFilter=t;['all','giris','cikis'].forEach(k=>{const b=q('mt-'+k);b.className='mt-btn'+(t===k?' sel-'+k:'');});mlFilter();}
 
 async function loadMeterList(silent=false){
-  const wrap=q('ml-wrap');
-  const scrollTop=wrap?.scrollTop||0;
-  const katVal=q('ml-kat')?.value||'';
+  const wrap=q('ml-wrap');const scrollTop=wrap?.scrollTop||0;const katVal=q('ml-kat')?.value||'';
   if(!silent)wrap.innerHTML='<div class="ml-empty">Yükleniyor...</div>';
   try{
     const res=await api('/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type,meter_values,photo_urls');
@@ -1144,9 +1094,8 @@ async function loadMeterList(silent=false){
 function mlFilter(){
   const search=(q('ml-search')?.value||'').toLowerCase().trim();
   const kat=q('ml-kat')?.value||'';
-  const pairedCikisIds=new Set();
-  const pairedGirisIds=new Set();
-  const girisByRoomF={}, cikisByRoomF={};
+  const pairedCikisIds=new Set();const pairedGirisIds=new Set();
+  const girisByRoomF={},cikisByRoomF={};
   mlAllData.forEach(e=>{
     const rno=e.room_no;
     if(e.type==='giris'||!e.type){if(!girisByRoomF[rno])girisByRoomF[rno]=[];girisByRoomF[rno].push(e);}
@@ -1156,15 +1105,10 @@ function mlFilter(){
   Object.keys(girisByRoomF).forEach(rno=>{
     const gl=[...girisByRoomF[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
     const cl=[...(cikisByRoomF[rno]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-    gl.forEach(g=>{
-      const m=cl.find(c=>!usedF.has(c.id)&&c.checkin_date>=g.checkin_date);
-      if(m){usedF.add(m.id);pairedCikisIds.add(m.id);pairedGirisIds.add(g.id);}
-    });
+    gl.forEach(g=>{const m=cl.find(c=>!usedF.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){usedF.add(m.id);pairedCikisIds.add(m.id);pairedGirisIds.add(g.id);}});
   });
-
   mlFiltered=mlAllData.filter(e=>{
-    const isGiris=e.type==='giris'||!e.type;
-    const isCikis=e.type==='cikis';
+    const isGiris=e.type==='giris'||!e.type;const isCikis=e.type==='cikis';
     if(isCikis&&pairedCikisIds.has(e.id))return false;
     if(mlTypeFilter==='giris'){if(!isGiris)return false;}
     else if(mlTypeFilter==='cikis'){if(isGiris&&!pairedGirisIds.has(e.id))return false;}
@@ -1175,174 +1119,96 @@ function mlFilter(){
   renderMeterList();
 }
 
-function mlSort(key) {
-  if (mlSortKey === key) { mlSortDir *= -1; }
-  else { mlSortKey = key; mlSortDir = 1; }
-  mlFiltered.sort((a, b) => {
-    let v1, v2;
-    switch (key) {
-      case 'room': v1 = Number(a.room_no); v2 = Number(b.room_no); break;
-      case 'kat': v1 = a.category || ''; v2 = b.category || ''; break;
-      case 'date': v1 = new Date(a.checkin_date); v2 = new Date(b.checkin_date); break;
-      default: v1=0;v2=0;
-    }
-    if (v1 > v2) return 1 * mlSortDir;
-    if (v1 < v2) return -1 * mlSortDir;
-    return 0;
-  });
-  renderMeterList();
-}
+function mlSort(key){if(mlSortKey===key){mlSortDir*=-1;}else{mlSortKey=key;mlSortDir=1;}mlFiltered.sort((a,b)=>{let v1,v2;switch(key){case'room':v1=Number(a.room_no);v2=Number(b.room_no);break;case'kat':v1=a.category||'';v2=b.category||'';break;case'date':v1=new Date(a.checkin_date);v2=new Date(b.checkin_date);break;default:v1=0;v2=0;}if(v1>v2)return 1*mlSortDir;if(v1<v2)return-1*mlSortDir;return 0;});renderMeterList();}
 
 function renderMeterList(){
   const wrap=q('ml-wrap'),statsEl=q('ml-stats');
   if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
-
-  const chronologicalData = [...mlAllData].sort((a,b)=>{
-    const da=new Date(a.checkin_date),db=new Date(b.checkin_date);
-    if(da-db!==0)return da-db;
-    return (a.type==='giris'||!a.type)?-1:1;
-  });
-  const farkMap={}, sonGirisMap={};
-  chronologicalData.forEach(e=>{
-    const mv=e.meter_values, rno=e.room_no;
-    if(!mv){farkMap[e.id]=null;return;}
-    const kwh=((parseInt(mv.l1)||0)*10000)+((parseInt(mv.l2)||0)*100)+(parseFloat(mv.l3)||0);
-    if(e.type==='giris'||!e.type){sonGirisMap[rno]={kwh,entry:e};farkMap[e.id]=null;}
-    else if(e.type==='cikis'){
-      const base=sonGirisMap[rno];
-      if(base!==undefined){
-        let diff=kwh>=base.kwh?kwh-base.kwh:((9999*10000)+(99*100)+99.9)-base.kwh+kwh;
-        farkMap[e.id]=diff.toFixed(2);
-      } else {farkMap[e.id]=null;}
-    }
-  });
-
-  const pairedMap={};
-  const usedCikisIds=new Set();
-  const girisByRoom={}, cikisByRoom={};
-  mlAllData.forEach(e=>{
-    const rno=e.room_no;
-    if(e.type==='giris'||!e.type){if(!girisByRoom[rno])girisByRoom[rno]=[];girisByRoom[rno].push(e);}
-    else if(e.type==='cikis'){if(!cikisByRoom[rno])cikisByRoom[rno]=[];cikisByRoom[rno].push(e);}
-  });
-  Object.keys(girisByRoom).forEach(rno=>{
-    const girList=[...girisByRoom[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-    const cikList=[...(cikisByRoom[rno]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-    girList.forEach(g=>{
-      const match=cikList.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);
-      if(match){pairedMap[g.id]=match;usedCikisIds.add(match.id);}
-    });
-  });
-
+  const chronologicalData=[...mlAllData].sort((a,b)=>{const da=new Date(a.checkin_date),db=new Date(b.checkin_date);if(da-db!==0)return da-db;return(a.type==='giris'||!a.type)?-1:1;});
+  const farkMap={},sonGirisMap={};
+  chronologicalData.forEach(e=>{const mv=e.meter_values,rno=e.room_no;if(!mv){farkMap[e.id]=null;return;}const kwh=((parseInt(mv.l1)||0)*10000)+((parseInt(mv.l2)||0)*100)+(parseFloat(mv.l3)||0);if(e.type==='giris'||!e.type){sonGirisMap[rno]={kwh,entry:e};farkMap[e.id]=null;}else if(e.type==='cikis'){const base=sonGirisMap[rno];if(base!==undefined){let diff=kwh>=base.kwh?kwh-base.kwh:((9999*10000)+(99*100)+99.9)-base.kwh+kwh;farkMap[e.id]=diff.toFixed(2);}else{farkMap[e.id]=null;}}});
+  const pairedMap={};const usedCikisIds=new Set();const girisByRoom={},cikisByRoom={};
+  mlAllData.forEach(e=>{const rno=e.room_no;if(e.type==='giris'||!e.type){if(!girisByRoom[rno])girisByRoom[rno]=[];girisByRoom[rno].push(e);}else if(e.type==='cikis'){if(!cikisByRoom[rno])cikisByRoom[rno]=[];cikisByRoom[rno].push(e);}});
+  Object.keys(girisByRoom).forEach(rno=>{const girList=[...girisByRoom[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));const cikList=[...(cikisByRoom[rno]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));girList.forEach(g=>{const match=cikList.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);if(match){pairedMap[g.id]=match;usedCikisIds.add(match.id);}});});
   const tG=mlFiltered.filter(e=>e.type==='giris'||!e.type).length;
   const tC=mlFiltered.filter(e=>e.type==='cikis').length;
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
   statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
-
-  const shownCikisIds=new Set();
-  let rows='';
+  const shownCikisIds=new Set();let rows='';
   mlFiltered.forEach(e=>{
-    const isG=e.type==='giris'||!e.type;
-    const mv=e.meter_values;
-    const cats=(e.category||'').split(',').filter(Boolean);
-    const katL=cats.length?cats[0]:'—';
-
+    const isG=e.type==='giris'||!e.type;const mv=e.meter_values;
+    const cats=(e.category||'').split(',').filter(Boolean);const katL=cats.length?cats[0]:'—';
     if(isG){
-      const gL1=mv?parseInt(mv.l1)||0:0, gL2=mv?parseInt(mv.l2)||0:0, gL3=mv?parseFloat(mv.l3)||0:0;
-      const cEntry=pairedMap[e.id]||null;
-      if(cEntry)shownCikisIds.add(cEntry.id);
+      const gL1=mv?parseInt(mv.l1)||0:0,gL2=mv?parseInt(mv.l2)||0:0,gL3=mv?parseFloat(mv.l3)||0:0;
+      const cEntry=pairedMap[e.id]||null;if(cEntry)shownCikisIds.add(cEntry.id);
       const cmv=cEntry?.meter_values||null;
-      const cL1=cmv?parseInt(cmv.l1)||0:0, cL2=cmv?parseInt(cmv.l2)||0:0, cL3=cmv?parseFloat(cmv.l3)||0:0;
-      const cDate=cEntry?.checkin_date||'';
-      const fark=cEntry?farkMap[cEntry.id]:null;
+      const cL1=cmv?parseInt(cmv.l1)||0:0,cL2=cmv?parseInt(cmv.l2)||0:0,cL3=cmv?parseFloat(cmv.l3)||0:0;
+      const cDate=cEntry?.checkin_date||'';const fark=cEntry?farkMap[cEntry.id]:null;
       const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
       const hasPair=!!cEntry;
       const cDateHtml=hasPair?`<div class="ml-c dt cdt">${fmtShort(cDate)}</div>`:`<div class="ml-c dt empty-dt">—</div>`;
-      const cValHtml=hasPair
-        ?`<div class="ml-c vc cc">${cL1}</div><div class="ml-c vc cc">${cL2}</div><div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>`
-        :`<div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div>`;
+      const cValHtml=hasPair?`<div class="ml-c vc cc">${cL1}</div><div class="ml-c vc cc">${cL2}</div><div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>`:`<div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div>`;
       let aksiyonHtml='';
-      if(hasPair){
-        aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${e.checkin_date}','${cDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`;
-      } else {
-        aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}',${gL1},${gL2},${gL3})">Çıkış Yap</button></div>`;
-      }
+      if(hasPair){aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${e.checkin_date}','${cDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`;}
+      else{aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}',${gL1},${gL2},${gL3})">Çıkış Yap</button></div>`;}
       rows+=`<div class="ml-row ${hasPair?'paired':'gr'}" onclick="goRoom('${e.room_no}')">
         <div class="ml-c rb"><span class="${hasPair?'paired':''}">${e.room_no}</span></div>
         <div class="ml-c kb"><span>${katL}</span></div>
         <div class="ml-c dt gdt">${fmtShort(e.checkin_date)}</div>
-        <div class="ml-c vc gc">${gL1}</div>
-        <div class="ml-c vc gc">${gL2}</div>
-        <div class="ml-c vc gc">${parseFloat(gL3).toFixed(1)}</div>
+        <div class="ml-c vc gc">${gL1}</div><div class="ml-c vc gc">${gL2}</div><div class="ml-c vc gc">${parseFloat(gL3).toFixed(1)}</div>
         ${cDateHtml}${cValHtml}${farkHtml}${aksiyonHtml}
       </div>`;
-    } else if(!shownCikisIds.has(e.id)){
-      const cL1=mv?parseInt(mv.l1)||0:0, cL2=mv?parseInt(mv.l2)||0:0, cL3=mv?parseFloat(mv.l3)||0:0;
-      const fark=farkMap[e.id];
-      const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
+    }else if(!shownCikisIds.has(e.id)){
+      const cL1=mv?parseInt(mv.l1)||0:0,cL2=mv?parseInt(mv.l2)||0:0,cL3=mv?parseFloat(mv.l3)||0:0;
+      const fark=farkMap[e.id];const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
       rows+=`<div class="ml-row cr" onclick="goRoom('${e.room_no}')">
         <div class="ml-c rb"><span class="eb">${e.room_no}</span></div>
         <div class="ml-c kb"><span>${katL}</span></div>
         <div class="ml-c dt empty-dt">—</div>
-        <div class="ml-c vc" style="color:var(--muted)">—</div>
-        <div class="ml-c vc" style="color:var(--muted)">—</div>
-        <div class="ml-c vc" style="color:var(--muted)">—</div>
+        <div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div>
         <div class="ml-c dt cdt">${fmtShort(e.checkin_date)}</div>
-        <div class="ml-c vc cc">${cL1}</div>
-        <div class="ml-c vc cc">${cL2}</div>
-        <div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>
+        <div class="ml-c vc cc">${cL1}</div><div class="ml-c vc cc">${cL2}</div><div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>
         ${farkHtml}<div class="ml-c"></div>
       </div>`;
     }
   });
-
-  wrap.innerHTML=`<div class="ml-head">
-    <span onclick="mlSort('room')">Oda</span><span onclick="mlSort('kat')">Kat</span><span class="hg" onclick="mlSort('date')">Giriş</span>
-    <span class="hg">L1</span><span class="hg">L2</span><span class="hg">L3</span>
-    <span class="hc">Çıkış</span><span class="hc">L1</span><span class="hc">L2</span><span class="hc">L3</span>
-    <span>Fark</span><span></span>
-  </div>${rows}`;
+  wrap.innerHTML=`<div class="ml-head"><span onclick="mlSort('room')">Oda</span><span onclick="mlSort('kat')">Kat</span><span class="hg" onclick="mlSort('date')">Giriş</span><span class="hg">L1</span><span class="hg">L2</span><span class="hg">L3</span><span class="hc">Çıkış</span><span class="hc">L1</span><span class="hc">L2</span><span class="hc">L3</span><span>Fark</span><span></span></div>${rows}`;
 }
 
-/* Sayaç listesinden Hesaplama */
-function mlGoHesapla(roomNo, girisDate, cikisDate, gL1, gL2, gL3, cL1, cL2, cL3){
-  goTab(4);
-  setTimeout(()=>{
-    const dNo=document.getElementById('daireNo'); const gDate=document.getElementById('girisDate'); const cDate=document.getElementById('cikisDate');
-    if(dNo)dNo.value=roomNo; if(gDate)gDate.value=girisDate||today(); if(cDate)cDate.value=cikisDate||today();
-    const tip=odaTipiGetir(roomNo); if(tip){document.getElementById('daireType').value=tip; seciliTip=tip; const info=document.getElementById('daireNoHint'); if(info){info.textContent=tip+' daire';info.style.color='var(--accent)';}}
-    const girisL1=document.getElementById('girisL1'); const girisL2=document.getElementById('girisL2'); const girisL3=document.getElementById('girisL3');
-    if(girisL1)girisL1.value=gL1||0; if(girisL2)girisL2.value=gL2||0; if(girisL3)girisL3.value=gL3||0;
-    const cikisL1=document.getElementById('cikisL1'); const cikisL2=document.getElementById('cikisL2'); const cikisL3=document.getElementById('cikisL3');
-    if(cikisL1)cikisL1.value=cL1||0; if(cikisL2)cikisL2.value=cL2||0; if(cikisL3)cikisL3.value=cL3||0;
-    tarifeCiz(); kwInfoGuncelle();
+function mlGoHesapla(roomNo,girisDate,cikisDate,gL1,gL2,gL3,cL1,cL2,cL3){
+  goTab(4);setTimeout(()=>{
+    const dNo=document.getElementById('daireNo');const gDate=document.getElementById('girisDate');const cDate=document.getElementById('cikisDate');
+    if(dNo)dNo.value=roomNo;if(gDate)gDate.value=girisDate||today();if(cDate)cDate.value=cikisDate||today();
+    const tip=odaTipiGetir(roomNo);if(tip){document.getElementById('daireType').value=tip;seciliTip=tip;const info=document.getElementById('daireNoHint');if(info){info.textContent=tip+' daire';info.style.color='var(--accent)';}}
+    const girisL1=document.getElementById('girisL1');const girisL2=document.getElementById('girisL2');const girisL3=document.getElementById('girisL3');
+    if(girisL1)girisL1.value=gL1||0;if(girisL2)girisL2.value=gL2||0;if(girisL3)girisL3.value=gL3||0;
+    const cikisL1=document.getElementById('cikisL1');const cikisL2=document.getElementById('cikisL2');const cikisL3=document.getElementById('cikisL3');
+    if(cikisL1)cikisL1.value=cL1||0;if(cikisL2)cikisL2.value=cL2||0;if(cikisL3)cikisL3.value=cL3||0;
+    tarifeCiz();kwInfoGuncelle();
   },80);
 }
 
-/* Sayaç listesinden Ekle */
-function mlGoEkle(roomNo, girisDate, gL1, gL2, gL3){
-  goTab(1);
-  setTimeout(()=>{
-    const fRoom=q('f-room'); if(fRoom)fRoom.value=roomNo;
-    const fDate=q('f-date'); if(fDate)fDate.value=today();
-    const fType=q('f-type'); if(fType)fType.value='cikis';
-    const fL1=q('f-l1'),fL2=q('f-l2'),fL3=q('f-l3'); if(fL1)fL1.value=0; if(fL2)fL2.value=0; if(fL3)fL3.value=0;
-    const banner=q('cikis-giris-banner'); const bannerText=q('cikis-giris-banner-text');
-    if(banner&&bannerText){bannerText.textContent=`Oda ${roomNo} · Giriş: ${fmtDate(girisDate)} — L1: ${gL1}, L2: ${gL2}, L3: ${parseFloat(gL3).toFixed(1)}`; banner.style.display='flex';}
-    const tags=q('f-tags'); if(tags){const kat=Math.floor(parseInt(roomNo)/100); if(kat>=1){const katLabel=kat+'. Kat'; tags.querySelectorAll('.tag').forEach(t=>{t.classList.remove('on'); if(t.textContent===katLabel){t.classList.add('on');selTags=[katLabel];}});}}
+function mlGoEkle(roomNo,girisDate,gL1,gL2,gL3){
+  goTab(1);setTimeout(()=>{
+    const fRoom=q('f-room');if(fRoom)fRoom.value=roomNo;
+    const fDate=q('f-date');if(fDate)fDate.value=today();
+    const fType=q('f-type');if(fType)fType.value='cikis';
+    const fL1=q('f-l1'),fL2=q('f-l2'),fL3=q('f-l3');if(fL1)fL1.value=0;if(fL2)fL2.value=0;if(fL3)fL3.value=0;
+    const banner=q('cikis-giris-banner');const bannerText=q('cikis-giris-banner-text');
+    if(banner&&bannerText){bannerText.textContent=`Oda ${roomNo} · Giriş: ${fmtDate(girisDate)} — L1: ${gL1}, L2: ${gL2}, L3: ${parseFloat(gL3).toFixed(1)}`;banner.style.display='flex';}
+    const tags=q('f-tags');if(tags){const kat=Math.floor(parseInt(roomNo)/100);if(kat>=1){const katLabel=kat+'. Kat';tags.querySelectorAll('.tag').forEach(t=>{t.classList.remove('on');if(t.textContent===katLabel){t.classList.add('on');selTags=[katLabel];}});}}
     window.scrollTo({top:0,behavior:'smooth'});
   },80);
 }
 
-/* PDF exports */
 async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const raw=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(blob);});const dims=await new Promise(r=>{const img=new Image();img.onload=()=>r({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>r({w:4,h:3});img.src=raw;});const fx=await fixOrientation(blob,raw,dims.w,dims.h);return{dataUrl:fx.dataUrl,fmt:'JPEG',pw:fx.pw,ph:fx.ph};}
 
 async function exportBulkPDFFromEntries(rooms,allEntries,filename,btnRef,origLabel){
   if(typeof window.jspdf==='undefined'){showToast('jsPDF yüklenemedi','error');return;}
-  const tt=rooms.length===1?'Oda '+rooms[0]+' PDF':rooms.length+' Oda PDF'; dlOpen(tt,true);
+  const tt=rooms.length===1?'Oda '+rooms[0]+' PDF':rooms.length+' Oda PDF';dlOpen(tt,true);
   try{
-    const{jsPDF}=window.jspdf,label=mode==='elektrik'?'Sayac':'Oda'; const tp=allEntries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'}); const PW=210,mg=15;
+    const{jsPDF}=window.jspdf,label=mode==='elektrik'?'Sayac':'Oda';const tp=allEntries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});const PW=210,mg=15;
     doc.setFillColor(26,92,58);doc.rect(0,0,PW,44,'F');doc.setTextColor(255,255,255);doc.setFontSize(22);doc.setFont(undefined,'bold');
     doc.text(rooms.length===1?`${label} ${rooms[0]}`:`${rooms.length} Oda Raporu`,PW/2,22,{align:'center'});
     doc.setFontSize(8.5);doc.setFont(undefined,'normal');doc.text(fmtDatePDF(today()),PW/2,36,{align:'center'});doc.setTextColor(0,0,0);
@@ -1371,85 +1237,64 @@ async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;b
 async function runPdfDate(){const from=q('pdf-date-from').value,to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi daha küçük olmalı','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Bu aralıkta kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const all=[];for(const rno of rooms){const d=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`)).json();d.forEach(e=>all.push(e));}if(!all.length){showToast('Bu odalarda kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,all,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 
-/* ========= SAYAÇ HESAPLAMA FONKSİYONLARI ========= */
-const TARIFELER = {
-  '7gun':  { label: '7 Günlük',  '1+1': 15, '2+1': 18 },
-  '15gun': { label: '15 Günlük', '1+1': 30, '2+1': 40 }
-};
-const BIRIM = 30;
-let seciliDevir = '7gun';
-let seciliTip = '1+1';
+const TARIFELER={'7gun':{label:'7 Günlük','1+1':15,'2+1':18},'15gun':{label:'15 Günlük','1+1':30,'2+1':40}};
+const BIRIM=30;
+let seciliDevir='7gun',seciliTip='1+1';
 
-function tarifeCiz() {
-  const wrap = document.getElementById('tarifeWrap'); if(!wrap) return;
-  wrap.innerHTML = '';
-  Object.entries(TARIFELER).forEach(([key, tar]) => {
-    const kw = tar[seciliTip]; const isActive = key === seciliDevir;
-    const div = document.createElement('div'); div.className = 'tarife-btn' + (isActive ? ' active' : '');
-    div.onclick = () => { seciliDevir = key; tarifeCiz(); kwInfoGuncelle(); };
-    div.innerHTML = '<div class="check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-      '<div class="tb-devir">' + tar.label + '</div><div class="tb-tip">' + seciliTip + '</div><div class="tb-kw">' + kw + '<span class="tb-unit"> kW/H</span></div>';
-    wrap.appendChild(div);
-  });
+function tarifeCiz(){const wrap=document.getElementById('tarifeWrap');if(!wrap)return;wrap.innerHTML='';Object.entries(TARIFELER).forEach(([key,tar])=>{const kw=tar[seciliTip];const isActive=key===seciliDevir;const div=document.createElement('div');div.className='tarife-btn'+(isActive?' active':'');div.onclick=()=>{seciliDevir=key;tarifeCiz();kwInfoGuncelle();};div.innerHTML='<div class="check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>'+'<div class="tb-devir">'+tar.label+'</div>'+'<div class="tb-tip">'+seciliTip+'</div>'+'<div class="tb-kw">'+kw+'<span class="tb-unit"> kW/H</span></div>';wrap.appendChild(div);});}
+function onTipChange(){seciliTip=document.getElementById('daireType').value;tarifeCiz();kwInfoGuncelle();}
+function onDaireNoChange(val){const tip=odaTipiGetir(val);const sel=document.getElementById('daireType');const info=document.getElementById('daireNoHint');if(tip){sel.value=tip;seciliTip=tip;tarifeCiz();kwInfoGuncelle();if(info){info.textContent=tip+' daire';info.style.color='var(--accent)';}}else if(val&&val.length>=3){if(info){info.textContent='Geçersiz oda no';info.style.color='var(--danger)';}}else{if(info){info.textContent='';}}}
+function onDateChange(){kwInfoGuncelle();}
+function kwInfoGuncelle(){const g=document.getElementById('girisDate')?.value;const c=document.getElementById('cikisDate')?.value;const info=document.getElementById('kwInfo');if(!info)return;if(g&&c&&c>=g){const gun=Math.round((new Date(c)-new Date(g))/86400000);const limit=TARIFELER[seciliDevir][seciliTip];info.classList.remove('hidden');document.getElementById('kwInfoText').textContent=gun+' günlük konaklama · '+TARIFELER[seciliDevir].label+' devre · Limit: '+limit+' kW/H';}else{info.classList.add('hidden');}}
+function meterToKWH(l1,l2,l3){return(l1*100*100)+(l2*100)+l3;}
+function hesaplaTuketim(gL1,gL2,gL3,cL1,cL2,cL3){let gKWH=meterToKWH(gL1,gL2,gL3);let cKWH=meterToKWH(cL1,cL2,cL3);if(cKWH>=gKWH){return cKWH-gKWH;}else{let maxKWH=meterToKWH(9999,99,99.9);return(maxKWH-gKWH)+cKWH;}}
+const fmtNum=n=>parseFloat(n).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtNumInt=n=>parseFloat(n).toLocaleString('tr-TR',{minimumFractionDigits:0,maximumFractionDigits:2});
+const fmtTL=n=>parseFloat(n).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtDateTr=d=>{if(!d)return'—';const p=d.split('-');return p[2]+'.'+p[1]+'.'+p[0];};
+
+function hesapla(){
+  const gL1=parseInt(document.getElementById('girisL1').value)||0;const gL2=parseInt(document.getElementById('girisL2').value)||0;const gL3=parseFloat(document.getElementById('girisL3').value)||0;
+  const cL1=parseInt(document.getElementById('cikisL1').value)||0;const cL2=parseInt(document.getElementById('cikisL2').value)||0;const cL3=parseFloat(document.getElementById('cikisL3').value)||0;
+  const girisDate=document.getElementById('girisDate').value;const cikisDate=document.getElementById('cikisDate').value;
+  const daireNo=document.getElementById('daireNo').value.trim()||'—';
+  if(!girisDate||!cikisDate){alert('Lütfen tarihleri seçiniz.');return;}
+  if(daireNo!=='—'&&daireNo!==''){if(!odaGecerliMi(daireNo)){showToast('Geçersiz oda numarası!','error');return;}const otomatikTip=odaTipiGetir(daireNo);if(otomatikTip){seciliTip=otomatikTip;document.getElementById('daireType').value=otomatikTip;tarifeCiz();}}
+  if(gL3>99.9||cL3>99.9){alert('L3 değeri 99.9\'dan büyük olamaz!');return;}
+  const tuketim=hesaplaTuketim(gL1,gL2,gL3,cL1,cL2,cL3);const limit=TARIFELER[seciliDevir][seciliTip];
+  const fark=tuketim-limit;const asmis=fark>0;
+  const gun=Math.round((new Date(cikisDate)-new Date(girisDate))/86400000);
+  const bedel=asmis?fark*BIRIM:0;
+  const hero=document.getElementById('heroCard');hero.className='result-hero anim '+(asmis?'amber':'green');
+  document.getElementById('heroLabel').textContent=asmis?'Aşılan Tüketim':'Toplam Tüketim';
+  document.getElementById('heroVal').textContent=fmtNumInt(asmis?fark:tuketim);
+  document.getElementById('heroSub').innerHTML=asmis?fmtNumInt(tuketim)+' kW/H tüketildi — limitin <strong>'+fmtNumInt(fark)+' kW/H</strong> üzerinde':'<strong>'+fmtNumInt(limit-tuketim)+' kW/H</strong> kullanılmamış limit kaldı';
+  const badge=document.getElementById('heroBadge');badge.className='rh-badge '+(asmis?'warn':'ok');
+  badge.textContent=asmis?'⚠ Limit Aşıldı — Fark Bedeli Tahsil Edilecek':'✓ Limit Dahilinde';
+  document.getElementById('m1').textContent=fmtNumInt(tuketim);document.getElementById('m2').textContent=fmtNumInt(limit);
+  document.getElementById('m3').innerHTML=`${gL1}.${gL2}.${gL3.toFixed(1)}`;document.getElementById('m4').innerHTML=`${cL1}.${cL2}.${cL3.toFixed(1)}`;
+  const bedelBox=document.getElementById('bedelBox');
+  if(asmis){bedelBox.classList.remove('hidden');document.getElementById('bAsan').textContent=fmtNumInt(fark)+' kW/H';document.getElementById('bToplam').textContent=fmtTL(bedel);}
+  else{bedelBox.classList.add('hidden');}
+  document.getElementById('dDaire').innerHTML=daireNo+'  <span style="font-size:11px;color:var(--muted)">('+seciliTip+')</span>';
+  document.getElementById('dTarih').textContent=fmtDateTr(girisDate)+' – '+fmtDateTr(cikisDate);
+  document.getElementById('dGun').textContent=gun+' gün';
+  document.getElementById('dDevre').textContent=TARIFELER[seciliDevir].label+' · '+limit+' kW/H';
+  const dDurum=document.getElementById('dDurum');dDurum.innerHTML=asmis?'⚠ '+fmtNumInt(fark)+' kW/H aşıldı · '+fmtTL(bedel)+' ₺ bedel':'✓ Limit dahilinde, bedel yok';
+  dDurum.style.color=asmis?'var(--amber)':'var(--accent)';
+  const wrap=document.getElementById('sonucWrap');wrap.classList.remove('hidden');wrap.style.display='flex';
+  setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
 
-function onTipChange() { seciliTip = document.getElementById('daireType').value; tarifeCiz(); kwInfoGuncelle(); }
-function onDaireNoChange(val) { const tip = odaTipiGetir(val); const sel = document.getElementById('daireType'); const info = document.getElementById('daireNoHint'); if (tip) { sel.value = tip; seciliTip = tip; tarifeCiz(); kwInfoGuncelle(); if (info) { info.textContent = tip + ' daire'; info.style.color = 'var(--accent)'; } } else if (val && val.length >= 3) { if (info) { info.textContent = 'Geçersiz oda no'; info.style.color = 'var(--danger)'; } } else { if (info) { info.textContent = ''; } } }
-function onDateChange() { kwInfoGuncelle(); }
-
-function kwInfoGuncelle() { const g = document.getElementById('girisDate')?.value; const c = document.getElementById('cikisDate')?.value; const info = document.getElementById('kwInfo'); if (!info) return; if (g && c && c >= g) { const gun = Math.round((new Date(c) - new Date(g)) / 86400000); const limit = TARIFELER[seciliDevir][seciliTip]; info.classList.remove('hidden'); document.getElementById('kwInfoText').textContent = gun + ' günlük konaklama · ' + TARIFELER[seciliDevir].label + ' devre · Limit: ' + limit + ' kW/H'; } else { info.classList.add('hidden'); } }
-
-function meterToKWH(l1, l2, l3) { return (l1 * 100 * 100) + (l2 * 100) + l3; }
-function kwhToMeter(kwh) { let total = kwh; let l3 = total % 100; total = Math.floor(total / 100); let l2 = total % 100; let l1 = Math.floor(total / 100); return { l1, l2, l3: parseFloat(l3.toFixed(1)) }; }
-function hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3) { let gKWH = meterToKWH(gL1, gL2, gL3); let cKWH = meterToKWH(cL1, cL2, cL3); if (cKWH >= gKWH) { return cKWH - gKWH; } else { let maxKWH = meterToKWH(9999, 99, 99.9); return (maxKWH - gKWH) + cKWH; } }
-
-const fmtNum = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
-const fmtNumInt = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:0, maximumFractionDigits:2});
-const fmtTL = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
-const fmtDateTr = d => { if(!d) return '—'; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; };
-
-function hesapla() {
-  const gL1 = parseInt(document.getElementById('girisL1').value) || 0; const gL2 = parseInt(document.getElementById('girisL2').value) || 0; const gL3 = parseFloat(document.getElementById('girisL3').value) || 0;
-  const cL1 = parseInt(document.getElementById('cikisL1').value) || 0; const cL2 = parseInt(document.getElementById('cikisL2').value) || 0; const cL3 = parseFloat(document.getElementById('cikisL3').value) || 0;
-  const girisDate = document.getElementById('girisDate').value; const cikisDate = document.getElementById('cikisDate').value;
-  const daireNo = document.getElementById('daireNo').value.trim() || '—';
-  if (!girisDate || !cikisDate) { alert('Lütfen tarihleri seçiniz.'); return; }
-  if (daireNo !== '—' && daireNo !== '') { if (!odaGecerliMi(daireNo)) { showToast('Geçersiz oda numarası! (101-1518 arası ve geçerli oda olmalı)', 'error'); return; } const otomatikTip = odaTipiGetir(daireNo); if (otomatikTip) { seciliTip = otomatikTip; document.getElementById('daireType').value = otomatikTip; tarifeCiz(); } }
-  if (gL3 > 99.9 || cL3 > 99.9) { alert('L3 değeri 99.9\'dan büyük olamaz!'); return; }
-  const tuketim = hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3); const limit = TARIFELER[seciliDevir][seciliTip];
-  const fark = tuketim - limit; const asmis = fark > 0;
-  const gun = Math.round((new Date(cikisDate) - new Date(girisDate)) / 86400000);
-  const bedel = asmis ? fark * BIRIM : 0;
-  const hero = document.getElementById('heroCard'); hero.className = 'result-hero anim ' + (asmis ? 'amber' : 'green');
-  document.getElementById('heroLabel').textContent = asmis ? 'Aşılan Tüketim' : 'Toplam Tüketim';
-  document.getElementById('heroVal').textContent = fmtNumInt(asmis ? fark : tuketim);
-  document.getElementById('heroSub').innerHTML = asmis ? fmtNumInt(tuketim) + ' kW/H tüketildi — limitin <strong>' + fmtNumInt(fark) + ' kW/H</strong> üzerinde' : '<strong>' + fmtNumInt(limit - tuketim) + ' kW/H</strong> kullanılmamış limit kaldı';
-  const badge = document.getElementById('heroBadge'); badge.className = 'rh-badge ' + (asmis ? 'warn' : 'ok');
-  badge.textContent = asmis ? '⚠ Limit Aşıldı — Fark Bedeli Tahsil Edilecek' : '✓ Limit Dahilinde';
-  document.getElementById('m1').textContent = fmtNumInt(tuketim); document.getElementById('m2').textContent = fmtNumInt(limit);
-  document.getElementById('m3').innerHTML = `${gL1}.${gL2}.${gL3.toFixed(1)}`; document.getElementById('m4').innerHTML = `${cL1}.${cL2}.${cL3.toFixed(1)}`;
-  const bedelBox = document.getElementById('bedelBox');
-  if (asmis) { bedelBox.classList.remove('hidden'); document.getElementById('bAsan').textContent = fmtNumInt(fark) + ' kW/H'; document.getElementById('bToplam').textContent = fmtTL(bedel); }
-  else { bedelBox.classList.add('hidden'); }
-  document.getElementById('dDaire').innerHTML = daireNo + '  <span style="font-size:11px;color:var(--muted)">(' + seciliTip + ')</span>';
-  document.getElementById('dTarih').textContent = fmtDateTr(girisDate) + ' – ' + fmtDateTr(cikisDate);
-  document.getElementById('dGun').textContent = gun + ' gün';
-  document.getElementById('dDevre').textContent = TARIFELER[seciliDevir].label + ' · ' + limit + ' kW/H';
-  const dDurum = document.getElementById('dDurum'); dDurum.innerHTML = asmis ? '⚠ ' + fmtNumInt(fark) + ' kW/H aşıldı · ' + fmtTL(bedel) + ' ₺ bedel' : '✓ Limit dahilinde, bedel yok';
-  dDurum.style.color = asmis ? 'var(--amber)' : 'var(--accent)';
-  const wrap = document.getElementById('sonucWrap'); wrap.classList.remove('hidden'); wrap.style.display = 'flex';
-  setTimeout(() => wrap.scrollIntoView({behavior:'smooth',block:'start'}), 50);
+function sifirla(){
+  document.getElementById('girisL1').value='0';document.getElementById('girisL2').value='0';document.getElementById('girisL3').value='0';
+  document.getElementById('cikisL1').value='0';document.getElementById('cikisL2').value='0';document.getElementById('cikisL3').value='0';
+  document.getElementById('daireNo').value='';document.getElementById('girisDate').value=today();document.getElementById('cikisDate').value=today();
+  const wrap=document.getElementById('sonucWrap');wrap.classList.add('hidden');wrap.style.display='none';
+  document.getElementById('kwInfo').classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function sifirla() {
-  document.getElementById('girisL1').value = '0'; document.getElementById('girisL2').value = '0'; document.getElementById('girisL3').value = '0';
-  document.getElementById('cikisL1').value = '0'; document.getElementById('cikisL2').value = '0'; document.getElementById('cikisL3').value = '0';
-  document.getElementById('daireNo').value = ''; document.getElementById('girisDate').value = today(); document.getElementById('cikisDate').value = today();
-  const wrap = document.getElementById('sonucWrap'); wrap.classList.add('hidden'); wrap.style.display = 'none';
-  document.getElementById('kwInfo').classList.add('hidden'); window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* ═══ INIT / TOKEN & READONLY ═══ */
+/* ═══ SALT OKUNUR MOD ═══ */
 const _p=new URLSearchParams(location.search);
 const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih');
 
@@ -1462,195 +1307,87 @@ function showAccessError(){
   q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yetkiniz yok.</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş bir link kullanıyor olabilirsiniz.</div></div>`;
 }
 
-/* ═══════════════════════════════════════════ */
-/*        SALT OKUNUR MOD (DÜZELTİLDİ)       */
-/* ═══════════════════════════════════════════ */
-async function showReadonlyEntry(oda, mod, tarih) {
-  const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
-  const isE = mod === 'elektrik';
-  q('topbar-title').textContent = `${label} ${oda}`;
-  q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
-  const el = q('sresult');
-  el.innerHTML = '<div class="empty">Yükleniyor...</div>';
-  
-  try {
-    // Odaya ait TÜM kayıtları getir (sadece o tarih değil)
-    const res = await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`);
-    const data = await res.json();
-    
-    if (!data.length) {
-      el.innerHTML = '<div class="empty">Bu oda için henüz kayıt bulunamadı.</div>';
-      return;
-    }
+async function showReadonlyEntry(oda,mod,tarih){
+  const label=mod==='elektrik'?'Sayaç':'Oda';const isE=mod==='elektrik';
+  q('topbar-title').textContent=`${label} ${oda}`;
+  q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
+  const el=q('sresult');el.innerHTML='<div class="empty">Yükleniyor...</div>';
+  try{
+    const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`);
+    const allData=await res.json();
+    const data=allData.filter(e=>e.photo_urls&&e.photo_urls.length>0);
+    if(!data.length){el.innerHTML='<div class="empty">Bu oda için henüz fotoğraflı kayıt bulunamadı.</div>';return;}
+    const tp=data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${data.length} kayıt · ${tp} fotoğraf · Salt Okunur</span></div></div>`;
 
-    const tp = data.reduce((s, e) => s + (e.photo_urls || []).length, 0);
-    let html = `<div class="room-header">
-                  <div class="room-num${isE ? ' e' : ''}">${oda}</div>
-                  <div class="room-summary">
-                    <strong>${label} ${oda}</strong>
-                    <span>${data.length} kayıt · ${tp} fotoğraf · Salt Okunur</span>
-                  </div>
-                </div>`;
-
-    if (isE) {
-      const girisler = data.filter(e => e.type === 'giris' || !e.type).sort((a, b) => new Date(b.checkin_date) - new Date(a.checkin_date));
-      const cikisler = data.filter(e => e.type === 'cikis').sort((a, b) => new Date(b.checkin_date) - new Date(a.checkin_date));
-      const usedCikisIds = new Set();
-      const pairs = [];
-
-      girisler.forEach(g => {
-        const match = cikisler.find(c => !usedCikisIds.has(c.id) && c.checkin_date >= g.checkin_date);
-        if (match) {
-          usedCikisIds.add(match.id);
-          pairs.push({ giris: g, cikis: match });
-        } else {
-          pairs.push({ giris: g, cikis: null });
-        }
+    if(isE){
+      const girisler=data.filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(b.checkin_date)-new Date(a.checkin_date));
+      const cikisler=data.filter(e=>e.type==='cikis').sort((a,b)=>new Date(b.checkin_date)-new Date(a.checkin_date));
+      const usedCikisIds=new Set();const pairs=[];
+      girisler.forEach(g=>{const match=cikisler.find(c=>!usedCikisIds.has(c.id)&&c.checkin_date>=g.checkin_date);if(match){usedCikisIds.add(match.id);pairs.push({giris:g,cikis:match});}else pairs.push({giris:g,cikis:null});});
+      cikisler.filter(c=>!usedCikisIds.has(c.id)).forEach(c=>pairs.push({giris:null,cikis:c}));
+      pairs.sort((a,b)=>{const da=a.giris?a.giris.checkin_date:(a.cikis?.checkin_date||'');const db=b.giris?b.giris.checkin_date:(b.cikis?.checkin_date||'');return new Date(db)-new Date(da);});
+      let ei=0;
+      pairs.forEach(pair=>{
+        const{giris,cikis}=pair;
+        if(giris&&cikis){html+=`<div style="margin-top:14px;"><div class="entries-grid">${buildReadonlyCard(giris,ei++,true,false)}${buildReadonlyCard(cikis,ei++,true,false)}</div></div>`;}
+        else if(giris){html+=`<div style="margin-top:14px;">${buildReadonlyCard(giris,ei++,true,false)}</div>`;}
+        else if(cikis){html+=`<div style="margin-top:14px;">${buildReadonlyCard(cikis,ei++,true,false)}</div>`;}
       });
-      cikisler.filter(c => !usedCikisIds.has(c.id)).forEach(c => pairs.push({ giris: null, cikis: c }));
-      
-      pairs.sort((a, b) => {
-        const da = a.giris ? a.giris.checkin_date : (a.cikis?.checkin_date || '');
-        const db = b.giris ? b.giris.checkin_date : (b.cikis?.checkin_date || '');
-        return new Date(db) - new Date(da);
-      });
-
-      let ei = 0;
-      pairs.forEach(pair => {
-        const { giris, cikis } = pair;
-        if (giris && cikis) {
-          html += `<div style="margin-top:14px;">
-                    <div class="entries-grid">
-                      ${buildReadonlyCard(giris, ei++, true, false)}
-                      ${buildReadonlyCard(cikis, ei++, true, false)}
-                    </div>
-                   </div>`;
-        } else if (giris) {
-          html += `<div style="margin-top:14px;">${buildReadonlyCard(giris, ei++, true, false)}</div>`;
-        } else if (cikis) {
-          html += `<div style="margin-top:14px;">${buildReadonlyCard(cikis, ei++, true, false)}</div>`;
-        }
-      });
-    } else {
-      const gbd = {};
-      data.forEach(e => {
-        if (!gbd[e.checkin_date]) gbd[e.checkin_date] = [];
-        gbd[e.checkin_date].push(e);
-      });
-      
-      let ei = 0;
-      Object.keys(gbd).sort((a, b) => new Date(b) - new Date(a)).forEach(dk => {
-        const arr = gbd[dk];
-        html += `<div style="margin-top:15px; margin-bottom:8px; font-size:13px; font-weight:600; color:var(--muted); display:flex; align-items:center; gap:6px;">
-                  📅 ${fmtDate(dk)}
-                 </div>`;
-        if (arr.length > 1) {
-          html += `<div class="entries-grid">`;
-          arr.forEach(e => { html += buildReadonlyCard(e, ei++, false, false); });
-          html += `</div>`;
-        } else {
-          html += buildReadonlyCard(arr[0], ei++, false, false);
-        }
+    }else{
+      const gbd={};data.forEach(e=>{if(!gbd[e.checkin_date])gbd[e.checkin_date]=[];gbd[e.checkin_date].push(e);});
+      let ei=0;
+      Object.keys(gbd).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
+        const arr=gbd[dk];
+        html+=`<div style="margin-top:15px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;">📅 ${fmtDate(dk)}</div>`;
+        if(arr.length>1){html+=`<div class="entries-grid">`;arr.forEach(e=>{html+=buildReadonlyCard(e,ei++,false,true);});html+=`</div>`;}
+        else html+=buildReadonlyCard(arr[0],ei++,false,true);
       });
     }
-    el.innerHTML = html;
-  } catch (e) {
-    console.error(e);
-    el.innerHTML = '<div class="empty">Bağlantı hatası. Lütfen daha sonra tekrar deneyin.</div>';
-  }
+    el.innerHTML=html;
+  }catch(e){el.innerHTML='<div class="empty">Bağlantı hatası.</div>';}
 }
 
-function buildReadonlyCard(entry, ei, isE, showRN) {
-  const urls = entry.photo_urls || [];
-  entryImages[ei] = urls;
-  entryData[ei] = entry;
-  
-  const cats = entry.category ? entry.category.split(',').filter(Boolean) : [];
-  const imgs = urls.map((u, i) => `
-    <div class="img-thumb" onclick="event.stopPropagation(); openLb(${ei}, ${i})">
-      <img src="${u}" loading="lazy" />
-      ${entry.type ? `<div class="img-label ${entry.type}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'}</div>` : ''}
-    </div>`).join('');
-  
-  const mv = isE && entry.meter_values ? `
-    <div style="display:flex; gap:6px; margin-top:8px; font-size:12px; font-family:'DM Mono',monospace; flex-wrap:wrap;">
-      <span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span>
-      <span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span>
-      <span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span>
-    </div>` : '';
-    
-  const rnb = showRN ? `<div class="room-num${isE ? ' e' : ''}" style="font-size:15px; padding:4px 10px; margin-right:2px">${entry.room_no}</div>` : '';
-
-  return `
-    <div class="entry-card">
-      <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
-        ${rnb}
-        <div class="date-badge${isE ? ' e' : ''}">${entry.type === 'cikis' ? 'Çıkış' : 'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
-        <div class="entry-meta">
-          ${cats.length ? `<div class="cat">${cats.join(' · ')}</div>` : ''}
-          ${entry.donem ? `<div class="nt" style="color:var(--amber);font-weight:500;">📅 ${entry.donem}</div>` : ''}
-          ${entry.note ? `<div class="nt">${entry.note}</div>` : ''}
-        </div>
-        <span class="entry-count">${urls.length} foto</span>
-        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+function buildReadonlyCard(entry,ei,isE,showRN=false){
+  const urls=entry.photo_urls||[];
+  entryImages[ei]=urls;entryData[ei]=entry;
+  const cats=entry.category?entry.category.split(',').filter(Boolean):[];
+  const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="event.stopPropagation();openLb(${ei},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}</div>`).join('');
+  const mv=isE&&entry.meter_values?`<div style="display:flex;gap:6px;margin-top:8px;font-size:12px;font-family:'DM Mono',monospace;flex-wrap:wrap;"><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span></div>`:'';
+  const rnb=showRN?`<div class="room-num${isE?' e':''}" style="font-size:15px;padding:4px 10px;margin-right:2px">${entry.room_no}</div>`:'';
+  return`<div class="entry-card">
+    <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
+      ${rnb}
+      <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
+      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.donem?`<div class="nt" style="color:var(--amber);font-weight:500;">📅 ${entry.donem}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
+      <span class="entry-count">${urls.length} foto</span>
+      <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="entry-body">
+      ${imgs?`<div class="img-scroll">${imgs}</div>`:'<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
+      <div class="entry-footer">
+        <div style="display:flex;flex-direction:column;margin-bottom:10px;"><span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>${mv}</div>
       </div>
-      <div class="entry-body">
-        ${imgs ? `<div class="img-scroll">${imgs}</div>` : '<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
-        <div class="entry-footer">
-          <div style="display:flex; flex-direction:column; margin-bottom:10px;">
-            <span class="entry-footer-info">${urls.length} fotoğraf · ${fmtDate(entry.checkin_date)}</span>
-            ${mv}
-          </div>
-        </div>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
-/* ═══ BAŞLANGIÇ ═══ */
-if (_oda && _token) {
-  document.querySelector('.nav').style.display = 'none';
-  document.querySelector('.mode-btns').style.display = 'none';
-  ['s1', 's2', 's3', 's4'].forEach(id => { const el = q(id); if (el) el.remove(); });
-  document.querySelector('#s0 > div:first-child').style.display = 'none';
-  q('stab-room-content').style.display = 'none';
-  q('stab-date-content').style.display = 'none';
-  q('sresult').innerHTML = '<div class="empty">Bağlantı doğrulanıyor...</div>';
-  
-  const _m = _mod === 'elektrik' ? 'elektrik' : 'demirbaş';
-  mode = _m;
-  
+/* ═══ INIT ═══ */
+if(_oda&&_token){
+  document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';
+  ['s1','s2','s3','s4'].forEach(id=>{const el=q(id);if(el)el.remove();});
+  document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
+  q('sresult').innerHTML='<div class="empty">Bağlantı doğrulanıyor...</div>';
+  const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
   api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
-    .then(r => r.json())
-    .then(data => {
-      if (!data || !data.length) { showAccessError(); return; }
-      const tr = data[0];
-      if (_tarih) {
-        if (tr.entry_date && tr.entry_date !== _tarih) { showAccessError(); return; }
-        showReadonlyEntry(_oda, _m, _tarih);
-      } else {
-        showReadonlyEntry(_oda, _m, tr.entry_date || today());
-      }
-    })
-    .catch(() => showAccessError());
-} else if (_oda && !_token) {
-  showAccessError();
-} else {
-  q('f-date').value = today();
-  let savedMode = 'demirbaş';
-  try { savedMode = localStorage.getItem('activeMode') || 'demirbaş'; } catch (e) {}
-  setMode(savedMode);
-  checkConn();
-  try {
-    const sv = parseInt(localStorage.getItem('activeTab'));
-    if (!isNaN(sv) && sv >= 0 && sv <= 4) {
-      if ((sv === 3 || sv === 4) && savedMode !== 'elektrik') goTab(0);
-      else goTab(sv);
-    } else {
-      startTimer();
-    }
-  } catch (e) { startTimer(); }
+    .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda,_m,_tarih);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
+}else if(_oda&&!_token){showAccessError();}
+else{
+  q('f-date').value=today();
+  let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
+  setMode(savedMode);checkConn();
+  try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=4){if(sv===3&&savedMode!=='elektrik')goTab(0);else if(sv===4&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
 }
 </script>
 </body>
 </html>
-```
