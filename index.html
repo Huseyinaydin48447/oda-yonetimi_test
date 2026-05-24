@@ -1827,11 +1827,40 @@ async function showReadonlyEntry(oda, mod, tarih, entryType) {
     } catch(e) {
       el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>';
     }
-    return; // pair modunda buradan çık, aşağıdaki normal kodu çalıştırma
+return; // pair modunda buradan çık
   }
-  
-  
-function buildReadonlyCard(entry,ei,isE){
+
+  // ── NORMAL TEK KAYIT MODU ──
+  const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
+  const isE = mod === 'elektrik';
+  q('topbar-title').textContent = `${label} ${oda}`;
+  q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
+  const el = q('sresult');
+  el.innerHTML = '<div class="empty">Yükleniyor...</div>';
+  try {
+    let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
+    if (entryType) url += `&type=eq.${encodeURIComponent(entryType)}`;
+    const res = await api(url);
+    const data = await res.json();
+    if (!data.length) {
+      el.innerHTML = `<div class="empty">Bu tarihe ait kayıt bulunamadı</div>`;
+      return;
+    }
+    const totalP = data.reduce((s,e) => s + (e.photo_urls||[]).length, 0);
+    let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
+    let ei = 0;
+    entryImages = {};
+    entryData = {};
+    data.forEach(entry => {
+      html += buildReadonlyCard(entry, ei++, isE);
+    });
+    el.innerHTML = html;
+  } catch(e) {
+    el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>';
+  }
+}
+
+function buildReadonlyCard(entry, ei, isE) {
   const urls=entry.photo_urls||[];
   entryImages[ei]=urls;
   const cats=entry.category?entry.category.split(',').filter(Boolean):[];
