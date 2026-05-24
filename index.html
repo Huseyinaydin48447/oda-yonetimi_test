@@ -1686,6 +1686,7 @@ async function showReadonlyEntry(oda,mod,tarih){
   q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
   const el=q('sresult');
   el.innerHTML='<div class="empty">Yükleniyor...</div>';
+  q('s0').classList.add('active'); // Bu satırı ekleyin
   try{
     // Tüm kayıtları getir - checkin_date filtresi olmadan
     const url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
@@ -1750,6 +1751,9 @@ async function showReadonlyEntry(oda,mod,tarih){
     });
     console.log('HTML generated, setting innerHTML');
     el.innerHTML=html;
+    // Bu 2 satırı ekleyin:
+q('s0').classList.add('active');
+q('sresult').style.display='block';
     console.log('Done!');
   }catch(e){
     console.error('Error in showReadonlyEntry:', e);
@@ -1782,6 +1786,7 @@ function buildReadonlyCard(entry,ei,isE){
 /* init */
 if(_oda&&_token){
   document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';
+  q('s0').classList.add('active'); // Bu satırı ekleyin
   q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
