@@ -13,6 +13,8 @@
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
     --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
   }
+  .ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.ml-cikis-btn:active{background:#fde68a;}
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
   .entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
@@ -1000,7 +1002,9 @@ function renderMeterList(){
       const cDate=cEntry?.checkin_date||'';
       const hasPair=!!cEntry;
       const cDateHtml=hasPair?`<div class="ml-c dt cdt">${fmtShort(cDate)}</div>`:`<div class="ml-c dt empty-dt">—</div>`;
-      const linkHtml=hasPair?`<div class="ml-c lnk"><button class="ml-link-btn" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${cDate}','${mode}',this)">Link</button></div>`:`<div class="ml-c"></div>`;
+    const linkHtml=hasPair
+  ?`<div class="ml-c lnk"><button class="ml-link-btn" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${cDate}','${mode}',this)">Link</button></div>`
+  :`<div class="ml-c lnk"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button></div>`;
 
       rows+=`<div class="ml-row ${hasPair?'paired':'gr'}" onclick="goRoom('${e.room_no}')">
         <div class="ml-c rb"><span class="${hasPair?'paired':''}">${e.room_no}</span></div>
@@ -1028,7 +1032,35 @@ function renderMeterList(){
     <span></span>
   </div>${rows}`;
 }
-
+function mlGoEkle(roomNo, girisDate){
+  goTab(1);
+  setTimeout(()=>{
+    const fRoom=q('f-room');
+    if(fRoom)fRoom.value=roomNo;
+    const fDate=q('f-date');
+    if(fDate)fDate.value=today();
+    const fType=q('f-type');
+    if(fType)fType.value='cikis';
+    const banner=q('cikis-giris-banner');
+    const bannerText=q('cikis-giris-banner-text');
+    if(banner&&bannerText){
+      bannerText.textContent=`Oda ${roomNo} · Giriş: ${fmtDate(girisDate)} — Çıkış kaydı oluştur`;
+      banner.style.display='flex';
+    }
+    const tags=q('f-tags');
+    if(tags){
+      const kat=Math.floor(parseInt(roomNo)/100);
+      if(kat>=1){
+        const katLabel=kat+'. Kat';
+        tags.querySelectorAll('.tag').forEach(t=>{
+          t.classList.remove('on');
+          if(t.textContent===katLabel){t.classList.add('on');selTags=[katLabel];}
+        });
+      }
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  },80);
+}
 /* PDF exports */
 async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const raw=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(blob);});const dims=await new Promise(r=>{const img=new Image();img.onload=()=>r({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>r({w:4,h:3});img.src=raw;});const fx=await fixOrientation(blob,raw,dims.w,dims.h);return{dataUrl:fx.dataUrl,fmt:'JPEG',pw:fx.pw,ph:fx.ph};}
 
