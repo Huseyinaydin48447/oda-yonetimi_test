@@ -51,7 +51,6 @@
   .search-wrap input::placeholder{font-weight:400}
   .room-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .room-num{background:var(--accent-light);color:var(--accent);font-size:22px;font-weight:600;padding:6px 14px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;flex-shrink:0}
-  .room-num.e{background:var(--amber-light);color:var(--amber)}
   .room-summary{flex:1}
   .room-summary strong{font-size:14px;font-weight:500;display:block}
   .room-summary span{font-size:12px;color:var(--muted)}
@@ -59,7 +58,6 @@
   .entry-head{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
   .entry-head:active{background:var(--surface2)}
   .date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;flex-shrink:0}
-  .date-badge.e{background:var(--amber-light);color:var(--amber)}
   .entry-meta{flex:1;min-width:0;overflow:hidden}
   .entry-meta .cat{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .entry-meta .nt{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -176,7 +174,7 @@
   .confirm-actions{display:flex;gap:8px}
   .confirm-actions .btn{flex:1;justify-content:center}
 
-  /* SAYAC LISTESI */
+  /* SAYAÇ LİSTESİ */
   .ml-toolbar{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
   .ml-row1{display:flex;gap:8px;}
   .ml-row1 input{flex:1;font-size:14px;padding:9px 12px;}
@@ -192,13 +190,12 @@
   .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
   .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
   .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto;}
-  /* Paired row: Oda | Kat | GirisTarih | gL1 | gL2 | gL3 | CikisTarih | cL1 | cL2 | cL3 | Fark | Aksiyon */
-  .ml-head{display:grid;grid-template-columns:44px 50px 68px 38px 38px 38px 68px 38px 38px 38px 52px 72px;background:var(--surface2);border-bottom:1px solid var(--border);min-width:580px;}
+  .ml-head{display:grid;grid-template-columns:44px 50px 68px 38px 38px 38px 68px 38px 38px 38px 52px;background:var(--surface2);border-bottom:1px solid var(--border);min-width:520px;}
   .ml-head span{font-size:10px;font-weight:600;color:var(--muted);padding:7px 3px;text-align:center;white-space:nowrap;}
   .ml-head span:first-child{text-align:left;padding-left:8px;}
   .ml-head .hg{color:var(--accent);}
   .ml-head .hc{color:var(--amber);}
-  .ml-row{display:grid;grid-template-columns:44px 50px 68px 38px 38px 38px 68px 38px 38px 38px 52px 72px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;min-width:580px;}
+  .ml-row{display:grid;grid-template-columns:44px 50px 68px 38px 38px 38px 68px 38px 38px 38px 52px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;min-width:520px;}
   .ml-row:last-child{border-bottom:none;}
   .ml-row:active{background:var(--surface2);}
   .ml-row.gr{border-left:3px solid var(--accent);}
@@ -225,70 +222,6 @@
   .ml-calc-btn:active{background:#c5e0d0;}
   .ml-cikis-btn{padding:4px 7px;font-size:10px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;line-height:1.3;}
   .ml-cikis-btn:active{background:#fde68a;}
-
-  /* SAYAÇ HESAPLAMA STILLERI */
-  .meter-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:0;}
-  .meter-label{font-size:10px;color:var(--muted);text-align:center;margin-bottom:4px;display:block;}
-  .meter-input{width:100%;padding:10px 4px;text-align:center;font-family:'DM Mono',monospace;font-size:16px;font-weight:500;border:1px solid var(--border);border-radius:8px;background:var(--surface);}
-  .meter-input:focus{outline:none;border-color:var(--accent);}
-  .meter-group{background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:12px;}
-  .meter-group-title{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:.3px;display:flex;align-items:center;gap:6px;}
-  .tarife-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-  .tarife-btn{border:2px solid var(--border);background:var(--surface2);border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;transition:all .15s;position:relative}
-  .tarife-btn:active{transform:scale(.97)}
-  .tarife-btn .tb-devir{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px}
-  .tarife-btn .tb-tip{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
-  .tarife-btn .tb-kw{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--muted);line-height:1}
-  .tarife-btn .tb-unit{font-size:10px;color:var(--muted)}
-  .tarife-btn.active{border-color:var(--accent);background:var(--accent-light)}
-  .tarife-btn.active .tb-devir{color:var(--accent-mid)}
-  .tarife-btn.active .tb-tip{color:var(--accent)}
-  .tarife-btn.active .tb-kw{color:var(--accent)}
-  .tarife-btn.active .tb-unit{color:var(--accent-mid)}
-  .tarife-btn .check{display:none;position:absolute;top:8px;right:8px;width:16px;height:16px;background:var(--accent);border-radius:50%;align-items:center;justify-content:center}
-  .tarife-btn.active .check{display:flex}
-  .btn-calc{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;box-shadow:0 2px 8px rgba(26,92,58,.25)}
-  .btn-calc:active{transform:scale(.98);background:#144d31}
-  .btn-reset{width:100%;padding:11px;background:var(--surface);color:var(--muted);border:1px solid var(--border);border-radius:9px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
-  .btn-reset:active{background:var(--surface2)}
-  .result-hero{border-radius:var(--radius);padding:20px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
-  .result-hero.green{background:linear-gradient(135deg,#1a5c3a 0%,#2d7a52 100%)}
-  .result-hero.amber{background:linear-gradient(135deg,#92400e 0%,#b45309 100%)}
-  .result-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:130px;height:130px;background:rgba(255,255,255,.06);border-radius:50%}
-  .result-hero::after{content:'';position:absolute;bottom:-20px;left:-20px;width:90px;height:90px;background:rgba(255,255,255,.04);border-radius:50%}
-  .rh-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
-  .rh-val{font-family:'DM Mono',monospace;font-size:44px;font-weight:500;color:#fff;line-height:1}
-  .rh-unit{font-size:14px;color:rgba(255,255,255,.65);margin-left:3px}
-  .rh-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:6px;line-height:1.5}
-  .rh-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;margin-top:10px}
-  .rh-badge.ok{background:rgba(255,255,255,.15);color:#fff}
-  .rh-badge.warn{background:rgba(255,220,80,.22);color:#ffe066}
-  .rh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
-  .rh-mini{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px}
-  .rh-mini .ml{font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px}
-  .rh-mini .mv{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#fff}
-  .rh-mini .mu{font-size:10px;color:rgba(255,255,255,.55)}
-  .bedel-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-  .bedel-head{background:var(--amber-light);padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #fcd34d}
-  .bedel-head span{font-size:12px;font-weight:600;color:var(--amber)}
-  .bedel-body{padding:0 14px}
-  .bedel-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
-  .bedel-row:last-child{border-bottom:none}
-  .bedel-row .bk{color:var(--muted)}
-  .bedel-row .bv{font-family:'DM Mono',monospace;font-weight:600;color:var(--text)}
-  .bedel-total{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--amber-light);border-top:2px solid #fcd34d}
-  .bedel-total .bt-k{font-size:13px;font-weight:600;color:var(--amber)}
-  .bedel-total .bt-v{font-family:'DM Mono',monospace;font-size:24px;font-weight:600;color:var(--amber)}
-  .bedel-total .bt-u{font-size:13px;color:var(--amber);margin-left:3px}
-  .detay-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
-  .detay-row:last-child{border-bottom:none}
-  .detay-row .dk{color:var(--muted);font-size:12px}
-  .detay-row .dv{font-weight:500}
-  .uyari{background:var(--amber-light);border:1px solid #fcd34d;border-radius:9px;padding:10px 12px;font-size:12px;color:var(--amber);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
-  .kw-info{background:var(--accent-light);border-radius:9px;padding:9px 12px;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:6px;font-weight:500;margin-top:8px}
-  @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  .anim{animation:slideUp .3s ease both}
-  .hidden{display:none!important}
   .spacer{height:80px}
 </style>
 </head>
@@ -313,7 +246,6 @@
     <button class="nav-btn" onclick="goTab(1)">Ekle</button>
     <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
     <button class="nav-btn" id="nav-sayac" style="display:none" onclick="goTab(3)">Sayaç Listesi</button>
-    <button class="nav-btn" id="nav-hesap" style="display:none" onclick="goTab(4)">📊 Hesapla</button>
   </div>
 
   <!-- ARA -->
@@ -347,11 +279,6 @@
   <div class="screen" id="s1">
     <div class="status-bar"><div class="status-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
     
-    <!-- Çıkış Yap - Giriş bilgi banner -->
-    <div id="cikis-giris-banner" style="display:none;background:var(--amber-light);border:1px solid #fcd34d;border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--amber);display:none;align-items:center;gap:8px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-      <span id="cikis-giris-banner-text"></span>
-    </div>
     <div class="field" id="donem-field" style="display:none;">
       <span class="label">Dönem Aralığı</span>
       <select id="f-donem">
@@ -462,148 +389,6 @@
     </div>
     <div class="ml-stats" id="ml-stats"></div>
     <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
-  </div>
-
-  <!-- SAYAÇ HESAPLAMA -->
-  <div class="screen" id="s4">
-    <div class="content" style="padding:0;display:flex;flex-direction:column;gap:14px">
-
-      <!-- DAİRE BİLGİLERİ -->
-      <div class="card anim" style="animation-delay:.04s">
-        <div class="card-head">
-          <div class="card-icon g">🏠</div>
-          <div><h2>Daire Bilgileri</h2><span>No, tip ve konaklama tarihleri</span></div>
-        </div>
-        <div class="card-body">
-          <div class="row2">
-            <div class="field">
-              <label class="label">Daire No</label>
-              <input type="text" id="daireNo" placeholder="ör: 102, 301..." oninput="onDaireNoChange(this.value)"/>
-              <div id="daireNoHint" style="font-size:11px;margin-top:4px;font-weight:500;"></div>
-            </div>
-            <div class="field">
-              <label class="label">Daire Tipi</label>
-              <select id="daireType" onchange="onTipChange()">
-                <option value="1+1">1+1</option>
-                <option value="2+1">2+1</option>
-              </select>
-            </div>
-          </div>
-          <div class="row2">
-            <div class="field">
-              <label class="label">Giriş Tarihi</label>
-              <input type="date" id="girisDate" onchange="onDateChange()"/>
-            </div>
-            <div class="field">
-              <label class="label">Çıkış Tarihi</label>
-              <input type="date" id="cikisDate" onchange="onDateChange()"/>
-            </div>
-          </div>
-          <div class="kw-info hidden" id="kwInfo">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-            <span id="kwInfoText"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- TARİFE SEÇİCİ -->
-      <div class="card anim" style="animation-delay:.08s">
-        <div class="card-head">
-          <div class="card-icon b">📋</div>
-          <div><h2>Devre Tarifesi</h2><span>Yönetim kurulu kararı · Aşım bedeli 30 ₺/kW/H</span></div>
-        </div>
-        <div class="card-body">
-          <div class="tarife-wrap" id="tarifeWrap"></div>
-          <div class="uyari">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Limiti aşan tüketim <strong>kW/H başına 30 ₺</strong> olarak tahsil edilir. Malzeme talep edilmemesi halinde odada bulunacağınız personele bildirilir.
-          </div>
-        </div>
-      </div>
-
-      <!-- SAYAÇ DEĞERLERİ - L1 L2 L3 -->
-      <div class="card anim" style="animation-delay:.12s">
-        <div class="card-head">
-          <div class="card-icon a">⚡</div>
-          <div><h2>Sayaç Değerleri</h2><span>Giriş ve çıkış L1 · L2 · L3 değerleri</span></div>
-        </div>
-        <div class="card-body">
-          <!-- GİRİŞ SAYACI -->
-          <div class="meter-group">
-            <div class="meter-group-title">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              Giriş Sayacı
-            </div>
-            <div class="meter-row3">
-              <div><div class="meter-label">L1</div><input type="number" id="girisL1" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
-              <div><div class="meter-label">L2</div><input type="number" id="girisL2" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
-              <div><div class="meter-label">L3</div><input type="number" id="girisL3" class="meter-input" step="0.1" min="0" max="99.9" value="0" placeholder="0.0"/></div>
-            </div>
-          </div>
-          <!-- ÇIKIŞ SAYACI -->
-          <div class="meter-group">
-            <div class="meter-group-title">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              Çıkış Sayacı
-            </div>
-            <div class="meter-row3">
-              <div><div class="meter-label">L1</div><input type="number" id="cikisL1" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
-              <div><div class="meter-label">L2</div><input type="number" id="cikisL2" class="meter-input" step="1" min="0" value="0" placeholder="0"/></div>
-              <div><div class="meter-label">L3</div><input type="number" id="cikisL3" class="meter-input" step="0.1" min="0" max="99.9" value="0" placeholder="0.0"/></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-calc anim" style="animation-delay:.16s" onclick="hesapla()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Hesapla
-      </button>
-
-      <!-- SONUÇ -->
-      <div id="sonucWrap" class="hidden" style="display:flex;flex-direction:column;gap:12px">
-        <div class="result-hero green anim" id="heroCard">
-          <div class="rh-label" id="heroLabel">Toplam Tüketim</div>
-          <div><span class="rh-val" id="heroVal">0</span><span class="rh-unit">kW/H</span></div>
-          <div class="rh-sub" id="heroSub"></div>
-          <div class="rh-badge ok" id="heroBadge">✓ Limit Dahilinde</div>
-          <div class="rh-grid">
-            <div class="rh-mini"><div class="ml">Toplam Tüketim</div><div><span class="mv" id="m1">—</span> <span class="mu">kW/H</span></div></div>
-            <div class="rh-mini"><div class="ml">Tanınan Limit</div><div><span class="mv" id="m2">—</span> <span class="mu">kW/H</span></div></div>
-            <div class="rh-mini"><div class="ml">Giriş Sayacı</div><div><span class="mv" id="m3">—</span> <span class="mu">kW</span></div></div>
-            <div class="rh-mini"><div class="ml">Çıkış Sayacı</div><div><span class="mv" id="m4">—</span> <span class="mu">kW</span></div></div>
-          </div>
-        </div>
-
-        <div class="bedel-box hidden" id="bedelBox">
-          <div class="bedel-head">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-            <span>Tahsil Edilecek Bedel</span>
-          </div>
-          <div class="bedel-body">
-            <div class="bedel-row"><span class="bk">Aşılan Miktar</span><span class="bv" id="bAsan">—</span></div>
-            <div class="bedel-row"><span class="bk">Birim Fiyat</span><span class="bv">30 ₺ / kW/H</span></div>
-          </div>
-          <div class="bedel-total">
-            <span class="bt-k">Toplam Bedel</span>
-            <div><span class="bt-v" id="bToplam">—</span><span class="bt-u">₺</span></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="detay-row"><span class="dk">Daire</span><span class="dv" id="dDaire" style="font-family:'DM Mono',monospace">—</span></div>
-            <div class="detay-row"><span class="dk">Giriş – Çıkış</span><span class="dv" id="dTarih">—</span></div>
-            <div class="detay-row"><span class="dk">Konaklama Süresi</span><span class="dv" id="dGun" style="color:var(--accent);font-weight:600">—</span></div>
-            <div class="detay-row"><span class="dk">Devre / Limit</span><span class="dv" id="dDevre">—</span></div>
-            <div class="detay-row"><span class="dk">Durum</span><span class="dv" id="dDurum">—</span></div>
-          </div>
-        </div>
-
-        <button class="btn-reset" onclick="sifirla()">↩ Yeni Hesaplama</button>
-      </div>
-      <div class="spacer"></div>
-    </div>
   </div>
 </div>
 
@@ -771,27 +556,6 @@ function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(
 function safe(s){if(!s)return'';return s.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}
 function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);}
 
-/* ═══ ODA TİPİ & DOĞRULAMA ═══ */
-// 2+1 odalar: her katta XX2, XX9, XX10, XX18 (son 2 rakam: 02,09,10,18)
-// 1+1 odalar: her katta geri kalanlar (01,03,04,05,06,07,11,13,14,15,16,17)
-const ODA_2P1_SONEKLER = [2, 9, 10, 18];
-const ODA_1P1_SONEKLER = [1, 3, 4, 5, 6, 7, 11, 13, 14, 15, 16, 17];
-const TUM_SONEKLER = [...ODA_2P1_SONEKLER, ...ODA_1P1_SONEKLER];
-
-function odaTipiGetir(odaNo) {
-  const n = parseInt(odaNo);
-  if (!n || isNaN(n)) return null;
-  const kat = Math.floor(n / 100);
-  const sonek = n % 100;
-  if (kat < 1 || kat > 15) return null;
-  if (!TUM_SONEKLER.includes(sonek)) return null;
-  return ODA_2P1_SONEKLER.includes(sonek) ? '2+1' : '1+1';
-}
-
-function odaGecerliMi(odaNo) {
-  return odaTipiGetir(odaNo) !== null;
-}
-
 async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-text').textContent='Supabase bağlantısı aktif';q('topbar-sub').textContent='Veriler bulutta saklanıyor';}else throw 0;}catch{q('conn-text').textContent='Bağlantı hatası';q('topbar-sub').textContent='Bağlantı sorunu';}}
 function showToast(msg,type=''){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3000);}
 function openConfirm(title,msg,okLabel,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;q('confirm-ok').textContent=okLabel;confirmCallback=cb;q('confirm-overlay').classList.add('open');}
@@ -817,9 +581,7 @@ function setMode(m){
   q('mode-d').classList.toggle('active',!isE);
   q('mode-e').classList.toggle('active',isE);
   q('nav-sayac').style.display=isE?'':'none';
-  q('nav-hesap').style.display=isE?'':'none';
   if(!isE&&tab===3)goTab(0);
-  if(!isE&&tab===4)goTab(0);
   openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
   if(tab===2)loadAll(true);
@@ -828,16 +590,8 @@ function setMode(m){
 
 /* tabs */
 function goTab(i){
-  // Ekle tabından çıkınca banner'ı gizle
   if(i!==1){const b=q('cikis-giris-banner');if(b)b.style.display='none';}
-  tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();if(i===4)initHesapTab();startTimer();
-}
-function initHesapTab(){
-  if(typeof tarifeCiz !== 'undefined'){
-    document.getElementById('girisDate').value = today();
-    document.getElementById('cikisDate').value = today();
-    tarifeCiz();
-  }
+  tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));if(i===2)loadAll();if(i===3)loadMeterList();startTimer();
 }
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(openEntries.size>0)return;if(tab===0){if(searchTab==='room'&&lastVal)doSearch(lastVal,true);else if(searchTab==='date'){const f=q('d-from').value,t=q('d-to').value;if(f&&t)doDateSearch(true);}}else if(tab===2)loadAll(true);else if(tab===3)loadMeterListSilentCheck();},3000);}
 
@@ -908,7 +662,7 @@ async function saveEdit(entryId,ei){
     if(mode==='elektrik'){const l1=document.getElementById(`edit-l1-${entryId}`);const l2=document.getElementById(`edit-l2-${entryId}`);const l3=document.getElementById(`edit-l3-${entryId}`);if(l1&&l2&&l3)body.meter_values={l1:parseFloat(l1.value)||0,l2:parseFloat(l2.value)||0,l3:parseFloat(l3.value)||0};}
     if(mode==='elektrik'&&tv!==null)body.type=tv;
     const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify(body)});if(!r.ok)throw new Error('Kayıt başarısız');
-       const upd={...entry,note,checkin_date:date,category:tags,photo_urls:newUrls};
+    const upd={...entry,note,checkin_date:date,category:tags,photo_urls:newUrls};
     if(body.donem!==undefined)upd.donem=body.donem;
     if(mode==='elektrik'&&tv!==null)upd.type=tv;if(body.meter_values)upd.meter_values=body.meter_values;
     entryData[ei]=upd;entryImages[ei]=newUrls;refreshCard(ei,upd);showToast('Güncellendi!','success');
@@ -921,7 +675,6 @@ async function createEntryLink(roomNo, date, mod, btnEl, entryType) {
   btnEl.disabled = true;
   try {
     const token = genToken();
-    // Eski token'ları temizle (aynı oda+tarih+mod+type)
     await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(date)}&entry_type=eq.${encodeURIComponent(entryType || '')}`, {
       method: 'DELETE',
       headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY }
@@ -932,7 +685,6 @@ async function createEntryLink(roomNo, date, mod, btnEl, entryType) {
       body: JSON.stringify({ room_no: roomNo, mod: mod, token: token, entry_date: date, entry_type: entryType || '' })
     });
     if (!r.ok) throw new Error('Token kaydedilemedi');
-    // URL'ye type parametresi ekle
     const typeParam = entryType ? `&type=${encodeURIComponent(entryType)}` : '';
     const url = `${location.origin + location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}${typeParam}`;
     navigator.clipboard.writeText(url)
@@ -945,38 +697,7 @@ async function createEntryLink(roomNo, date, mod, btnEl, entryType) {
     btnEl.disabled = false;
   }
 }
-async function createPairLink(roomNo, girisDate, cikisDate, mod, btnEl) {
-  const orig = btnEl.innerHTML;
-  btnEl.innerHTML = '<span class="loader" style="border-top-color:var(--accent)"></span>';
-  btnEl.disabled = true;
-  try {
-    const token = genToken();
-    // Eski çift token'ları temizle
-    await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(girisDate)}&entry_type=eq.pair`, {
-      method: 'DELETE',
-      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY }
-    });
-    const r = await fetch(`${SB}/rest/v1/tokens`, {
-      method: 'POST',
-      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ 
-        room_no: roomNo, mod: mod, token: token, 
-        entry_date: girisDate, entry_type: 'pair',
-        paired_date: cikisDate
-      })
-    });
-    if (!r.ok) throw new Error('Token kaydedilemedi');
-    const url = `${location.origin + location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(girisDate)}&token=${token}&type=pair`;
-    navigator.clipboard.writeText(url)
-      .then(() => showToast('Çift kayıt linki kopyalandı!', 'success'))
-      .catch(() => { prompt('Linki kopyalayın:', url); });
-  } catch (e) {
-    showToast('Hata: ' + e.message, 'error');
-  } finally {
-    btnEl.innerHTML = orig;
-    btnEl.disabled = false;
-  }
-}
+
 /* image helpers */
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
 async function addFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);pending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++;}renderPrev();if(cc>0){const s=Math.round((1-tn/to)*100);se.innerHTML=`<div class="compress-info"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>${cc} fotoğraf sıkıştırıldı · %${s} küçültüldü (${fmtBytes(to)} → ${fmtBytes(tn)})</div>`;}}
@@ -1044,7 +765,7 @@ async function doSearch(val,silent=false){
     let gi=0;
 
     if(isE){
-      // Elektrik modunda: giriş/çıkış çiftlerini 2 sütunlu kart olarak göster
+      // Elektrik modunda: giriş/çıkış çiftlerini göster
       const girisler=[...fd].filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
       const cikisler=[...fd].filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
       const usedCikisIds=new Set();
@@ -1065,23 +786,7 @@ async function doSearch(val,silent=false){
         if(giris&&cikis){
           const giEl=buildEntryCard(giris,gi++,true,false);
           const ciEl=buildEntryCard(cikis,gi++,true,false);
-          const gmv=giris.meter_values||{};const cmv=cikis.meter_values||{};
-          const gL1=parseInt(gmv.l1)||0,gL2=parseInt(gmv.l2)||0,gL3=parseFloat(gmv.l3)||0;
-          const cL1=parseInt(cmv.l1)||0,cL2=parseInt(cmv.l2)||0,cL3=parseFloat(cmv.l3)||0;
-         // Bunu şu şekilde değiştirin:
-        html += `<div style="margin-top:14px;">
-  <div class="entries-grid">${giEl}${ciEl}</div>
-  <div style="margin-top:8px;display:flex;justify-content:center;gap:8px;">
-    <button style="padding:9px 22px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="mlGoHesapla('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      Hesapla
-    </button>
-    <button style="padding:9px 22px;background:var(--surface);color:var(--accent);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="createPairLink('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}','${mode}',this)">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-      Link
-    </button>
-  </div>
-</div>`;
+          html += `<div style="margin-top:14px;"><div class="entries-grid">${giEl}${ciEl}</div></div>`;
         } else if(giris){
           html+=`<div style="margin-top:14px;">${buildEntryCard(giris,gi++,true,false)}</div>`;
         } else if(cikis){
@@ -1139,7 +844,7 @@ async function saveEntry(){
     let filter=`room_no=eq.${encodeURIComponent(roomNo)}&checkin_date=eq.${date}&mode=eq.${encodeURIComponent(mode)}`;
     if(mode==='elektrik'&&type)filter+=`&type=eq.${encodeURIComponent(type)}`;
     const ex=await(await api(`/rest/v1/entries?${filter}&limit=1`)).json();
-    if(ex.length>0){const merged=[...(ex[0].photo_urls||[]),...urls];await api(`/rest/v1/entries?id=eq.${ex[0].id}`,{method:'PATCH',body:JSON.stringify({photo_urls:merged,note:note||ex[0].note,category:selTags.join(',')||ex[0].category,type})});showToast('Fotoğraflar mevcut kayda eklendi!','success');}
+    if(ex.length>0){const merged=[...(ex[0].photo_urls||[]),...urls];await api(`/rest/v1/entries?id=eq.${ex[0].id}`,{method:'PATCH',body:JSON.stringify({photo_urls:merged,note:note||ex[0].note,category:selTags.join(',')||ex[0].category,type,donem: donem || null})});showToast('Fotoğraflar mevcut kayda eklendi!','success');}
     else{const body={room_no:roomNo,mode,checkin_date:date,category:selTags.join(','),note,photo_urls:urls,type,donem: donem || null };if(mode==='elektrik')body.meter_values=mv;await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});showToast('Yeni kayıt oluşturuldu!','success');}
     pending=[];selTags=[];qs('.tag').forEach(t=>t.classList.remove('on'));
     q('f-room').value='';q('f-note').value='';q('f-date').value=today();q('f-donem').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';
@@ -1200,7 +905,6 @@ function mlFilter(){
   const search=(q('ml-search')?.value||'').toLowerCase().trim();
   const kat=q('ml-kat')?.value||'';
 
-  // Eşleşmiş çıkış/giriş ID'lerini hesapla (tüm data üzerinde)
   const pairedCikisIds=new Set();
   const pairedGirisIds=new Set();
   const girisByRoomF={}, cikisByRoomF={};
@@ -1222,25 +926,16 @@ function mlFilter(){
   mlFiltered=mlAllData.filter(e=>{
     const isGiris=e.type==='giris'||!e.type;
     const isCikis=e.type==='cikis';
-
-    // Eşleşmiş çıkışlar asla ayrı satır gösterilmez (giriş satırına dahil)
     if(isCikis&&pairedCikisIds.has(e.id))return false;
-
-    if(mlTypeFilter==='giris'){
-      // Sadece giriş kayıtları (eşleşmiş olsun olmasın)
-      if(!isGiris)return false;
-    } else if(mlTypeFilter==='cikis'){
-      // Eşleşmiş çifti olan girişler + yetim çıkışlar
-      if(isGiris&&!pairedGirisIds.has(e.id))return false;
-    }
-    // 'all': eşleşmiş çıkışlar hariç hepsi
-
+    if(mlTypeFilter==='giris'){if(!isGiris)return false;}
+    else if(mlTypeFilter==='cikis'){if(isGiris&&!pairedGirisIds.has(e.id))return false;}
     if(kat&&!(e.category||'').includes(kat))return false;
     if(search){const rno=String(e.room_no).toLowerCase();const cat=(e.category||'').toLowerCase();const nt=(e.note||'').toLowerCase();if(!rno.includes(search)&&!cat.includes(search)&&!nt.includes(search))return false;}
     return true;
   });
   renderMeterList();
 }
+
 function mlSort(key) {
   if (mlSortKey === key) {
     mlSortDir *= -1;
@@ -1262,11 +957,11 @@ function mlSort(key) {
   });
   renderMeterList();
 }
+
 function renderMeterList(){
   const wrap=q('ml-wrap'),statsEl=q('ml-stats');
   if(!mlFiltered.length){wrap.innerHTML='<div class="ml-empty">Kayıt bulunamadı</div>';statsEl.innerHTML='';return;}
 
-  // ── Kronolojik sırayla fark hesapla (tüm veri üzerinde) ──
   const chronologicalData = [...mlAllData].sort((a,b)=>{
     const da=new Date(a.checkin_date),db=new Date(b.checkin_date);
     if(da-db!==0)return da-db;
@@ -1289,11 +984,7 @@ function renderMeterList(){
     }
   });
 
-  // ── Giriş kayıtlarına çıkış eşleştir ──
-  // Her giriş için en yakın (tarih <= giriş tarihinden sonra) çıkışı bul
-  // Aynı odada birden fazla giriş varsa, her biri kendi çıkışıyla eşleşir
-  // Eşleştirme: odaya göre kronolojik sırada, her giriş bir sonraki çıkışla eşleşir
-  const pairedMap={}; // girisId -> cikisEntry
+  const pairedMap={};
   const usedCikisIds=new Set();
   const girisByRoom={}, cikisByRoom={};
   mlAllData.forEach(e=>{
@@ -1306,7 +997,6 @@ function renderMeterList(){
       cikisByRoom[rno].push(e);
     }
   });
-  // Kronolojik eşleştir: her giriş → en yakın sonraki çıkış
   Object.keys(girisByRoom).forEach(rno=>{
     const girList=[...girisByRoom[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
     const cikList=[...(cikisByRoom[rno]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
@@ -1316,24 +1006,15 @@ function renderMeterList(){
     });
   });
 
-  // ── İstatistik ──
-// Eşleşmiş çıkışları da say
-const tG = mlFiltered.filter(e => e.type === 'giris' || !e.type).length;
-const tC = mlFiltered.reduce((count, e) => {
-  const isG = e.type === 'giris' || !e.type;
-  if (isG) {
-    // Bu girişin çıkışı varsa 1 ekle
-    return count + (pairedMap[e.id] ? 1 : 0);
-  } else {
-    // Yetim çıkış
-    return count + 1;
-  }
-}, 0);
+  const tG = mlFiltered.filter(e => e.type === 'giris' || !e.type).length;
+  const tC = mlFiltered.reduce((count, e) => {
+    const isG = e.type === 'giris' || !e.type;
+    if (isG) return count + (pairedMap[e.id] ? 1 : 0);
+    else return count + 1;
+  }, 0);
   const odalar=new Set(mlFiltered.map(e=>e.room_no));
   statsEl.innerHTML=`<div class="ml-stat"><div class="ml-stat-v">${odalar.size}</div><div class="ml-stat-l">Sayaç</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--accent)">${tG}</div><div class="ml-stat-l">Giriş</div></div><div class="ml-stat"><div class="ml-stat-v" style="color:var(--amber)">${tC}</div><div class="ml-stat-l">Çıkış</div></div><div class="ml-stat"><div class="ml-stat-v">${mlFiltered.length}</div><div class="ml-stat-l">Toplam</div></div>`;
 
-  // ── Satır oluştur ──
-  // Filtreden geçen girişleri ve eşleşmeyen çıkışları göster
   const shownCikisIds=new Set();
   let rows='';
 
@@ -1344,31 +1025,19 @@ const tC = mlFiltered.reduce((count, e) => {
     const katL=cats.length?cats[0]:'—';
 
     if(isG){
-      // Giriş satırı + eşleşen çıkış (aynı satırda)
       const gL1=mv?parseInt(mv.l1)||0:0, gL2=mv?parseInt(mv.l2)||0:0, gL3=mv?parseFloat(mv.l3)||0:0;
       const cEntry=pairedMap[e.id]||null;
       if(cEntry)shownCikisIds.add(cEntry.id);
-
       const cmv=cEntry?.meter_values||null;
       const cL1=cmv?parseInt(cmv.l1)||0:0, cL2=cmv?parseInt(cmv.l2)||0:0, cL3=cmv?parseFloat(cmv.l3)||0:0;
       const cDate=cEntry?.checkin_date||'';
       const fark=cEntry?farkMap[cEntry.id]:null;
       const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
       const hasPair=!!cEntry;
-
-      // Çıkış sütunları
       const cDateHtml=hasPair?`<div class="ml-c dt cdt">${fmtShort(cDate)}</div>`:`<div class="ml-c dt empty-dt">—</div>`;
       const cValHtml=hasPair
         ?`<div class="ml-c vc cc">${cL1}</div><div class="ml-c vc cc">${cL2}</div><div class="ml-c vc cc">${parseFloat(cL3).toFixed(1)}</div>`
         :`<div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div><div class="ml-c vc" style="color:var(--muted)">—</div>`;
-
-      // Aksiyon sütunu
-      let aksiyonHtml='';
-      if(hasPair){
-        aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-calc-btn" onclick="event.stopPropagation();mlGoHesapla('${e.room_no}','${e.checkin_date}','${cDate}',${gL1},${gL2},${gL3},${cL1},${cL2},${cL3})">Hesapla</button></div>`;
-      } else {
-        aksiyonHtml=`<div class="ml-c" style="padding:4px 3px;text-align:center;"><button class="ml-cikis-btn" onclick="event.stopPropagation();mlGoEkle('${e.room_no}','${e.checkin_date}',${gL1},${gL2},${gL3})">Çıkış Yap</button></div>`;
-      }
 
       rows+=`<div class="ml-row ${hasPair?'paired':'gr'}" onclick="goRoom('${e.room_no}')">
         <div class="ml-c rb"><span class="${hasPair?'paired':''}">${e.room_no}</span></div>
@@ -1380,11 +1049,9 @@ const tC = mlFiltered.reduce((count, e) => {
         ${cDateHtml}
         ${cValHtml}
         ${farkHtml}
-        ${aksiyonHtml}
+        <div class="ml-c"></div>
       </div>`;
-
     } else if(!shownCikisIds.has(e.id)){
-      // Eşleşmeyen (yetim) çıkış satırı — tek başına göster
       const cL1=mv?parseInt(mv.l1)||0:0, cL2=mv?parseInt(mv.l2)||0:0, cL3=mv?parseFloat(mv.l3)||0:0;
       const fark=farkMap[e.id];
       const farkHtml=fark===null||fark===undefined?`<div class="ml-c fc none">—</div>`:`<div class="ml-c fc pos">+${fark}</div>`;
@@ -1412,87 +1079,8 @@ const tC = mlFiltered.reduce((count, e) => {
     <span class="hg">L1</span><span class="hg">L2</span><span class="hg">L3</span>
     <span class="hc">Çıkış</span>
     <span class="hc">L1</span><span class="hc">L2</span><span class="hc">L3</span>
-    <span>Fark</span><span></span>
+    <span>Fark</span>
   </div>${rows}`;
-}
-
-/* Sayaç listesinden Hesaplama tab'ına git ve doldur */
-function mlGoHesapla(roomNo, girisDate, cikisDate, gL1, gL2, gL3, cL1, cL2, cL3){
-  goTab(4);
-  setTimeout(()=>{
-    const dNo=document.getElementById('daireNo');
-    const gDate=document.getElementById('girisDate');
-    const cDate=document.getElementById('cikisDate');
-    if(dNo)dNo.value=roomNo;
-    if(gDate)gDate.value=girisDate||today();
-    if(cDate)cDate.value=cikisDate||today();
-    // Daire tipini otomatik belirle
-    const tip=odaTipiGetir(roomNo);
-    if(tip){
-      document.getElementById('daireType').value=tip;
-      seciliTip=tip;
-      const info=document.getElementById('daireNoHint');
-      if(info){info.textContent=tip+' daire';info.style.color='var(--accent)';}
-    }
-    // Giriş sayaç değerleri
-    const girisL1=document.getElementById('girisL1');
-    const girisL2=document.getElementById('girisL2');
-    const girisL3=document.getElementById('girisL3');
-    if(girisL1)girisL1.value=gL1||0;
-    if(girisL2)girisL2.value=gL2||0;
-    if(girisL3)girisL3.value=gL3||0;
-    // Çıkış sayaç değerleri
-    const cikisL1=document.getElementById('cikisL1');
-    const cikisL2=document.getElementById('cikisL2');
-    const cikisL3=document.getElementById('cikisL3');
-    if(cikisL1)cikisL1.value=cL1||0;
-    if(cikisL2)cikisL2.value=cL2||0;
-    if(cikisL3)cikisL3.value=cL3||0;
-    tarifeCiz();
-    kwInfoGuncelle();
-  },80);
-}
-
-/* Sayaç listesinden Ekle tab'ına git — çıkış kaydı için */
-function mlGoEkle(roomNo, girisDate, gL1, gL2, gL3){
-  goTab(1);
-  setTimeout(()=>{
-    // Oda numarasını doldur
-    const fRoom=q('f-room');
-    if(fRoom)fRoom.value=roomNo;
-    // Tarihi bugün olarak ayarla
-    const fDate=q('f-date');
-    if(fDate)fDate.value=today();
-    // Türü çıkış olarak seç
-    const fType=q('f-type');
-    if(fType)fType.value='cikis';
-    // L1 L2 L3 değerlerini sıfırla (yeni çıkış değerleri girilecek)
-    const fL1=q('f-l1'),fL2=q('f-l2'),fL3=q('f-l3');
-    if(fL1)fL1.value=0;
-    if(fL2)fL2.value=0;
-    if(fL3)fL3.value=0;
-    // Banner'ı göster: giriş tarihi ve değerleri
-    const banner=q('cikis-giris-banner');
-    const bannerText=q('cikis-giris-banner-text');
-    if(banner&&bannerText){
-      bannerText.textContent=`Oda ${roomNo} · Giriş: ${fmtDate(girisDate)} — L1: ${gL1}, L2: ${gL2}, L3: ${parseFloat(gL3).toFixed(1)}`;
-      banner.style.display='flex';
-    }
-    // Oda numarasına göre kat tagını otomatik seç
-    const tags=q('f-tags');
-    if(tags){
-      const kat=Math.floor(parseInt(roomNo)/100);
-      if(kat>=1){
-        const katLabel=kat+'. Kat';
-        tags.querySelectorAll('.tag').forEach(t=>{
-          t.classList.remove('on');
-          if(t.textContent===katLabel){t.classList.add('on');selTags=[katLabel];}
-        });
-      }
-    }
-    // Ekrana kaydır
-    window.scrollTo({top:0,behavior:'smooth'});
-  },80);
 }
 
 /* PDF exports */
@@ -1549,300 +1137,13 @@ async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;b
 async function runPdfDate(){const from=q('pdf-date-from').value,to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi daha küçük olmalı','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Bu aralıkta kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const all=[];for(const rno of rooms){const d=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`)).json();d.forEach(e=>all.push(e));}if(!all.length){showToast('Bu odalarda kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,all,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 
-/* ========= SAYAÇ HESAPLAMA FONKSİYONLARI (L1-L2-L3) ========= */
-const TARIFELER = {
-  '7gun':  { label: '7 Günlük',  '1+1': 15, '2+1': 20 },
-  '15gun': { label: '15 Günlük', '1+1': 30, '2+1': 40 }
-};
-const BIRIM = 30;
-let seciliDevir = '7gun';
-let seciliTip = '1+1';
-
-function tarifeCiz() {
-  const wrap = document.getElementById('tarifeWrap');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  Object.entries(TARIFELER).forEach(([key, tar]) => {
-    const kw = tar[seciliTip];
-    const isActive = key === seciliDevir;
-    const div = document.createElement('div');
-    div.className = 'tarife-btn' + (isActive ? ' active' : '');
-    div.onclick = () => { seciliDevir = key; tarifeCiz(); kwInfoGuncelle(); };
-    div.innerHTML =
-      '<div class="check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-      '<div class="tb-devir">' + tar.label + '</div>' +
-      '<div class="tb-tip">' + seciliTip + '</div>' +
-      '<div class="tb-kw">' + kw + '<span class="tb-unit"> kW/H</span></div>';
-    wrap.appendChild(div);
-  });
-}
-
-function onTipChange() {
-  seciliTip = document.getElementById('daireType').value;
-  tarifeCiz();
-  kwInfoGuncelle();
-}
-
-function onDaireNoChange(val) {
-  const tip = odaTipiGetir(val);
-  const sel = document.getElementById('daireType');
-  const info = document.getElementById('daireNoHint');
-  if (tip) {
-    sel.value = tip;
-    seciliTip = tip;
-    tarifeCiz();
-    kwInfoGuncelle();
-    if (info) { info.textContent = tip + ' daire'; info.style.color = 'var(--accent)'; }
-  } else if (val && val.length >= 3) {
-    if (info) { info.textContent = 'Geçersiz oda no'; info.style.color = 'var(--danger)'; }
-  } else {
-    if (info) { info.textContent = ''; }
-  }
-}
-
-function onDateChange() { kwInfoGuncelle(); }
-
-function kwInfoGuncelle() {
-  const g = document.getElementById('girisDate')?.value;
-  const c = document.getElementById('cikisDate')?.value;
-  const info = document.getElementById('kwInfo');
-  if (!info) return;
-  if (g && c && c >= g) {
-    const gun = Math.round((new Date(c) - new Date(g)) / 86400000);
-    const limit = TARIFELER[seciliDevir][seciliTip];
-    info.classList.remove('hidden');
-    document.getElementById('kwInfoText').textContent =
-      gun + ' günlük konaklama · ' + TARIFELER[seciliDevir].label + ' devre · Limit: ' + limit + ' kW/H';
-  } else {
-    info.classList.add('hidden');
-  }
-}
-
-function meterToKWH(l1, l2, l3) {
-  return (l1 * 100 * 100) + (l2 * 100) + l3;
-}
-
-function kwhToMeter(kwh) {
-  let total = kwh;
-  let l3 = total % 100;
-  total = Math.floor(total / 100);
-  let l2 = total % 100;
-  let l1 = Math.floor(total / 100);
-  return { l1, l2, l3: parseFloat(l3.toFixed(1)) };
-}
-
-function hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3) {
-  let gKWH = meterToKWH(gL1, gL2, gL3);
-  let cKWH = meterToKWH(cL1, cL2, cL3);
-  
-  if (cKWH >= gKWH) {
-    return cKWH - gKWH;
-  } else {
-    let maxKWH = meterToKWH(9999, 99, 99.9);
-    return (maxKWH - gKWH) + cKWH;
-  }
-}
-
-const fmtNum = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
-const fmtNumInt = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:0, maximumFractionDigits:2});
-const fmtTL = n => parseFloat(n).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
-const fmtDateTr = d => { if(!d) return '—'; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; };
-
-function hesapla() {
-  const gL1 = parseInt(document.getElementById('girisL1').value) || 0;
-  const gL2 = parseInt(document.getElementById('girisL2').value) || 0;
-  const gL3 = parseFloat(document.getElementById('girisL3').value) || 0;
-  const cL1 = parseInt(document.getElementById('cikisL1').value) || 0;
-  const cL2 = parseInt(document.getElementById('cikisL2').value) || 0;
-  const cL3 = parseFloat(document.getElementById('cikisL3').value) || 0;
-  
-  const girisDate = document.getElementById('girisDate').value;
-  const cikisDate = document.getElementById('cikisDate').value;
-  const daireNo = document.getElementById('daireNo').value.trim() || '—';
-
-  if (!girisDate || !cikisDate) { alert('Lütfen tarihleri seçiniz.'); return; }
-
-  // Oda no doğrulama
-  if (daireNo !== '—' && daireNo !== '') {
-    if (!odaGecerliMi(daireNo)) {
-      showToast('Geçersiz oda numarası! (101-1518 arası ve geçerli oda olmalı)', 'error');
-      return;
-    }
-    // Tipi otomatik güncelle
-    const otomatikTip = odaTipiGetir(daireNo);
-    if (otomatikTip) {
-      seciliTip = otomatikTip;
-      document.getElementById('daireType').value = otomatikTip;
-      tarifeCiz();
-    }
-  }
-  
-  if (gL3 > 99.9 || cL3 > 99.9) {
-    alert('L3 değeri 99.9\'dan büyük olamaz!');
-    return;
-  }
-
-  const tuketim = hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3);
-  const limit = TARIFELER[seciliDevir][seciliTip];
-  const fark = tuketim - limit;
-  const asmis = fark > 0;
-  const gun = Math.round((new Date(cikisDate) - new Date(girisDate)) / 86400000);
-  const bedel = asmis ? fark * BIRIM : 0;
-
-  const hero = document.getElementById('heroCard');
-  hero.className = 'result-hero anim ' + (asmis ? 'amber' : 'green');
-  document.getElementById('heroLabel').textContent = asmis ? 'Aşılan Tüketim' : 'Toplam Tüketim';
-  document.getElementById('heroVal').textContent = fmtNumInt(asmis ? fark : tuketim);
-  document.getElementById('heroSub').innerHTML = asmis
-    ? fmtNumInt(tuketim) + ' kW/H tüketildi — limitin <strong>' + fmtNumInt(fark) + ' kW/H</strong> üzerinde'
-    : '<strong>' + fmtNumInt(limit - tuketim) + ' kW/H</strong> kullanılmamış limit kaldı';
-
-  const badge = document.getElementById('heroBadge');
-  badge.className = 'rh-badge ' + (asmis ? 'warn' : 'ok');
-  badge.textContent = asmis ? '⚠ Limit Aşıldı — Fark Bedeli Tahsil Edilecek' : '✓ Limit Dahilinde';
-
-  document.getElementById('m1').textContent = fmtNumInt(tuketim);
-  document.getElementById('m2').textContent = fmtNumInt(limit);
-  document.getElementById('m3').innerHTML = `${gL1}.${gL2}.${gL3.toFixed(1)}`;
-  document.getElementById('m4').innerHTML = `${cL1}.${cL2}.${cL3.toFixed(1)}`;
-
-  const bedelBox = document.getElementById('bedelBox');
-  if (asmis) {
-    bedelBox.classList.remove('hidden');
-    document.getElementById('bAsan').textContent = fmtNumInt(fark) + ' kW/H';
-    document.getElementById('bToplam').textContent = fmtTL(bedel);
-  } else {
-    bedelBox.classList.add('hidden');
-  }
-
-  document.getElementById('dDaire').innerHTML = daireNo + '  <span style="font-size:11px;color:var(--muted)">(' + seciliTip + ')</span>';
-  document.getElementById('dTarih').textContent = fmtDateTr(girisDate) + ' – ' + fmtDateTr(cikisDate);
-  document.getElementById('dGun').textContent = gun + ' gün';
-  document.getElementById('dDevre').textContent = TARIFELER[seciliDevir].label + ' · ' + limit + ' kW/H';
-  const dDurum = document.getElementById('dDurum');
-  dDurum.innerHTML = asmis ? '⚠ ' + fmtNumInt(fark) + ' kW/H aşıldı · ' + fmtTL(bedel) + ' ₺ bedel' : '✓ Limit dahilinde, bedel yok';
-  dDurum.style.color = asmis ? 'var(--amber)' : 'var(--accent)';
-
-  const wrap = document.getElementById('sonucWrap');
-  wrap.classList.remove('hidden');
-  wrap.style.display = 'flex';
-  setTimeout(() => wrap.scrollIntoView({behavior:'smooth',block:'start'}), 50);
-}
-
-function sifirla() {
-  document.getElementById('girisL1').value = '0';
-  document.getElementById('girisL2').value = '0';
-  document.getElementById('girisL3').value = '0';
-  document.getElementById('cikisL1').value = '0';
-  document.getElementById('cikisL2').value = '0';
-  document.getElementById('cikisL3').value = '0';
-  document.getElementById('daireNo').value = '';
-  document.getElementById('girisDate').value = today();
-  document.getElementById('cikisDate').value = today();
-  const wrap = document.getElementById('sonucWrap');
-  wrap.classList.add('hidden');
-  wrap.style.display = 'none';
-  document.getElementById('kwInfo').classList.add('hidden');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
 /* readonly / token */
 const _p=new URLSearchParams(location.search);
 const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih'),_type=_p.get('type');
 
-function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
+function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
 async function showReadonlyEntry(oda, mod, tarih, entryType) {
-  
-  // ── ÇİFT KAYIT MODU ──
-  if (entryType === 'pair') {
-    // Token'dan paired_date'i al
-    const tokenData = await api(
-      `/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`
-    ).then(r => r.json()).catch(() => []);
-    
-    const cikisDate = tokenData[0]?.paired_date;
-    if (!cikisDate) { showAccessError(); return; }
-    
-    const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
-    const isE = mod === 'elektrik';
-    q('topbar-title').textContent = `${label} ${oda}`;
-    q('topbar-sub').textContent = `${fmtDate(tarih)} – ${fmtDate(cikisDate)} · Salt okunur`;
-    const el = q('sresult');
-    el.innerHTML = '<div class="empty">Yükleniyor...</div>';
-    
-    try {
-      // Giriş ve çıkış kayıtlarını ayrı ayrı çek
-      const [girisData, cikisData] = await Promise.all([
-        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&type=eq.giris`).then(r => r.json()),
-        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(cikisDate)}&mode=eq.${encodeURIComponent(mod)}&type=eq.cikis`).then(r => r.json())
-      ]);
-      
-      const giris = girisData[0];
-      const cikis = cikisData[0];
-      
-      if (!giris && !cikis) { 
-        el.innerHTML = '<div class="empty">Kayıt bulunamadı</div>'; 
-        return; 
-      }
-      
-      let ei = 0;
-      entryImages = {};
-      entryData = {};
-      
-      const totalP = (giris?.photo_urls?.length || 0) + (cikis?.photo_urls?.length || 0);
-      let html = `<div class="room-header"><div class="room-num e">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cikisDate)} · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
-      
-      // Giriş ve çıkış kartlarını yan yana göster
-      const girisEl = giris ? buildReadonlyCard(giris, ei++, isE) : '';
-      const cikisEl = cikis ? buildReadonlyCard(cikis, ei++, isE) : '';
-      
-      html += `<div style="margin-top:14px;">
-        <div class="entries-grid">${girisEl}${cikisEl}</div>`;
-      
-      // Hesapla butonu — değerleri doldur
-      if (giris && cikis) {
-        const gmv = giris.meter_values || {};
-        const cmv = cikis.meter_values || {};
-        const gL1 = parseInt(gmv.l1)||0, gL2 = parseInt(gmv.l2)||0, gL3 = parseFloat(gmv.l3)||0;
-        const cL1 = parseInt(cmv.l1)||0, cL2 = parseInt(cmv.l2)||0, cL3 = parseFloat(cmv.l3)||0;
-        
-        // Tüketimi hesapla ve göster
-        const tuketim = hesaplaTuketim(gL1, gL2, gL3, cL1, cL2, cL3);
-        const tip = odaTipiGetir(oda) || '1+1';
-        // Gün hesapla
-        const gun = Math.round((new Date(cikisDate) - new Date(tarih)) / 86400000);
-        const devir = gun <= 7 ? '7gun' : '15gun';
-        const limit = TARIFELER[devir][tip];
-        const fark = tuketim - limit;
-        const asmis = fark > 0;
-        const bedel = asmis ? fark * 30 : 0;
-        
-        html += `<div style="margin-top:12px;background:${asmis?'linear-gradient(135deg,#92400e,#b45309)':'linear-gradient(135deg,#1a5c3a,#2d7a52)'};border-radius:var(--radius);padding:16px;color:#fff;">
-          <div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">${asmis?'AŞILAN TÜKETİM':'TOPLAM TÜKETİM'}</div>
-          <div style="font-family:'DM Mono',monospace;font-size:36px;font-weight:500;line-height:1">${fmtNumInt(asmis?fark:tuketim)}<span style="font-size:14px;color:rgba(255,255,255,.65);margin-left:4px">kW/H</span></div>
-          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:6px">${asmis?fmtNumInt(tuketim)+' kW/H tüketildi — limitin '+fmtNumInt(fark)+' kW/H üzerinde':'Kullanılmamış limit: '+fmtNumInt(limit-tuketim)+' kW/H'}</div>
-          <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;margin-top:10px;background:rgba(255,255,255,.15);color:#fff">${asmis?'⚠ Limit Aşıldı':'✓ Limit Dahilinde'}</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
-            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Konaklama</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${gun} gün</div></div>
-            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Tanınan Limit</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${limit} kW/H</div></div>
-            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Giriş Sayacı</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${gL1}.${gL2}.${gL3.toFixed(1)}</div></div>
-            <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.55);margin-bottom:3px">Çıkış Sayacı</div><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">${cL1}.${cL2}.${cL3.toFixed(1)}</div></div>
-          </div>
-          ${asmis?`<div style="background:rgba(255,220,80,.22);border-radius:10px;padding:12px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600;color:#ffe066">Tahsil Edilecek Bedel</span><span style="font-family:'DM Mono',monospace;font-size:22px;font-weight:600;color:#ffe066">${fmtTL(bedel)} ₺</span></div>`:''}
-        </div>`;
-      }
-      
-      html += `</div>`;
-      el.innerHTML = html;
-      
-    } catch(e) {
-      el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>';
-    }
-return; // pair modunda buradan çık
-  }
-
-  // ── NORMAL TEK KAYIT MODU ──
   const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
   const isE = mod === 'elektrik';
   q('topbar-title').textContent = `${label} ${oda}`;
@@ -1878,7 +1179,6 @@ function buildReadonlyCard(entry, ei, isE) {
   const cats=entry.category?entry.category.split(',').filter(Boolean):[];
   const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}</div>`).join('');
   const mv=isE&&entry.meter_values?`<div style="display:flex;gap:6px;margin-top:8px;font-size:12px;font-family:'DM Mono',monospace;flex-wrap:wrap;"><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L1: ${entry.meter_values.l1}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L2: ${entry.meter_values.l2}</span><span style="background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:6px;font-weight:600;border:1px solid #b7f0c8;">L3: ${entry.meter_values.l3}</span></div>`:'';
-  const typeBadgeClass=isE?(entry.type==='cikis'?'e':''):'';
   return`<div class="entry-card">
     <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
       <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
@@ -1898,19 +1198,19 @@ function buildReadonlyCard(entry, ei, isE) {
 /* init */
 if(_oda&&_token){
   document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';
-  q('s0').classList.add('active'); // Bu satırı ekleyin
-  q('s1').remove();q('s2').remove();q('s3').remove();q('s4').remove();
+  q('s0').classList.add('active');
+  q('s1').remove();q('s2').remove();q('s3').remove();
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
-  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
+  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
     .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda, _m, _tarih, _type);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
 }else if(_oda&&!_token){showAccessError();}
 else{
   q('f-date').value=today();
   let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
   setMode(savedMode);checkConn();
-  try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=4){if(sv===3&&savedMode!=='elektrik')goTab(0);else if(sv===4&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
+  try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=3){if(sv===3&&savedMode!=='elektrik')goTab(0);else goTab(sv);}else startTimer();}catch(e){startTimer();}
 }
 </script>
 </body>
