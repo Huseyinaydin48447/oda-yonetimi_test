@@ -1089,6 +1089,56 @@ const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get
 function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();q('s3').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
 
 async function showReadonlyEntry(oda, mod, tarih, entryType) {
+  // ── ÇİFT KAYIT MODU (type=pair) ──
+  if (entryType === 'pair') {
+    const tokenData = await api(
+      `/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`
+    ).then(r => r.json()).catch(() => []);
+    
+    const cikisDate = tokenData[0]?.paired_date;
+    if (!cikisDate) { showAccessError(); return; }
+    
+    const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
+    const isE = mod === 'elektrik';
+    q('topbar-title').textContent = `${label} ${oda}`;
+    q('topbar-sub').textContent = `${fmtDate(tarih)} – ${fmtDate(cikisDate)} · Salt okunur`;
+    const el = q('sresult');
+    el.innerHTML = '<div class="empty">Yükleniyor...</div>';
+    
+    try {
+      const [girisData, cikisData] = await Promise.all([
+        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&type=eq.giris`).then(r => r.json()),
+        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(cikisDate)}&mode=eq.${encodeURIComponent(mod)}&type=eq.cikis`).then(r => r.json())
+      ]);
+      
+      const giris = girisData[0];
+      const cikis = cikisData[0];
+      
+      if (!giris && !cikis) { 
+        el.innerHTML = '<div class="empty">Kayıt bulunamadı</div>'; 
+        return; 
+      }
+      
+      let ei = 0;
+      entryImages = {};
+      entryData = {};
+      
+      const totalP = (giris?.photo_urls?.length || 0) + (cikis?.photo_urls?.length || 0);
+      let html = `<div class="room-header"><div class="room-num e">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cikisDate)} · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
+      
+      const girisEl = giris ? buildReadonlyCard(giris, ei++, isE) : '';
+      const cikisEl = cikis ? buildReadonlyCard(cikis, ei++, isE) : '';
+      
+      html += `<div style="margin-top:14px;"><div class="entries-grid">${girisEl}${cikisEl}</div></div>`;
+      el.innerHTML = html;
+      
+    } catch(e) {
+      el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>';
+    }
+    return;
+  }
+
+  // ── NORMAL TEK KAYIT MODU ──
   const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
   const isE = mod === 'elektrik';
   q('topbar-title').textContent = `${label} ${oda}`;
@@ -1147,7 +1197,7 @@ if(_oda&&_token){
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
-  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
+  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
     .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda, _m, _tarih, _type);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
 }else if(_oda&&!_token){showAccessError();}
 else{
