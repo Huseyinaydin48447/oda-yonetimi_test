@@ -51,6 +51,7 @@
   .search-wrap input::placeholder{font-weight:400}
   .room-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .room-num{background:var(--accent-light);color:var(--accent);font-size:22px;font-weight:600;padding:6px 14px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;flex-shrink:0}
+  .room-num.e{background:var(--amber-light);color:var(--amber)}
   .room-summary{flex:1}
   .room-summary strong{font-size:14px;font-weight:500;display:block}
   .room-summary span{font-size:12px;color:var(--muted)}
@@ -58,6 +59,7 @@
   .entry-head{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
   .entry-head:active{background:var(--surface2)}
   .date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;flex-shrink:0}
+  .date-badge.e{background:var(--amber-light);color:var(--amber)}
   .entry-meta{flex:1;min-width:0;overflow:hidden}
   .entry-meta .cat{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .entry-meta .nt{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -190,12 +192,12 @@
   .ml-stat-v{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
   .ml-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
   .ml-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto;}
-  .ml-head{display:grid;grid-template-columns:60px 60px 100px 100px 1fr;background:var(--surface2);border-bottom:1px solid var(--border);min-width:420px;}
+  .ml-head{display:grid;grid-template-columns:55px 60px 85px 85px 80px;background:var(--surface2);border-bottom:1px solid var(--border);min-width:365px;}
   .ml-head span{font-size:10px;font-weight:600;color:var(--muted);padding:7px 3px;text-align:center;white-space:nowrap;}
   .ml-head span:first-child{text-align:left;padding-left:8px;}
   .ml-head .hg{color:var(--accent);}
   .ml-head .hc{color:var(--amber);}
-  .ml-row{display:grid;grid-template-columns:60px 60px 100px 100px 1fr;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;min-width:420px;}
+  .ml-row{display:grid;grid-template-columns:55px 60px 85px 85px 80px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;min-width:365px;}
   .ml-row:last-child{border-bottom:none;}
   .ml-row:active{background:var(--surface2);}
   .ml-row.gr{border-left:3px solid var(--accent);}
@@ -210,7 +212,9 @@
   .ml-c.dt.gdt{color:var(--accent);}
   .ml-c.dt.cdt{color:var(--amber);}
   .ml-c.dt.empty-dt{color:var(--muted);font-weight:400;}
-  .ml-c.nt{font-size:10px;color:var(--muted);text-align:left;padding:4px 6px;}
+  .ml-c.lnk{padding:4px 3px;}
+  .ml-link-btn{padding:4px 10px;font-size:10px;font-weight:600;border-radius:6px;border:1px solid var(--accent-mid);background:var(--accent-light);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+  .ml-link-btn:active{background:#c5e0d0;}
   .ml-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;}
   .spacer{height:80px}
 </style>
@@ -268,7 +272,6 @@
   <!-- EKLE -->
   <div class="screen" id="s1">
     <div class="status-bar"><div class="status-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
-    
     <div class="field" id="donem-field">
       <span class="label">Dönem Aralığı</span>
       <select id="f-donem">
@@ -299,7 +302,6 @@
         <option value="17 - 31 Aralık">24. Dönem: 17 - 31 Aralık</option>
       </select>
     </div>
-    
     <div class="field" id="io-type-field" style="display:none;">
       <span class="label">İşlem Türü</span>
       <select id="f-type"><option value="giris">Giriş</option><option value="cikis">Çıkış</option></select>
@@ -675,6 +677,38 @@ async function createEntryLink(roomNo, date, mod, btnEl, entryType) {
   }
 }
 
+async function createPairLink(roomNo, girisDate, cikisDate, mod, btnEl) {
+  const orig = btnEl.innerHTML;
+  btnEl.innerHTML = '<span class="loader" style="border-top-color:var(--accent)"></span>';
+  btnEl.disabled = true;
+  try {
+    const token = genToken();
+    await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_date=eq.${encodeURIComponent(girisDate)}&entry_type=eq.pair`, {
+      method: 'DELETE',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY }
+    });
+    const r = await fetch(`${SB}/rest/v1/tokens`, {
+      method: 'POST',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ 
+        room_no: roomNo, mod: mod, token: token, 
+        entry_date: girisDate, entry_type: 'pair',
+        paired_date: cikisDate
+      })
+    });
+    if (!r.ok) throw new Error('Token kaydedilemedi');
+    const url = `${location.origin + location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(girisDate)}&token=${token}&type=pair`;
+    navigator.clipboard.writeText(url)
+      .then(() => showToast('Çift kayıt linki kopyalandı!', 'success'))
+      .catch(() => { prompt('Linki kopyalayın:', url); });
+  } catch (e) {
+    showToast('Hata: ' + e.message, 'error');
+  } finally {
+    btnEl.innerHTML = orig;
+    btnEl.disabled = false;
+  }
+}
+
 /* image helpers */
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
 async function addFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);pending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++;}renderPrev();if(cc>0){const s=Math.round((1-tn/to)*100);se.innerHTML=`<div class="compress-info"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>${cc} fotoğraf sıkıştırıldı · %${s} küçültüldü (${fmtBytes(to)} → ${fmtBytes(tn)})</div>`;}}
@@ -760,7 +794,15 @@ async function doSearch(val,silent=false){
         if(giris&&cikis){
           const giEl=buildEntryCard(giris,gi++,true,false);
           const ciEl=buildEntryCard(cikis,gi++,true,false);
-          html += `<div style="margin-top:14px;"><div class="entries-grid">${giEl}${ciEl}</div></div>`;
+          html += `<div style="margin-top:14px;">
+            <div class="entries-grid">${giEl}${ciEl}</div>
+            <div style="margin-top:8px;display:flex;justify-content:center;gap:8px;">
+              <button style="padding:9px 22px;background:var(--surface);color:var(--accent);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;" onclick="createPairLink('${giris.room_no}','${giris.checkin_date}','${cikis.checkin_date}','${mode}',this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Link
+              </button>
+            </div>
+          </div>`;
         } else if(giris){
           html+=`<div style="margin-top:14px;">${buildEntryCard(giris,gi++,true,false)}</div>`;
         } else if(cikis){
@@ -957,13 +999,14 @@ function renderMeterList(){
       const cDate=cEntry?.checkin_date||'';
       const hasPair=!!cEntry;
       const cDateHtml=hasPair?`<div class="ml-c dt cdt">${fmtShort(cDate)}</div>`:`<div class="ml-c dt empty-dt">—</div>`;
+      const linkHtml=hasPair?`<div class="ml-c lnk"><button class="ml-link-btn" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${cDate}','${mode}',this)">Link</button></div>`:`<div class="ml-c"></div>`;
 
       rows+=`<div class="ml-row ${hasPair?'paired':'gr'}" onclick="goRoom('${e.room_no}')">
         <div class="ml-c rb"><span class="${hasPair?'paired':''}">${e.room_no}</span></div>
         <div class="ml-c kb"><span>${katL}</span></div>
         <div class="ml-c dt gdt">${fmtShort(e.checkin_date)}</div>
         ${cDateHtml}
-        <div class="ml-c nt">${e.note||'—'}</div>
+        ${linkHtml}
       </div>`;
     } else if(!shownCikisIds.has(e.id)){
       rows+=`<div class="ml-row cr" onclick="goRoom('${e.room_no}')">
@@ -971,7 +1014,7 @@ function renderMeterList(){
         <div class="ml-c kb"><span>${katL}</span></div>
         <div class="ml-c dt empty-dt">—</div>
         <div class="ml-c dt cdt">${fmtShort(e.checkin_date)}</div>
-        <div class="ml-c nt">${e.note||'—'}</div>
+        <div class="ml-c"></div>
       </div>`;
     }
   });
@@ -981,7 +1024,7 @@ function renderMeterList(){
     <span>Kat</span>
     <span class="hg">Giriş</span>
     <span class="hc">Çıkış</span>
-    <span>Not</span>
+    <span></span>
   </div>${rows}`;
 }
 
