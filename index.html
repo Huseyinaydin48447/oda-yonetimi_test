@@ -5,232 +5,256 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Oda Yönetimi · Demirbaş & Elektrik</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
-  :root {
-    --bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:#e2e1d9;
-    --text:#1a1a18;--muted:#7a7a72;--accent:#1a5c3a;--accent-light:#e8f2ec;
-    --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
-    --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
-    --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:15px; }
-  .app { max-width:1300px; margin:0 auto; min-height:100vh; background:var(--bg); }
-  .topbar { background:var(--accent); padding:10px 16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:sticky; top:0; z-index:100; }
-  .topbar h1 { font-size:16px; font-weight:700; color:#fff; }
-  .topbar p { font-size:11px; color:rgba(255,255,255,.65); margin:0; }
-  .mode-btns { display:flex; gap:5px; margin-left:auto; }
-  .mode-btn { padding:5px 10px; font-size:11px; font-weight:600; border-radius:99px; cursor:pointer; border:1.5px solid rgba(255,255,255,.25); background:transparent; color:rgba(255,255,255,.7); transition:all .15s; font-family:'DM Sans',sans-serif; }
-  .mode-btn.active { background:rgba(255,255,255,.25); border-color:rgba(255,255,255,.6); color:#fff; }
-  .conn-badge { font-size:10px; color:#ccc; display:flex; align-items:center; gap:4px; padding:2px 8px; background:rgba(0,0,0,0.2); border-radius:20px; }
-  .conn-dot { width:6px; height:6px; border-radius:50%; background:#aaa; }
-  .conn-dot.ok { background:#4caf50; }
-  .stat-badge { display:flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); cursor:default; }
-  .stat-badge .count { font-size:14px; font-weight:700; }
-  .sb-dolu-temiz { background:#1565c0; } .sb-dolu-kirli { background:#6a1a9a; } .sb-cout { background:#2e7d32; }
-  .sb-temiz { background:#4caf50; color:#000; } .sb-kirli { background:#ff6d00; } .sb-ooi { background:#880e4f; }
-  .sb-ariza { background:#546e7a; } .sb-onaylı { background:#4a148c; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root {
+--bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:#e2e1d9;
+--text:#1a1a18;--muted:#7a7a72;--accent:#1a5c3a;--accent-light:#e8f2ec;
+--accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
+--amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
+--shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+.app{max-width:550px;margin:0 auto;min-height:100vh;background:var(--bg)}
+.app.wide{max-width:1300px}
 
-  .nav { display:flex; background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:48px; z-index:99; overflow-x:auto; }
-  .nav-btn { flex:1; padding:11px 4px; font-size:12px; font-weight:500; border:none; background:transparent; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; font-family:'DM Sans',sans-serif; white-space:nowrap; }
-  .nav-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
-  .screen { display:none; padding:16px; }
-  .screen.active { display:block; }
-  input,select,textarea { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:15px; background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif; -webkit-appearance:none; }
-  input:focus,select:focus,textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(26,92,58,.1); }
-  .field { margin-bottom:14px; } .label { font-size:12px; color:var(--muted); margin-bottom:5px; display:block; font-weight:500; }
-  .btn { padding:11px 18px; border-radius:var(--radius-sm); font-size:14px; font-weight:500; cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:6px; }
-  .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .btn-danger { background:var(--danger-light); color:var(--danger); border-color:#f5c6c2; }
-  .tags-row { display:flex; flex-wrap:wrap; gap:6px; }
-  .tag { padding:5px 12px; border-radius:99px; font-size:12px; font-weight:500; border:1px solid var(--border); cursor:pointer; color:var(--muted); background:var(--surface); }
-  .tag.on { background:var(--accent-light); color:var(--accent); border-color:var(--accent-mid); }
-  .drop-zone { border:1.5px dashed var(--border); border-radius:var(--radius); padding:14px; text-align:center; cursor:pointer; background:var(--surface2); }
-  .drop-zone.over { border-color:var(--accent); background:var(--accent-light); }
-  .prev-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
-  .prev-item { position:relative; width:80px; height:60px; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); }
-  .prev-item img { width:100%; height:100%; object-fit:cover; }
-  .prev-del { position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:rgba(192,57,43,.85); color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:600; }
-  .compress-info { font-size:11px; color:var(--accent); background:var(--accent-light); border-radius:99px; padding:2px 10px; display:inline-flex; align-items:center; gap:4px; margin-top:6px; }
-  .progress-bar-wrap { height:4px; background:var(--surface2); border-radius:99px; overflow:hidden; margin-top:8px; display:none; }
-  .progress-bar-wrap.show { display:block; } .progress-bar { height:100%; background:var(--accent); border-radius:99px; width:0; }
-  .empty { text-align:center; padding:40px 16px; color:var(--muted); font-size:14px; }
-  .empty-icon { width:48px; height:48px; margin:0 auto 12px; opacity:.3; }
-  .room-header { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .room-num { background:var(--accent-light); color:var(--accent); font-size:22px; font-weight:600; padding:6px 14px; border-radius:var(--radius-sm); font-family:'DM Mono',monospace; }
-  .room-num.e { background:var(--amber-light); color:var(--amber); }
-  .entry-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:10px; }
-  .entry-head { padding:10px 14px; display:flex; align-items:center; gap:8px; cursor:pointer; }
-  .entry-head:active { background:var(--surface2); }
-  .date-badge { display:inline-flex; align-items:center; gap:5px; background:var(--accent-light); color:var(--accent); font-size:12px; font-weight:600; padding:4px 10px; border-radius:99px; }
-  .date-badge.e { background:var(--amber-light); color:var(--amber); }
-  .entry-meta { flex:1; min-width:0; } .entry-meta .cat { font-size:11px; color:var(--muted); }
-  .entry-count { font-size:11px; color:var(--muted); background:var(--surface2); border-radius:99px; padding:3px 8px; }
-  .chevron { transition:transform .2s; } .chevron.open { transform:rotate(90deg); }
-  .entry-body { display:none; } .entry-body.open { display:block; }
-  .img-scroll { display:flex; gap:8px; overflow-x:auto; padding:12px 14px; }
-  .img-thumb { width:120px; height:90px; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer; position:relative; }
-  .img-thumb img { width:100%; height:100%; object-fit:cover; }
-  .entry-footer { border-top:1px solid var(--border); padding:8px 14px; display:flex; justify-content:space-between; gap:8px; background:var(--surface2); flex-wrap:wrap; }
-  .link-btn { padding:6px 12px; border-radius:99px; font-size:12px; font-weight:500; border:1px solid var(--border); background:var(--surface); color:var(--accent); cursor:pointer; }
-  .wa-btn { color:#25D366; border-color:#b7f0c8; background:#eafaf0; }
-  .edit-btn { color:var(--amber); }
-  .del-btn { color:var(--danger); border-color:#f5c6c2; background:var(--danger-light); }
-  .edit-panel { display:none; padding:12px 14px; border-top:1px solid var(--border); background:var(--surface2); }
-  .edit-panel.open { display:block; }
-  .all-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:10px; cursor:pointer; }
-  .all-card-inner { padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.topbar{background:var(--accent);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar h1{font-size:16px;font-weight:600;color:#fff}
+.topbar p{font-size:11px;color:rgba(255,255,255,.65);margin-top:1px}
+.mode-btns{display:flex;gap:5px;flex-shrink:0}
+.mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
+.mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
+.conn-badge{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px;padding:2px 8px;background:rgba(0,0,0,0.2);border-radius:20px;margin-left:auto}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:#aaa}
+.conn-dot.ok{background:#4caf50}
 
-  /* SAYAÇ GRID */
-  .grid-container { padding:12px; overflow-x:auto; }
-  .floor-section { margin-bottom:8px; }
-  .floor-label { font-size:13px; color:var(--muted); margin-bottom:4px; font-weight:600; }
-  .room-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(55px, 1fr)); gap:4px; }
-  .room-cell { height:38px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; cursor:pointer; border:1px solid rgba(0,0,0,0.05); position:relative; background:var(--surface); color:var(--text); transition:transform 0.1s; }
-  .room-cell:hover { transform:scale(1.06); z-index:2; filter:brightness(1.15); }
-  .status-dolu-temiz{background:#1565c0;color:#fff}.status-dolu-kirli{background:#6a1a9a;color:#fff}.status-cout{background:#2e7d32;color:#fff}.status-temiz{background:#4caf50;color:#fff}.status-temiz-b{background:#009688;color:#fff}.status-kirli{background:#ff6d00;color:#fff}.status-kirli-b{background:#d32f2f;color:#fff}.status-ooi{background:#880e4f;color:#fff}.status-ariza{background:#546e7a;color:#fff}.status-onaylı{background:#4a148c;color:#fff}.status-onaylı-b{background:#7b1fa2;color:#fff}.status-bos{background:#fff;color:#888;border:1px dashed #ccc}
-  .room-flag { position:absolute; top:2px; right:2px; width:6px; height:6px; border-radius:50%; background:#00e5ff; }
-  .panel-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:500; }
-  .panel-overlay.open { display:block; }
-  .room-panel { position:fixed; top:0; right:0; bottom:0; width:540px; max-width:100vw; background:var(--surface); z-index:501; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.28s; overflow:hidden; box-shadow:-4px 0 20px rgba(0,0,0,0.15); }
-  .room-panel.open { transform:translateX(0); }
-  .panel-header { background:var(--accent); padding:14px 18px; display:flex; align-items:center; justify-content:space-between; }
-  .panel-header h2 { font-size:15px; color:#fff; }
-  .panel-room-badge { background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:6px; font-size:20px; font-weight:700; color:#fff; margin-right:10px; }
-  .panel-close { background:none; border:none; color:#fff; font-size:20px; cursor:pointer; }
-  .panel-tabs { display:flex; border-bottom:1px solid var(--border); }
-  .ptab { flex:1; padding:12px; text-align:center; font-size:13px; font-weight:600; border:none; background:transparent; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; }
-  .ptab.active { color:var(--accent); border-bottom-color:var(--accent); }
-  .panel-body { flex:1; overflow-y:auto; }
-  .tab-pane { display:none; padding:14px 16px; }
-  .tab-pane.active { display:block; }
-  .type-badge { padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; }
-  .type-badge.giris { background:#e8f2ec; color:#1a5c3a; }
-  .type-badge.cikis { background:#fef3c7; color:#b45309; }
-  .elegant-form { background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
-  .form-section { margin-bottom:16px; }
-  .form-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-  .type-btns { display:flex; gap:8px; }
-  .type-btn { flex:1; padding:14px; border-radius:var(--radius-sm); font-size:14px; font-weight:700; border:2px solid var(--border); background:var(--surface2); cursor:pointer; text-align:center; }
-  .type-btn.active-giris { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
-  .type-btn.active-cikis { border-color:var(--amber); background:var(--amber-light); color:var(--amber); }
-  .photo-drop { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:20px; text-align:center; cursor:pointer; background:var(--surface2); }
-  .photo-drop:hover { border-color:var(--accent); background:var(--accent-light); }
-  .list-container { display:none; padding:12px; }
-  .list-container.active { display:block; }
-  .grid-container.hidden { display:none; }
-  .readonly-view { display:none; padding:16px; }
-  .readonly-view.active { display:block; }
-  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000; flex-direction:column; }
-  .lightbox.open { display:flex; }
-  .lb-top { display:flex; justify-content:space-between; padding:10px 14px; }
-  .lb-close { background:none; border:none; color:#fff; font-size:20px; cursor:pointer; }
-  .lb-img-wrap { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-  .lb-img-wrap img { max-width:100%; max-height:100%; object-fit:contain; }
-  .lb-nav { display:flex; gap:10px; justify-content:center; padding:10px; }
-  .lb-btn { padding:6px 16px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; cursor:pointer; }
-  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--text); color:#fff; padding:10px 20px; border-radius:20px; font-size:13px; z-index:9999; display:none; white-space:nowrap; }
-  .toast.show { display:block; } .toast.success { background:var(--accent); } .toast.error { background:var(--danger); }
-  .confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; }
-  .confirm-overlay.open { display:flex; }
-  .confirm-sheet { background:var(--surface); border-radius:var(--radius); padding:20px; width:320px; }
-  .confirm-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; }
-  .ml-cikis-btn { padding:5px 10px; font-size:11px; font-weight:600; border-radius:6px; border:1px solid #e8a020; background:var(--amber-light); color:var(--amber); cursor:pointer; }
-  .loader { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+.nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto}
+.nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.screen{display:none;padding:16px}
+.screen.active{display:block}
+
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,92,58,.1)}
+.field{margin-bottom:14px}
+.label{font-size:12px;color:var(--muted);margin-bottom:5px;display:block;font-weight:500}
+.btn{padding:11px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);width:100%;justify-content:center;padding:13px;font-size:15px}
+.btn-primary:active{background:#144d31}
+.btn-primary:disabled{background:var(--muted);border-color:var(--muted);cursor:not-allowed}
+.btn-sm{padding:9px 14px;font-size:13px}
+.btn-danger{background:var(--danger-light);color:var(--danger);border-color:#f5c6c2}
+.wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0}
+.search-wrap{display:flex;gap:8px;margin-bottom:16px}
+.room-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.room-num{background:var(--accent-light);color:var(--accent);font-size:22px;font-weight:600;padding:6px 14px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;flex-shrink:0}
+.room-num.e{background:var(--amber-light);color:var(--amber)}
+.room-summary{flex:1}
+.room-summary strong{font-size:14px;font-weight:500;display:block}
+.entry-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.entry-head{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.entry-head:active{background:var(--surface2)}
+.date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;flex-shrink:0}
+.date-badge.e{background:var(--amber-light);color:var(--amber)}
+.entry-meta{flex:1;min-width:0;overflow:hidden}
+.entry-count{font-size:11px;color:var(--muted);background:var(--surface2);border-radius:99px;padding:3px 8px;white-space:nowrap;flex-shrink:0}
+.chevron{transition:transform .2s;flex-shrink:0}
+.chevron.open{transform:rotate(90deg)}
+.entry-body{display:none}
+.entry-body.open{display:block}
+.img-scroll{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;scrollbar-width:none}
+.img-thumb{width:120px;height:90px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);flex-shrink:0;cursor:pointer;position:relative}
+.img-thumb img{width:100%;height:100%;object-fit:cover}
+.entry-footer{border-top:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface2);flex-wrap:wrap}
+.link-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif}
+.edit-btn{color:var(--amber)}
+.del-btn{color:var(--danger);border-color:#f5c6c2;background:var(--danger-light)}
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);cursor:pointer;color:var(--muted);background:var(--surface);transition:all .12s;font-family:'DM Sans',sans-serif}
+.tag.on{background:var(--accent-light);color:var(--accent);border-color:var(--accent-mid)}
+.drop-zone{border:1.5px dashed var(--border);border-radius:var(--radius);padding:14px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface2);margin-bottom:0}
+.drop-zone.over{border-color:var(--accent);background:var(--accent-light)}
+.prev-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.prev-item{position:relative;width:80px;height:60px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+.prev-item img{width:100%;height:100%;object-fit:cover}
+.prev-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(192,57,43,.85);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:600}
+.all-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;cursor:pointer}
+.all-card:active{background:var(--surface2)}
+.all-card-inner{padding:12px 14px;display:flex;align-items:center;gap:10px}
+.empty{text-align:center;padding:40px 16px;color:var(--muted);font-size:14px}
+.compress-info{font-size:11px;color:var(--accent);background:var(--accent-light);border-radius:99px;padding:2px 10px;display:inline-flex;align-items:center;gap:4px;margin-top:6px}
+.progress-bar-wrap{height:4px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:8px;display:none}
+.progress-bar-wrap.show{display:block}
+.progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .2s;width:0}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:99px;z-index:9999;display:none;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.toast.show{display:block}
+.toast.success{background:var(--accent)}
+.toast.error{background:var(--danger)}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;flex-direction:column}
+.lightbox.open{display:flex}
+.lb-top{display:flex;justify-content:space-between;padding:10px 14px}
+.lb-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+.lb-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lb-img-wrap img{max-width:100%;max-height:100%;object-fit:contain}
+.lb-nav{display:flex;gap:10px;justify-content:center;padding:10px}
+.lb-btn{padding:6px 16px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:6px;cursor:pointer}
+.loader{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:flex-end;justify-content:center;padding:16px}
+.confirm-overlay.open{display:flex}
+.confirm-sheet{background:var(--surface);border-radius:var(--radius);padding:20px;width:100%;max-width:448px}
+.confirm-sheet h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.confirm-actions{display:flex;gap:8px}
+.confirm-actions .btn{flex:1;justify-content:center}
+.ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+
+/* ELEKTRA GRID STILLERI */
+.stat-badge{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:#fff;background:rgba(255,255,255,0.15);cursor:default}
+.stat-badge .count{font-size:14px;font-weight:700}
+.sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}
+.sb-temiz{background:#4caf50;color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}
+.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
+.elektra-top-stats{display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)}
+.elektra-filter{display:flex;gap:8px;align-items:center;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.elektra-filter select,.elektra-filter input{width:auto;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
+.grid-container{padding:12px;overflow-x:auto}
+.floor-section{margin-bottom:8px}
+.floor-label{font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(55px,1fr));gap:4px}
+.room-cell{height:38px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(0,0,0,0.05);position:relative;background:var(--surface);color:var(--text);transition:transform 0.1s,filter 0.1s}
+.room-cell:hover{transform:scale(1.06);z-index:2;filter:brightness(1.15)}
+.room-flag{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#00e5ff}
+.status-dolu-temiz{background:#1565c0;color:#fff}.status-dolu-kirli{background:#6a1a9a;color:#fff}.status-cout{background:#2e7d32;color:#fff}.status-cout-b{background:#1b5e20;color:#fff}.status-temiz{background:#4caf50;color:#fff}.status-temiz-b{background:#009688;color:#fff}.status-kirli{background:#ff6d00;color:#fff}.status-kirli-b{background:#d32f2f;color:#fff}.status-ooi{background:#880e4f;color:#fff}.status-ariza{background:#546e7a;color:#fff}.status-onaylı{background:#4a148c;color:#fff}.status-onaylı-b{background:#7b1fa2;color:#fff}.status-bos{background:#fff;color:#888;border:1px dashed #ccc}
+.panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500}
+.panel-overlay.open{display:block}
+.room-panel{position:fixed;top:0;right:0;bottom:0;width:540px;max-width:100vw;background:var(--surface);z-index:1501;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s;overflow:hidden;box-shadow:-4px 0 20px rgba(0,0,0,0.15)}
+.room-panel.open{transform:translateX(0)}
+.panel-header{background:var(--accent);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.panel-header h2{font-size:15px;color:#fff}
+.panel-room-badge{background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:6px;font-size:20px;font-weight:700;color:#fff;margin-right:10px}
+.panel-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+.panel-tabs{display:flex;border-bottom:1px solid var(--border)}
+.ptab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif}
+.ptab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.panel-body{flex:1;overflow-y:auto}
+.tab-pane{display:none;padding:14px 16px}
+.tab-pane.active{display:block}
+.type-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.type-badge.giris{background:#e8f2ec;color:#1a5c3a}
+.type-badge.cikis{background:#fef3c7;color:#b45309}
+.elegant-form{background:var(--surface);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.form-section{margin-bottom:16px}
+.form-label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.type-btns{display:flex;gap:8px}
+.type-btn{flex:1;padding:14px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;border:2px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center}
+.type-btn.active-giris{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.type-btn.active-cikis{border-color:var(--amber);background:var(--amber-light);color:var(--amber)}
+.photo-drop{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;background:var(--surface2)}
+.photo-drop:hover{border-color:var(--accent);background:var(--accent-light)}
+.list-container{display:none;padding:12px}
+.list-container.active{display:block}
+.grid-container.hidden{display:none}
+.readonly-view{display:none;padding:16px}
+.readonly-view.active{display:block}
+.view-toggle{display:flex;gap:4px;margin-left:auto}
+.view-btn{padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer}
+.view-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <div class="topbar" id="topbar">
-    <h1 id="topbar-title">Demirbaş Takibi</h1>
-    <span id="topbar-sub" style="font-size:11px;color:rgba(255,255,255,.65)"></span>
-    <div class="conn-badge"><div class="conn-dot" id="conn-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
-    <div class="mode-btns">
-      <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
-      <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
-    </div>
-  </div>
+<div class="topbar" id="topbar">
+<div class="topbar-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg></div>
+<div style="flex:1"><h1 id="topbar-title">Demirbaş Takibi</h1><p id="topbar-sub">Bağlanıyor...</p></div>
+<div class="conn-badge"><div class="conn-dot" id="conn-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
+<div class="mode-btns">
+<button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
+<button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
+</div>
+</div>
 
-  <!-- DEMİRBAŞ -->
-  <div id="demirbas-ui">
-    <div class="nav" id="demirbas-nav">
-      <button class="nav-btn active" onclick="goDemirbasTab(0)">Ara</button>
-      <button class="nav-btn" onclick="goDemirbasTab(1)">Ekle</button>
-      <button class="nav-btn" onclick="goDemirbasTab(2)">Tüm Odalar</button>
-    </div>
-    <div id="demirbas-screens">
-      <div class="screen active" id="ds0">
-        <div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
-          <button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)" onclick="setDemirbasSearchTab('room')">Oda No</button>
-          <button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)" onclick="setDemirbasSearchTab('date')">Tarih Aralığı</button>
-        </div>
-        <div id="stab-room-content"><div class="search-wrap" style="display:flex;gap:8px"><input id="dsinput" type="number" placeholder="Oda no girin" onkeydown="if(event.key==='Enter')demirbasSearch()"><button class="btn btn-primary btn-sm" onclick="demirbasSearch()">Ara</button></div></div>
-        <div id="stab-date-content" style="display:none"><div style="display:flex;gap:8px;align-items:flex-end"><div style="flex:1"><span class="label">Başlangıç</span><input id="d-from" type="date"></div><div style="flex:1"><span class="label">Bitiş</span><input id="d-to" type="date"></div><button class="btn btn-primary btn-sm" onclick="demirbasDateSearch()">Ara</button></div></div>
-        <div id="dsresult"><div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Numara girin</div></div>
-      </div>
-      <div class="screen" id="ds1">
-        <div class="field"><span class="label">Dönem Aralığı</span><select id="f-donem"><option value="">Seçiniz</option><option>1 - 15 Ocak</option><option>16 - 30 Ocak</option></select></div>
-        <div class="field"><span class="label">Oda numarası *</span><input id="f-room" type="number" placeholder="örn: 307"></div>
-        <div class="field"><span class="label">Giriş tarihi *</span><input id="f-date" type="date"></div>
-        <div class="field"><span class="label">Kategori</span><div class="tags-row" id="f-tags"><span class="tag" onclick="this.classList.toggle('on')">1+1</span><span class="tag" onclick="this.classList.toggle('on')">2+1</span></div></div>
-        <div class="field"><span class="label">Not</span><textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea></div>
-        <div class="field"><span class="label">Fotoğraflar *</span>
-          <div class="drop-zone" id="dropz" onclick="document.getElementById('fgal').click()"><p>Fotoğraf seç veya sürükle bırak</p></div>
-          <input type="file" id="fgal" accept="image/*" multiple style="display:none" onchange="demirbasAddFiles(this.files)">
-          <div id="compress-status"></div><div class="prev-row" id="prev-row"></div>
-          <div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
-        </div>
-        <button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()">Kaydet</button>
-      </div>
-      <div class="screen" id="ds2"><div id="rlist"><div class="empty">Yükleniyor...</div></div></div>
-    </div>
-  </div>
+<!-- DEMIRBAS UI -->
+<div id="demirbas-ui">
+<div class="nav" id="main-nav">
+<button class="nav-btn active" onclick="goDemirbasTab(0)">Ara</button>
+<button class="nav-btn" onclick="goDemirbasTab(1)">Ekle</button>
+<button class="nav-btn" onclick="goDemirbasTab(2)">Tüm Odalar</button>
+</div>
+<div class="screen active" id="ds0">
+<div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
+<button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)" onclick="setDemirbasSearchTab('room')">Oda No</button>
+<button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)" onclick="setDemirbasSearchTab('date')">Tarih Aralığı</button>
+</div>
+<div id="stab-room-content"><div class="search-wrap"><input id="dsinput" type="number" placeholder="Oda no girin" onkeydown="if(event.key==='Enter')demirbasSearch()"><button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="demirbasSearch()">Ara</button></div></div>
+<div id="stab-date-content" style="display:none"><div style="display:flex;gap:8px;align-items:flex-end"><div style="flex:1"><span class="label">Başlangıç</span><input id="d-from" type="date"></div><div style="flex:1"><span class="label">Bitiş</span><input id="d-to" type="date"></div><button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);flex-shrink:0" onclick="demirbasDateSearch()">Ara</button></div></div>
+<div id="dsresult"><div class="empty">Numara girin</div></div>
+</div>
+<div class="screen" id="ds1">
+<div class="field"><span class="label">Dönem Aralığı</span><select id="f-donem"><option value="">Seçiniz</option><option>1 - 15 Ocak</option><option>16 - 30 Ocak</option></select></div>
+<div class="field"><span class="label">Oda numarası *</span><input id="f-room" type="number" placeholder="örn: 307"></div>
+<div class="field"><span class="label">Giriş tarihi *</span><input id="f-date" type="date"></div>
+<div class="field"><span class="label">Kategori</span><div class="tags-row" id="f-tags"><span class="tag" onclick="this.classList.toggle('on')">1+1</span><span class="tag" onclick="this.classList.toggle('on')">2+1</span></div></div>
+<div class="field"><span class="label">Not</span><textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea></div>
+<div class="field"><span class="label">Fotoğraflar *</span>
+<div style="display:flex;gap:10px;margin-bottom:10px">
+<button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto" onclick="document.getElementById('fcam').click()"><span>📷 Fotoğraf Çek</span></button>
+<button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto" onclick="document.getElementById('fgal').click()"><span>🖼 Galeriden Seç</span></button>
+</div>
+<div class="drop-zone" id="dropz" onclick="document.getElementById('fgal').click()"><p>veya buraya sürükle bırak</p></div>
+<input type="file" id="fgal" accept="image/*" multiple style="display:none" onchange="demirbasAddFiles(this.files)">
+<input type="file" id="fcam" accept="image/*" capture="environment" style="display:none" onchange="demirbasAddFiles(this.files)">
+<div id="compress-status"></div><div class="prev-row" id="prev-row"></div>
+<div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
+</div>
+<button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()"><span id="save-label">Kaydet</span></button>
+</div>
+<div class="screen" id="ds2"><div id="rlist"><div class="empty">Yükleniyor...</div></div></div>
+</div>
 
-  <!-- ELEKTRA -->
-  <div id="elektra-ui" style="display:none">
-    <div id="elektra-stats" style="display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)">
-      <div class="stat-badge sb-dolu-temiz"><span class="count" id="cnt-dt">0</span>Dolu Temiz</div>
-      <div class="stat-badge sb-dolu-kirli"><span class="count" id="cnt-dk">0</span>Dolu Kirli</div>
-      <div class="stat-badge sb-cout"><span class="count" id="cnt-co">0</span>C/Out</div>
-      <div class="stat-badge sb-temiz"><span class="count" id="cnt-t">0</span>Temiz</div>
-      <div class="stat-badge sb-kirli"><span class="count" id="cnt-k">0</span>Kirli</div>
-      <div class="stat-badge sb-ooi"><span class="count" id="cnt-ooi">0</span>OOI</div>
-      <div class="stat-badge sb-ariza"><span class="count" id="cnt-ar">0</span>Arıza</div>
-      <div class="stat-badge sb-onaylı"><span class="count" id="cnt-on">0</span>Onaylı</div>
-    </div>
-    <div style="padding:6px 12px;display:flex;gap:8px;align-items:center;background:var(--surface2);border-bottom:1px solid var(--border)">
-      <label style="font-size:11px;color:var(--muted)">Durum:</label>
-      <select id="efilter-status" onchange="renderElektraView()" style="font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);width:auto">
-        <option value="">Tümü</option><option value="dolu-temiz">Dolu Temiz</option><option value="dolu-kirli">Dolu Kirli</option><option value="cout">C/Out</option><option value="temiz">Temiz</option><option value="kirli">Kirli</option><option value="ooi">OOI</option><option value="ariza">Arıza</option><option value="onaylı">Onaylı</option><option value="bos">Boş</option>
-      </select>
-      <input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:100px;font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)">
-      <div style="margin-left:auto;display:flex;gap:4px">
-        <button class="btn btn-sm" id="ebtn-grid" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:4px 10px;font-size:11px" onclick="setElektraView('grid')">Grid</button>
-        <button class="btn btn-sm" id="ebtn-list" style="padding:4px 10px;font-size:11px" onclick="setElektraView('list')">Liste</button>
-      </div>
-    </div>
-    <div class="grid-container" id="egrid-container"></div>
-    <div class="list-container" id="elist-container"></div>
-    <div class="readonly-view" id="ereadonly-view"></div>
+<!-- ELEKTRA UI -->
+<div id="elektra-ui" style="display:none">
+<div class="elektra-top-stats" id="estats">
+<div class="stat-badge sb-dolu-temiz"><span class="count" id="cnt-dt">0</span>Dolu Temiz</div>
+<div class="stat-badge sb-dolu-kirli"><span class="count" id="cnt-dk">0</span>Dolu Kirli</div>
+<div class="stat-badge sb-cout"><span class="count" id="cnt-co">0</span>C/Out</div>
+<div class="stat-badge sb-temiz"><span class="count" id="cnt-t">0</span>Temiz</div>
+<div class="stat-badge sb-kirli"><span class="count" id="cnt-k">0</span>Kirli</div>
+<div class="stat-badge sb-ooi"><span class="count" id="cnt-ooi">0</span>OOI</div>
+<div class="stat-badge sb-ariza"><span class="count" id="cnt-ar">0</span>Arıza</div>
+<div class="stat-badge sb-onaylı"><span class="count" id="cnt-on">0</span>Onaylı</div>
+</div>
+<div class="elektra-filter">
+<label style="font-size:11px;color:var(--muted)">Durum:</label>
+<select id="efilter-status" onchange="renderElektraView()"><option value="">Tümü</option><option value="dolu-temiz">Dolu Temiz</option><option value="dolu-kirli">Dolu Kirli</option><option value="cout">C/Out</option><option value="temiz">Temiz</option><option value="kirli">Kirli</option><option value="ooi">OOI</option><option value="ariza">Arıza</option><option value="onaylı">Onaylı</option><option value="bos">Boş</option></select>
+<input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:100px">
+<div class="view-toggle">
+<button class="view-btn active" id="ebtn-grid" onclick="setElektraView('grid')">Grid</button>
+<button class="view-btn" id="ebtn-list" onclick="setElektraView('list')">Liste</button>
+</div>
+</div>
+<div class="grid-container" id="egrid-container"></div>
+<div class="list-container" id="elist-container"></div>
+<div class="readonly-view" id="ereadonly-view"></div>
 
-    <div class="panel-overlay" id="epanel-overlay" onclick="if(event.target===this)closeElektraPanel()"></div>
-    <div class="room-panel" id="eroom-panel">
-      <div class="panel-header"><div style="display:flex;align-items:center;gap:10px"><div class="panel-room-badge" id="epanel-room-num">-</div><h2 id="epanel-floor-label">-</h2></div><button class="panel-close" onclick="closeElektraPanel()">✕</button></div>
-      <div class="panel-tabs"><button class="ptab active" id="eptab-kayitlar" onclick="switchElektraPanelTab('kayitlar')">📋 Kayıtlar</button><button class="ptab" id="eptab-ekle" onclick="switchElektraPanelTab('ekle')">➕ Yeni Kayıt</button><button class="ptab" id="eptab-durum" onclick="switchElektraPanelTab('durum')">🏠 Oda Durumu</button></div>
-      <div class="panel-body">
-        <div class="tab-pane active" id="epane-kayitlar"><div id="eentries-list"></div></div>
-        <div class="tab-pane" id="epane-ekle"><div class="elegant-form">
-          <div class="form-section"><div class="form-label">📌 İşlem Türü</div><div class="type-btns"><button class="type-btn" id="ebtn-giris" onclick="setElektraEntryType('giris')">⬇️ Giriş</button><button class="type-btn" id="ebtn-cikis" onclick="setElektraEntryType('cikis')">⬆️ Çıkış</button></div></div>
-          <div class="form-section"><div class="form-label">📅 Tarih</div><input type="date" id="ef-date"></div>
-          <div class="form-section"><div class="form-label">📝 Not</div><textarea id="ef-note" rows="2" placeholder="Açıklama..."></textarea></div>
-          <div class="form-section"><div class="form-label">📷 Fotoğraf</div><div class="photo-drop" id="edrop-zone" onclick="document.getElementById('ef-photos').click()"><input type="file" id="ef-photos" accept="image/*" multiple style="display:none" onchange="elektraHandleFiles(this.files)"><div>📷 Fotoğraf seç veya sürükle bırak</div></div><div id="ecompress-status" class="compress-info"></div><div class="prev-row" id="eprev-row"></div><div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div></div>
-          <button class="btn btn-primary" id="esave-btn" onclick="elektraSaveEntry()" style="width:100%">💾 Kaydet</button>
-        </div></div>
-        <div class="tab-pane" id="epane-durum"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><label>Oda Durumu</label><select id="ef-status"><option value="bos">Boş</option><option value="dolu-temiz">Dolu Temiz</option><option value="dolu-kirli">Dolu Kirli</option><option value="cout">C/Out</option><option value="temiz">Temiz</option><option value="kirli">Kirli</option><option value="ooi">OOI</option><option value="ariza">Arıza</option><option value="onaylı">Onaylı</option></select></div><button class="btn btn-primary" onclick="saveElektraRoomStatus()">💾 Durumu Kaydet</button></div>
-      </div>
-    </div>
-  </div>
+<div class="panel-overlay" id="epanel-overlay" onclick="if(event.target===this)closeElektraPanel()"></div>
+<div class="room-panel" id="eroom-panel">
+<div class="panel-header"><div style="display:flex;align-items:center;gap:10px"><div class="panel-room-badge" id="epanel-room-num">-</div><h2 id="epanel-floor-label">-</h2></div><button class="panel-close" onclick="closeElektraPanel()">✕</button></div>
+<div class="panel-tabs"><button class="ptab active" id="eptab-kayitlar" onclick="switchElektraPanelTab('kayitlar')">📋 Kayıtlar</button><button class="ptab" id="eptab-ekle" onclick="switchElektraPanelTab('ekle')">➕ Yeni Kayıt</button><button class="ptab" id="eptab-durum" onclick="switchElektraPanelTab('durum')">🏠 Oda Durumu</button></div>
+<div class="panel-body">
+<div class="tab-pane active" id="epane-kayitlar"><div id="eentries-list"></div></div>
+<div class="tab-pane" id="epane-ekle"><div class="elegant-form">
+<div class="form-section"><div class="form-label">📌 İşlem Türü</div><div class="type-btns"><button class="type-btn" id="ebtn-giris" onclick="setElektraEntryType('giris')">⬇️ Giriş</button><button class="type-btn" id="ebtn-cikis" onclick="setElektraEntryType('cikis')">⬆️ Çıkış</button></div></div>
+<div class="form-section"><div class="form-label">📅 Tarih</div><input type="date" id="ef-date"></div>
+<div class="form-section"><div class="form-label">📝 Not</div><textarea id="ef-note" rows="2" placeholder="Açıklama..."></textarea></div>
+<div class="form-section"><div class="form-label">📷 Fotoğraf</div><div class="photo-drop" id="edrop-zone" onclick="document.getElementById('ef-photos').click()"><input type="file" id="ef-photos" accept="image/*" multiple style="display:none" onchange="elektraHandleFiles(this.files)"><div>📷 Fotoğraf seç veya sürükle bırak</div></div><div id="ecompress-status" class="compress-info"></div><div class="prev-row" id="eprev-row"></div><div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div></div>
+<button class="btn btn-primary" id="esave-btn" onclick="elektraSaveEntry()" style="width:100%">💾 Kaydet</button>
+</div></div>
+<div class="tab-pane" id="epane-durum"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><label>Oda Durumu</label><select id="ef-status"><option value="bos">Boş</option><option value="dolu-temiz">Dolu Temiz</option><option value="dolu-kirli">Dolu Kirli</option><option value="cout">C/Out</option><option value="temiz">Temiz</option><option value="kirli">Kirli</option><option value="ooi">OOI</option><option value="ariza">Arıza</option><option value="onaylı">Onaylı</option></select></div><button class="btn btn-primary" onclick="saveElektraRoomStatus()">💾 Durumu Kaydet</button></div>
+</div>
+</div>
+</div>
 </div>
 
 <div class="lightbox" id="lb"><div class="lb-top"><span id="lb-label"></span><button class="lb-close" onclick="closeLb()">✕</button></div><div class="lb-img-wrap"><img id="lb-img" src=""></div><div class="lb-nav"><button class="lb-btn" onclick="lbMove(-1)">←</button><span id="lb-counter"></span><button class="lb-btn" onclick="lbMove(1)">→</button></div></div>
@@ -238,12 +262,17 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── ORTAK ───
-const SB='https://tpfdsmexywjnsbkfphwq.supabase.co', KEY='sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L', BUCKETS={demirbaş:'photos',elektrik:'meters'}, MODES={demirbaş:{title:'Demirbaş Takibi',tags:['1+1','2+1']},elektrik:{title:'⚡ ELEKTRA SAYAÇ PANELİ',tags:['1. Kat','2. Kat','3. Kat','4. Kat','5. Kat','6. Kat','7. Kat','8. Kat','9. Kat','10. Kat','11. Kat','12. Kat','13. Kat','14. Kat','15. Kat']}};
-let mode='demirbaş', demirbasTab=0, demirbasSearchTab='room', demirbasPending=[], demirbasSelTags=[];
-let elektraView='grid', elektraCurrentRoom=null, elektraPending=[], elektraEntryType=null, elektraCurrentEntries=[], elektraAllData=[];
-let lbImages=[], lbIndex=0, confirmCb=null, roomsWithEntries=new Set();
-const CMAX=1600, CQ=0.82, FLOORS=Array.from({length:15},(_,i)=>({label:(i+1)+'. Kat',prefix:i+1,rooms:18}));
+// ═══════════════ ORTAK ═══════════════
+const SB='https://tpfdsmexywjnsbkfphwq.supabase.co',KEY='sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
+const BUCKETS={demirbaş:'photos',elektrik:'meters'};
+const CMAX=1600,CQ=0.82;
+const FLOORS=Array.from({length:15},(_,i)=>({label:(i+1)+'. Kat',prefix:i+1,rooms:18}));
+let mode='demirbaş',demirbasTab=0,demirbasSearchTab='room',demirbasPending=[];
+let elektraView='grid',elektraCurrentRoom=null,elektraPending=[],elektraEntryType=null,elektraCurrentEntries=[],elektraAllData=[],roomsWithEntries=new Set();
+let lbImages=[],lbIndex=0,confirmCb=null,entryImages={},entryData={},openEntries=new Set();
+let demirbasSelTags=[],lastVal='',timer=null;
+let mlAllData=[],mlFiltered=[],mlTypeFilter='all',searchTab='room',confirmCallback=null,activePdfOpt=null;
+const MODES={demirbaş:{title:'Demirbaş Takibi',tags:['1+1','2+1']},elektrik:{title:'⚡ ELEKTRA SAYAÇ PANELİ',tags:['1. Kat','2. Kat','3. Kat','4. Kat','5. Kat','6. Kat','7. Kat','8. Kat','9. Kat','10. Kat','11. Kat','12. Kat','13. Kat','14. Kat','15. Kat']}};
 
 function q(id){return document.getElementById(id)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -257,140 +286,85 @@ q('confirm-ok').addEventListener('click',()=>{if(confirmCb)confirmCb();closeConf
 function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16)}
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let w=img.width,h=img.height;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);c.toBlob(b=>{resolve({file:new File([b],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:b.size})},'image/jpeg',CQ)};img.src=url})}
 async function uploadImg(file,roomNo,bucket){const ext=file.name.split('.').pop();const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});if(!r.ok)throw new Error('Yükleme başarısız');return`${SB}/storage/v1/object/public/${bucket}/${path}`}
-
-// LIGHTBOX
 function openLb(photos,idx){lbImages=typeof photos==='string'?JSON.parse(photos):photos;lbIndex=idx;updateLb();q('lb').classList.add('open')}
 function closeLb(){q('lb').classList.remove('open')}
 function lbMove(d){lbIndex=Math.max(0,Math.min(lbImages.length-1,lbIndex+d));updateLb()}
-function updateLb(){q('lb-img').src=lbImages[lbIndex]||'';q('lb-counter').textContent=lbImages.length?`${lbIndex+1} / ${lbImages.length}`:''}
+function updateLb(){q('lb-img').src=lbImages[lbIndex]||'';q('lb-counter').textContent=lbImages.length?`${lbIndex+1}/${lbImages.length}`:''}
+async function createEntryLink(roomNo,date,mod,type){const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${roomNo}&mod=eq.${mod}&entry_date=eq.${date}&entry_type=eq.${type||''}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_date:date,entry_type:type||''})});const url=`${location.origin+location.pathname}?oda=${roomNo}&mod=${mod}&tarih=${date}&token=${token}&type=${type||''}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url))}
+async function createPairLink(roomNo,girisDate,cikisDate,mod){const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${roomNo}&mod=eq.${mod}&entry_date=eq.${girisDate}&entry_type=eq.pair`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_date:girisDate,entry_type:'pair',paired_date:cikisDate})});const url=`${location.origin+location.pathname}?oda=${roomNo}&mod=${mod}&tarih=${girisDate}&token=${token}&type=pair`;navigator.clipboard.writeText(url).then(()=>showToast('Çift link kopyalandı!')).catch(()=>prompt('Link:',url))}
+async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-dot').classList.add('ok');q('conn-text').textContent='Bağlantı aktif'}else throw 0}catch{q('conn-text').textContent='Bağlantı yok'}}
 
-// MOD DEĞİŞTİR
+// ═══════════════ MOD ═══════════════
 function setMode(m){
-  mode=m; localStorage.setItem('activeMode',m);
-  const isD=m==='demirbaş';
-  q('mode-d').classList.toggle('active',isD); q('mode-e').classList.toggle('active',!isD);
-  q('demirbas-ui').style.display=isD?'':'none'; q('elektra-ui').style.display=isD?'none':'';
-  q('topbar-title').textContent=isD?'Demirbaş Takibi':'⚡ ELEKTRA SAYAÇ PANELİ';
-  if(isD){ if(!window._demirbasInit){initDemirbas();window._demirbasInit=true} }
-  else { if(!window._elektraInit){initElektra();window._elektraInit=true} else renderElektraView() }
+mode=m;localStorage.setItem('activeMode',m);
+const isD=m==='demirbaş';
+q('mode-d').classList.toggle('active',isD);q('mode-e').classList.toggle('active',!isD);
+q('demirbas-ui').style.display=isD?'':'none';q('elektra-ui').style.display=isD?'none':'';
+q('app').classList.toggle('wide',!isD);
+q('topbar-title').textContent=isD?'Demirbaş Takibi':'⚡ ELEKTRA SAYAÇ PANELİ';
+if(isD){if(!window._demInit){initDemirbas();window._demInit=true}}
+else{if(!window._eleInit){initElektra();window._eleInit=true}else renderElektraView()}
 }
 
-// ─── DEMİRBAŞ ───
-function initDemirbas(){ q('f-date').value=today(); checkConn(); goDemirbasTab(0); }
-function goDemirbasTab(i){ demirbasTab=i; document.querySelectorAll('#demirbas-nav .nav-btn').forEach((b,j)=>b.classList.toggle('active',j===i)); document.querySelectorAll('#demirbas-screens .screen').forEach((s,j)=>s.classList.toggle('active',j===i)); if(i===2)demirbasLoadAll() }
-function setDemirbasSearchTab(t){ demirbasSearchTab=t; const isR=t==='room'; q('stab-room-content').style.display=isR?'block':'none'; q('stab-date-content').style.display=isR?'none':'block'; q('stab-room').style.cssText=isR?'flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)':'flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)'; q('stab-date').style.cssText=!isR?'flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)':'flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)' }
-async function demirbasSearch(){ const val=q('dsinput').value.trim(); if(!val)return; q('dsresult').innerHTML='<div class="empty">Aranıyor...</div>';
-  try{ const data=await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`).then(r=>r.json());
-    if(!data.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}
-    let html=`<div class="room-header"><div class="room-num">${val}</div><div class="room-summary"><strong>Oda ${val}</strong><span>${data.length} kayıt</span></div></div>`;
-    const g={}; data.forEach(e=>{const k=e.checkin_date;if(!g[k])g[k]=[];g[k].push(e)});
-    Object.keys(g).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{ html+=`<div style="margin:15px 0 8px;font-size:13px;font-weight:600;color:var(--muted)">${fmtDate(dk)}</div>`; g[dk].forEach(e=>html+=buildDemirbasCard(e)) });
-    q('dsresult').innerHTML=html;
-  }catch(e){q('dsresult').innerHTML='<div class="empty">Hata</div>'} }
-async function demirbasDateSearch(){ const f=q('d-from').value,t=q('d-to').value; if(!f||!t)return; q('dsresult').innerHTML='<div class="empty">Aranıyor...</div>';
-  try{ const data=await api(`/rest/v1/entries?checkin_date=gte.${f}&checkin_date=lte.${t}&mode=eq.demirbaş&order=checkin_date.desc,room_no.asc`).then(r=>r.json());
-    if(!data.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}
-    const gr={}; data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});
-    let html=`<div class="room-header"><div class="room-num">${Object.keys(gr).length} oda</div><div class="room-summary"><strong>${fmtDate(f)} – ${fmtDate(t)}</strong><span>${data.length} kayıt</span></div></div>`;
-    Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(rno=>{ html+=`<div style="margin-top:12px;font-weight:600">Oda ${rno}</div>`; gr[rno].forEach(e=>html+=buildDemirbasCard(e)) });
-    q('dsresult').innerHTML=html;
-  }catch(e){q('dsresult').innerHTML='<div class="empty">Hata</div>'} }
-function buildDemirbasCard(entry){ const urls=entry.photo_urls||[],cats=(entry.category||'').split(',').filter(Boolean);
-  return`<div class="entry-card"><div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><div class="date-badge">${fmtDate(entry.checkin_date)}</div><div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div>${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body">${urls.length?`<div class="img-scroll">${urls.map(u=>`<div class="img-thumb" onclick="openLb(['${u}'],0)"><img src="${u}" loading="lazy"></div>`).join('')}</div>`:''}<div class="entry-footer"><span>${urls.length} fotoğraf</span><button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button><button class="link-btn" onclick="createEntryLink('${entry.room_no}','${entry.checkin_date}','demirbaş','giris')">Link</button><button class="btn btn-danger btn-sm" onclick="demirbasDeleteEntry('${entry.id}')">Sil</button></div></div></div>` }
-async function demirbasDeleteEntry(id){ openConfirm('Sil','Bu kayıt silinecek.',async()=>{await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});showToast('Silindi');demirbasSearch()}) }
-async function demirbasAddFiles(files){ const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0; for(const f of files){const r=await compressImage(f);demirbasPending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++} demirbasRenderPrev(); if(cc>0)se.innerHTML=`<div class="compress-info">${cc} fotoğraf sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü</div>` }
-function demirbasRenderPrev(){ q('prev-row').innerHTML=demirbasPending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="demirbasPending.splice(${i},1);demirbasRenderPrev()">✕</div></div>`).join('') }
-async function demirbasSaveEntry(){ const room=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim(),donem=q('f-donem').value; if(!room||!date||!demirbasPending.length){showToast('Eksik bilgi','error');return} const btn=q('save-btn'),lbl=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span>'; const pw=q('progress-wrap'),pb=q('progress-bar');pw.classList.add('show');pb.style.width='0%';
-  try{ const tags=[...document.querySelectorAll('#f-tags .tag.on')].map(t=>t.textContent).join(','); const urls=[]; for(let i=0;i<demirbasPending.length;i++){urls.push(await uploadImg(demirbasPending[i].file,room,BUCKETS.demirbaş));pb.style.width=Math.round((i+1)/demirbasPending.length*100)+'%'} await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:room,mode:'demirbaş',checkin_date:date,category:tags,note,photo_urls:urls,donem})}); showToast('Kayıt oluşturuldu'); demirbasPending=[]; q('f-room').value='';q('f-note').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';q('f-donem').value=''; document.querySelectorAll('#f-tags .tag.on').forEach(t=>t.classList.remove('on'));
-  }catch(e){showToast('Hata: '+e.message,'error')} finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')} }
-async function demirbasLoadAll(){ const el=q('rlist');el.innerHTML='<div class="empty">Yükleniyor...</div>';
-  try{ const data=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls&mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json()); if(!data.length){el.innerHTML='<div class="empty">Kayıt yok</div>';return}
-    const gr={}; data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});
-    el.innerHTML=Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).map(rno=>{const e=gr[rno][0],cover=(e.photo_urls||[])[0]; return`<div class="all-card" onclick="q('dsinput').value='${rno}';goDemirbasTab(0);demirbasSearch()"><div class="all-card-inner">${cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">`:'<div style="width:56px;height:56px;background:var(--surface2);border-radius:8px"></div>'}<div><strong>Oda ${rno}</strong><div style="font-size:12px;color:var(--muted)">${gr[rno].length} kayıt</div></div></div></div>`}).join('')
-  }catch(e){el.innerHTML='<div class="empty">Hata</div>'} }
-async function createEntryLink(roomNo,date,mod,type){ const token=genToken(); await fetch(`${SB}/rest/v1/tokens?room_no=eq.${roomNo}&mod=eq.${mod}&entry_date=eq.${date}&entry_type=eq.${type||''}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}); await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_date:date,entry_type:type||''})}); const url=`${location.origin+location.pathname}?oda=${roomNo}&mod=${mod}&tarih=${date}&token=${token}&type=${type||''}`; navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url)) }
-async function createPairLink(roomNo,girisDate,cikisDate,mod){ const token=genToken(); await fetch(`${SB}/rest/v1/tokens?room_no=eq.${roomNo}&mod=eq.${mod}&entry_date=eq.${girisDate}&entry_type=eq.pair`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}); await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_date:girisDate,entry_type:'pair',paired_date:cikisDate})}); const url=`${location.origin+location.pathname}?oda=${roomNo}&mod=${mod}&tarih=${girisDate}&token=${token}&type=pair`; navigator.clipboard.writeText(url).then(()=>showToast('Çift link kopyalandı!')).catch(()=>prompt('Link:',url)) }
-async function checkConn(){ try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-dot').classList.add('ok');q('conn-text').textContent='Bağlantı aktif'}else throw 0}catch{q('conn-text').textContent='Bağlantı yok'} }
+// ═══════════════ DEMIRBAS ═══════════════
+function initDemirbas(){q('f-date').value=today();checkConn();goDemirbasTab(0)}
+function goDemirbasTab(i){demirbasTab=i;document.querySelectorAll('#main-nav .nav-btn').forEach((b,j)=>b.classList.toggle('active',j===i));document.querySelectorAll('#demirbas-ui .screen').forEach((s,j)=>s.classList.toggle('active',j===i));if(i===2)demirbasLoadAll()}
+function setDemirbasSearchTab(t){demirbasSearchTab=t;const isR=t==='room';q('stab-room-content').style.display=isR?'block':'none';q('stab-date-content').style.display=isR?'none':'block';q('stab-room').style.cssText=isR?'flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)':'flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)';q('stab-date').style.cssText=!isR?'flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)':'flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)'}
+async function demirbasSearch(){const val=q('dsinput').value.trim();if(!val)return;q('dsresult').innerHTML='<div class="empty">Aranıyor...</div>';try{const data=await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`).then(r=>r.json());if(!data.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}let html=`<div class="room-header"><div class="room-num">${val}</div><div class="room-summary"><strong>Oda ${val}</strong><span>${data.length} kayıt</span></div></div>`;const g={};data.forEach(e=>{const k=e.checkin_date;if(!g[k])g[k]=[];g[k].push(e)});Object.keys(g).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{html+=`<div style="margin:15px 0 8px;font-size:13px;font-weight:600;color:var(--muted)">${fmtDate(dk)}</div>`;g[dk].forEach(e=>html+=buildDemirbasCard(e))});q('dsresult').innerHTML=html}catch(e){q('dsresult').innerHTML='<div class="empty">Hata</div>'}}
+async function demirbasDateSearch(){const f=q('d-from').value,t=q('d-to').value;if(!f||!t)return;q('dsresult').innerHTML='<div class="empty">Aranıyor...</div>';try{const data=await api(`/rest/v1/entries?checkin_date=gte.${f}&checkin_date=lte.${t}&mode=eq.demirbaş&order=checkin_date.desc,room_no.asc`).then(r=>r.json());if(!data.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}const gr={};data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});let html=`<div class="room-header"><div class="room-num">${Object.keys(gr).length} oda</div><div class="room-summary"><strong>${fmtDate(f)} – ${fmtDate(t)}</strong><span>${data.length} kayıt</span></div></div>`;Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(rno=>{html+=`<div style="margin-top:12px;font-weight:600">Oda ${rno}</div>`;gr[rno].forEach(e=>html+=buildDemirbasCard(e))});q('dsresult').innerHTML=html}catch(e){q('dsresult').innerHTML='<div class="empty">Hata</div>'}}
+function buildDemirbasCard(entry){const urls=entry.photo_urls||[],cats=(entry.category||'').split(',').filter(Boolean);return`<div class="entry-card"><div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><div class="date-badge">${fmtDate(entry.checkin_date)}</div><div class="entry-meta">${cats.length?`<div>${cats.join(' · ')}</div>`:''}${entry.note?`<div>${entry.note}</div>`:''}</div><span class="entry-count">${urls.length} foto</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body">${urls.length?`<div class="img-scroll">${urls.map(u=>`<div class="img-thumb" onclick="openLb(['${u}'],0)"><img src="${u}" loading="lazy"></div>`).join('')}</div>`:''}<div class="entry-footer"><span>${urls.length} fotoğraf</span><div style="display:flex;gap:6px"><button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button><button class="link-btn" onclick="createEntryLink('${entry.room_no}','${entry.checkin_date}','demirbaş','giris')">Link</button><button class="btn btn-danger btn-sm" onclick="demirbasDeleteEntry('${entry.id}')">Sil</button></div></div></div></div>`}
+async function demirbasDeleteEntry(id){openConfirm('Sil','Bu kayıt silinecek.',async()=>{await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});showToast('Silindi');demirbasSearch()})}
+async function demirbasAddFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);demirbasPending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++}demirbasRenderPrev();if(cc>0)se.innerHTML=`<div class="compress-info">${cc} fotoğraf sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü</div>`}
+function demirbasRenderPrev(){q('prev-row').innerHTML=demirbasPending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="demirbasPending.splice(${i},1);demirbasRenderPrev()">✕</div></div>`).join('')}
+async function demirbasSaveEntry(){const room=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim(),donem=q('f-donem').value;if(!room||!date||!demirbasPending.length){showToast('Eksik bilgi','error');return}const btn=q('save-btn'),lbl=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span>';const pw=q('progress-wrap'),pb=q('progress-bar');pw.classList.add('show');pb.style.width='0%';try{const tags=[...document.querySelectorAll('#f-tags .tag.on')].map(t=>t.textContent).join(',');const urls=[];for(let i=0;i<demirbasPending.length;i++){urls.push(await uploadImg(demirbasPending[i].file,room,BUCKETS.demirbaş));pb.style.width=Math.round((i+1)/demirbasPending.length*100)+'%'}await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:room,mode:'demirbaş',checkin_date:date,category:tags,note,photo_urls:urls,donem})});showToast('Kayıt oluşturuldu');demirbasPending=[];q('f-room').value='';q('f-note').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';q('f-donem').value='';document.querySelectorAll('#f-tags .tag.on').forEach(t=>t.classList.remove('on'))}catch(e){showToast('Hata: '+e.message,'error')}finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')}}
+async function demirbasLoadAll(){const el=q('rlist');el.innerHTML='<div class="empty">Yükleniyor...</div>';try{const data=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls&mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());if(!data.length){el.innerHTML='<div class="empty">Kayıt yok</div>';return}const gr={};data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});el.innerHTML=Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).map(rno=>{const e=gr[rno][0],cover=(e.photo_urls||[])[0];return`<div class="all-card" onclick="q('dsinput').value='${rno}';goDemirbasTab(0);demirbasSearch()"><div class="all-card-inner">${cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">`:'<div style="width:56px;height:56px;background:var(--surface2);border-radius:8px"></div>'}<div><strong>Oda ${rno}</strong><div style="font-size:12px;color:var(--muted)">${gr[rno].length} kayıt</div></div></div></div>`}).join('')}catch(e){el.innerHTML='<div class="empty">Hata</div>'}}
 
-// ─── ELEKTRA ───
+// ═══════════════ ELEKTRA ═══════════════
 const EROOM_PREFIX='otel_room_';
 function getERoom(n){try{return JSON.parse(localStorage.getItem(EROOM_PREFIX+n)||'null')}catch{return null}}
 function setERoom(n,d){localStorage.setItem(EROOM_PREFIX+n,JSON.stringify(d))}
 function allERooms(){const a=[];FLOORS.forEach(f=>{for(let i=1;i<=f.rooms;i++)a.push(f.prefix*100+i)});return a}
-function initElektra(){ allERooms().forEach(n=>{if(!getERoom(n))setERoom(n,{status:'bos'})}); updateElektraStats(); loadElektraRoomsWithEntries(); renderElektraView() }
-function updateElektraStats(){ const c={}; allERooms().forEach(n=>{const s=getERoom(n)?.status||'bos';c[s]=(c[s]||0)+1}); q('cnt-dt').textContent=c['dolu-temiz']||0;q('cnt-dk').textContent=c['dolu-kirli']||0;q('cnt-co').textContent=(c['cout']||0)+(c['cout-b']||0);q('cnt-t').textContent=(c['temiz']||0)+(c['temiz-b']||0);q('cnt-k').textContent=(c['kirli']||0)+(c['kirli-b']||0);q('cnt-ooi').textContent=c['ooi']||0;q('cnt-ar').textContent=c['ariza']||0;q('cnt-on').textContent=(c['onaylı']||0)+(c['onaylı-b']||0) }
-async function loadElektraRoomsWithEntries(){ try{const r=await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);roomsWithEntries=new Set((await r.json()).map(e=>String(e.room_no)))}catch(e){} }
-function setElektraView(v){ elektraView=v; q('ebtn-grid').style.cssText=v==='grid'?'background:var(--accent);color:#fff;border-color:var(--accent);padding:4px 10px;font-size:11px':'padding:4px 10px;font-size:11px'; q('ebtn-list').style.cssText=v==='list'?'background:var(--accent);color:#fff;border-color:var(--accent);padding:4px 10px;font-size:11px':'padding:4px 10px;font-size:11px'; renderElektraView() }
-function renderElektraView(){ if(elektraView==='grid'){q('egrid-container').classList.remove('hidden');q('elist-container').classList.remove('active');renderElektraGrid()}else{q('egrid-container').classList.add('hidden');q('elist-container').classList.add('active');renderElektraList()} }
+function initElektra(){allERooms().forEach(n=>{if(!getERoom(n))setERoom(n,{status:'bos'})});updateElektraStats();loadElektraRoomsWithEntries();renderElektraView()}
+function updateElektraStats(){const c={};allERooms().forEach(n=>{const s=getERoom(n)?.status||'bos';c[s]=(c[s]||0)+1});q('cnt-dt').textContent=c['dolu-temiz']||0;q('cnt-dk').textContent=c['dolu-kirli']||0;q('cnt-co').textContent=(c['cout']||0)+(c['cout-b']||0);q('cnt-t').textContent=(c['temiz']||0)+(c['temiz-b']||0);q('cnt-k').textContent=(c['kirli']||0)+(c['kirli-b']||0);q('cnt-ooi').textContent=c['ooi']||0;q('cnt-ar').textContent=c['ariza']||0;q('cnt-on').textContent=(c['onaylı']||0)+(c['onaylı-b']||0)}
+async function loadElektraRoomsWithEntries(){try{const r=await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);roomsWithEntries=new Set((await r.json()).map(e=>String(e.room_no)))}catch(e){}}
+function setElektraView(v){elektraView=v;q('ebtn-grid').style.cssText=v==='grid'?'background:var(--accent);color:#fff;border-color:var(--accent);padding:6px 12px;font-size:12px':'padding:6px 12px;font-size:12px';q('ebtn-list').style.cssText=v==='list'?'background:var(--accent);color:#fff;border-color:var(--accent);padding:6px 12px;font-size:12px':'padding:6px 12px;font-size:12px';renderElektraView()}
+function renderElektraView(){if(elektraView==='grid'){q('egrid-container').classList.remove('hidden');q('elist-container').classList.remove('active');renderElektraGrid()}else{q('egrid-container').classList.add('hidden');q('elist-container').classList.add('active');renderElektraList()}}
 function statusClass(s){const m={'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli','cout':'status-cout','cout-b':'status-cout-b','temiz':'status-temiz','temiz-b':'status-temiz-b','kirli':'status-kirli','kirli-b':'status-kirli-b','ooi':'status-ooi','ariza':'status-ariza','onaylı':'status-onaylı','onaylı-b':'status-onaylı-b','bos':'status-bos'};return m[s]||'status-bos'}
-function renderElektraGrid(){ const fs=q('efilter-status').value,sv=q('esearch-room').value.trim().toLowerCase(),container=q('egrid-container');container.innerHTML='';
-  FLOORS.forEach(f=>{ const matching=[]; for(let i=1;i<=f.rooms;i++){const n=f.prefix*100+i;const s=getERoom(n)?.status||'bos';if(fs&&s!==fs)continue;if(sv&&!String(n).includes(sv))continue;matching.push(n)} if(!matching.length)return;
-    const sec=document.createElement('div');sec.className='floor-section';sec.innerHTML=`<div class="floor-label">▸ ${f.label}</div>`;const grid=document.createElement('div');grid.className='room-grid';
-    matching.forEach(n=>{const cell=document.createElement('div');cell.className='room-cell '+statusClass(getERoom(n)?.status||'bos');cell.textContent=n;if(roomsWithEntries.has(String(n))){const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl)} cell.addEventListener('click',()=>openElektraPanel(n));grid.appendChild(cell)});
-    sec.appendChild(grid);container.appendChild(sec) }) }
-async function renderElektraList(){ const wrap=q('elist-container');wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">Yükleniyor...</div>';
-  try{ const res=await api(`/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,note,type`);elektraAllData=await res.json();const sv=q('esearch-room').value.trim().toLowerCase();
-    const filtered=elektraAllData.filter(e=>{if(sv&&!String(e.room_no).includes(sv)&&!(e.note||'').toLowerCase().includes(sv))return false;return true});
-    if(!filtered.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>';return}
-    const pairedC=new Set(),pairedG=new Set(),gB={},cB={}; elektraAllData.forEach(e=>{if(e.type==='giris'||!e.type){if(!gB[e.room_no])gB[e.room_no]=[];gB[e.room_no].push(e)}else{if(!cB[e.room_no])cB[e.room_no]=[];cB[e.room_no].push(e)}});
-    Object.keys(gB).forEach(r=>{const gl=[...gB[r]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),cl=[...(cB[r]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),used=new Set();gl.forEach(g=>{const m=cl.find(c=>!used.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){used.add(m.id);pairedC.add(m.id);pairedG.add(g.id)}})});
-    let html=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:var(--surface2)"><th>Oda</th><th>Giriş</th><th>Çıkış</th><th></th></tr></thead><tbody>`;const shownC=new Set();
-    filtered.forEach(e=>{const isG=e.type==='giris'||!e.type;if(isG){const ce=pairedG.has(e.id)?(cB[e.room_no]||[]).find(c=>pairedC.has(c.id)&&c.checkin_date>=e.checkin_date):null;if(ce)shownC.add(ce.id);
-      html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td><td style="color:#b45309">${ce?fmtShort(ce.checkin_date):'—'}</td><td>${ce?`<button class="btn btn-sm" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${ce.checkin_date}','elektrik')">Link</button>`:`<button class="ml-cikis-btn" onclick="event.stopPropagation();quickCikis('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button>`}</td></tr>`}else if(!shownC.has(e.id)){html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`}});
-    html+='</tbody></table></div>';wrap.innerHTML=html }catch(e){wrap.innerHTML='<div style="text-align:center;padding:40px">Hata</div>'} }
+function renderElektraGrid(){const fs=q('efilter-status').value,sv=q('esearch-room').value.trim().toLowerCase(),container=q('egrid-container');container.innerHTML='';FLOORS.forEach(f=>{const matching=[];for(let i=1;i<=f.rooms;i++){const n=f.prefix*100+i;const s=getERoom(n)?.status||'bos';if(fs&&s!==fs)continue;if(sv&&!String(n).includes(sv))continue;matching.push(n)}if(!matching.length)return;const sec=document.createElement('div');sec.className='floor-section';sec.innerHTML=`<div class="floor-label">▸ ${f.label}</div>`;const grid=document.createElement('div');grid.className='room-grid';matching.forEach(n=>{const cell=document.createElement('div');cell.className='room-cell '+statusClass(getERoom(n)?.status||'bos');cell.textContent=n;if(roomsWithEntries.has(String(n))){const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl)}cell.addEventListener('click',()=>openElektraPanel(n));grid.appendChild(cell)});sec.appendChild(grid);container.appendChild(sec)})}
+async function renderElektraList(){const wrap=q('elist-container');wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">Yükleniyor...</div>';try{const res=await api(`/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,note,type`);elektraAllData=await res.json();const sv=q('esearch-room').value.trim().toLowerCase();const filtered=elektraAllData.filter(e=>{if(sv&&!String(e.room_no).includes(sv)&&!(e.note||'').toLowerCase().includes(sv))return false;return true});if(!filtered.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>';return}const pairedC=new Set(),pairedG=new Set(),gB={},cB={};elektraAllData.forEach(e=>{if(e.type==='giris'||!e.type){if(!gB[e.room_no])gB[e.room_no]=[];gB[e.room_no].push(e)}else{if(!cB[e.room_no])cB[e.room_no]=[];cB[e.room_no].push(e)}});Object.keys(gB).forEach(r=>{const gl=[...gB[r]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),cl=[...(cB[r]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),used=new Set();gl.forEach(g=>{const m=cl.find(c=>!used.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){used.add(m.id);pairedC.add(m.id);pairedG.add(g.id)}})});let html=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:var(--surface2)"><th>Oda</th><th>Giriş</th><th>Çıkış</th><th></th></tr></thead><tbody>`;const shownC=new Set();filtered.forEach(e=>{const isG=e.type==='giris'||!e.type;if(isG){const ce=pairedG.has(e.id)?(cB[e.room_no]||[]).find(c=>pairedC.has(c.id)&&c.checkin_date>=e.checkin_date):null;if(ce)shownC.add(ce.id);html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td><td style="color:#b45309">${ce?fmtShort(ce.checkin_date):'—'}</td><td>${ce?`<button class="btn btn-sm" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${ce.checkin_date}','elektrik')">Link</button>`:`<button class="ml-cikis-btn" onclick="event.stopPropagation();quickCikis('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button>`}</td></tr>`}else if(!shownC.has(e.id)){html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`}});html+='</tbody></table></div>';wrap.innerHTML=html}catch(e){wrap.innerHTML='<div style="text-align:center;padding:40px">Hata</div>'}}
 function quickCikis(rno,gd){openElektraPanel(rno);setTimeout(()=>{switchElektraPanelTab('ekle');setElektraEntryType('cikis');q('ef-date').value=today()},200)}
-function openElektraPanel(num){ elektraCurrentRoom=num; q('epanel-room-num').textContent=num; const fl=Math.floor(num/100); q('epanel-floor-label').textContent=(fl<=15?fl+'. Kat':fl+'. Kat'); q('ef-status').value=getERoom(num)?.status||'bos'; resetElektraAddForm(); switchElektraPanelTab('kayitlar'); q('epanel-overlay').classList.add('open');q('eroom-panel').classList.add('open');document.body.style.overflow='hidden'; loadElektraEntries() }
+function openElektraPanel(num){elektraCurrentRoom=num;q('epanel-room-num').textContent=num;const fl=Math.floor(num/100);q('epanel-floor-label').textContent=(fl<=15?fl+'. Kat':fl+'. Kat');q('ef-status').value=getERoom(num)?.status||'bos';resetElektraAddForm();switchElektraPanelTab('kayitlar');q('epanel-overlay').classList.add('open');q('eroom-panel').classList.add('open');document.body.style.overflow='hidden';loadElektraEntries()}
 function closeElektraPanel(){q('epanel-overlay').classList.remove('open');q('eroom-panel').classList.remove('open');document.body.style.overflow='';elektraCurrentRoom=null}
 function switchElektraPanelTab(t){['kayitlar','ekle','durum'].forEach(x=>{q('epane-'+x).classList.toggle('active',x===t);q('eptab-'+x).classList.toggle('active',x===t)})}
-async function loadElektraEntries(){ q('eentries-list').innerHTML='<div style="text-align:center;padding:20px">Yükleniyor...</div>';
-  try{ elektraCurrentEntries=await api(`/rest/v1/entries?room_no=eq.${elektraCurrentRoom}&mode=eq.elektrik&order=checkin_date.desc&select=*`).then(r=>r.json()); renderElektraEntries() }catch(e){q('eentries-list').innerHTML='<div style="text-align:center;padding:20px">Hata</div>'} }
-function renderElektraEntries(){ const w=q('eentries-list'); if(!elektraCurrentEntries.length){w.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted)">Kayıt yok</div>';return}
-  const g=elektraCurrentEntries.filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),c=elektraCurrentEntries.filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),used=new Set();let h='';
-  g.forEach(gi=>{const ci=c.find(cc=>!used.has(cc.id)&&cc.checkin_date>=gi.checkin_date);if(ci)used.add(ci.id);h+=`<div style="margin-bottom:12px">${buildElektraCard(gi)}${ci?buildElektraCard(ci):''}</div>`});
-  c.filter(cc=>!used.has(cc.id)).forEach(cc=>h+=`<div style="margin-bottom:12px">${buildElektraCard(cc)}</div>`); w.innerHTML=h }
-function buildElektraCard(entry){ const isG=entry.type==='giris'||!entry.type,photos=entry.photo_urls||[],note=entry.note||'',ps=JSON.stringify(photos).replace(/"/g,'&quot;');
-  return`<div class="entry-card"><div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span><div class="entry-meta"><div>${fmtDate(entry.checkin_date)}</div>${note?`<div>${note}</div>`:''}</div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body">${photos.length?`<div class="img-scroll">${photos.map((u,i)=>`<div class="img-thumb" onclick="event.stopPropagation();openLb('${ps}',${i})"><img src="${u}" loading="lazy"></div>`).join('')}</div>`:''}<div class="entry-footer"><span>${photos.length} fotoğraf</span><div style="display:flex;gap:6px"><button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button><button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','elektrik','${entry.type||'giris'}')">Link</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteElektraEntry('${entry.id}')">Sil</button></div></div></div></div>` }
-async function deleteElektraEntry(id){ openConfirm('Sil','Bu kayıt silinecek.',async()=>{ await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'}); showToast('Silindi');loadElektraEntries();loadElektraRoomsWithEntries() }) }
+async function loadElektraEntries(){q('eentries-list').innerHTML='<div style="text-align:center;padding:20px">Yükleniyor...</div>';try{elektraCurrentEntries=await api(`/rest/v1/entries?room_no=eq.${elektraCurrentRoom}&mode=eq.elektrik&order=checkin_date.desc&select=*`).then(r=>r.json());renderElektraEntries()}catch(e){q('eentries-list').innerHTML='<div style="text-align:center;padding:20px">Hata</div>'}}
+function renderElektraEntries(){const w=q('eentries-list');if(!elektraCurrentEntries.length){w.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted)">Kayıt yok</div>';return}const g=elektraCurrentEntries.filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),c=elektraCurrentEntries.filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date)),used=new Set();let h='';g.forEach(gi=>{const ci=c.find(cc=>!used.has(cc.id)&&cc.checkin_date>=gi.checkin_date);if(ci)used.add(ci.id);h+=`<div style="margin-bottom:12px">${buildElektraCard(gi)}${ci?buildElektraCard(ci):''}</div>`});c.filter(cc=>!used.has(cc.id)).forEach(cc=>h+=`<div style="margin-bottom:12px">${buildElektraCard(cc)}</div>`);w.innerHTML=h}
+function buildElektraCard(entry){const isG=entry.type==='giris'||!entry.type,photos=entry.photo_urls||[],note=entry.note||'',ps=JSON.stringify(photos).replace(/"/g,'&quot;');return`<div class="entry-card"><div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span><div class="entry-meta"><div>${fmtDate(entry.checkin_date)}</div>${note?`<div>${note}</div>`:''}</div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body">${photos.length?`<div class="img-scroll">${photos.map((u,i)=>`<div class="img-thumb" onclick="event.stopPropagation();openLb('${ps}',${i})"><img src="${u}" loading="lazy"></div>`).join('')}</div>`:''}<div class="entry-footer"><span>${photos.length} fotoğraf</span><div style="display:flex;gap:6px"><button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button><button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','elektrik','${entry.type||'giris'}')">Link</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteElektraEntry('${entry.id}')">Sil</button></div></div></div></div>`}
+async function deleteElektraEntry(id){openConfirm('Sil','Bu kayıt silinecek.',async()=>{await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});showToast('Silindi');loadElektraEntries();loadElektraRoomsWithEntries()})}
 function setElektraEntryType(t){elektraEntryType=t;q('ebtn-giris').className='type-btn'+(t==='giris'?' active-giris':'');q('ebtn-cikis').className='type-btn'+(t==='cikis'?' active-cikis':'')}
 function resetElektraAddForm(){elektraEntryType=null;elektraPending=[];q('ebtn-giris').className='type-btn';q('ebtn-cikis').className='type-btn';q('ef-date').value=today();q('ef-note').value='';q('eprev-row').innerHTML='';q('ecompress-status').innerHTML='';q('eprogress-wrap').classList.remove('show')}
-async function elektraHandleFiles(files){ const se=q('ecompress-status');se.innerHTML='';let to=0,tn=0,cc=0; for(const f of files){const r=await compressImage(f);elektraPending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++} elektraRenderPrev(); if(cc>0)se.innerHTML=`${cc} fotoğraf sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü`;q('ef-photos').value='' }
+async function elektraHandleFiles(files){const se=q('ecompress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);elektraPending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++}elektraRenderPrev();if(cc>0)se.innerHTML=`${cc} fotoğraf sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü`;q('ef-photos').value=''}
 function elektraRenderPrev(){q('eprev-row').innerHTML=elektraPending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="elektraPending.splice(${i},1);elektraRenderPrev()">✕</div></div>`).join('')}
-async function elektraSaveEntry(){ if(!elektraCurrentRoom||!elektraEntryType||!elektraPending.length){showToast('Eksik bilgi','error');return} const btn=q('esave-btn'),lbl=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span>';const pw=q('eprogress-wrap'),pb=q('eprogress-bar');pw.classList.add('show');pb.style.width='0%';
-  try{ const date=q('ef-date').value,note=q('ef-note').value.trim(),urls=[]; for(let i=0;i<elektraPending.length;i++){urls.push(await uploadImg(elektraPending[i].file,elektraCurrentRoom,BUCKETS.elektrik));pb.style.width=Math.round((i+1)/elektraPending.length*100)+'%'} await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:String(elektraCurrentRoom),mode:'elektrik',checkin_date:date,type:elektraEntryType,note,photo_urls:urls})}); showToast('Kayıt oluşturuldu'); resetElektraAddForm();switchElektraPanelTab('kayitlar');loadElektraEntries();loadElektraRoomsWithEntries()
-  }catch(e){showToast('Hata: '+e.message,'error')} finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')} }
-function saveElektraRoomStatus(){ if(!elektraCurrentRoom)return; const d=getERoom(elektraCurrentRoom)||{};d.status=q('ef-status').value;setERoom(elektraCurrentRoom,d);renderElektraView();updateElektraStats();showToast('Durum kaydedildi') }
+async function elektraSaveEntry(){if(!elektraCurrentRoom||!elektraEntryType||!elektraPending.length){showToast('Eksik bilgi','error');return}const btn=q('esave-btn'),lbl=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span>';const pw=q('eprogress-wrap'),pb=q('eprogress-bar');pw.classList.add('show');pb.style.width='0%';try{const date=q('ef-date').value,note=q('ef-note').value.trim(),urls=[];for(let i=0;i<elektraPending.length;i++){urls.push(await uploadImg(elektraPending[i].file,elektraCurrentRoom,BUCKETS.elektrik));pb.style.width=Math.round((i+1)/elektraPending.length*100)+'%'}await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:String(elektraCurrentRoom),mode:'elektrik',checkin_date:date,type:elektraEntryType,note,photo_urls:urls})});showToast('Kayıt oluşturuldu');resetElektraAddForm();switchElektraPanelTab('kayitlar');loadElektraEntries();loadElektraRoomsWithEntries()}catch(e){showToast('Hata: '+e.message,'error')}finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')}}
+function saveElektraRoomStatus(){if(!elektraCurrentRoom)return;const d=getERoom(elektraCurrentRoom)||{};d.status=q('ef-status').value;setERoom(elektraCurrentRoom,d);renderElektraView();updateElektraStats();showToast('Durum kaydedildi')}
 
-// DROP ZONE ELEKTRA
+// DROP ZONES
 q('edrop-zone').addEventListener('dragover',e=>{e.preventDefault();q('edrop-zone').style.borderColor='var(--accent)'});
 q('edrop-zone').addEventListener('dragleave',()=>q('edrop-zone').style.borderColor='');
 q('edrop-zone').addEventListener('drop',e=>{e.preventDefault();q('edrop-zone').style.borderColor='';elektraHandleFiles(e.dataTransfer.files)});
-// DROP ZONE DEMIRBAS
 q('dropz').addEventListener('dragover',e=>{e.preventDefault();q('dropz').classList.add('over')});
 q('dropz').addEventListener('dragleave',()=>q('dropz').classList.remove('over'));
 q('dropz').addEventListener('drop',e=>{e.preventDefault();q('dropz').classList.remove('over');demirbasAddFiles(e.dataTransfer.files)});
 
-// READONLY / TOKEN
+// ═══════════════ READONLY / TOKEN ═══════════════
 const _p=new URLSearchParams(location.search),_oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih'),_type=_p.get('type');
-if(_oda&&_token){ const _m=_mod==='elektrik'?'elektrik':'demirbaş'; mode=_m;
-  q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';
-  if(_m==='elektrik'){ q('elektra-ui').style.display='';q('topbar-title').textContent='⚡ ELEKTRA SAYAÇ PANELİ';q('egrid-container').style.display='none';q('elist-container').style.display='none';q('ereadonly-view').classList.add('active');
-    api(`/rest/v1/tokens?token=eq.${_token}&room_no=eq.${_oda}&mod=eq.${_m}&select=id,entry_date,paired_date`).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return}const tr=data[0],tarih=_tarih||tr.entry_date||today();if(_tarih&&tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return}showElektraReadonly(_oda,_m,tarih,_type)}).catch(()=>showAccessError())
-  } else { q('demirbas-ui').style.display='';q('topbar-title').textContent='Demirbaş Takibi';q('dsresult').innerHTML='<div class="empty">Yükleniyor...</div>';
-    api(`/rest/v1/tokens?token=eq.${_token}&room_no=eq.${_oda}&mod=eq.${_m}&select=id,entry_date`).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return}const tarih=_tarih||data[0].entry_date||today();api(`/rest/v1/entries?room_no=eq.${_oda}&checkin_date=eq.${tarih}&mode=eq.demirbaş`).then(r=>r.json()).then(d=>{if(!d.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return} q('dsresult').innerHTML=`<div class="room-header"><div class="room-num">${_oda}</div><div class="room-summary"><strong>Oda ${_oda} · ${fmtDate(tarih)}</strong><span>Salt okunur</span></div></div>`+d.map(e=>buildDemirbasCard(e)).join('')}).catch(()=>showAccessError())}).catch(()=>showAccessError()) }
-} else if(_oda&&!_token){ showAccessError() }
-else { setMode('demirbaş'); checkConn() }
+if(_oda&&_token){const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';q('topbar-title').textContent=_m==='elektrik'?'⚡ ELEKTRA SAYAÇ PANELİ':'Demirbaş Takibi';
+if(_m==='elektrik'){q('elektra-ui').style.display='';q('egrid-container').style.display='none';q('elist-container').style.display='none';q('ereadonly-view').classList.add('active');q('app').classList.add('wide');
+api(`/rest/v1/tokens?token=eq.${_token}&room_no=eq.${_oda}&mod=eq.${_m}&select=id,entry_date,paired_date`).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return}const tr=data[0],tarih=_tarih||tr.entry_date||today();if(_tarih&&tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return}showElektraReadonly(_oda,_m,tarih,_type)}).catch(()=>showAccessError())}
+else{q('demirbas-ui').style.display='';q('dsresult').innerHTML='<div class="empty">Yükleniyor...</div>';api(`/rest/v1/tokens?token=eq.${_token}&room_no=eq.${_oda}&mod=eq.${_m}&select=id,entry_date`).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return}const tarih=_tarih||data[0].entry_date||today();api(`/rest/v1/entries?room_no=eq.${_oda}&checkin_date=eq.${tarih}&mode=eq.demirbaş`).then(r=>r.json()).then(d=>{if(!d.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}q('dsresult').innerHTML=`<div class="room-header"><div class="room-num">${_oda}</div><div class="room-summary"><strong>Oda ${_oda} · ${fmtDate(tarih)}</strong><span>Salt okunur</span></div></div>`+d.map(e=>buildDemirbasCard(e)).join('')}).catch(()=>showAccessError())}).catch(()=>showAccessError())}}
+}else if(_oda&&!_token){showAccessError()}else{let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş'}catch(e){}setMode(savedMode);checkConn()}
 
-function showAccessError(){ q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';q('topbar-title').textContent='Erişim Yok'; document.body.innerHTML+='<div style="text-align:center;padding:60px;font-size:17px">Geçersiz veya süresi dolmuş link.</div>' }
-async function showElektraReadonly(oda,mod,tarih,entryType){
-  const rw=q('ereadonly-view');rw.innerHTML='<div style="text-align:center;padding:40px">Yükleniyor...</div>';
-  q('topbar-title').textContent=`Sayaç ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
-  if(entryType==='pair'){ const td=await api(`/rest/v1/tokens?token=eq.${_token}&select=paired_date`).then(r=>r.json()).catch(()=>[]);const cd=td[0]?.paired_date;if(!cd){showAccessError();return}
-    const[gd,cid]=await Promise.all([api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&type=eq.giris`).then(r=>r.json()),api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${cd}&mode=eq.${mod}&type=eq.cikis`).then(r=>r.json())]);
-    const g=gd[0],c=cid[0];if(!g&&!c){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}
-    rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cd)} · Salt Okunur</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${g?buildElektraCard(g):''}${c?buildElektraCard(c):''}</div>`;
-  } else { let url=`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&order=checkin_date.desc`;if(entryType)url+=`&type=eq.${entryType}`; const data=await api(url).then(r=>r.json()); if(!data.length){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}
-    rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · Salt Okunur</span></div></div>`+data.map(e=>buildElektraCard(e)).join('') }
-}
+function showAccessError(){q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';q('topbar-title').textContent='Erişim Yok';document.body.innerHTML+='<div style="text-align:center;padding:60px;font-size:17px">Geçersiz veya süresi dolmuş link.</div>'}
+async function showElektraReadonly(oda,mod,tarih,entryType){const rw=q('ereadonly-view');rw.innerHTML='<div style="text-align:center;padding:40px">Yükleniyor...</div>';q('topbar-title').textContent=`Sayaç ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;if(entryType==='pair'){const td=await api(`/rest/v1/tokens?token=eq.${_token}&select=paired_date`).then(r=>r.json()).catch(()=>[]);const cd=td[0]?.paired_date;if(!cd){showAccessError();return}const[gd,cid]=await Promise.all([api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&type=eq.giris`).then(r=>r.json()),api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${cd}&mode=eq.${mod}&type=eq.cikis`).then(r=>r.json())]);const g=gd[0],c=cid[0];if(!g&&!c){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cd)} · Salt Okunur</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${g?buildElektraCard(g):''}${c?buildElektraCard(c):''}</div>`}else{let url=`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&order=checkin_date.desc`;if(entryType)url+=`&type=eq.${entryType}`;const data=await api(url).then(r=>r.json());if(!data.length){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · Salt Okunur</span></div></div>`+data.map(e=>buildElektraCard(e)).join('')}}
 </script>
 </body>
 </html>
