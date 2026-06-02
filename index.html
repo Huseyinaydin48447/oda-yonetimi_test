@@ -22,10 +22,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .topbar h1{font-size:16px;font-weight:600;color:#fff}
 .topbar p{font-size:11px;color:rgba(255,255,255,.65);margin-top:1px}
-.mode-btns{display:flex;gap:5px;flex-shrink:0}
+.mode-btns{display:flex;gap:5px;flex-shrink:0;margin-left:auto}
 .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
 .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
-.conn-badge{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px;padding:2px 8px;background:rgba(0,0,0,0.2);border-radius:20px;margin-left:auto}
+.conn-badge{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px;padding:2px 8px;background:rgba(0,0,0,0.2);border-radius:20px}
 .conn-dot{width:6px;height:6px;border-radius:50%;background:#aaa}
 .conn-dot.ok{background:#4caf50}
 
@@ -94,12 +94,20 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .toast.error{background:var(--danger)}
 .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;flex-direction:column}
 .lightbox.open{display:flex}
-.lb-top{display:flex;justify-content:space-between;padding:10px 14px}
-.lb-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
-.lb-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.lb-img-wrap img{max-width:100%;max-height:100%;object-fit:contain}
-.lb-nav{display:flex;gap:10px;justify-content:center;padding:10px}
-.lb-btn{padding:6px 16px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:6px;cursor:pointer}
+.lb-topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0;background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);position:absolute;top:0;left:0;z-index:10}
+.lb-lbl{color:rgba(255,255,255,.7);font-size:12px;font-family:'DM Mono',monospace}
+.lb-zoom-row{display:flex;align-items:center;gap:8px}
+.lb-zoom-badge{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);color:#fff;font-size:12px;font-weight:600;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:99px;min-width:48px;text-align:center}
+.lb-reset-btn{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:none;color:#fff;font-size:14px;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lb-close{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:none;color:#fff;font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lb-img-wrap{flex:1;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:grab}
+.lb-img-wrap img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;transition:transform .25s ease;pointer-events:none;border-radius:4px;user-select:none;-webkit-user-drag:none}
+.lb-nav{width:100%;display:flex;gap:12px;padding:14px 16px;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);position:absolute;bottom:0;left:0}
+.lb-btn{padding:9px 20px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);backdrop-filter:blur(6px);color:#fff;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.lb-btn:disabled{opacity:.3;cursor:default}
+.lb-counter{color:rgba(255,255,255,.65);font-size:13px;font-family:'DM Mono',monospace}
+.lb-hint{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:rgba(255,255,255,.75);font-size:11px;padding:5px 12px;border-radius:99px;pointer-events:none;opacity:1;transition:opacity 1s ease;white-space:nowrap}
+.lb-hint.hide{opacity:0}
 .loader{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:flex-end;justify-content:center;padding:16px}
@@ -108,14 +116,23 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .confirm-sheet h3{font-size:16px;font-weight:600;margin-bottom:8px}
 .confirm-actions{display:flex;gap:8px}
 .confirm-actions .btn{flex:1;justify-content:center}
-.ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
-
-/* ELEKTRA GRID STILLERI */
+.pdf-panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:flex-end;justify-content:center;padding:16px}
+.pdf-panel-overlay.open{display:flex}
+.pdf-panel{background:var(--surface);border-radius:var(--radius);width:100%;max-width:448px;overflow:hidden;box-shadow:0 -4px 32px rgba(0,0,0,.12)}
+.pdf-panel-header{padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between}
+.pdf-option{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.pdf-sub-panel{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--surface2)}
+.pdf-sub-panel.open{display:block}
+.dl-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:flex-end;justify-content:center;padding:16px}
+.dl-overlay.open{display:flex}
+.dl-sheet{background:var(--surface);border-radius:var(--radius);padding:20px;width:100%;max-width:448px}
+.dl-bar-wrap{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:8px 0}
+.dl-bar{height:100%;background:var(--accent);width:0;transition:width .25s}
+.ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;white-space:nowrap}
+/* ELEKTRA EK STILLERI */
 .stat-badge{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:#fff;background:rgba(255,255,255,0.15);cursor:default}
 .stat-badge .count{font-size:14px;font-weight:700}
-.sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}
-.sb-temiz{background:#4caf50;color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}
-.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
+.sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}.sb-temiz{background:#4caf50;color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
 .elektra-top-stats{display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)}
 .elektra-filter{display:flex;gap:8px;align-items:center;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
 .elektra-filter select,.elektra-filter input{width:auto;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
@@ -126,7 +143,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .room-cell{height:38px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(0,0,0,0.05);position:relative;background:var(--surface);color:var(--text);transition:transform 0.1s,filter 0.1s}
 .room-cell:hover{transform:scale(1.06);z-index:2;filter:brightness(1.15)}
 .room-flag{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#00e5ff}
-.status-dolu-temiz{background:#1565c0;color:#fff}.status-dolu-kirli{background:#6a1a9a;color:#fff}.status-cout{background:#2e7d32;color:#fff}.status-cout-b{background:#1b5e20;color:#fff}.status-temiz{background:#4caf50;color:#fff}.status-temiz-b{background:#009688;color:#fff}.status-kirli{background:#ff6d00;color:#fff}.status-kirli-b{background:#d32f2f;color:#fff}.status-ooi{background:#880e4f;color:#fff}.status-ariza{background:#546e7a;color:#fff}.status-onaylı{background:#4a148c;color:#fff}.status-onaylı-b{background:#7b1fa2;color:#fff}.status-bos{background:#fff;color:#888;border:1px dashed #ccc}
+.status-dolu-temiz{background:#1565c0;color:#fff}.status-dolu-kirli{background:#6a1a9a;color:#fff}.status-cout{background:#2e7d32;color:#fff}.status-temiz{background:#4caf50;color:#fff}.status-temiz-b{background:#009688;color:#fff}.status-kirli{background:#ff6d00;color:#fff}.status-kirli-b{background:#d32f2f;color:#fff}.status-ooi{background:#880e4f;color:#fff}.status-ariza{background:#546e7a;color:#fff}.status-onaylı{background:#4a148c;color:#fff}.status-bos{background:#fff;color:#888;border:1px dashed #ccc}
 .panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500}
 .panel-overlay.open{display:block}
 .room-panel{position:fixed;top:0;right:0;bottom:0;width:540px;max-width:100vw;background:var(--surface);z-index:1501;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s;overflow:hidden;box-shadow:-4px 0 20px rgba(0,0,0,0.15)}
@@ -192,7 +209,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 <div id="dsresult"><div class="empty">Numara girin</div></div>
 </div>
 <div class="screen" id="ds1">
-<div class="field"><span class="label">Dönem Aralığı</span><select id="f-donem"><option value="">Seçiniz</option><option>1 - 15 Ocak</option><option>16 - 30 Ocak</option></select></div>
+<div class="field"><span class="label">Dönem Aralığı</span><select id="f-donem"><option value="">Seçiniz</option><option>1 - 15 Ocak</option><option>16 - 30 Ocak</option><option>31 Ocak - 14 Şubat</option><option>15 Şubat - 1 Mart</option><option>2 - 16 Mart</option><option>17 - 31 Mart</option><option>1 - 15 Nisan</option><option>16 - 30 Nisan</option><option>1 - 15 Mayıs</option><option>16 - 30 Mayıs</option><option>31 Mayıs - 14 Haziran</option><option>15 - 29 Haziran</option><option>30 Haziran - 14 Temmuz</option><option>15 - 29 Temmuz</option><option>30 Temmuz - 13 Ağustos</option><option>14 - 28 Ağustos</option><option>29 Ağustos - 12 Eylül</option><option>13 - 27 Eylül</option><option>28 Eylül - 12 Ekim</option><option>13 - 27 Ekim</option><option>2 - 16 Kasım</option><option>17 Kasım - 1 Aralık</option><option>2 - 16 Aralık</option><option>17 - 31 Aralık</option></select></div>
 <div class="field"><span class="label">Oda numarası *</span><input id="f-room" type="number" placeholder="örn: 307"></div>
 <div class="field"><span class="label">Giriş tarihi *</span><input id="f-date" type="date"></div>
 <div class="field"><span class="label">Kategori</span><div class="tags-row" id="f-tags"><span class="tag" onclick="this.classList.toggle('on')">1+1</span><span class="tag" onclick="this.classList.toggle('on')">2+1</span></div></div>
@@ -210,7 +227,27 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 </div>
 <button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()"><span id="save-label">Kaydet</span></button>
 </div>
-<div class="screen" id="ds2"><div id="rlist"><div class="empty">Yükleniyor...</div></div></div>
+<div class="screen" id="ds2">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+<span style="font-size:13px;color:var(--muted)"></span>
+<button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)">📄 PDF Dışa Aktar</button>
+</div>
+<div id="rlist"><div class="empty">Yükleniyor...</div></div>
+</div>
+<!-- PDF PANEL -->
+<div class="pdf-panel-overlay" id="pdf-panel-overlay" onclick="if(event.target===this)closePdfPanel()">
+<div class="pdf-panel">
+<div class="pdf-panel-header"><h3>PDF Dışa Aktar</h3><button class="pdf-panel-close" onclick="closePdfPanel()">✕</button></div>
+<div class="pdf-option" onclick="selectPdfOpt('all')"><div class="pdf-option-icon all"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a5c3a" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg></div><div><strong>Hepsini İndir</strong><span>Tüm odalar tek PDF</span></div></div>
+<div class="pdf-sub-panel" id="pdf-sub-all"><button class="pdf-sub-btn" id="pdf-all-btn" onclick="runPdfAll()">Tüm Odaları PDF İndir</button></div>
+<div class="pdf-option" onclick="selectPdfOpt('date')"><div class="pdf-option-icon date"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><strong>Tarih Aralığı</strong><span>Seçilen tarihler arası</span></div></div>
+<div class="pdf-sub-panel" id="pdf-sub-date"><div class="field"><span class="label">Başlangıç</span><input type="date" id="pdf-date-from"></div><div class="field"><span class="label">Bitiş</span><input type="date" id="pdf-date-to"></div><button class="pdf-sub-btn" id="pdf-date-btn" onclick="runPdfDate()">Tarihe Göre PDF İndir</button></div>
+<div class="pdf-option" onclick="selectPdfOpt('rooms')"><div class="pdf-option-icon rooms"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><strong>Oda Numarası</strong><span>Virgülle ayırarak yazın</span></div></div>
+<div class="pdf-sub-panel" id="pdf-sub-rooms"><div class="field"><span class="label">Oda numaraları</span><input type="text" id="pdf-rooms-input" placeholder="101,205,307"></div><button class="pdf-sub-btn" id="pdf-rooms-btn" onclick="runPdfRooms()">Seçili Odaları PDF İndir</button></div>
+</div>
+</div>
+<!-- DOWNLOAD OVERLAY -->
+<div class="dl-overlay" id="dl-overlay"><div class="dl-sheet"><div class="dl-title"><span class="loader" style="border-top-color:var(--accent);width:14px;height:14px;border-width:2px"></span><span>İndiriliyor...</span></div><div class="dl-percent">0%</div><div class="dl-bar-wrap"><div class="dl-bar" id="dl-bar"></div></div><div class="dl-stats"><span id="dl-stats-left"></span><span id="dl-stats-right"></span></div></div></div>
 </div>
 
 <!-- ELEKTRA UI -->
@@ -257,9 +294,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 </div>
 </div>
 
-<div class="lightbox" id="lb"><div class="lb-top"><span id="lb-label"></span><button class="lb-close" onclick="closeLb()">✕</button></div><div class="lb-img-wrap"><img id="lb-img" src=""></div><div class="lb-nav"><button class="lb-btn" onclick="lbMove(-1)">←</button><span id="lb-counter"></span><button class="lb-btn" onclick="lbMove(1)">→</button></div></div>
+<div class="lightbox" id="lb">
+<div class="lb-topbar"><span class="lb-lbl" id="lb-lbl"></span><div class="lb-zoom-row"><span class="lb-zoom-badge" id="lb-zoom-badge">%100</span><button class="lb-reset-btn" onclick="lbResetZoom()">↺</button><button class="lb-close" onclick="closeLb()">✕</button></div></div>
+<div class="lb-img-wrap" id="lb-img-wrap"><img id="lb-img" src=""><div class="lb-hint" id="lb-hint">Çift dokun / kaydır → yakınlaştır</div></div>
+<div class="lb-nav"><button class="lb-btn" id="lb-prev" onclick="lbMove(-1)">← Önceki</button><span class="lb-counter" id="lb-counter"></span><button class="lb-btn" id="lb-next" onclick="lbMove(1)">Sonraki →</button></div>
+</div>
 <div class="confirm-overlay" id="confirm-overlay" onclick="if(event.target===this)closeConfirm()"><div class="confirm-sheet"><h3 id="confirm-title">Emin misiniz?</h3><p id="confirm-msg"></p><div class="confirm-actions"><button class="btn" onclick="closeConfirm()">İptal</button><button class="btn btn-danger" id="confirm-ok">Sil</button></div></div></div>
 <div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 // ═══════════════ ORTAK ═══════════════
@@ -267,17 +311,17 @@ const SB='https://tpfdsmexywjnsbkfphwq.supabase.co',KEY='sb_publishable_3pKKUsVj
 const BUCKETS={demirbaş:'photos',elektrik:'meters'};
 const CMAX=1600,CQ=0.82;
 const FLOORS=Array.from({length:15},(_,i)=>({label:(i+1)+'. Kat',prefix:i+1,rooms:18}));
-let mode='demirbaş',demirbasTab=0,demirbasSearchTab='room',demirbasPending=[];
+let mode='demirbaş',demirbasTab=0,demirbasSearchTab='room',demirbasPending=[],demirbasSelTags=[];
 let elektraView='grid',elektraCurrentRoom=null,elektraPending=[],elektraEntryType=null,elektraCurrentEntries=[],elektraAllData=[],roomsWithEntries=new Set();
 let lbImages=[],lbIndex=0,confirmCb=null,entryImages={},entryData={},openEntries=new Set();
-let demirbasSelTags=[],lastVal='',timer=null;
-let mlAllData=[],mlFiltered=[],mlTypeFilter='all',searchTab='room',confirmCallback=null,activePdfOpt=null;
-const MODES={demirbaş:{title:'Demirbaş Takibi',tags:['1+1','2+1']},elektrik:{title:'⚡ ELEKTRA SAYAÇ PANELİ',tags:['1. Kat','2. Kat','3. Kat','4. Kat','5. Kat','6. Kat','7. Kat','8. Kat','9. Kat','10. Kat','11. Kat','12. Kat','13. Kat','14. Kat','15. Kat']}};
+let mlAllData=[],mlFiltered=[],mlTypeFilter='all',activePdfOpt=null;
+let timer=null;
 
 function q(id){return document.getElementById(id)}
 function today(){return new Date().toISOString().slice(0,10)}
 function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const a=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return parseInt(d)+' '+a[parseInt(m)-1]+' '+y}
 function fmtShort(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const a=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return parseInt(d)+' '+a[parseInt(m)-1]+' '+y.slice(2)}
+function fmtDatePDF(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const a=['Oca','Sub','Mar','Nis','May','Haz','Tem','Agu','Eyl','Eki','Kas','Ara'];return parseInt(d)+' '+a[parseInt(m)-1]+' '+y}
 async function api(path,opts={}){return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}})}
 function showToast(msg,type='success'){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',2500)}
 function openConfirm(title,msg,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;confirmCb=cb;q('confirm-overlay').classList.add('open')}
@@ -286,13 +330,38 @@ q('confirm-ok').addEventListener('click',()=>{if(confirmCb)confirmCb();closeConf
 function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16)}
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let w=img.width,h=img.height;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);c.toBlob(b=>{resolve({file:new File([b],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:b.size})},'image/jpeg',CQ)};img.src=url})}
 async function uploadImg(file,roomNo,bucket){const ext=file.name.split('.').pop();const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});if(!r.ok)throw new Error('Yükleme başarısız');return`${SB}/storage/v1/object/public/${bucket}/${path}`}
-function openLb(photos,idx){lbImages=typeof photos==='string'?JSON.parse(photos):photos;lbIndex=idx;updateLb();q('lb').classList.add('open')}
-function closeLb(){q('lb').classList.remove('open')}
-function lbMove(d){lbIndex=Math.max(0,Math.min(lbImages.length-1,lbIndex+d));updateLb()}
-function updateLb(){q('lb-img').src=lbImages[lbIndex]||'';q('lb-counter').textContent=lbImages.length?`${lbIndex+1}/${lbImages.length}`:''}
 async function createEntryLink(roomNo,date,mod,type){const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${roomNo}&mod=eq.${mod}&entry_date=eq.${date}&entry_type=eq.${type||''}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_date:date,entry_type:type||''})});const url=`${location.origin+location.pathname}?oda=${roomNo}&mod=${mod}&tarih=${date}&token=${token}&type=${type||''}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url))}
 async function createPairLink(roomNo,girisDate,cikisDate,mod){const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${roomNo}&mod=eq.${mod}&entry_date=eq.${girisDate}&entry_type=eq.pair`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_date:girisDate,entry_type:'pair',paired_date:cikisDate})});const url=`${location.origin+location.pathname}?oda=${roomNo}&mod=${mod}&tarih=${girisDate}&token=${token}&type=pair`;navigator.clipboard.writeText(url).then(()=>showToast('Çift link kopyalandı!')).catch(()=>prompt('Link:',url))}
 async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-dot').classList.add('ok');q('conn-text').textContent='Bağlantı aktif'}else throw 0}catch{q('conn-text').textContent='Bağlantı yok'}}
+
+// ═══════════════ LIGHTBOX (ortak) ═══════════════
+const LB={scale:1,minScale:1,maxScale:5,translateX:0,translateY:0,isDragging:false,dragStartX:0,dragStartY:0,dragStartTX:0,dragStartTY:0,isPinching:false,pinchStartDist:0,pinchStartScale:1,pinchMidX:0,pinchMidY:0,lastTapTime:0,lastTapX:0,lastTapY:0};
+const lbWrap=()=>q('lb-img-wrap'),lbImgEl=()=>q('lb-img');
+function lbApply(anim){const img=lbImgEl();anim?img.classList.remove('no-transition'):img.classList.add('no-transition');img.style.transform=`translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;q('lb-zoom-badge').textContent=Math.round(LB.scale*100)+'%'}
+function lbClamp(){const wrap=lbWrap(),img=lbImgEl();const wW=wrap.clientWidth,wH=wrap.clientHeight;const iW=img.naturalWidth||img.offsetWidth,iH=img.naturalHeight||img.offsetHeight;const ratio=Math.min(wW/iW,wH/iH);const dispW=iW*ratio*LB.scale,dispH=iH*ratio*LB.scale;const maxX=Math.max(0,(dispW-wW)/2),maxY=Math.max(0,(dispH-wH)/2);LB.translateX=Math.max(-maxX,Math.min(maxX,LB.translateX));LB.translateY=Math.max(-maxY,Math.min(maxY,LB.translateY))}
+function lbZoomTo(s,ox,oy,anim){const wrap=lbWrap();const rect=wrap.getBoundingClientRect();const cx=(ox-rect.left)-rect.width/2,cy=(oy-rect.top)-rect.height/2;const f=s/LB.scale;LB.translateX=cx-f*(cx-LB.translateX);LB.translateY=cy-f*(cy-LB.translateY);LB.scale=s;lbClamp();lbApply(anim);lbWrap().classList.toggle('zoomed',LB.scale>1.05)}
+function lbResetZoom(anim){LB.scale=1;LB.translateX=0;LB.translateY=0;lbApply(anim!==false);lbWrap().classList.remove('zoomed')}
+function lbOnWheel(e){e.preventDefault();const ns=Math.max(LB.minScale,Math.min(LB.maxScale,LB.scale*(e.deltaY>0?0.85:1.18)));lbZoomTo(ns,e.clientX,e.clientY,false)}
+function lbOnMD(e){if(LB.scale<=1.05)return;LB.isDragging=true;LB.dragStartX=e.clientX;LB.dragStartY=e.clientY;LB.dragStartTX=LB.translateX;LB.dragStartTY=LB.translateY;lbWrap().classList.add('grabbing')}
+function lbOnMM(e){if(!LB.isDragging)return;LB.translateX=LB.dragStartTX+(e.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(e.clientY-LB.dragStartY);lbClamp();lbApply(false)}
+function lbOnMU(){LB.isDragging=false;lbWrap().classList.remove('grabbing')}
+function lbOnDbl(e){LB.scale>1.3?lbResetZoom():lbZoomTo(2.5,e.clientX,e.clientY,true)}
+function lbTDist(t){const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy)}
+function lbTMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
+function lbOnTS(e){if(e.touches.length===2){e.preventDefault();LB.isPinching=true;LB.isDragging=false;LB.pinchStartDist=lbTDist(e.touches);LB.pinchStartScale=LB.scale;const m=lbTMid(e.touches);LB.pinchMidX=m.x;LB.pinchMidY=m.y}else if(e.touches.length===1){const now=Date.now(),t=e.touches[0];if(now-LB.lastTapTime<300&&Math.abs(t.clientX-LB.lastTapX)<30&&Math.abs(t.clientY-LB.lastTapY)<30){e.preventDefault();LB.scale>1.3?lbResetZoom(true):lbZoomTo(2.5,t.clientX,t.clientY,true);LB.lastTapTime=0;return}LB.lastTapTime=now;LB.lastTapX=t.clientX;LB.lastTapY=t.clientY;if(LB.scale>1.05){LB.isDragging=true;LB.dragStartX=t.clientX;LB.dragStartY=t.clientY;LB.dragStartTX=LB.translateX;LB.dragStartTY=LB.translateY}}}
+function lbOnTM(e){if(LB.isPinching&&e.touches.length===2){e.preventDefault();const ns=Math.max(LB.minScale,Math.min(LB.maxScale,LB.pinchStartScale*(lbTDist(e.touches)/LB.pinchStartDist)));lbZoomTo(ns,LB.pinchMidX,LB.pinchMidY,false)}else if(LB.isDragging&&e.touches.length===1&&LB.scale>1.05){e.preventDefault();const t=e.touches[0];LB.translateX=LB.dragStartTX+(t.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(t.clientY-LB.dragStartY);lbClamp();lbApply(false)}}
+function lbOnTE(e){if(e.touches.length<2)LB.isPinching=false;if(e.touches.length===0)LB.isDragging=false}
+function lbBind(){const w=lbWrap();w.addEventListener('wheel',lbOnWheel,{passive:false});w.addEventListener('mousedown',lbOnMD);window.addEventListener('mousemove',lbOnMM);window.addEventListener('mouseup',lbOnMU);w.addEventListener('dblclick',lbOnDbl);w.addEventListener('touchstart',lbOnTS,{passive:false});w.addEventListener('touchmove',lbOnTM,{passive:false});w.addEventListener('touchend',lbOnTE)}
+function openLb(ei,ii){
+if(typeof ei==='number'){lbImages=entryImages[ei]||[];lbIdx=ii}
+else{lbImages=typeof ei==='string'?JSON.parse(ei):ei;lbIdx=ii}
+updateLb();q('lb').classList.add('open');const h=q('lb-hint');if(h){h.classList.remove('hide');setTimeout(()=>h.classList.add('hide'),3000)}
+}
+function closeLb(){q('lb').classList.remove('open');lbResetZoom(false)}
+function lbMove(d){lbIdx=Math.max(0,Math.min(lbImages.length-1,lbIdx+d));lbResetZoom(false);updateLb()}
+function updateLb(){q('lb-img').src=lbImages[lbIdx]||'';q('lb-lbl').textContent=(lbIdx+1)+'. fotoğraf';q('lb-counter').textContent=(lbIdx+1)+' / '+lbImages.length;q('lb-prev').disabled=lbIdx===0;q('lb-next').disabled=lbIdx===lbImages.length-1}
+document.addEventListener('DOMContentLoaded',lbBind);
+if(document.readyState!=='loading')lbBind();
 
 // ═══════════════ MOD ═══════════════
 function setMode(m){
@@ -317,7 +386,25 @@ async function demirbasDeleteEntry(id){openConfirm('Sil','Bu kayıt silinecek.',
 async function demirbasAddFiles(files){const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;for(const f of files){const r=await compressImage(f);demirbasPending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++}demirbasRenderPrev();if(cc>0)se.innerHTML=`<div class="compress-info">${cc} fotoğraf sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü</div>`}
 function demirbasRenderPrev(){q('prev-row').innerHTML=demirbasPending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="demirbasPending.splice(${i},1);demirbasRenderPrev()">✕</div></div>`).join('')}
 async function demirbasSaveEntry(){const room=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim(),donem=q('f-donem').value;if(!room||!date||!demirbasPending.length){showToast('Eksik bilgi','error');return}const btn=q('save-btn'),lbl=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span>';const pw=q('progress-wrap'),pb=q('progress-bar');pw.classList.add('show');pb.style.width='0%';try{const tags=[...document.querySelectorAll('#f-tags .tag.on')].map(t=>t.textContent).join(',');const urls=[];for(let i=0;i<demirbasPending.length;i++){urls.push(await uploadImg(demirbasPending[i].file,room,BUCKETS.demirbaş));pb.style.width=Math.round((i+1)/demirbasPending.length*100)+'%'}await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:room,mode:'demirbaş',checkin_date:date,category:tags,note,photo_urls:urls,donem})});showToast('Kayıt oluşturuldu');demirbasPending=[];q('f-room').value='';q('f-note').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';q('f-donem').value='';document.querySelectorAll('#f-tags .tag.on').forEach(t=>t.classList.remove('on'))}catch(e){showToast('Hata: '+e.message,'error')}finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')}}
-async function demirbasLoadAll(){const el=q('rlist');el.innerHTML='<div class="empty">Yükleniyor...</div>';try{const data=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls&mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());if(!data.length){el.innerHTML='<div class="empty">Kayıt yok</div>';return}const gr={};data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});el.innerHTML=Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).map(rno=>{const e=gr[rno][0],cover=(e.photo_urls||[])[0];return`<div class="all-card" onclick="q('dsinput').value='${rno}';goDemirbasTab(0);demirbasSearch()"><div class="all-card-inner">${cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">`:'<div style="width:56px;height:56px;background:var(--surface2);border-radius:8px"></div>'}<div><strong>Oda ${rno}</strong><div style="font-size:12px;color:var(--muted)">${gr[rno].length} kayıt</div></div></div></div>`}).join('')}catch(e){el.innerHTML='<div class="empty">Hata</div>'}}
+async function demirbasLoadAll(){const el=q('rlist');el.innerHTML='<div class="empty">Yükleniyor...</div>';try{const data=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls&mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());if(!data.length){el.innerHTML='<div class="empty">Kayıt yok</div>';return}const gr={};data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});const rooms=Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b));el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:13px;color:var(--muted)">${rooms.length} oda</span><button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Dışa Aktar</button></div>`+rooms.map(rno=>{const e=gr[rno][0],cover=(e.photo_urls||[])[0];return`<div class="all-card" onclick="q('dsinput').value='${rno}';goDemirbasTab(0);demirbasSearch()"><div class="all-card-inner">${cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">`:'<div style="width:56px;height:56px;background:var(--surface2);border-radius:8px"></div>'}<div><strong>Oda ${rno}</strong><div style="font-size:12px;color:var(--muted)">${gr[rno].length} kayıt</div></div></div></div>`}).join('')}catch(e){el.innerHTML='<div class="empty">Hata</div>'}}
+
+// PDF (Demirbaş)
+function openPdfPanel(){activePdfOpt=null;['all','date','rooms'].forEach(k=>{q('pdf-sub-'+k).classList.remove('open')});q('pdf-panel-overlay').classList.add('open')}
+function closePdfPanel(){q('pdf-panel-overlay').classList.remove('open')}
+function selectPdfOpt(key){if(activePdfOpt===key){q('pdf-sub-'+key).classList.remove('open');activePdfOpt=null;return}['all','date','rooms'].forEach(k=>q('pdf-sub-'+k).classList.remove('open'));activePdfOpt=key;q('pdf-sub-'+key).classList.add('open')}
+async function loadPhoto(url){const res=await fetch(url);const blob=await res.blob();const raw=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(blob)});const dims=await new Promise(r=>{const img=new Image();img.onload=()=>r({w:img.naturalWidth,h:img.naturalHeight});img.onerror=()=>r({w:4,h:3});img.src=raw});return{dataUrl:raw,pw:dims.w,ph:dims.h}}
+async function exportBulkPDF(rooms,entries,filename){
+if(typeof window.jspdf==='undefined'){showToast('jsPDF yüklenemedi','error');return}
+const{jsPDF}=window.jspdf,doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'}),PW=210,mg=15;let sy=20,page=0;
+const total=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+let processed=0;
+function updateProgress(){q('dl-bar').style.width=Math.round(processed/total*100)+'%';q('dl-percent').textContent=Math.round(processed/total*100)+'%';q('dl-stats-left').textContent=processed+' / '+total}
+q('dl-overlay').classList.add('open');updateProgress();
+for(const entry of entries){const urls=entry.photo_urls||[];for(const url of urls){const{dataUrl,pw,ph}=await loadPhoto(url);doc.addPage('a4');doc.addImage(dataUrl,'JPEG',10,10,190,ph/pw*190);processed++;updateProgress()}}
+doc.save(filename);q('dl-overlay').classList.remove('open');showToast('PDF indirildi!')}
+async function runPdfAll(){const data=await api(`/rest/v1/entries?mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());closePdfPanel();exportBulkPDF([...new Set(data.map(e=>e.room_no))],data,`tum_odalar_${today()}.pdf`)}
+async function runPdfDate(){const f=q('pdf-date-from').value,t=q('pdf-date-to').value;if(!f||!t)return;const data=await api(`/rest/v1/entries?checkin_date=gte.${f}&checkin_date=lte.${t}&mode=eq.demirbaş&order=room_no.asc`).then(r=>r.json());closePdfPanel();exportBulkPDF([...new Set(data.map(e=>e.room_no))],data,`tarih_${f}_${t}.pdf`)}
+async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();const rooms=raw.split(/[\s,;]+/).filter(Boolean);const all=[];for(const r of rooms){const d=await api(`/rest/v1/entries?room_no=eq.${r}&mode=eq.demirbaş`).then(r=>r.json());d.forEach(e=>all.push(e))}closePdfPanel();exportBulkPDF(rooms,all,`odalar_${rooms.join('-')}.pdf`)}
 
 // ═══════════════ ELEKTRA ═══════════════
 const EROOM_PREFIX='otel_room_';
@@ -327,7 +414,7 @@ function allERooms(){const a=[];FLOORS.forEach(f=>{for(let i=1;i<=f.rooms;i++)a.
 function initElektra(){allERooms().forEach(n=>{if(!getERoom(n))setERoom(n,{status:'bos'})});updateElektraStats();loadElektraRoomsWithEntries();renderElektraView()}
 function updateElektraStats(){const c={};allERooms().forEach(n=>{const s=getERoom(n)?.status||'bos';c[s]=(c[s]||0)+1});q('cnt-dt').textContent=c['dolu-temiz']||0;q('cnt-dk').textContent=c['dolu-kirli']||0;q('cnt-co').textContent=(c['cout']||0)+(c['cout-b']||0);q('cnt-t').textContent=(c['temiz']||0)+(c['temiz-b']||0);q('cnt-k').textContent=(c['kirli']||0)+(c['kirli-b']||0);q('cnt-ooi').textContent=c['ooi']||0;q('cnt-ar').textContent=c['ariza']||0;q('cnt-on').textContent=(c['onaylı']||0)+(c['onaylı-b']||0)}
 async function loadElektraRoomsWithEntries(){try{const r=await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);roomsWithEntries=new Set((await r.json()).map(e=>String(e.room_no)))}catch(e){}}
-function setElektraView(v){elektraView=v;q('ebtn-grid').style.cssText=v==='grid'?'background:var(--accent);color:#fff;border-color:var(--accent);padding:6px 12px;font-size:12px':'padding:6px 12px;font-size:12px';q('ebtn-list').style.cssText=v==='list'?'background:var(--accent);color:#fff;border-color:var(--accent);padding:6px 12px;font-size:12px':'padding:6px 12px;font-size:12px';renderElektraView()}
+function setElektraView(v){elektraView=v;q('ebtn-grid').style.cssText=v==='grid'?'background:var(--accent);color:#fff;border-color:var(--accent)':'';q('ebtn-list').style.cssText=v==='list'?'background:var(--accent);color:#fff;border-color:var(--accent)':'';renderElektraView()}
 function renderElektraView(){if(elektraView==='grid'){q('egrid-container').classList.remove('hidden');q('elist-container').classList.remove('active');renderElektraGrid()}else{q('egrid-container').classList.add('hidden');q('elist-container').classList.add('active');renderElektraList()}}
 function statusClass(s){const m={'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli','cout':'status-cout','cout-b':'status-cout-b','temiz':'status-temiz','temiz-b':'status-temiz-b','kirli':'status-kirli','kirli-b':'status-kirli-b','ooi':'status-ooi','ariza':'status-ariza','onaylı':'status-onaylı','onaylı-b':'status-onaylı-b','bos':'status-bos'};return m[s]||'status-bos'}
 function renderElektraGrid(){const fs=q('efilter-status').value,sv=q('esearch-room').value.trim().toLowerCase(),container=q('egrid-container');container.innerHTML='';FLOORS.forEach(f=>{const matching=[];for(let i=1;i<=f.rooms;i++){const n=f.prefix*100+i;const s=getERoom(n)?.status||'bos';if(fs&&s!==fs)continue;if(sv&&!String(n).includes(sv))continue;matching.push(n)}if(!matching.length)return;const sec=document.createElement('div');sec.className='floor-section';sec.innerHTML=`<div class="floor-label">▸ ${f.label}</div>`;const grid=document.createElement('div');grid.className='room-grid';matching.forEach(n=>{const cell=document.createElement('div');cell.className='room-cell '+statusClass(getERoom(n)?.status||'bos');cell.textContent=n;if(roomsWithEntries.has(String(n))){const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl)}cell.addEventListener('click',()=>openElektraPanel(n));grid.appendChild(cell)});sec.appendChild(grid);container.appendChild(sec)})}
