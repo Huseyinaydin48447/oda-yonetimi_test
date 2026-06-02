@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Elektra Sayaç Paneli</title>
@@ -17,7 +17,6 @@
   body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:15px; }
   .app { max-width:1300px; margin:0 auto; min-height:100vh; background:var(--bg); display:flex; flex-direction:column; }
 
-  /* TOPBAR */
   .topbar { background:var(--accent); padding:10px 16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:sticky; top:0; z-index:100; }
   .topbar h1 { font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px; }
   .stat-badge { display:flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); cursor:default; }
@@ -34,12 +33,10 @@
   .conn-dot { width:6px; height:6px; border-radius:50%; background:#aaa; }
   .conn-dot.ok { background:#4caf50; }
 
-  /* LEGEND */
   .legend { background:var(--surface); padding:6px 12px; display:flex; flex-wrap:wrap; gap:8px; border-bottom:1px solid var(--border); }
   .legend-item { display:flex; align-items:center; gap:4px; font-size:11px; color:var(--muted); }
   .legend-dot { width:12px; height:12px; border-radius:3px; }
 
-  /* FILTER BAR */
   .filter-bar { padding:6px 12px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; background:var(--surface2); border-bottom:1px solid var(--border); }
   .filter-bar label { font-size:11px; color:var(--muted); }
   .filter-bar select, .filter-bar input { font-size:12px; padding:6px 8px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif; }
@@ -47,7 +44,6 @@
   .view-btn { padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid var(--border); background:var(--surface); color:var(--muted); cursor:pointer; }
   .view-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
 
-  /* GRID */
   .grid-container { padding:12px; overflow-x:auto; }
   .floor-section { margin-bottom:8px; }
   .floor-label { font-size:11px; color:var(--muted); margin-bottom:4px; font-weight:600; }
@@ -70,10 +66,9 @@
   .status-bos         { background:#fff; color:#aaa; border:1px dashed #ccc; }
   .room-flag { position:absolute; top:2px; right:2px; width:6px; height:6px; border-radius:50%; background:#00e5ff; }
 
-  /* PANEL */
   .panel-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:500; }
   .panel-overlay.open { display:block; }
-  .room-panel { position:fixed; top:0; right:0; bottom:0; width:540px; max-width:100vw; background:var(--surface); z-index:501; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.28s cubic-bezier(0.4,0,0.2,1); overflow:hidden; box-shadow:-4px 0 20px rgba(0,0,0,0.15); }
+  .room-panel { position:fixed; top:0; right:0; bottom:0; width:540px; max-width:100vw; background:var(--surface); z-index:501; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.28s; overflow:hidden; box-shadow:-4px 0 20px rgba(0,0,0,0.15); }
   .room-panel.open { transform:translateX(0); }
   .panel-header { background:var(--accent); padding:14px 18px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
   .panel-header h2 { font-size:15px; color:#fff; }
@@ -86,12 +81,10 @@
   .tab-pane { display:none; padding:14px 16px; }
   .tab-pane.active { display:block; }
 
-  /* LIST VIEW */
   .list-container { display:none; padding:12px; }
   .list-container.active { display:block; }
   .grid-container.hidden { display:none; }
 
-  /* entry cards */
   .entry-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:10px; overflow:hidden; }
   .entry-head { padding:10px 14px; display:flex; align-items:center; gap:8px; cursor:pointer; }
   .entry-head:hover { background:var(--surface2); }
@@ -106,21 +99,27 @@
   .entry-body { max-height:0; overflow:hidden; transition:max-height 0.3s; }
   .entry-body.open { max-height:1000px; }
   .img-scroll { display:flex; gap:6px; overflow-x:auto; padding:8px 14px; }
-  .img-thumb { width:80px; height:60px; border-radius:6px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer; }
+  .img-thumb { width:80px; height:60px; border-radius:6px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer; position:relative; }
   .img-thumb img { width:100%; height:100%; object-fit:cover; }
-  .entry-actions { display:flex; gap:6px; padding:8px 14px; border-top:1px solid var(--border); }
+  .img-thumb-del { position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:rgba(192,57,43,0.85); color:#fff; font-size:10px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .entry-actions { display:flex; gap:6px; padding:8px 14px; border-top:1px solid var(--border); flex-wrap:wrap; }
   .btn { padding:8px 14px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:4px; }
   .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
   .btn-danger { background:var(--danger-light); color:var(--danger); border-color:#f5c6c2; }
   .wa-btn { color:#25D366; border-color:#b7f0c8; background:#eafaf0; }
-  .ml-cikis-btn { padding:5px 10px; font-size:11px; font-weight:600; border-radius:6px; border:1px solid #e8a020; background:var(--amber-light); color:var(--amber); cursor:pointer; }
+  .edit-panel { display:none; padding:12px 14px; border-top:1px solid var(--border); background:var(--surface2); }
+  .edit-panel.open { display:block; }
+  .field { margin-bottom:10px; }
+  .field label { font-size:11px; color:var(--muted); display:block; margin-bottom:3px; }
+  .field input, .field select, .field textarea { width:100%; padding:8px; border-radius:6px; border:1px solid var(--border); font-size:13px; }
+  .tags-row { display:flex; gap:4px; flex-wrap:wrap; }
+  .tag { padding:4px 10px; border-radius:20px; font-size:11px; border:1px solid var(--border); cursor:pointer; color:var(--muted); }
+  .tag.on { background:var(--accent-light); color:var(--accent); border-color:var(--accent-mid); }
 
-  /* status select */
   .status-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
   .status-row label { font-size:13px; font-weight:600; }
-  .status-row select { flex:1; padding:8px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); }
+  .status-row select { flex:1; padding:8px; border-radius:6px; border:1px solid var(--border); }
 
-  /* add form */
   .form-section { margin-bottom:14px; }
   .form-label { font-size:11px; color:var(--muted); margin-bottom:4px; display:block; font-weight:600; text-transform:uppercase; }
   .type-btns { display:flex; gap:6px; }
@@ -138,7 +137,6 @@
   .progress-wrap.show { display:block; }
   .progress-bar { height:100%; background:var(--accent); width:0; transition:width 0.2s; }
 
-  /* lightbox */
   .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000; flex-direction:column; }
   .lightbox.open { display:flex; }
   .lb-top { display:flex; justify-content:space-between; padding:10px 14px; }
@@ -148,18 +146,16 @@
   .lb-nav { display:flex; gap:10px; justify-content:center; padding:10px; }
   .lb-btn { padding:6px 16px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; cursor:pointer; }
 
-  /* confirm */
   .confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; }
   .confirm-overlay.open { display:flex; }
   .confirm-sheet { background:var(--surface); border-radius:var(--radius); padding:20px; width:320px; }
-  .confirm-sheet h3 { margin-bottom:8px; }
   .confirm-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; }
 
-  /* toast */
   .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--text); color:#fff; padding:10px 20px; border-radius:20px; font-size:13px; z-index:9999; display:none; white-space:nowrap; }
   .toast.show { display:block; }
   .toast.success { background:var(--accent); }
   .toast.error { background:var(--danger); }
+  .ml-cikis-btn { padding:5px 10px; font-size:11px; font-weight:600; border-radius:6px; border:1px solid #e8a020; background:var(--amber-light); color:var(--amber); cursor:pointer; }
 </style>
 </head>
 <body>
@@ -274,7 +270,6 @@
 </div>
 
 <script>
-// CONFIG
 const SB = 'https://tpfdsmexywjnsbkfphwq.supabase.co';
 const KEY = 'sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
 const BUCKET = 'meters';
@@ -288,46 +283,61 @@ const FLOORS = [
   {label:'10. Kat',prefix:10,rooms:18},{label:'11. Kat',prefix:11,rooms:18},{label:'12. Kat',prefix:12,rooms:18},
   {label:'13. Kat',prefix:13,rooms:18},{label:'14. Kat',prefix:14,rooms:18},{label:'15. Kat',prefix:15,rooms:18}
 ];
-const DEMO_STATUSES = ['dolu-temiz','dolu-kirli','cout','temiz','kirli','ooi','ariza','onaylı','bos','bos'];
 
 let currentRoom = null, pendingPhotos = [], entryType = null, currentView = 'grid';
 let lbImages = [], lbIndex = 0, confirmCb = null;
 let roomsWithEntries = new Set();
 let allMeterData = [];
+let currentEntries = []; // cache for the current room entries
 
-function q(id){return document.getElementById(id)}
-function today(){return new Date().toISOString().slice(0,10)}
-function fmtDate(iso){if(!iso)return'';const [y,m,d]=iso.split('-');const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y}`}
-function fmtShort(iso){if(!iso)return'';const [y,m,d]=iso.split('-');const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y.slice(2)}`}
-async function api(path,opts={}){return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}})}
-function showToast(msg,type='success'){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',2500)}
-function openConfirm(title,msg,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;confirmCb=cb;q('confirm-overlay').classList.add('open')}
-function closeConfirm(){q('confirm-overlay').classList.remove('open');confirmCb=null}
-q('confirm-ok').addEventListener('click',()=>{if(confirmCb)confirmCb();closeConfirm()});
+const q = id => document.getElementById(id);
+const today = () => new Date().toISOString().slice(0,10);
+const fmtDate = iso => { if(!iso) return ''; const [y,m,d]=iso.split('-'); const a=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara']; return `${parseInt(d)} ${a[parseInt(m)-1]} ${y}`; };
+const fmtShort = iso => { if(!iso) return ''; const [y,m,d]=iso.split('-'); const a=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara']; return `${parseInt(d)} ${a[parseInt(m)-1]} ${y.slice(2)}`; };
+async function api(path,opts={}) { return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}}); }
+function showToast(msg,type='success') { const t=q('toast'); t.textContent=msg; t.className='toast show '+type; setTimeout(()=>t.className='toast',2500); }
+function openConfirm(title,msg,cb){ q('confirm-title').textContent=title; q('confirm-msg').textContent=msg; confirmCb=cb; q('confirm-overlay').classList.add('open'); }
+function closeConfirm(){ q('confirm-overlay').classList.remove('open'); confirmCb=null; }
+q('confirm-ok').addEventListener('click',()=>{ if(confirmCb) confirmCb(); closeConfirm(); });
 
-// ROOM STATUS LOCAL STORAGE
+// Room status local storage
 const KEY_PREFIX = 'otel_room_';
-function roomKey(num){return KEY_PREFIX+num}
-function getRoomData(num){try{return JSON.parse(localStorage.getItem(roomKey(num))||'null')}catch(e){return null}}
-function setRoomData(num,data){localStorage.setItem(roomKey(num),JSON.stringify(data))}
-function allRooms(){const a=[];FLOORS.forEach(f=>{for(let i=1;i<=f.rooms;i++)a.push(f.prefix*100+i)});return a}
-function initDemo(){allRooms().forEach(n=>{if(!getRoomData(n)){setRoomData(n,{status:DEMO_STATUSES[Math.floor(Math.random()*DEMO_STATUSES.length)]})}})}
-function updateStats(){
-  const c={};allRooms().forEach(n=>{const s=getRoomData(n)?.status||'bos';c[s]=(c[s]||0)+1});
-  q('cnt-dt').textContent=c['dolu-temiz']||0; q('cnt-dk').textContent=c['dolu-kirli']||0;
-  q('cnt-co').textContent=(c['cout']||0)+(c['cout-b']||0); q('cnt-t').textContent=(c['temiz']||0)+(c['temiz-b']||0);
-  q('cnt-k').textContent=(c['kirli']||0)+(c['kirli-b']||0); q('cnt-ooi').textContent=c['ooi']||0;
-  q('cnt-ar').textContent=c['ariza']||0; q('cnt-on').textContent=(c['onaylı']||0)+(c['onaylı-b']||0);
+const roomKey = num => KEY_PREFIX+num;
+function getRoomData(num){ try{ return JSON.parse(localStorage.getItem(roomKey(num))||'null'); }catch{ return null; } }
+function setRoomData(num,data){ localStorage.setItem(roomKey(num), JSON.stringify(data)); }
+function allRooms(){ const a=[]; FLOORS.forEach(f=>{ for(let i=1;i<=f.rooms;i++) a.push(f.prefix*100+i); }); return a; }
+
+// Initialize all rooms as "temiz" (clean, green) – as requested
+function initDemo(){
+  allRooms().forEach(n => {
+    if(!getRoomData(n)) setRoomData(n, {status:'temiz'});
+  });
 }
 
-// SUPABASE CONNECTION
+function updateStats(){
+  const c = {};
+  allRooms().forEach(n => {
+    const s = getRoomData(n)?.status || 'temiz';
+    c[s] = (c[s]||0)+1;
+  });
+  q('cnt-dt').textContent = c['dolu-temiz']||0;
+  q('cnt-dk').textContent = c['dolu-kirli']||0;
+  q('cnt-co').textContent = (c['cout']||0)+(c['cout-b']||0);
+  q('cnt-t').textContent = (c['temiz']||0)+(c['temiz-b']||0);
+  q('cnt-k').textContent = (c['kirli']||0)+(c['kirli-b']||0);
+  q('cnt-ooi').textContent = c['ooi']||0;
+  q('cnt-ar').textContent = c['ariza']||0;
+  q('cnt-on').textContent = (c['onaylı']||0)+(c['onaylı-b']||0);
+}
+
 async function checkConn(){
   try{
     const r = await api('/rest/v1/entries?select=id&limit=1');
     if(r.ok){ q('conn-dot').classList.add('ok'); q('conn-text').textContent='Bağlantı aktif'; await loadRoomsWithEntries(); }
     else throw 0;
-  }catch{ q('conn-text').textContent='Bağlantı yok' }
+  }catch{ q('conn-text').textContent='Bağlantı yok'; }
 }
+
 async function loadRoomsWithEntries(){
   try{
     const r = await api(`/rest/v1/entries?mode=eq.${MODE}&select=room_no`);
@@ -337,7 +347,7 @@ async function loadRoomsWithEntries(){
   }catch(e){}
 }
 
-// GRID / LIST VIEW
+// View switching
 function setView(v){ currentView=v; q('btn-grid').classList.toggle('active',v==='grid'); q('btn-list').classList.toggle('active',v==='list'); renderView(); }
 function renderView(){
   if(currentView==='grid'){ q('grid-container').classList.remove('hidden'); q('list-container').classList.remove('active'); renderGrid(); }
@@ -345,19 +355,21 @@ function renderView(){
 }
 
 function statusClass(s){
-  const m={'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli','cout':'status-cout','cout-b':'status-cout-b',
+  const m = {
+    'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli','cout':'status-cout','cout-b':'status-cout-b',
     'temiz':'status-temiz','temiz-b':'status-temiz-b','kirli':'status-kirli','kirli-b':'status-kirli-b',
-    'ooi':'status-ooi','ariza':'status-ariza','onaylı':'status-onaylı','onaylı-b':'status-onaylı-b','bos':'status-bos'};
+    'ooi':'status-ooi','ariza':'status-ariza','onaylı':'status-onaylı','onaylı-b':'status-onaylı-b','bos':'status-bos'
+  };
   return m[s]||'status-bos';
 }
 
 function populateFloorFilter(){
   const sel = q('filter-floor');
   sel.innerHTML = '<option value="">Tümü</option>';
-  FLOORS.forEach(f=>{ const o=document.createElement('option'); o.value=f.prefix; o.textContent=f.label; sel.appendChild(o); });
+  FLOORS.forEach(f=>{ sel.appendChild(new Option(f.label, f.prefix)); });
   const katSel = q('f-kat');
   katSel.innerHTML = '<option value="">Seçin</option>';
-  for(let i=1;i<=15;i++){ const o=document.createElement('option'); o.value=i+'. Kat'; o.textContent=i+'. Kat'; katSel.appendChild(o); }
+  for(let i=1;i<=15;i++) katSel.appendChild(new Option(i+'. Kat', i+'. Kat'));
 }
 
 function renderGrid(){
@@ -367,21 +379,24 @@ function renderGrid(){
   FLOORS.forEach(f=>{
     if(ff && parseInt(ff)!==f.prefix) return;
     const sec = document.createElement('div'); sec.className='floor-section';
-    const lbl = document.createElement('div'); lbl.className='floor-label'; lbl.textContent='▸ '+f.label; sec.appendChild(lbl);
+    sec.innerHTML = `<div class="floor-label">▸ ${f.label}</div>`;
     const grid = document.createElement('div'); grid.className='room-grid';
     for(let i=1;i<=f.rooms;i++){
       const num = f.prefix*100+i;
-      const d = getRoomData(num); const status = d?.status||'bos';
+      const d = getRoomData(num); const status = d?.status || 'temiz';
       if(fs && status!==fs){ grid.appendChild(document.createElement('div')); continue; }
       if(sv && !String(num).includes(sv)){ grid.appendChild(document.createElement('div')); continue; }
       const cell = document.createElement('div');
       cell.className = 'room-cell '+statusClass(status);
       cell.textContent = num;
-      if(roomsWithEntries.has(String(num))){ const flag=document.createElement('div'); flag.className='room-flag'; cell.appendChild(flag); }
-      cell.addEventListener('click',()=>openPanel(num));
+      if(roomsWithEntries.has(String(num))){
+        const flag = document.createElement('div'); flag.className='room-flag'; cell.appendChild(flag);
+      }
+      cell.addEventListener('click', ()=>openPanel(num));
       grid.appendChild(cell);
     }
-    sec.appendChild(grid); container.appendChild(sec);
+    sec.appendChild(grid);
+    container.appendChild(sec);
   });
 }
 
@@ -391,7 +406,8 @@ async function renderList(){
   try{
     const res = await api(`/rest/v1/entries?mode=eq.${MODE}&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type`);
     allMeterData = await res.json();
-    const katSet = new Set(); allMeterData.forEach(e=>{ if(e.category) e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim())); });
+    const katSet = new Set();
+    allMeterData.forEach(e=>{ if(e.category) e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim())); });
     const ff = q('filter-floor').value, sv = q('search-room').value.trim().toLowerCase();
     const filtered = allMeterData.filter(e=>{
       if(ff && !(e.category||'').includes(ff)) return false;
@@ -400,11 +416,12 @@ async function renderList(){
     });
     if(!filtered.length){ wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>'; return; }
 
+    // Pair logic for list
     const pairedCikisIds = new Set(), pairedGirisIds = new Set();
     const gByRoom={}, cByRoom={};
     allMeterData.forEach(e=>{
-      if(e.type==='giris'||!e.type){ if(!gByRoom[e.room_no])gByRoom[e.room_no]=[]; gByRoom[e.room_no].push(e); }
-      else{ if(!cByRoom[e.room_no])cByRoom[e.room_no]=[]; cByRoom[e.room_no].push(e); }
+      if(e.type==='giris'||!e.type){ if(!gByRoom[e.room_no]) gByRoom[e.room_no]=[]; gByRoom[e.room_no].push(e); }
+      else{ if(!cByRoom[e.room_no]) cByRoom[e.room_no]=[]; cByRoom[e.room_no].push(e); }
     });
     Object.keys(gByRoom).forEach(rno=>{
       const gl = [...gByRoom[rno]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
@@ -422,21 +439,21 @@ async function renderList(){
       const kat = cats.length?cats[0]:'—';
       if(isG){
         const paired = pairedGirisIds.has(e.id);
-        const cEntry = paired ? (gByRoom[e.room_no]?.find(g=>g.id===e.id) ? (cByRoom[e.room_no]||[]).find(c=>pairedCikisIds.has(c.id)&&c.checkin_date>=e.checkin_date) : null) : null;
+        const cEntry = paired ? (cByRoom[e.room_no]||[]).find(c=>pairedCikisIds.has(c.id)&&c.checkin_date>=e.checkin_date) : null;
         if(cEntry) shownCikis.add(cEntry.id);
-        html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openPanel('${e.room_no}')">
+        html += `<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openPanel('${e.room_no}')">
           <td style="padding:8px;font-weight:600">${e.room_no}</td><td>${kat}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td>
           <td style="color:#b45309">${cEntry?fmtShort(cEntry.checkin_date):'—'}</td>
           <td style="text-align:right">${cEntry?`<button class="btn" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${cEntry.checkin_date}')">Link</button>`:`<button class="ml-cikis-btn" onclick="event.stopPropagation();quickCikis('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button>`}</td>
         </tr>`;
       } else if(!shownCikis.has(e.id)){
-        html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openPanel('${e.room_no}')">
+        html += `<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openPanel('${e.room_no}')">
           <td style="padding:8px;font-weight:600">${e.room_no}</td><td>${kat}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`;
       }
     });
     html += '</tbody></table></div>';
     wrap.innerHTML = html;
-  }catch(e){ wrap.innerHTML='<div style="text-align:center;padding:40px">Bağlantı hatası</div>' }
+  }catch(e){ wrap.innerHTML='<div style="text-align:center;padding:40px">Bağlantı hatası</div>'; }
 }
 
 function quickCikis(roomNo, girisDate){
@@ -450,7 +467,7 @@ function quickCikis(roomNo, girisDate){
   },200);
 }
 
-// PANEL
+// Panel open/close
 function openPanel(num){
   currentRoom = num;
   q('panel-room-num').textContent = num;
@@ -458,7 +475,7 @@ function openPanel(num){
   const fo = FLOORS.find(f=>f.prefix===fl);
   q('panel-floor-label').textContent = fo ? fo.label : fl+'. Kat';
   const d = getRoomData(num)||{};
-  q('f-status').value = d.status||'bos';
+  q('f-status').value = d.status||'temiz';
   resetAddForm();
   switchPanelTab('kayitlar');
   q('panel-overlay').classList.add('open');
@@ -470,20 +487,20 @@ function closePanel(){
   q('panel-overlay').classList.remove('open');
   q('room-panel').classList.remove('open');
   document.body.style.overflow='';
-  currentRoom=null;
+  currentRoom = null;
 }
 function switchPanelTab(t){
   ['kayitlar','ekle','durum'].forEach(x=>{ q('pane-'+x).classList.toggle('active',x===t); q('ptab-'+x).classList.toggle('active',x===t); });
 }
 
-// ENTRIES
+// Load entries for current room
 async function loadEntries(){
   q('entries-list').innerHTML = '<div style="text-align:center;padding:20px">Yükleniyor...</div>';
   try{
     const r = await api(`/rest/v1/entries?room_no=eq.${currentRoom}&mode=eq.${MODE}&order=checkin_date.desc&select=*`);
-    const data = await r.json();
-    renderEntries(data);
-  }catch(e){ q('entries-list').innerHTML='<div style="text-align:center;padding:20px">Hata</div>' }
+    currentEntries = await r.json();
+    renderEntries(currentEntries);
+  }catch(e){ q('entries-list').innerHTML='<div style="text-align:center;padding:20px">Hata</div>'; }
 }
 
 function renderEntries(entries){
@@ -493,10 +510,13 @@ function renderEntries(entries){
   const cikisler = entries.filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
   const usedCikis = new Set();
   let html = '';
+  const buildPair = (g,c) => {
+    html += `<div style="margin-bottom:12px">${buildEntryCard(g)}${c?buildEntryCard(c):''}</div>`;
+  };
   girisler.forEach(g=>{
     const c = cikisler.find(cc=>!usedCikis.has(cc.id)&&cc.checkin_date>=g.checkin_date);
     if(c) usedCikis.add(c.id);
-    html += `<div style="margin-bottom:12px">${buildEntryCard(g)}${c?buildEntryCard(c):''}</div>`;
+    buildPair(g,c);
   });
   cikisler.filter(c=>!usedCikis.has(c.id)).forEach(c=>{ html += `<div style="margin-bottom:12px">${buildEntryCard(c)}</div>`; });
   wrap.innerHTML = html;
@@ -507,59 +527,159 @@ function buildEntryCard(entry){
   const photos = entry.photo_urls||[];
   const cats = (entry.category||'').split(',').filter(Boolean);
   let endeksVal = null;
-  if(cats.length) cats.forEach(c=>{ if(c.startsWith('endeks:')) endeksVal = c.replace('endeks:',''); });
-  return `<div class="entry-card">
-    <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')">
-      <span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span>
-      <div class="entry-meta"><div class="entry-date">${fmtDate(entry.checkin_date)}</div>${endeksVal?`<div class="entry-note">⚡ ${endeksVal}</div>`:''}</div>
-      <span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-    </div>
-    <div class="entry-body">
-      ${photos.length?`<div class="img-scroll">${photos.map((u,i)=>`<div class="img-thumb" onclick="openLb('${u}')"><img src="${u}" loading="lazy"></div>`).join('')}</div>`:''}
-      ${entry.note?`<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>`:''}
-      <div class="entry-actions">
-        <button class="btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button>
-        <button class="btn" onclick="createEntryLink('${entry.room_no}','${entry.checkin_date}','${entry.type||'giris'}')">Link</button>
-        <button class="btn btn-danger" onclick="deleteEntry('${entry.id}')">Sil</button>
+  cats.forEach(c=>{ if(c.startsWith('endeks:')) endeksVal = c.replace('endeks:',''); });
+  const katVal = cats.filter(c=>!c.startsWith('endeks:')).join(', ');
+
+  return `
+    <div class="entry-card" id="card-${entry.id}">
+      <div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open'); this.querySelector('.chevron').classList.toggle('open')">
+        <span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span>
+        <div class="entry-meta">
+          <div class="entry-date">${fmtDate(entry.checkin_date)}</div>
+          ${endeksVal ? `<div class="entry-note">⚡ ${endeksVal}</div>` : ''}
+          ${katVal ? `<div style="font-size:11px;color:var(--muted)">${katVal}</div>` : ''}
+        </div>
+        <span>📷${photos.length}</span>
+        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="entry-body">
+        ${photos.length ? `<div class="img-scroll">${photos.map((u,i)=>`
+          <div class="img-thumb" onclick="openLb(${JSON.stringify(photos)}, ${i})"><img src="${u}" loading="lazy"></div>
+        `).join('')}</div>` : ''}
+        ${entry.note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
+        <div class="entry-actions">
+          <button class="btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button>
+          <button class="btn" onclick="event.stopPropagation(); createEntryLink('${entry.room_no}','${entry.checkin_date}','${entry.type||'giris'}')">Link</button>
+          <button class="btn" onclick="event.stopPropagation(); toggleEditPanel('${entry.id}')">Düzenle</button>
+          <button class="btn btn-danger" onclick="event.stopPropagation(); deleteEntry('${entry.id}')">Sil</button>
+        </div>
+        <div class="edit-panel" id="edit-panel-${entry.id}">
+          <div class="field"><label>Tarih</label><input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date||''}"></div>
+          <div class="field"><label>Endeks</label><input type="number" step="0.01" id="edit-endeks-${entry.id}" value="${endeksVal||''}"></div>
+          <div class="field"><label>Kat</label>
+            <select id="edit-kat-${entry.id}">
+              <option value="">Seçin</option>
+              ${Array.from({length:15},(_,i)=>`<option value="${i+1}. Kat" ${katVal.includes((i+1)+'. Kat')?'selected':''}>${i+1}. Kat</option>`).join('')}
+            </select>
+          </div>
+          <div class="field"><label>Not</label><textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea></div>
+          <div class="field"><label>Yeni Fotoğraf Ekle</label><input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple></div>
+          <div id="edit-preview-${entry.id}" class="preview-row"></div>
+          <button class="btn btn-primary" onclick="saveEdit('${entry.id}')">Değişiklikleri Kaydet</button>
+        </div>
       </div>
     </div>
-  </div>`;
+  `;
+}
+
+function toggleEditPanel(id){
+  const panel = q(`edit-panel-${id}`);
+  panel.classList.toggle('open');
+}
+
+async function saveEdit(entryId){
+  const panel = q(`edit-panel-${entryId}`);
+  const date = q(`edit-date-${entryId}`).value;
+  const endeks = q(`edit-endeks-${entryId}`).value.trim();
+  const kat = q(`edit-kat-${entryId}`).value;
+  const note = q(`edit-note-${entryId}`).value.trim();
+  let category = kat;
+  if(endeks) category = (category?category+',':'')+'endeks:'+endeks;
+
+  // Handle new photos
+  const newPhotoInput = q(`edit-photos-${entryId}`);
+  let newUrls = [];
+  if(newPhotoInput.files.length){
+    const compressedFiles = [];
+    for(const f of newPhotoInput.files){
+      const r = await compressImage(f);
+      compressedFiles.push(r.file);
+    }
+    for(const file of compressedFiles){
+      const url = await uploadImg(file, currentRoom);
+      newUrls.push(url);
+    }
+  }
+
+  // Get current entry from cached currentEntries
+  const entry = currentEntries.find(e=>e.id===entryId);
+  if(!entry) return;
+  const mergedPhotos = [...(entry.photo_urls||[]), ...newUrls];
+  const body = { checkin_date:date, category, note, photo_urls:mergedPhotos };
+  try{
+    const r = await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify(body)});
+    if(!r.ok) throw new Error('Güncelleme başarısız');
+    showToast('Güncellendi');
+    // Refresh the entry in currentEntries and re-render
+    Object.assign(entry, body);
+    // Update the entry type remains same (no change to type in this edit)
+    loadEntries();
+    loadRoomsWithEntries();
+  }catch(e){ showToast('Hata: '+e.message,'error'); }
 }
 
 async function deleteEntry(id){
   openConfirm('Kaydı sil','Bu sayaç kaydı silinecek.', async ()=>{
     try{
+      const entry = currentEntries.find(e=>e.id===id);
       const r = await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
       if(!r.ok) throw new Error('Silinemedi');
+      // Delete photos from storage
+      if(entry && entry.photo_urls){
+        for(const url of entry.photo_urls){
+          const path = url.split('/object/public/')[1];
+          if(path){
+            const [bucket,...rest] = path.split('/');
+            await fetch(`${SB}/storage/v1/object/${bucket}/${rest.join('/')}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}}).catch(()=>{});
+          }
+        }
+      }
       showToast('Silindi');
       loadEntries();
       await loadRoomsWithEntries();
-    }catch(e){ showToast('Hata: '+e.message,'error') }
+    }catch(e){ showToast('Hata: '+e.message,'error'); }
   });
 }
 
+// Link generation (proper token management)
 async function createEntryLink(roomNo, date, type){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);
-  await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:MODE,token,entry_date:date,entry_type:type})});
-  const url = `${location.origin+location.pathname}?oda=${roomNo}&mod=${MODE}&tarih=${date}&token=${token}&type=${type}`;
+  // Delete old token if exists
+  await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(date)}&entry_type=eq.${encodeURIComponent(type)}`, {
+    method:'DELETE', headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+  });
+  // Create new token
+  await fetch(`${SB}/rest/v1/tokens`, {
+    method:'POST',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({room_no:roomNo, mod:MODE, token, entry_date:date, entry_type:type})
+  });
+  const url = `${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${MODE}&tarih=${encodeURIComponent(date)}&token=${token}&type=${type}`;
   navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url));
 }
 async function createPairLink(roomNo, girisDate, cikisDate){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);
-  await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:MODE,token,entry_date:girisDate,entry_type:'pair',paired_date:cikisDate})});
-  const url = `${location.origin+location.pathname}?oda=${roomNo}&mod=${MODE}&tarih=${girisDate}&token=${token}&type=pair`;
+  await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(girisDate)}&entry_type=eq.pair`, {
+    method:'DELETE', headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+  });
+  await fetch(`${SB}/rest/v1/tokens`, {
+    method:'POST',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({room_no:roomNo, mod:MODE, token, entry_date:girisDate, entry_type:'pair', paired_date:cikisDate})
+  });
+  const url = `${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${MODE}&tarih=${encodeURIComponent(girisDate)}&token=${token}&type=pair`;
   navigator.clipboard.writeText(url).then(()=>showToast('Çift link kopyalandı!')).catch(()=>prompt('Link:',url));
 }
 
-// ADD ENTRY
+// Add entry form
 function setEntryType(t){ entryType=t; q('btn-giris').className='type-btn'+(t==='giris'?' active-giris':''); q('btn-cikis').className='type-btn'+(t==='cikis'?' active-cikis':''); }
 function resetAddForm(){ entryType=null; pendingPhotos=[]; q('btn-giris').className='type-btn'; q('btn-cikis').className='type-btn'; q('f-date').value=today(); q('f-endeks').value=''; q('f-kat').value=''; q('f-note').value=''; q('preview-row').innerHTML=''; q('compress-status').innerHTML=''; q('progress-wrap').classList.remove('show'); }
 async function handleFiles(files){
-  const se = q('compress-status'); se.innerHTML=''; let to=0,tn=0,cc=0;
+  const se = q('compress-status'); se.innerHTML=''; let to=0, tn=0, cc=0;
   for(const f of files){
     const r = await compressImage(f);
     pendingPhotos.push({file:r.file, url:URL.createObjectURL(r.file)});
-    to+=r.origSize; tn+=r.newSize; if(r.compressed)cc++;
+    to+=r.origSize; tn+=r.newSize; if(r.compressed) cc++;
   }
   renderPreviews();
   if(cc>0) se.innerHTML = `${cc} fotoğraf sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü`;
@@ -567,9 +687,9 @@ async function handleFiles(files){
 }
 async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let w=img.width,h=img.height;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);c.toBlob(b=>{resolve({file:new File([b],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:b.size})},'image/jpeg',CQ)};img.src=url})}
 function renderPreviews(){ q('preview-row').innerHTML = pendingPhotos.map((p,i)=>`<div class="prev-item"><img src="${p.url}"><button class="prev-del" onclick="pendingPhotos.splice(${i},1);renderPreviews()">✕</button></div>`).join(''); }
-async function uploadImg(file){
+async function uploadImg(file, roomNo){
   const ext = file.name.split('.').pop();
-  const path = `${currentRoom}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  const path = `${roomNo||currentRoom}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
   const r = await fetch(`${SB}/storage/v1/object/${BUCKET}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});
   if(!r.ok) throw new Error('Yükleme başarısız');
   return `${SB}/storage/v1/object/public/${BUCKET}/${path}`;
@@ -580,19 +700,19 @@ async function saveEntry(){
   const pw = q('progress-wrap'), pb = q('progress-bar'); pw.classList.add('show'); pb.style.width='0%';
   try{
     const date = q('f-date').value, endeks = q('f-endeks').value.trim(), kat = q('f-kat').value, note = q('f-note').value.trim();
-    let category = kat||'';
+    let category = kat;
     if(endeks) category += (category?',':'')+'endeks:'+endeks;
     const urls = [];
     for(let i=0;i<pendingPhotos.length;i++){ urls.push(await uploadImg(pendingPhotos[i].file)); pb.style.width=Math.round((i+1)/pendingPhotos.length*100)+'%'; }
-    const body = {room_no:String(currentRoom),mode:MODE,checkin_date:date,type:entryType,category,note,photo_urls:urls};
+    const body = {room_no:String(currentRoom), mode:MODE, checkin_date:date, type:entryType, category, note, photo_urls:urls};
     await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});
     showToast('Kayıt oluşturuldu');
     resetAddForm(); switchPanelTab('kayitlar'); loadEntries(); await loadRoomsWithEntries();
-  }catch(e){ showToast('Hata: '+e.message,'error') }
+  }catch(e){ showToast('Hata: '+e.message,'error'); }
   finally{ btn.disabled=false; btn.innerHTML=lbl; pw.classList.remove('show'); }
 }
 
-// ROOM STATUS
+// Room status save
 function saveRoomStatus(){
   if(!currentRoom) return;
   const d = getRoomData(currentRoom)||{};
@@ -602,19 +722,27 @@ function saveRoomStatus(){
   showToast('Durum kaydedildi');
 }
 
-// LIGHTBOX
-function openLb(url){ lbImages=[url]; lbIndex=0; updateLb(); q('lb').classList.add('open') }
-function closeLb(){ q('lb').classList.remove('open') }
-function lbMove(d){ lbIndex = Math.max(0,Math.min(lbImages.length-1,lbIndex+d)); updateLb() }
-function updateLb(){ q('lb-img').src=lbImages[lbIndex]; q('lb-counter').textContent=(lbIndex+1)+'/'+lbImages.length; q('lb-label').textContent='Fotoğraf '+(lbIndex+1) }
+// Lightbox
+function openLb(photos, idx){
+  lbImages = photos; lbIndex = idx;
+  updateLb();
+  q('lb').classList.add('open');
+}
+function closeLb(){ q('lb').classList.remove('open'); }
+function lbMove(d){ lbIndex = Math.max(0, Math.min(lbImages.length-1, lbIndex+d)); updateLb(); }
+function updateLb(){
+  q('lb-img').src = lbImages[lbIndex];
+  q('lb-counter').textContent = `${lbIndex+1} / ${lbImages.length}`;
+  q('lb-label').textContent = `Fotoğraf ${lbIndex+1}`;
+}
 
-// DROP ZONE
+// Drop zone
 const dz = q('drop-zone');
-dz.addEventListener('dragover',e=>{e.preventDefault();dz.style.borderColor='var(--accent)'});
-dz.addEventListener('dragleave',()=>dz.style.borderColor='');
-dz.addEventListener('drop',e=>{e.preventDefault();dz.style.borderColor='';handleFiles(e.dataTransfer.files)});
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor='var(--accent)'; });
+dz.addEventListener('dragleave', ()=> dz.style.borderColor='');
+dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.borderColor=''; handleFiles(e.dataTransfer.files); });
 
-// INIT
+// Init
 initDemo();
 populateFloorFilter();
 renderView();
