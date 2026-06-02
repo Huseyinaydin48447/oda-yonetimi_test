@@ -124,20 +124,23 @@
   .status-row label { font-size:13px; font-weight:600; }
   .status-row select { flex:1; padding:8px; border-radius:6px; border:1px solid var(--border); }
 
-  /* ŞIK EKLE FORMU */
-  .elegant-form { background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
-  .elegant-form .form-section { margin-bottom:16px; }
-  .elegant-form .form-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-  .elegant-form .form-label i { font-style:normal; font-size:16px; }
-  .elegant-form .type-btns { display:flex; gap:8px; }
-  .elegant-form .type-btn { flex:1; padding:14px; border-radius:var(--radius-sm); font-size:14px; font-weight:700; border:2px solid var(--border); background:var(--surface2); cursor:pointer; transition: all 0.15s; text-align:center; }
-  .elegant-form .type-btn.active-giris { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
-  .elegant-form .type-btn.active-cikis { border-color:var(--amber); background:var(--amber-light); color:var(--amber); }
-  .elegant-form input, .elegant-form select, .elegant-form textarea { width:100%; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface2); font-size:14px; transition:border-color 0.2s; }
-  .elegant-form input:focus, .elegant-form select:focus, .elegant-form textarea:focus { border-color:var(--accent); outline:none; background:var(--surface); }
-  .elegant-form .photo-drop { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:20px; text-align:center; cursor:pointer; background:var(--surface2); transition: all 0.2s; }
-  .elegant-form .photo-drop:hover { border-color:var(--accent); background:var(--accent-light); }
-  .elegant-form .btn-primary { padding:14px; font-size:15px; border-radius:var(--radius-sm); margin-top:8px; }
+  /* EKLE FORMU – SADE, KART YOK */
+  .form-section { margin-bottom:14px; }
+  .form-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .type-btns { display:flex; gap:8px; }
+  .type-btn { flex:1; padding:14px; border-radius:var(--radius-sm); font-size:14px; font-weight:700; border:2px solid var(--border); background:var(--surface2); cursor:pointer; transition: all 0.15s; text-align:center; }
+  .type-btn.active-giris { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
+  .type-btn.active-cikis { border-color:var(--amber); background:var(--amber-light); color:var(--amber); }
+  .photo-drop { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:20px; text-align:center; cursor:pointer; background:var(--surface2); transition: all 0.2s; }
+  .photo-drop:hover { border-color:var(--accent); background:var(--accent-light); }
+  .preview-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .prev-item { position:relative; width:70px; height:50px; border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+  .prev-item img { width:100%; height:100%; object-fit:cover; }
+  .prev-del { position:absolute; top:2px; right:2px; background:rgba(192,57,43,0.85); color:#fff; border:none; font-size:10px; cursor:pointer; border-radius:3px; padding:0 4px; }
+  .compress-info { font-size:11px; color:var(--accent); margin-top:4px; }
+  .progress-wrap { height:4px; background:#eee; border-radius:2px; overflow:hidden; margin-top:8px; display:none; }
+  .progress-wrap.show { display:block; }
+  .progress-bar { height:100%; background:var(--accent); width:0; transition:width 0.2s; }
 
   .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000; flex-direction:column; }
   .lightbox.open { display:flex; }
@@ -225,39 +228,37 @@
     <div class="panel-body">
       <div class="tab-pane active" id="pane-kayitlar"><div id="entries-list"></div></div>
       <div class="tab-pane" id="pane-ekle">
-        <div class="elegant-form">
-          <div class="form-section">
-            <div class="form-label"><span>📌 İşlem Türü</span></div>
-            <div class="type-btns">
-              <button class="type-btn" id="btn-giris" onclick="setEntryType('giris')">⬇️ Giriş</button>
-              <button class="type-btn" id="btn-cikis" onclick="setEntryType('cikis')">⬆️ Çıkış</button>
-            </div>
+        <div class="form-section">
+          <div class="form-label">📌 İşlem Türü</div>
+          <div class="type-btns">
+            <button class="type-btn" id="btn-giris" onclick="setEntryType('giris')">⬇️ Giriş</button>
+            <button class="type-btn" id="btn-cikis" onclick="setEntryType('cikis')">⬆️ Çıkış</button>
           </div>
-          <div class="form-section">
-            <div class="form-label"><span>📅 Tarih</span></div>
-            <input type="date" id="f-date">
-          </div>
-          <div class="form-section">
-            <div class="form-label"><span>📍 Kat</span></div>
-            <select id="f-kat"><option value="">Seçin</option></select>
-          </div>
-          <div class="form-section">
-            <div class="form-label"><span>📝 Not</span></div>
-            <textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea>
-          </div>
-          <div class="form-section">
-            <div class="form-label"><span>📷 Fotoğraf</span></div>
-            <div class="photo-drop" id="drop-zone" onclick="document.getElementById('f-photos').click()">
-              <input type="file" id="f-photos" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
-              <div style="font-size:14px; font-weight:500;">📷 Fotoğraf seç veya sürükle bırak</div>
-              <div style="font-size:11px; color:var(--muted); margin-top:4px;">JPG, PNG – birden fazla seçilebilir</div>
-            </div>
-            <div id="compress-status" class="compress-info"></div>
-            <div class="preview-row" id="preview-row"></div>
-            <div class="progress-wrap" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-          </div>
-          <button class="btn btn-primary" id="save-btn" onclick="saveEntry()" style="width:100%">💾 Kaydet</button>
         </div>
+        <div class="form-section">
+          <div class="form-label">📅 Tarih</div>
+          <input type="date" id="f-date">
+        </div>
+        <div class="form-section">
+          <div class="form-label">📍 Kat</div>
+          <select id="f-kat"><option value="">Seçin</option></select>
+        </div>
+        <div class="form-section">
+          <div class="form-label">📝 Not</div>
+          <textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea>
+        </div>
+        <div class="form-section">
+          <div class="form-label">📷 Fotoğraf</div>
+          <div class="photo-drop" id="drop-zone" onclick="document.getElementById('f-photos').click()">
+            <input type="file" id="f-photos" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
+            <div style="font-size:14px; font-weight:500;">📷 Fotoğraf seç veya sürükle bırak</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">JPG, PNG – birden fazla seçilebilir</div>
+          </div>
+          <div id="compress-status" class="compress-info"></div>
+          <div class="preview-row" id="preview-row"></div>
+          <div class="progress-wrap" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+        </div>
+        <button class="btn btn-primary" id="save-btn" onclick="saveEntry()" style="width:100%">💾 Kaydet</button>
       </div>
       <div class="tab-pane" id="pane-durum">
         <div class="status-row"><label>Oda Durumu</label>
