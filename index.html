@@ -129,7 +129,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .dl-bar-wrap{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:8px 0}
 .dl-bar{height:100%;background:var(--accent);width:0;transition:width .25s}
 .ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;white-space:nowrap}
-/* ELEKTRA EK STILLERI */
 .stat-badge{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:#fff;background:rgba(255,255,255,0.15);cursor:default}
 .stat-badge .count{font-size:14px;font-weight:700}
 .sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}.sb-temiz{background:#4caf50;color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
@@ -352,14 +351,6 @@ function lbOnTS(e){if(e.touches.length===2){e.preventDefault();LB.isPinching=tru
 function lbOnTM(e){if(LB.isPinching&&e.touches.length===2){e.preventDefault();const ns=Math.max(LB.minScale,Math.min(LB.maxScale,LB.pinchStartScale*(lbTDist(e.touches)/LB.pinchStartDist)));lbZoomTo(ns,LB.pinchMidX,LB.pinchMidY,false)}else if(LB.isDragging&&e.touches.length===1&&LB.scale>1.05){e.preventDefault();const t=e.touches[0];LB.translateX=LB.dragStartTX+(t.clientX-LB.dragStartX);LB.translateY=LB.dragStartTY+(t.clientY-LB.dragStartY);lbClamp();lbApply(false)}}
 function lbOnTE(e){if(e.touches.length<2)LB.isPinching=false;if(e.touches.length===0)LB.isDragging=false}
 function lbBind(){const w=lbWrap();w.addEventListener('wheel',lbOnWheel,{passive:false});w.addEventListener('mousedown',lbOnMD);window.addEventListener('mousemove',lbOnMM);window.addEventListener('mouseup',lbOnMU);w.addEventListener('dblclick',lbOnDbl);w.addEventListener('touchstart',lbOnTS,{passive:false});w.addEventListener('touchmove',lbOnTM,{passive:false});w.addEventListener('touchend',lbOnTE)}
-function openLb(ei,ii){
-if(typeof ei==='number'){lbImages=entryImages[ei]||[];lbIdx=ii}
-else{lbImages=typeof ei==='string'?JSON.parse(ei):ei;lbIdx=ii}
-updateLb();q('lb').classList.add('open');const h=q('lb-hint');if(h){h.classList.remove('hide');setTimeout(()=>h.classList.add('hide'),3000)}
-}
-function closeLb(){q('lb').classList.remove('open');lbResetZoom(false)}
-function lbMove(d){lbIdx=Math.max(0,Math.min(lbImages.length-1,lbIdx+d));lbResetZoom(false);updateLb()}
-function updateLb(){q('lb-img').src=lbImages[lbIdx]||'';q('lb-lbl').textContent=(lbIdx+1)+'. fotoğraf';q('lb-counter').textContent=(lbIdx+1)+' / '+lbImages.length;q('lb-prev').disabled=lbIdx===0;q('lb-next').disabled=lbIdx===lbImages.length-1}
 document.addEventListener('DOMContentLoaded',lbBind);
 if(document.readyState!=='loading')lbBind();
 
@@ -401,7 +392,8 @@ let processed=0;
 function updateProgress(){q('dl-bar').style.width=Math.round(processed/total*100)+'%';q('dl-percent').textContent=Math.round(processed/total*100)+'%';q('dl-stats-left').textContent=processed+' / '+total}
 q('dl-overlay').classList.add('open');updateProgress();
 for(const entry of entries){const urls=entry.photo_urls||[];for(const url of urls){const{dataUrl,pw,ph}=await loadPhoto(url);doc.addPage('a4');doc.addImage(dataUrl,'JPEG',10,10,190,ph/pw*190);processed++;updateProgress()}}
-doc.save(filename);q('dl-overlay').classList.remove('open');showToast('PDF indirildi!')}
+doc.save(filename);q('dl-overlay').classList.remove('open');showToast('PDF indirildi!')
+}
 async function runPdfAll(){const data=await api(`/rest/v1/entries?mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());closePdfPanel();exportBulkPDF([...new Set(data.map(e=>e.room_no))],data,`tum_odalar_${today()}.pdf`)}
 async function runPdfDate(){const f=q('pdf-date-from').value,t=q('pdf-date-to').value;if(!f||!t)return;const data=await api(`/rest/v1/entries?checkin_date=gte.${f}&checkin_date=lte.${t}&mode=eq.demirbaş&order=room_no.asc`).then(r=>r.json());closePdfPanel();exportBulkPDF([...new Set(data.map(e=>e.room_no))],data,`tarih_${f}_${t}.pdf`)}
 async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();const rooms=raw.split(/[\s,;]+/).filter(Boolean);const all=[];for(const r of rooms){const d=await api(`/rest/v1/entries?room_no=eq.${r}&mode=eq.demirbaş`).then(r=>r.json());d.forEach(e=>all.push(e))}closePdfPanel();exportBulkPDF(rooms,all,`odalar_${rooms.join('-')}.pdf`)}
@@ -448,7 +440,7 @@ if(_oda&&_token){const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;q('de
 if(_m==='elektrik'){q('elektra-ui').style.display='';q('egrid-container').style.display='none';q('elist-container').style.display='none';q('ereadonly-view').classList.add('active');q('app').classList.add('wide');
 api(`/rest/v1/tokens?token=eq.${_token}&room_no=eq.${_oda}&mod=eq.${_m}&select=id,entry_date,paired_date`).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return}const tr=data[0],tarih=_tarih||tr.entry_date||today();if(_tarih&&tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return}showElektraReadonly(_oda,_m,tarih,_type)}).catch(()=>showAccessError())}
 else{q('demirbas-ui').style.display='';q('dsresult').innerHTML='<div class="empty">Yükleniyor...</div>';api(`/rest/v1/tokens?token=eq.${_token}&room_no=eq.${_oda}&mod=eq.${_m}&select=id,entry_date`).then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return}const tarih=_tarih||data[0].entry_date||today();api(`/rest/v1/entries?room_no=eq.${_oda}&checkin_date=eq.${tarih}&mode=eq.demirbaş`).then(r=>r.json()).then(d=>{if(!d.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}q('dsresult').innerHTML=`<div class="room-header"><div class="room-num">${_oda}</div><div class="room-summary"><strong>Oda ${_oda} · ${fmtDate(tarih)}</strong><span>Salt okunur</span></div></div>`+d.map(e=>buildDemirbasCard(e)).join('')}).catch(()=>showAccessError())}).catch(()=>showAccessError())}}
-}else if(_oda&&!_token){showAccessError()}else{let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş'}catch(e){}setMode(savedMode);checkConn()} }
+}else if(_oda&&!_token){showAccessError()}else{let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş'}catch(e){}setMode(savedMode);checkConn()}
 
 function showAccessError(){q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';q('topbar-title').textContent='Erişim Yok';document.body.innerHTML+='<div style="text-align:center;padding:60px;font-size:17px">Geçersiz veya süresi dolmuş link.</div>'}
 async function showElektraReadonly(oda,mod,tarih,entryType){const rw=q('ereadonly-view');rw.innerHTML='<div style="text-align:center;padding:40px">Yükleniyor...</div>';q('topbar-title').textContent=`Sayaç ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;if(entryType==='pair'){const td=await api(`/rest/v1/tokens?token=eq.${_token}&select=paired_date`).then(r=>r.json()).catch(()=>[]);const cd=td[0]?.paired_date;if(!cd){showAccessError();return}const[gd,cid]=await Promise.all([api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&type=eq.giris`).then(r=>r.json()),api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${cd}&mode=eq.${mod}&type=eq.cikis`).then(r=>r.json())]);const g=gd[0],c=cid[0];if(!g&&!c){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cd)} · Salt Okunur</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${g?buildElektraCard(g):''}${c?buildElektraCard(c):''}</div>`}else{let url=`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&order=checkin_date.desc`;if(entryType)url+=`&type=eq.${entryType}`;const data=await api(url).then(r=>r.json());if(!data.length){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · Salt Okunur</span></div></div>`+data.map(e=>buildElektraCard(e)).join('')}}
