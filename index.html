@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -308,17 +307,16 @@ function openConfirm(title,msg,cb){ q('confirm-title').textContent=title; q('con
 function closeConfirm(){ q('confirm-overlay').classList.remove('open'); confirmCb=null; }
 q('confirm-ok').addEventListener('click',()=>{ if(confirmCb) confirmCb(); closeConfirm(); });
 
-// Room status local storage
 const KEY_PREFIX = 'otel_room_';
 const roomKey = num => KEY_PREFIX+num;
 function getRoomData(num){ try{ return JSON.parse(localStorage.getItem(roomKey(num))||'null'); }catch{ return null; } }
 function setRoomData(num,data){ localStorage.setItem(roomKey(num), JSON.stringify(data)); }
 function allRooms(){ const a=[]; FLOORS.forEach(f=>{ for(let i=1;i<=f.rooms;i++) a.push(f.prefix*100+i); }); return a; }
 
-// Başlangıçta TÜM odaları "bos" olarak ayarla ve localStorage'a kaydet
+// TÜM ODALARI BAŞLANGIÇTA "BOŞ" YAP
 function initDemo(){
   allRooms().forEach(n => {
-    setRoomData(n, {status:'bos'});  // mevcut değeri ez, her zaman boş yap
+    setRoomData(n, {status:'bos'});
   });
 }
 
@@ -529,7 +527,6 @@ function buildEntryCard(entry){
   let endeksVal = null;
   cats.forEach(c=>{ if(c.startsWith('endeks:')) endeksVal = c.replace('endeks:',''); });
   const katVal = cats.filter(c=>!c.startsWith('endeks:')).join(', ');
-  // Lightbox için güvenli URL listesi
   const photosStr = JSON.stringify(photos).replace(/"/g, '&quot;');
 
   return `
@@ -546,7 +543,7 @@ function buildEntryCard(entry){
       </div>
       <div class="entry-body">
         ${photos.length ? `<div class="img-scroll">${photos.map((u,i)=>`
-          <div class="img-thumb" onclick="event.stopPropagation();openLb(${photosStr},${i})"><img src="${u}" loading="lazy"></div>
+          <div class="img-thumb" onclick="event.stopPropagation();openLb('${photosStr}',${i})"><img src="${u}" loading="lazy"></div>
         `).join('')}</div>` : ''}
         ${entry.note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
         <div class="entry-actions">
@@ -566,7 +563,6 @@ function buildEntryCard(entry){
           </div>
           <div class="field"><label>Not</label><textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea></div>
           <div class="field"><label>Yeni Fotoğraf Ekle</label><input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple></div>
-          <div id="edit-preview-${entry.id}" class="preview-row"></div>
           <button class="btn btn-primary" onclick="saveEdit('${entry.id}')">Değişiklikleri Kaydet</button>
         </div>
       </div>
@@ -582,7 +578,7 @@ async function saveEdit(entryId){
   const kat = q(`edit-kat-${entryId}`).value;
   const note = q(`edit-note-${entryId}`).value.trim();
   let category = kat;
-  if(endeks) category = (category?category+',':'')+'endeks:'+endeks;
+  if(endeks) category += (category?',':'')+'endeks:'+endeks;
 
   const newPhotoInput = q(`edit-photos-${entryId}`);
   let newUrls = [];
@@ -690,7 +686,6 @@ function saveRoomStatus(){
 
 // Lightbox
 function openLb(photos, idx){
-  // photos parametresi ya doğrudan bir dizi ya da JSON.parse gerektiren bir string olabilir
   if(typeof photos === 'string'){
     try { photos = JSON.parse(photos); } catch(e){ photos = []; }
   }
@@ -712,7 +707,7 @@ dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor='v
 dz.addEventListener('dragleave', ()=> dz.style.borderColor='');
 dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.borderColor=''; handleFiles(e.dataTransfer.files); });
 
-// ─── TOKEN / READONLY MODULE ───
+// Token / Read-only
 function showAccessError(){
   q('legend').style.display = 'none';
   q('filter-bar').style.display = 'none';
@@ -806,7 +801,6 @@ async function showReadonlyEntry(oda, mod, tarih, entryType){
   }catch(e){ rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
 }
 
-// URL parameters
 const _p = new URLSearchParams(location.search);
 const _oda = _p.get('oda'), _mod = _p.get('mod'), _token = _p.get('token'), _tarih = _p.get('tarih'), _type = _p.get('type');
 
@@ -833,7 +827,6 @@ if (_oda && _token) {
 } else if (_oda && !_token) {
   showAccessError();
 } else {
-  // NORMAL MODE
   initDemo();
   populateFloorFilter();
   renderView();
@@ -843,4 +836,3 @@ if (_oda && _token) {
 </script>
 </body>
 </html>
-```
