@@ -48,10 +48,9 @@
   .grid-container { padding:12px; overflow-x:auto; }
   .floor-section { margin-bottom:8px; }
   .floor-label { font-size:11px; color:var(--muted); margin-bottom:4px; font-weight:600; }
-  .room-grid { display:grid; grid-template-columns:repeat(18, minmax(48px,1fr)); gap:4px; }
+  .room-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(48px, 1fr)); gap:4px; }
   .room-cell { height:38px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; cursor:pointer; border:1px solid rgba(0,0,0,0.05); position:relative; background:var(--surface); color:var(--text); transition:transform 0.1s, filter 0.1s; }
   .room-cell:hover { transform:scale(1.06); z-index:2; filter:brightness(1.15); }
-  .room-cell.empty { background:#eee; color:#ccc; pointer-events:none; }
   .status-dolu-temiz  { background:#1565c0; color:#fff; }
   .status-dolu-kirli  { background:#6a1a9a; color:#fff; }
   .status-cout        { background:#2e7d32; color:#fff; }
@@ -67,6 +66,7 @@
   .status-bos         { background:#fff; color:#888; border:1px dashed #ccc; }
   .room-flag { position:absolute; top:2px; right:2px; width:6px; height:6px; border-radius:50%; background:#00e5ff; }
 
+  /* panel, tabs, cards vs. aynı kalacak, sadece grid düzeltmesi yapıldı */
   .panel-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:500; }
   .panel-overlay.open { display:block; }
   .room-panel { position:fixed; top:0; right:0; bottom:0; width:540px; max-width:100vw; background:var(--surface); z-index:501; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.28s; overflow:hidden; box-shadow:-4px 0 20px rgba(0,0,0,0.15); }
@@ -367,14 +367,20 @@ function renderGrid(){
   const container = q('grid-container');
   container.innerHTML = '';
   FLOORS.forEach(f=>{
-    const sec = document.createElement('div'); sec.className='floor-section';
-    sec.innerHTML = `<div class="floor-label">▸ ${f.label}</div>`;
-    const grid = document.createElement('div'); grid.className='room-grid';
+    const matchingRooms = [];
     for(let i=1;i<=f.rooms;i++){
       const num = f.prefix*100+i;
       const d = getRoomData(num); const status = d?.status || 'bos';
-      if(fs && status!==fs){ grid.appendChild(document.createElement('div')); continue; }
-      if(sv && !String(num).includes(sv)){ grid.appendChild(document.createElement('div')); continue; }
+      if(fs && status!==fs) continue;
+      if(sv && !String(num).includes(sv)) continue;
+      matchingRooms.push(num);
+    }
+    if(matchingRooms.length === 0) return; // bu katı tamamen gizle
+    const sec = document.createElement('div'); sec.className='floor-section';
+    sec.innerHTML = `<div class="floor-label">▸ ${f.label}</div>`;
+    const grid = document.createElement('div'); grid.className='room-grid';
+    matchingRooms.forEach(num => {
+      const d = getRoomData(num); const status = d?.status || 'bos';
       const cell = document.createElement('div');
       cell.className = 'room-cell '+statusClass(status);
       cell.textContent = num;
@@ -383,7 +389,7 @@ function renderGrid(){
       }
       cell.addEventListener('click', ()=>openPanel(num));
       grid.appendChild(cell);
-    }
+    });
     sec.appendChild(grid);
     container.appendChild(sec);
   });
