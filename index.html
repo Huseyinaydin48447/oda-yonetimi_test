@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -19,7 +20,7 @@
 
   .topbar { background:var(--accent); padding:10px 16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:sticky; top:0; z-index:100; }
   .topbar h1 { font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px; }
-  .topbar p { font-size:11px; color:rgba(255,255,255,.65); margin-top:1px; }
+  .topbar p { font-size:11px; color:rgba(255,255,255,.65); margin:0; }
   .stat-badge { display:flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); cursor:default; }
   .stat-badge .count { font-size:14px; font-weight:700; }
   .stat-badge.sb-dolu-temiz { background: #1565c0; }
@@ -64,7 +65,7 @@
   .status-ariza       { background:#546e7a; color:#fff; }
   .status-onaylı      { background:#4a148c; color:#fff; }
   .status-onaylı-b    { background:#7b1fa2; color:#fff; }
-  .status-bos         { background:#fff; color:#aaa; border:1px dashed #ccc; }
+  .status-bos         { background:#fff; color:#888; border:1px dashed #ccc; }
   .room-flag { position:absolute; top:2px; right:2px; width:6px; height:6px; border-radius:50%; background:#00e5ff; }
 
   .panel-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:500; }
@@ -101,7 +102,7 @@
   .chevron { transition:transform 0.2s; color:var(--muted); }
   .chevron.open { transform:rotate(90deg); }
   .entry-body { max-height:0; overflow:hidden; transition:max-height 0.3s; }
-  .entry-body.open { max-height:1000px; }
+  .entry-body.open { max-height:2000px; }
   .img-scroll { display:flex; gap:6px; overflow-x:auto; padding:8px 14px; }
   .img-thumb { width:80px; height:60px; border-radius:6px; overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer; position:relative; }
   .img-thumb img { width:100%; height:100%; object-fit:cover; }
@@ -145,7 +146,7 @@
   .lightbox.open { display:flex; }
   .lb-top { display:flex; justify-content:space-between; padding:10px 14px; }
   .lb-close { background:none; border:none; color:#fff; font-size:20px; cursor:pointer; }
-  .lb-img-wrap { flex:1; display:flex; align-items:center; justify-content:center; }
+  .lb-img-wrap { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .lb-img-wrap img { max-width:100%; max-height:100%; object-fit:contain; }
   .lb-nav { display:flex; gap:10px; justify-content:center; padding:10px; }
   .lb-btn { padding:6px 16px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; cursor:pointer; }
@@ -314,10 +315,10 @@ function getRoomData(num){ try{ return JSON.parse(localStorage.getItem(roomKey(n
 function setRoomData(num,data){ localStorage.setItem(roomKey(num), JSON.stringify(data)); }
 function allRooms(){ const a=[]; FLOORS.forEach(f=>{ for(let i=1;i<=f.rooms;i++) a.push(f.prefix*100+i); }); return a; }
 
-// Initialize all rooms as "bos" (empty/white)
+// Başlangıçta TÜM odaları "bos" olarak ayarla ve localStorage'a kaydet
 function initDemo(){
   allRooms().forEach(n => {
-    if(!getRoomData(n)) setRoomData(n, {status:'bos'});
+    setRoomData(n, {status:'bos'});  // mevcut değeri ez, her zaman boş yap
   });
 }
 
@@ -354,7 +355,6 @@ async function loadRoomsWithEntries(){
   }catch(e){}
 }
 
-// View switching
 function setView(v){ currentView=v; q('btn-grid').classList.toggle('active',v==='grid'); q('btn-list').classList.toggle('active',v==='list'); renderView(); }
 function renderView(){
   if(currentView==='grid'){ q('grid-container').classList.remove('hidden'); q('list-container').classList.remove('active'); renderGrid(); }
@@ -413,8 +413,7 @@ async function renderList(){
   try{
     const res = await api(`/rest/v1/entries?mode=eq.${MODE}&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type`);
     allMeterData = await res.json();
-    const katSet = new Set();
-    allMeterData.forEach(e=>{ if(e.category) e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim())); });
+    const katSet = new Set(); allMeterData.forEach(e=>{ if(e.category) e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim())); });
     const ff = q('filter-floor').value, sv = q('search-room').value.trim().toLowerCase();
     const filtered = allMeterData.filter(e=>{
       if(ff && !(e.category||'').includes(ff)) return false;
@@ -473,7 +472,6 @@ function quickCikis(roomNo, girisDate){
   },200);
 }
 
-// Panel open/close
 function openPanel(num){
   currentRoom = num;
   q('panel-room-num').textContent = num;
@@ -499,7 +497,6 @@ function switchPanelTab(t){
   ['kayitlar','ekle','durum'].forEach(x=>{ q('pane-'+x).classList.toggle('active',x===t); q('ptab-'+x).classList.toggle('active',x===t); });
 }
 
-// Load entries
 async function loadEntries(){
   q('entries-list').innerHTML = '<div style="text-align:center;padding:20px">Yükleniyor...</div>';
   try{
@@ -516,13 +513,10 @@ function renderEntries(entries){
   const cikisler = entries.filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
   const usedCikis = new Set();
   let html = '';
-  const buildPair = (g,c) => {
-    html += `<div style="margin-bottom:12px">${buildEntryCard(g)}${c?buildEntryCard(c):''}</div>`;
-  };
   girisler.forEach(g=>{
     const c = cikisler.find(cc=>!usedCikis.has(cc.id)&&cc.checkin_date>=g.checkin_date);
     if(c) usedCikis.add(c.id);
-    buildPair(g,c);
+    html += `<div style="margin-bottom:12px">${buildEntryCard(g)}${c?buildEntryCard(c):''}</div>`;
   });
   cikisler.filter(c=>!usedCikis.has(c.id)).forEach(c=>{ html += `<div style="margin-bottom:12px">${buildEntryCard(c)}</div>`; });
   wrap.innerHTML = html;
@@ -535,6 +529,8 @@ function buildEntryCard(entry){
   let endeksVal = null;
   cats.forEach(c=>{ if(c.startsWith('endeks:')) endeksVal = c.replace('endeks:',''); });
   const katVal = cats.filter(c=>!c.startsWith('endeks:')).join(', ');
+  // Lightbox için güvenli URL listesi
+  const photosStr = JSON.stringify(photos).replace(/"/g, '&quot;');
 
   return `
     <div class="entry-card" id="card-${entry.id}">
@@ -550,7 +546,7 @@ function buildEntryCard(entry){
       </div>
       <div class="entry-body">
         ${photos.length ? `<div class="img-scroll">${photos.map((u,i)=>`
-          <div class="img-thumb" onclick="openLb(${JSON.stringify(photos)}, ${i})"><img src="${u}" loading="lazy"></div>
+          <div class="img-thumb" onclick="event.stopPropagation();openLb(${photosStr},${i})"><img src="${u}" loading="lazy"></div>
         `).join('')}</div>` : ''}
         ${entry.note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
         <div class="entry-actions">
@@ -578,13 +574,9 @@ function buildEntryCard(entry){
   `;
 }
 
-function toggleEditPanel(id){
-  const panel = q(`edit-panel-${id}`);
-  panel.classList.toggle('open');
-}
+function toggleEditPanel(id){ q(`edit-panel-${id}`).classList.toggle('open'); }
 
 async function saveEdit(entryId){
-  const panel = q(`edit-panel-${entryId}`);
   const date = q(`edit-date-${entryId}`).value;
   const endeks = q(`edit-endeks-${entryId}`).value.trim();
   const kat = q(`edit-kat-${entryId}`).value;
@@ -595,26 +587,18 @@ async function saveEdit(entryId){
   const newPhotoInput = q(`edit-photos-${entryId}`);
   let newUrls = [];
   if(newPhotoInput.files.length){
-    const compressedFiles = [];
     for(const f of newPhotoInput.files){
       const r = await compressImage(f);
-      compressedFiles.push(r.file);
-    }
-    for(const file of compressedFiles){
-      const url = await uploadImg(file, currentRoom);
-      newUrls.push(url);
+      newUrls.push(await uploadImg(r.file, currentRoom));
     }
   }
-
   const entry = currentEntries.find(e=>e.id===entryId);
   if(!entry) return;
   const mergedPhotos = [...(entry.photo_urls||[]), ...newUrls];
-  const body = { checkin_date:date, category, note, photo_urls:mergedPhotos };
   try{
-    const r = await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify(body)});
-    if(!r.ok) throw new Error('Güncelleme başarısız');
+    await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify({checkin_date:date,category,note,photo_urls:mergedPhotos})});
     showToast('Güncellendi');
-    Object.assign(entry, body);
+    Object.assign(entry, {checkin_date:date,category,note,photo_urls:mergedPhotos});
     loadEntries();
     loadRoomsWithEntries();
   }catch(e){ showToast('Hata: '+e.message,'error'); }
@@ -624,9 +608,8 @@ async function deleteEntry(id){
   openConfirm('Kaydı sil','Bu sayaç kaydı silinecek.', async ()=>{
     try{
       const entry = currentEntries.find(e=>e.id===id);
-      const r = await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
-      if(!r.ok) throw new Error('Silinemedi');
-      if(entry && entry.photo_urls){
+      await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
+      if(entry?.photo_urls){
         for(const url of entry.photo_urls){
           const path = url.split('/object/public/')[1];
           if(path){
@@ -637,40 +620,26 @@ async function deleteEntry(id){
       }
       showToast('Silindi');
       loadEntries();
-      await loadRoomsWithEntries();
+      loadRoomsWithEntries();
     }catch(e){ showToast('Hata: '+e.message,'error'); }
   });
 }
 
-// Link generation with token storage
 async function createEntryLink(roomNo, date, type){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);
-  await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(date)}&entry_type=eq.${encodeURIComponent(type)}`, {
-    method:'DELETE', headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
-  });
-  await fetch(`${SB}/rest/v1/tokens`, {
-    method:'POST',
-    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-    body:JSON.stringify({room_no:roomNo, mod:MODE, token, entry_date:date, entry_type:type})
-  });
+  await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(date)}&entry_type=eq.${encodeURIComponent(type)}`, {method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+  await fetch(`${SB}/rest/v1/tokens`, {method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:MODE,token,entry_date:date,entry_type:type})});
   const url = `${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${MODE}&tarih=${encodeURIComponent(date)}&token=${token}&type=${type}`;
   navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url));
 }
 async function createPairLink(roomNo, girisDate, cikisDate){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);
-  await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(girisDate)}&entry_type=eq.pair`, {
-    method:'DELETE', headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
-  });
-  await fetch(`${SB}/rest/v1/tokens`, {
-    method:'POST',
-    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-    body:JSON.stringify({room_no:roomNo, mod:MODE, token, entry_date:girisDate, entry_type:'pair', paired_date:cikisDate})
-  });
+  await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(girisDate)}&entry_type=eq.pair`, {method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+  await fetch(`${SB}/rest/v1/tokens`, {method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:MODE,token,entry_date:girisDate,entry_type:'pair',paired_date:cikisDate})});
   const url = `${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${MODE}&tarih=${encodeURIComponent(girisDate)}&token=${token}&type=pair`;
   navigator.clipboard.writeText(url).then(()=>showToast('Çift link kopyalandı!')).catch(()=>prompt('Link:',url));
 }
 
-// Add entry form
 function setEntryType(t){ entryType=t; q('btn-giris').className='type-btn'+(t==='giris'?' active-giris':''); q('btn-cikis').className='type-btn'+(t==='cikis'?' active-cikis':''); }
 function resetAddForm(){ entryType=null; pendingPhotos=[]; q('btn-giris').className='type-btn'; q('btn-cikis').className='type-btn'; q('f-date').value=today(); q('f-endeks').value=''; q('f-kat').value=''; q('f-note').value=''; q('preview-row').innerHTML=''; q('compress-status').innerHTML=''; q('progress-wrap').classList.remove('show'); }
 async function handleFiles(files){
@@ -703,15 +672,13 @@ async function saveEntry(){
     if(endeks) category += (category?',':'')+'endeks:'+endeks;
     const urls = [];
     for(let i=0;i<pendingPhotos.length;i++){ urls.push(await uploadImg(pendingPhotos[i].file)); pb.style.width=Math.round((i+1)/pendingPhotos.length*100)+'%'; }
-    const body = {room_no:String(currentRoom), mode:MODE, checkin_date:date, type:entryType, category, note, photo_urls:urls};
-    await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});
+    await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:String(currentRoom),mode:MODE,checkin_date:date,type:entryType,category,note,photo_urls:urls})});
     showToast('Kayıt oluşturuldu');
-    resetAddForm(); switchPanelTab('kayitlar'); loadEntries(); await loadRoomsWithEntries();
+    resetAddForm(); switchPanelTab('kayitlar'); loadEntries(); loadRoomsWithEntries();
   }catch(e){ showToast('Hata: '+e.message,'error'); }
   finally{ btn.disabled=false; btn.innerHTML=lbl; pw.classList.remove('show'); }
 }
 
-// Room status save
 function saveRoomStatus(){
   if(!currentRoom) return;
   const d = getRoomData(currentRoom)||{};
@@ -723,19 +690,23 @@ function saveRoomStatus(){
 
 // Lightbox
 function openLb(photos, idx){
-  lbImages = photos; lbIndex = idx;
+  // photos parametresi ya doğrudan bir dizi ya da JSON.parse gerektiren bir string olabilir
+  if(typeof photos === 'string'){
+    try { photos = JSON.parse(photos); } catch(e){ photos = []; }
+  }
+  lbImages = photos;
+  lbIndex = idx;
   updateLb();
   q('lb').classList.add('open');
 }
 function closeLb(){ q('lb').classList.remove('open'); }
 function lbMove(d){ lbIndex = Math.max(0, Math.min(lbImages.length-1, lbIndex+d)); updateLb(); }
 function updateLb(){
-  q('lb-img').src = lbImages[lbIndex];
-  q('lb-counter').textContent = `${lbIndex+1} / ${lbImages.length}`;
+  q('lb-img').src = lbImages[lbIndex] || '';
+  q('lb-counter').textContent = lbImages.length ? `${lbIndex+1} / ${lbImages.length}` : '';
   q('lb-label').textContent = `Fotoğraf ${lbIndex+1}`;
 }
 
-// Drop zone
 const dz = q('drop-zone');
 dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor='var(--accent)'; });
 dz.addEventListener('dragleave', ()=> dz.style.borderColor='');
@@ -743,7 +714,6 @@ dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.borderColor=''; ha
 
 // ─── TOKEN / READONLY MODULE ───
 function showAccessError(){
-  // Hide everything except the topbar message
   q('legend').style.display = 'none';
   q('filter-bar').style.display = 'none';
   q('grid-container').style.display = 'none';
@@ -756,14 +726,17 @@ function showAccessError(){
   q('readonly-view').classList.add('active');
 }
 
-function buildReadonlyCard(entry, ei, isE) {
+function buildReadonlyCard(entry, ei, isE){
   const urls = entry.photo_urls||[];
   entryImages[ei] = urls;
   const cats = (entry.category||'').split(',').filter(Boolean);
-  const imgs = urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${JSON.stringify(urls)},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
+  const photosStr = JSON.stringify(urls).replace(/"/g, '&quot;');
+  const imgs = urls.length ? `<div class="img-scroll">${urls.map((u,i)=>`
+    <div class="img-thumb" onclick="event.stopPropagation();openLb('${photosStr}',${i})"><img src="${u}" loading="lazy"></div>
+  `).join('')}</div>` : '<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>';
   return `
     <div class="entry-card">
-      <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.chevron').classList.toggle('open')">
+      <div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open'); this.querySelector('.chevron').classList.toggle('open')">
         <span class="type-badge ${entry.type==='cikis'?'cikis':'giris'}">${entry.type==='cikis'?'ÇIKIŞ':'GİRİŞ'}</span>
         <div class="entry-meta">
           <div class="entry-date">${fmtDate(entry.checkin_date)}</div>
@@ -773,14 +746,13 @@ function buildReadonlyCard(entry, ei, isE) {
         <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="entry-body open">
-        ${imgs ? `<div class="img-scroll">${imgs}</div>` : '<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
-        ${entry.note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
+        ${imgs}
+        ${entry.note ? `<div style="padding:8px 14px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
       </div>
     </div>`;
 }
 
-async function showReadonlyEntry(oda, mod, tarih, entryType) {
-  // Hide normal UI, show readonly container
+async function showReadonlyEntry(oda, mod, tarih, entryType){
   q('legend').style.display = 'none';
   q('filter-bar').style.display = 'none';
   q('grid-container').style.display = 'none';
@@ -796,18 +768,17 @@ async function showReadonlyEntry(oda, mod, tarih, entryType) {
   q('topbar-title').textContent = `${label} ${oda}`;
   q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
 
-  if (entryType === 'pair') {
-    const tokenData = await api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`).then(r => r.json()).catch(() => []);
+  if (entryType === 'pair'){
+    const tokenData = await api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`).then(r=>r.json()).catch(()=>[]);
     const cikisDate = tokenData[0]?.paired_date;
-    if (!cikisDate) { showAccessError(); return; }
-    try {
+    if(!cikisDate){ showAccessError(); return; }
+    try{
       const [girisData, cikisData] = await Promise.all([
         api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&type=eq.giris`).then(r=>r.json()),
         api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(cikisDate)}&mode=eq.${encodeURIComponent(mod)}&type=eq.cikis`).then(r=>r.json())
       ]);
-      const giris = girisData[0];
-      const cikis = cikisData[0];
-      if (!giris && !cikis) { rw.innerHTML = '<div class="empty">Kayıt bulunamadı</div>'; return; }
+      const giris = girisData[0], cikis = cikisData[0];
+      if(!giris && !cikis){ rw.innerHTML = '<div class="empty">Kayıt bulunamadı</div>'; return; }
       let ei = 0;
       entryImages = {}; entryData = {};
       const totalP = (giris?.photo_urls?.length||0)+(cikis?.photo_urls?.length||0);
@@ -817,35 +788,31 @@ async function showReadonlyEntry(oda, mod, tarih, entryType) {
       if(cikis) html += buildReadonlyCard(cikis, ei++, isE);
       html += '</div>';
       rw.innerHTML = html;
-    } catch(e) { rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
+    }catch(e){ rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
     return;
   }
 
-  // Single entry
-  try {
+  try{
     let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
-    if (entryType) url += `&type=eq.${encodeURIComponent(entryType)}`;
-    const res = await api(url);
-    const data = await res.json();
-    if (!data.length) { rw.innerHTML = '<div class="empty">Bu tarihe ait kayıt bulunamadı</div>'; return; }
+    if(entryType) url += `&type=eq.${encodeURIComponent(entryType)}`;
+    const data = await api(url).then(r=>r.json());
+    if(!data.length){ rw.innerHTML = '<div class="empty">Bu tarihe ait kayıt bulunamadı</div>'; return; }
     const totalP = data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
     let html = `<div class="room-header" style="margin-bottom:16px"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
     let ei = 0;
     entryImages = {}; entryData = {};
     data.forEach(entry => { html += buildReadonlyCard(entry, ei++, isE); });
     rw.innerHTML = html;
-  } catch(e) { rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
+  }catch(e){ rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
 }
 
-// URL parameter handling
+// URL parameters
 const _p = new URLSearchParams(location.search);
 const _oda = _p.get('oda'), _mod = _p.get('mod'), _token = _p.get('token'), _tarih = _p.get('tarih'), _type = _p.get('type');
 
 if (_oda && _token) {
-  // Readonly mode: verify token and show entry
   const _m = _mod === 'elektrik' ? 'elektrik' : 'demirbaş';
   mode = _m;
-  // Immediately hide the normal UI (except topbar) and show loading
   q('legend').style.display = 'none';
   q('filter-bar').style.display = 'none';
   q('grid-container').style.display = 'none';
@@ -853,7 +820,6 @@ if (_oda && _token) {
   q('readonly-view').classList.add('active');
   q('topbar-title').textContent = 'Doğrulanıyor...';
   q('topbar-sub').textContent = '';
-  // Verify token
   api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
     .then(r => r.json())
     .then(data => {
@@ -867,7 +833,7 @@ if (_oda && _token) {
 } else if (_oda && !_token) {
   showAccessError();
 } else {
-  // Normal initialization
+  // NORMAL MODE
   initDemo();
   populateFloorFilter();
   renderView();
@@ -877,3 +843,4 @@ if (_oda && _token) {
 </script>
 </body>
 </html>
+```
