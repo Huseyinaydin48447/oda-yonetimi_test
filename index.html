@@ -116,25 +116,20 @@
   .field { margin-bottom:10px; }
   .field label { font-size:11px; color:var(--muted); display:block; margin-bottom:3px; }
   .field input, .field select, .field textarea { width:100%; padding:8px; border-radius:6px; border:1px solid var(--border); font-size:13px; }
-  .tags-row { display:flex; gap:4px; flex-wrap:wrap; }
-  .tag { padding:4px 10px; border-radius:20px; font-size:11px; border:1px solid var(--border); cursor:pointer; color:var(--muted); }
-  .tag.on { background:var(--accent-light); color:var(--accent); border-color:var(--accent-mid); }
 
   .status-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
   .status-row label { font-size:13px; font-weight:600; }
   .status-row select { flex:1; padding:8px; border-radius:6px; border:1px solid var(--border); }
 
-  /* ŞIK EKLE FORMU */
   .elegant-form { background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
   .elegant-form .form-section { margin-bottom:16px; }
   .elegant-form .form-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-  .elegant-form .form-label i { font-style:normal; font-size:16px; }
   .elegant-form .type-btns { display:flex; gap:8px; }
   .elegant-form .type-btn { flex:1; padding:14px; border-radius:var(--radius-sm); font-size:14px; font-weight:700; border:2px solid var(--border); background:var(--surface2); cursor:pointer; transition: all 0.15s; text-align:center; }
   .elegant-form .type-btn.active-giris { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
   .elegant-form .type-btn.active-cikis { border-color:var(--amber); background:var(--amber-light); color:var(--amber); }
-  .elegant-form input, .elegant-form select, .elegant-form textarea { width:100%; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface2); font-size:14px; transition:border-color 0.2s; }
-  .elegant-form input:focus, .elegant-form select:focus, .elegant-form textarea:focus { border-color:var(--accent); outline:none; background:var(--surface); }
+  .elegant-form input, .elegant-form textarea { width:100%; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface2); font-size:14px; transition:border-color 0.2s; }
+  .elegant-form input:focus, .elegant-form textarea:focus { border-color:var(--accent); outline:none; background:var(--surface); }
   .elegant-form .photo-drop { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:20px; text-align:center; cursor:pointer; background:var(--surface2); transition: all 0.2s; }
   .elegant-form .photo-drop:hover { border-color:var(--accent); background:var(--accent-light); }
   .elegant-form .btn-primary { padding:14px; font-size:15px; border-radius:var(--radius-sm); margin-top:8px; }
@@ -195,8 +190,6 @@
       <option value="cout">C/Out</option><option value="temiz">Temiz</option><option value="kirli">Kirli</option>
       <option value="ooi">OOI</option><option value="ariza">Arıza</option><option value="onaylı">Onaylı</option><option value="bos">Boş</option>
     </select>
-    <label>Kat:</label>
-    <select id="filter-floor" onchange="renderView()"><option value="">Tümü</option></select>
     <input type="text" id="search-room" placeholder="Oda ara..." oninput="renderView()" style="width:100px;">
     <div class="view-toggle">
       <button class="view-btn active" id="btn-grid" onclick="setView('grid')">Grid</button>
@@ -236,10 +229,6 @@
           <div class="form-section">
             <div class="form-label"><span>📅 Tarih</span></div>
             <input type="date" id="f-date">
-          </div>
-          <div class="form-section">
-            <div class="form-label"><span>📍 Kat</span></div>
-            <select id="f-kat"><option value="">Seçin</option></select>
           </div>
           <div class="form-section">
             <div class="form-label"><span>📝 Not</span></div>
@@ -373,21 +362,11 @@ function statusClass(s){
   return m[s]||'status-bos';
 }
 
-function populateFloorFilter(){
-  const sel = q('filter-floor');
-  sel.innerHTML = '<option value="">Tümü</option>';
-  FLOORS.forEach(f=>{ sel.appendChild(new Option(f.label, f.prefix)); });
-  const katSel = q('f-kat');
-  katSel.innerHTML = '<option value="">Seçin</option>';
-  for(let i=1;i<=15;i++) katSel.appendChild(new Option(i+'. Kat', i+'. Kat'));
-}
-
 function renderGrid(){
-  const fs = q('filter-status').value, ff = q('filter-floor').value, sv = q('search-room').value.trim().toLowerCase();
+  const fs = q('filter-status').value, sv = q('search-room').value.trim().toLowerCase();
   const container = q('grid-container');
   container.innerHTML = '';
   FLOORS.forEach(f=>{
-    if(ff && parseInt(ff)!==f.prefix) return;
     const sec = document.createElement('div'); sec.className='floor-section';
     sec.innerHTML = `<div class="floor-label">▸ ${f.label}</div>`;
     const grid = document.createElement('div'); grid.className='room-grid';
@@ -414,13 +393,11 @@ async function renderList(){
   const wrap = q('list-container');
   wrap.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">Yükleniyor...</div>';
   try{
-    const res = await api(`/rest/v1/entries?mode=eq.${MODE}&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,category,note,type`);
+    const res = await api(`/rest/v1/entries?mode=eq.${MODE}&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,note,type`);
     allMeterData = await res.json();
-    const katSet = new Set(); allMeterData.forEach(e=>{ if(e.category) e.category.split(',').filter(Boolean).forEach(k=>katSet.add(k.trim())); });
-    const ff = q('filter-floor').value, sv = q('search-room').value.trim().toLowerCase();
+    const sv = q('search-room').value.trim().toLowerCase();
     const filtered = allMeterData.filter(e=>{
-      if(ff && !(e.category||'').includes(ff)) return false;
-      if(sv && !String(e.room_no).includes(sv) && !(e.category||'').toLowerCase().includes(sv) && !(e.note||'').toLowerCase().includes(sv)) return false;
+      if(sv && !String(e.room_no).includes(sv) && !(e.note||'').toLowerCase().includes(sv)) return false;
       return true;
     });
     if(!filtered.length){ wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>'; return; }
@@ -439,24 +416,22 @@ async function renderList(){
     });
 
     let html = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-      <thead><tr style="background:var(--surface2)"><th style="padding:8px;text-align:left">Oda</th><th>Kat</th><th>Giriş</th><th>Çıkış</th><th style="text-align:right">İşlem</th></tr></thead><tbody>`;
+      <thead><tr style="background:var(--surface2)"><th style="padding:8px;text-align:left">Oda</th><th>Giriş</th><th>Çıkış</th><th style="text-align:right">İşlem</th></tr></thead><tbody>`;
     const shownCikis = new Set();
     filtered.forEach(e=>{
       const isG = e.type==='giris'||!e.type;
-      const cats = (e.category||'').split(',').filter(Boolean);
-      const kat = cats.length?cats[0]:'—';
       if(isG){
         const paired = pairedGirisIds.has(e.id);
         const cEntry = paired ? (cByRoom[e.room_no]||[]).find(c=>pairedCikisIds.has(c.id)&&c.checkin_date>=e.checkin_date) : null;
         if(cEntry) shownCikis.add(cEntry.id);
         html += `<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openPanel('${e.room_no}')">
-          <td style="padding:8px;font-weight:600">${e.room_no}</td><td>${kat}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td>
+          <td style="padding:8px;font-weight:600">${e.room_no}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td>
           <td style="color:#b45309">${cEntry?fmtShort(cEntry.checkin_date):'—'}</td>
           <td style="text-align:right">${cEntry?`<button class="btn" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${cEntry.checkin_date}')">Link</button>`:`<button class="ml-cikis-btn" onclick="event.stopPropagation();quickCikis('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button>`}</td>
         </tr>`;
       } else if(!shownCikis.has(e.id)){
         html += `<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openPanel('${e.room_no}')">
-          <td style="padding:8px;font-weight:600">${e.room_no}</td><td>${kat}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`;
+          <td style="padding:8px;font-weight:600">${e.room_no}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`;
       }
     });
     html += '</tbody></table></div>';
@@ -470,8 +445,6 @@ function quickCikis(roomNo, girisDate){
     switchPanelTab('ekle');
     setEntryType('cikis');
     q('f-date').value = today();
-    const kat = Math.floor(parseInt(roomNo)/100);
-    if(kat>=1) q('f-kat').value = kat+'. Kat';
   },200);
 }
 
@@ -528,8 +501,7 @@ function renderEntries(entries){
 function buildEntryCard(entry){
   const isG = entry.type==='giris'||!entry.type;
   const photos = entry.photo_urls||[];
-  const cats = (entry.category||'').split(',').filter(Boolean);
-  const katVal = cats.join(', ');
+  const note = entry.note || '';
   const photosStr = JSON.stringify(photos).replace(/"/g, '&quot;');
 
   return `
@@ -538,7 +510,7 @@ function buildEntryCard(entry){
         <span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span>
         <div class="entry-meta">
           <div class="entry-date">${fmtDate(entry.checkin_date)}</div>
-          ${katVal ? `<div style="font-size:11px;color:var(--muted)">${katVal}</div>` : ''}
+          ${note ? `<div class="entry-note">${note}</div>` : ''}
         </div>
         <span>📷${photos.length}</span>
         <svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
@@ -547,7 +519,7 @@ function buildEntryCard(entry){
         ${photos.length ? `<div class="img-scroll">${photos.map((u,i)=>`
           <div class="img-thumb" onclick="event.stopPropagation();openLb('${photosStr}',${i})"><img src="${u}" loading="lazy"></div>
         `).join('')}</div>` : ''}
-        ${entry.note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
+        ${note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${note}</div>` : ''}
         <div class="entry-actions">
           <button class="btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button>
           <button class="btn" onclick="event.stopPropagation(); createEntryLink('${entry.room_no}','${entry.checkin_date}','${entry.type||'giris'}')">Link</button>
@@ -556,13 +528,7 @@ function buildEntryCard(entry){
         </div>
         <div class="edit-panel" id="edit-panel-${entry.id}">
           <div class="field"><label>Tarih</label><input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date||''}"></div>
-          <div class="field"><label>Kat</label>
-            <select id="edit-kat-${entry.id}">
-              <option value="">Seçin</option>
-              ${Array.from({length:15},(_,i)=>`<option value="${i+1}. Kat" ${katVal.includes((i+1)+'. Kat')?'selected':''}>${i+1}. Kat</option>`).join('')}
-            </select>
-          </div>
-          <div class="field"><label>Not</label><textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea></div>
+          <div class="field"><label>Not</label><textarea id="edit-note-${entry.id}" rows="2">${note}</textarea></div>
           <div class="field"><label>Yeni Fotoğraf Ekle</label><input type="file" id="edit-photos-${entry.id}" accept="image/*" multiple></div>
           <button class="btn btn-primary" onclick="saveEdit('${entry.id}')">Değişiklikleri Kaydet</button>
         </div>
@@ -575,9 +541,7 @@ function toggleEditPanel(id){ q(`edit-panel-${id}`).classList.toggle('open'); }
 
 async function saveEdit(entryId){
   const date = q(`edit-date-${entryId}`).value;
-  const kat = q(`edit-kat-${entryId}`).value;
   const note = q(`edit-note-${entryId}`).value.trim();
-  let category = kat;
 
   const newPhotoInput = q(`edit-photos-${entryId}`);
   let newUrls = [];
@@ -591,9 +555,9 @@ async function saveEdit(entryId){
   if(!entry) return;
   const mergedPhotos = [...(entry.photo_urls||[]), ...newUrls];
   try{
-    await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify({checkin_date:date,category,note,photo_urls:mergedPhotos})});
+    await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify({checkin_date:date, note, photo_urls:mergedPhotos})});
     showToast('Güncellendi');
-    Object.assign(entry, {checkin_date:date,category,note,photo_urls:mergedPhotos});
+    Object.assign(entry, {checkin_date:date, note, photo_urls:mergedPhotos});
     loadEntries();
     loadRoomsWithEntries();
   }catch(e){ showToast('Hata: '+e.message,'error'); }
@@ -636,7 +600,7 @@ async function createPairLink(roomNo, girisDate, cikisDate){
 }
 
 function setEntryType(t){ entryType=t; q('btn-giris').className='type-btn'+(t==='giris'?' active-giris':''); q('btn-cikis').className='type-btn'+(t==='cikis'?' active-cikis':''); }
-function resetAddForm(){ entryType=null; pendingPhotos=[]; q('btn-giris').className='type-btn'; q('btn-cikis').className='type-btn'; q('f-date').value=today(); q('f-kat').value=''; q('f-note').value=''; q('preview-row').innerHTML=''; q('compress-status').innerHTML=''; q('progress-wrap').classList.remove('show'); }
+function resetAddForm(){ entryType=null; pendingPhotos=[]; q('btn-giris').className='type-btn'; q('btn-cikis').className='type-btn'; q('f-date').value=today(); q('f-note').value=''; q('preview-row').innerHTML=''; q('compress-status').innerHTML=''; q('progress-wrap').classList.remove('show'); }
 async function handleFiles(files){
   const se = q('compress-status'); se.innerHTML=''; let to=0, tn=0, cc=0;
   for(const f of files){
@@ -662,11 +626,10 @@ async function saveEntry(){
   const btn = q('save-btn'), lbl = btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="loader"></span>';
   const pw = q('progress-wrap'), pb = q('progress-bar'); pw.classList.add('show'); pb.style.width='0%';
   try{
-    const date = q('f-date').value, kat = q('f-kat').value, note = q('f-note').value.trim();
-    let category = kat;
+    const date = q('f-date').value, note = q('f-note').value.trim();
     const urls = [];
     for(let i=0;i<pendingPhotos.length;i++){ urls.push(await uploadImg(pendingPhotos[i].file)); pb.style.width=Math.round((i+1)/pendingPhotos.length*100)+'%'; }
-    await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:String(currentRoom),mode:MODE,checkin_date:date,type:entryType,category,note,photo_urls:urls})});
+    await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:String(currentRoom),mode:MODE,checkin_date:date,type:entryType,note,photo_urls:urls})});
     showToast('Kayıt oluşturuldu');
     resetAddForm(); switchPanelTab('kayitlar'); loadEntries(); loadRoomsWithEntries();
   }catch(e){ showToast('Hata: '+e.message,'error'); }
@@ -716,10 +679,10 @@ function showAccessError(){
 function buildReadonlyCard(entry, ei, isE){
   const urls = entry.photo_urls||[];
   entryImages[ei] = urls;
-  const cats = (entry.category||'').split(',').filter(Boolean);
+  const note = entry.note || '';
   const photosStr = JSON.stringify(urls).replace(/"/g, '&quot;');
   const imgs = urls.length ? `<div class="img-scroll">${urls.map((u,i)=>`<div class="img-thumb" onclick="event.stopPropagation();openLb('${photosStr}',${i})"><img src="${u}" loading="lazy"></div>`).join('')}</div>` : '<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>';
-  return `<div class="entry-card"><div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open'); this.querySelector('.chevron').classList.toggle('open')"><span class="type-badge ${entry.type==='cikis'?'cikis':'giris'}">${entry.type==='cikis'?'ÇIKIŞ':'GİRİŞ'}</span><div class="entry-meta"><div class="entry-date">${fmtDate(entry.checkin_date)}</div>${cats.length ? `<div style="font-size:11px;color:var(--muted)">${cats.join(' · ')}</div>`:''}</div><span>📷${urls.length}</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs}${entry.note ? `<div style="padding:8px 14px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}</div></div>`;
+  return `<div class="entry-card"><div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open'); this.querySelector('.chevron').classList.toggle('open')"><span class="type-badge ${entry.type==='cikis'?'cikis':'giris'}">${entry.type==='cikis'?'ÇIKIŞ':'GİRİŞ'}</span><div class="entry-meta"><div class="entry-date">${fmtDate(entry.checkin_date)}</div>${note ? `<div class="entry-note">${note}</div>`:''}</div><span>📷${urls.length}</span><svg class="chevron open" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${imgs}${note ? `<div style="padding:8px 14px;font-size:12px;color:var(--muted)">📝 ${note}</div>` : ''}</div></div>`;
 }
 
 async function showReadonlyEntry(oda, mod, tarih, entryType){
@@ -776,7 +739,7 @@ if (_oda && _token) {
       showReadonlyEntry(_oda, _m, tarih, _type);
     }).catch(() => showAccessError());
 } else if (_oda && !_token) { showAccessError(); }
-else { initDemo(); populateFloorFilter(); renderView(); updateStats(); checkConn(); }
+else { initDemo(); renderView(); updateStats(); checkConn(); }
 </script>
 </body>
 </html>
