@@ -19,6 +19,7 @@
 
   .topbar { background:var(--accent); padding:10px 16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:sticky; top:0; z-index:100; }
   .topbar h1 { font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px; }
+  .topbar p { font-size:11px; color:rgba(255,255,255,.65); margin-top:1px; }
   .stat-badge { display:flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); cursor:default; }
   .stat-badge .count { font-size:14px; font-weight:700; }
   .stat-badge.sb-dolu-temiz { background: #1565c0; }
@@ -84,6 +85,9 @@
   .list-container { display:none; padding:12px; }
   .list-container.active { display:block; }
   .grid-container.hidden { display:none; }
+
+  .readonly-view { display:none; padding:16px; }
+  .readonly-view.active { display:block; }
 
   .entry-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:10px; overflow:hidden; }
   .entry-head { padding:10px 14px; display:flex; align-items:center; gap:8px; cursor:pointer; }
@@ -160,8 +164,9 @@
 </head>
 <body>
 <div class="app">
-  <div class="topbar">
-    <h1>⚡ ELEKTRA SAYAÇ PANELİ</h1>
+  <div class="topbar" id="topbar">
+    <h1 id="topbar-title">⚡ ELEKTRA SAYAÇ PANELİ</h1>
+    <span id="topbar-sub" style="font-size:11px; color:rgba(255,255,255,.65); margin-left:auto;"></span>
     <div class="stat-badge sb-dolu-temiz"><span class="count" id="cnt-dt">0</span>Dolu Temiz</div>
     <div class="stat-badge sb-dolu-kirli"><span class="count" id="cnt-dk">0</span>Dolu Kirli</div>
     <div class="stat-badge sb-cout"><span class="count" id="cnt-co">0</span>C/Out</div>
@@ -172,7 +177,7 @@
     <div class="stat-badge sb-onaylı"><span class="count" id="cnt-on">0</span>Onaylı</div>
     <div class="conn-badge"><div class="conn-dot" id="conn-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
   </div>
-  <div class="legend">
+  <div class="legend" id="legend">
     <div class="legend-item"><div class="legend-dot" style="background:#1565c0"></div>Dolu Temiz</div>
     <div class="legend-item"><div class="legend-dot" style="background:#6a1a9a"></div>Dolu Kirli</div>
     <div class="legend-item"><div class="legend-dot" style="background:#2e7d32"></div>C/Out</div>
@@ -185,7 +190,7 @@
     <div class="legend-item"><div class="legend-dot" style="background:#4a148c"></div>Onaylı</div>
     <div class="legend-item"><div class="legend-dot" style="background:#fff; border:1px dashed #ccc"></div>Boş</div>
   </div>
-  <div class="filter-bar">
+  <div class="filter-bar" id="filter-bar">
     <label>Durum:</label>
     <select id="filter-status" onchange="renderView()">
       <option value="">Tümü</option><option value="dolu-temiz">Dolu Temiz</option><option value="dolu-kirli">Dolu Kirli</option>
@@ -203,6 +208,7 @@
 
   <div class="grid-container" id="grid-container"></div>
   <div class="list-container" id="list-container"></div>
+  <div class="readonly-view" id="readonly-view"></div>
 
   <div class="panel-overlay" id="panel-overlay" onclick="if(event.target===this)closePanel()"></div>
   <div class="room-panel" id="room-panel">
@@ -288,7 +294,8 @@ let currentRoom = null, pendingPhotos = [], entryType = null, currentView = 'gri
 let lbImages = [], lbIndex = 0, confirmCb = null;
 let roomsWithEntries = new Set();
 let allMeterData = [];
-let currentEntries = []; // cache for the current room entries
+let currentEntries = [];
+let entryImages = {}, entryData = {};
 
 const q = id => document.getElementById(id);
 const today = () => new Date().toISOString().slice(0,10);
@@ -307,17 +314,17 @@ function getRoomData(num){ try{ return JSON.parse(localStorage.getItem(roomKey(n
 function setRoomData(num,data){ localStorage.setItem(roomKey(num), JSON.stringify(data)); }
 function allRooms(){ const a=[]; FLOORS.forEach(f=>{ for(let i=1;i<=f.rooms;i++) a.push(f.prefix*100+i); }); return a; }
 
-// Initialize all rooms as "temiz" (clean, green) – as requested
+// Initialize all rooms as "bos" (empty/white)
 function initDemo(){
   allRooms().forEach(n => {
-    if(!getRoomData(n)) setRoomData(n, {status:'temiz'});
+    if(!getRoomData(n)) setRoomData(n, {status:'bos'});
   });
 }
 
 function updateStats(){
   const c = {};
   allRooms().forEach(n => {
-    const s = getRoomData(n)?.status || 'temiz';
+    const s = getRoomData(n)?.status || 'bos';
     c[s] = (c[s]||0)+1;
   });
   q('cnt-dt').textContent = c['dolu-temiz']||0;
@@ -383,7 +390,7 @@ function renderGrid(){
     const grid = document.createElement('div'); grid.className='room-grid';
     for(let i=1;i<=f.rooms;i++){
       const num = f.prefix*100+i;
-      const d = getRoomData(num); const status = d?.status || 'temiz';
+      const d = getRoomData(num); const status = d?.status || 'bos';
       if(fs && status!==fs){ grid.appendChild(document.createElement('div')); continue; }
       if(sv && !String(num).includes(sv)){ grid.appendChild(document.createElement('div')); continue; }
       const cell = document.createElement('div');
@@ -416,7 +423,6 @@ async function renderList(){
     });
     if(!filtered.length){ wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>'; return; }
 
-    // Pair logic for list
     const pairedCikisIds = new Set(), pairedGirisIds = new Set();
     const gByRoom={}, cByRoom={};
     allMeterData.forEach(e=>{
@@ -475,7 +481,7 @@ function openPanel(num){
   const fo = FLOORS.find(f=>f.prefix===fl);
   q('panel-floor-label').textContent = fo ? fo.label : fl+'. Kat';
   const d = getRoomData(num)||{};
-  q('f-status').value = d.status||'temiz';
+  q('f-status').value = d.status||'bos';
   resetAddForm();
   switchPanelTab('kayitlar');
   q('panel-overlay').classList.add('open');
@@ -493,7 +499,7 @@ function switchPanelTab(t){
   ['kayitlar','ekle','durum'].forEach(x=>{ q('pane-'+x).classList.toggle('active',x===t); q('ptab-'+x).classList.toggle('active',x===t); });
 }
 
-// Load entries for current room
+// Load entries
 async function loadEntries(){
   q('entries-list').innerHTML = '<div style="text-align:center;padding:20px">Yükleniyor...</div>';
   try{
@@ -586,7 +592,6 @@ async function saveEdit(entryId){
   let category = kat;
   if(endeks) category = (category?category+',':'')+'endeks:'+endeks;
 
-  // Handle new photos
   const newPhotoInput = q(`edit-photos-${entryId}`);
   let newUrls = [];
   if(newPhotoInput.files.length){
@@ -601,7 +606,6 @@ async function saveEdit(entryId){
     }
   }
 
-  // Get current entry from cached currentEntries
   const entry = currentEntries.find(e=>e.id===entryId);
   if(!entry) return;
   const mergedPhotos = [...(entry.photo_urls||[]), ...newUrls];
@@ -610,9 +614,7 @@ async function saveEdit(entryId){
     const r = await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify(body)});
     if(!r.ok) throw new Error('Güncelleme başarısız');
     showToast('Güncellendi');
-    // Refresh the entry in currentEntries and re-render
     Object.assign(entry, body);
-    // Update the entry type remains same (no change to type in this edit)
     loadEntries();
     loadRoomsWithEntries();
   }catch(e){ showToast('Hata: '+e.message,'error'); }
@@ -624,7 +626,6 @@ async function deleteEntry(id){
       const entry = currentEntries.find(e=>e.id===id);
       const r = await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
       if(!r.ok) throw new Error('Silinemedi');
-      // Delete photos from storage
       if(entry && entry.photo_urls){
         for(const url of entry.photo_urls){
           const path = url.split('/object/public/')[1];
@@ -641,14 +642,12 @@ async function deleteEntry(id){
   });
 }
 
-// Link generation (proper token management)
+// Link generation with token storage
 async function createEntryLink(roomNo, date, type){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);
-  // Delete old token if exists
   await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${MODE}&entry_date=eq.${encodeURIComponent(date)}&entry_type=eq.${encodeURIComponent(type)}`, {
     method:'DELETE', headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
   });
-  // Create new token
   await fetch(`${SB}/rest/v1/tokens`, {
     method:'POST',
     headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
@@ -742,12 +741,139 @@ dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor='v
 dz.addEventListener('dragleave', ()=> dz.style.borderColor='');
 dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.borderColor=''; handleFiles(e.dataTransfer.files); });
 
-// Init
-initDemo();
-populateFloorFilter();
-renderView();
-updateStats();
-checkConn();
+// ─── TOKEN / READONLY MODULE ───
+function showAccessError(){
+  // Hide everything except the topbar message
+  q('legend').style.display = 'none';
+  q('filter-bar').style.display = 'none';
+  q('grid-container').style.display = 'none';
+  q('list-container').style.display = 'none';
+  q('readonly-view').innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px">
+      <div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div>
+      <div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div>
+    </div>`;
+  q('readonly-view').classList.add('active');
+}
+
+function buildReadonlyCard(entry, ei, isE) {
+  const urls = entry.photo_urls||[];
+  entryImages[ei] = urls;
+  const cats = (entry.category||'').split(',').filter(Boolean);
+  const imgs = urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${JSON.stringify(urls)},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
+  return `
+    <div class="entry-card">
+      <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.chevron').classList.toggle('open')">
+        <span class="type-badge ${entry.type==='cikis'?'cikis':'giris'}">${entry.type==='cikis'?'ÇIKIŞ':'GİRİŞ'}</span>
+        <div class="entry-meta">
+          <div class="entry-date">${fmtDate(entry.checkin_date)}</div>
+          ${cats.length ? `<div style="font-size:11px;color:var(--muted)">${cats.join(' · ')}</div>`:''}
+        </div>
+        <span>📷${urls.length}</span>
+        <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="entry-body open">
+        ${imgs ? `<div class="img-scroll">${imgs}</div>` : '<div style="padding:12px 14px;font-size:13px;color:var(--muted)">Fotoğraf yok</div>'}
+        ${entry.note ? `<div style="padding:0 14px 8px;font-size:12px;color:var(--muted)">📝 ${entry.note}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+async function showReadonlyEntry(oda, mod, tarih, entryType) {
+  // Hide normal UI, show readonly container
+  q('legend').style.display = 'none';
+  q('filter-bar').style.display = 'none';
+  q('grid-container').style.display = 'none';
+  q('list-container').style.display = 'none';
+  q('panel-overlay').classList.remove('open');
+  q('room-panel').classList.remove('open');
+  const rw = q('readonly-view');
+  rw.classList.add('active');
+  rw.innerHTML = '<div style="text-align:center;padding:40px">Yükleniyor...</div>';
+
+  const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
+  const isE = mod === 'elektrik';
+  q('topbar-title').textContent = `${label} ${oda}`;
+  q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
+
+  if (entryType === 'pair') {
+    const tokenData = await api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`).then(r => r.json()).catch(() => []);
+    const cikisDate = tokenData[0]?.paired_date;
+    if (!cikisDate) { showAccessError(); return; }
+    try {
+      const [girisData, cikisData] = await Promise.all([
+        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&type=eq.giris`).then(r=>r.json()),
+        api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(cikisDate)}&mode=eq.${encodeURIComponent(mod)}&type=eq.cikis`).then(r=>r.json())
+      ]);
+      const giris = girisData[0];
+      const cikis = cikisData[0];
+      if (!giris && !cikis) { rw.innerHTML = '<div class="empty">Kayıt bulunamadı</div>'; return; }
+      let ei = 0;
+      entryImages = {}; entryData = {};
+      const totalP = (giris?.photo_urls?.length||0)+(cikis?.photo_urls?.length||0);
+      let html = `<div class="room-header" style="margin-bottom:16px"><div class="room-num e">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cikisDate)} · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
+      html += '<div class="entries-grid">';
+      if(giris) html += buildReadonlyCard(giris, ei++, isE);
+      if(cikis) html += buildReadonlyCard(cikis, ei++, isE);
+      html += '</div>';
+      rw.innerHTML = html;
+    } catch(e) { rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
+    return;
+  }
+
+  // Single entry
+  try {
+    let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
+    if (entryType) url += `&type=eq.${encodeURIComponent(entryType)}`;
+    const res = await api(url);
+    const data = await res.json();
+    if (!data.length) { rw.innerHTML = '<div class="empty">Bu tarihe ait kayıt bulunamadı</div>'; return; }
+    const totalP = data.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
+    let html = `<div class="room-header" style="margin-bottom:16px"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
+    let ei = 0;
+    entryImages = {}; entryData = {};
+    data.forEach(entry => { html += buildReadonlyCard(entry, ei++, isE); });
+    rw.innerHTML = html;
+  } catch(e) { rw.innerHTML = '<div class="empty">Bağlantı hatası</div>'; }
+}
+
+// URL parameter handling
+const _p = new URLSearchParams(location.search);
+const _oda = _p.get('oda'), _mod = _p.get('mod'), _token = _p.get('token'), _tarih = _p.get('tarih'), _type = _p.get('type');
+
+if (_oda && _token) {
+  // Readonly mode: verify token and show entry
+  const _m = _mod === 'elektrik' ? 'elektrik' : 'demirbaş';
+  mode = _m;
+  // Immediately hide the normal UI (except topbar) and show loading
+  q('legend').style.display = 'none';
+  q('filter-bar').style.display = 'none';
+  q('grid-container').style.display = 'none';
+  q('list-container').style.display = 'none';
+  q('readonly-view').classList.add('active');
+  q('topbar-title').textContent = 'Doğrulanıyor...';
+  q('topbar-sub').textContent = '';
+  // Verify token
+  api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
+    .then(r => r.json())
+    .then(data => {
+      if (!data || !data.length) { showAccessError(); return; }
+      const tr = data[0];
+      const tarih = _tarih || tr.entry_date || today();
+      if (_tarih && tr.entry_date && tr.entry_date !== _tarih) { showAccessError(); return; }
+      showReadonlyEntry(_oda, _m, tarih, _type);
+    })
+    .catch(() => showAccessError());
+} else if (_oda && !_token) {
+  showAccessError();
+} else {
+  // Normal initialization
+  initDemo();
+  populateFloorFilter();
+  renderView();
+  updateStats();
+  checkConn();
+}
 </script>
 </body>
 </html>
