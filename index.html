@@ -739,7 +739,7 @@ function buildElektraCard(entry){
   const isG=entry.type==='giris'||!entry.type,photos=entry.photo_urls||[],note=entry.note||'';
   const ps=JSON.stringify(photos).replace(/"/g,'&quot;');
   const thumbs=photos.map((u,i)=>`<div class="img-thumb" onclick="event.stopPropagation();openLb('${ps}',${i})"><img src="${u}" loading="lazy"></div>`).join('');
-  return`<div class="entry-card"><div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span><div class="entry-meta"><div>${fmtDate(entry.checkin_date)}</div>${note?`<div>${note}</div>`:''}</div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body">${photos.length?`<div class="img-scroll">${thumbs}</div>`:''}<div class="entry-footer"><span>${photos.length} fotoğraf</span><div style="display:flex;gap:6px"><button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button><button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','elektrik','${entry.type||'giris'}')">Link</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteElektraEntry('${entry.id}')">Sil</button></div></div></div></div>`;
+  return`<div class="entry-card"><div class="entry-head" onclick="this.parentElement.querySelector('.entry-body').classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><span class="type-badge ${isG?'giris':'cikis'}">${isG?'GİRİŞ':'ÇIKIŞ'}</span><div class="entry-meta"><div>${fmtDate(entry.checkin_date)}</div>${note?`<div>${note}</div>`:''}</div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body">${photos.length?`<div class="img-scroll">${thumbs}</div>`:''}<div class="entry-footer"><span>${photos.length} fotoğraf</span><div style="display:flex;gap:6px"><button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button><button class="link-btn edit-btn" onclick="event.stopPropagation();editElektraEntry('${entry.id}','${entry.checkin_date}','${(entry.note||'').replace(/'/g,'')}')">Düzenle</button><button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','elektrik','${entry.type||'giris'}')">Link</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteElektraEntry('${entry.id}')">Sil</button></div></div></div></div>`;
 }
 
 async function deleteElektraEntry(id){
@@ -750,7 +750,18 @@ async function deleteElektraEntry(id){
     loadElektraRoomsWithEntries();
   });
 }
-
+async function editElektraEntry(id, date, note) {
+  const newDate = prompt('Tarih (YYYY-MM-DD):', date);
+  if (!newDate) return;
+  const newNote = prompt('Not:', note);
+  if (newNote === null) return;
+  await api(`/rest/v1/entries?id=eq.${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ checkin_date: newDate, note: newNote })
+  });
+  showToast('Güncellendi');
+  loadElektraEntries();
+}
 function setElektraEntryType(t){
   elektraEntryType=t;
   q('ebtn-giris').className='type-btn'+(t==='giris'?' active-giris':'');
@@ -833,6 +844,9 @@ if(_oda&&_token){
   q('topbar-title').textContent=_m==='elektrik'?'⚡ ELEKTRA SAYAÇ PANELİ':'Demirbaş Takibi';
 
   if(_m==='elektrik'){
+    // Bağlantı badge ve mod butonlarını gizle
+    q('conn-badge').style.display = 'none';
+    q('mode-btns').style.display = 'none';
     q('elektra-ui').style.display='';
     q('egrid-container').style.display='none';
     q('elist-container').style.display='none';
@@ -849,6 +863,8 @@ if(_oda&&_token){
       })
       .catch(()=>showAccessError());
   }else{
+    q('conn-badge').style.display = 'none';
+    q('mode-btns').style.display = 'none';
     q('demirbas-ui').style.display='';
     q('dsresult').innerHTML='<div class="empty">Yükleniyor...</div>';
     api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
