@@ -1,496 +1,1631 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Oda Yönetimi · Demirbaş & Elektrik</title>
-<style>
-/* ─── Tüm stiller aynen korunmuştur, ekleme yapılmamıştır ─── */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
-:root {
---bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:#e2e1d9;
---text:#1a1a18;--muted:#7a7a72;--accent:#1a5c3a;--accent-light:#e8f2ec;
---accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
---amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
---shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
-.app{max-width:550px;margin:0 auto;min-height:100vh;background:var(--bg)}
-.app.wide{max-width:1300px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Oda Yönetimi · Demirbaş & Elektrik</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+        :root {
+            --bg: #f5f4f0;
+            --surface: #fff;
+            --surface2: #f0efe9;
+            --border: #e2e1d9;
+            --text: #1a1a18;
+            --muted: #7a7a72;
+            --accent: #1a5c3a;
+            --accent-light: #e8f2ec;
+            --accent-mid: #2d7a52;
+            --danger: #c0392b;
+            --danger-light: #fdf0ee;
+            --amber: #b45309;
+            --amber-light: #fef3c7;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 2px 12px rgba(0, 0, 0, .07);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, .12);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 15px;
+        }
+        .app {
+            max-width: 550px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg);
+        }
+        .app.wide {
+            max-width: 1300px;
+        }
 
-.topbar{background:var(--accent);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;flex-wrap:wrap}
-.topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.topbar h1{font-size:16px;font-weight:600;color:#fff}
-.topbar p{font-size:11px;color:rgba(255,255,255,.65);margin-top:1px}
-.mode-btns{display:flex;gap:5px;flex-shrink:0;margin-left:auto}
-.mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
-.mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
-.conn-badge{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px;padding:2px 8px;background:rgba(0,0,0,0.2);border-radius:20px}
-.conn-dot{width:6px;height:6px;border-radius:50%;background:#aaa}
-.conn-dot.ok{background:#4caf50}
+        .topbar {
+            background: var(--accent);
+            padding: 14px 16px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+        .topbar-icon {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, .15);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .topbar h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .topbar p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .65);
+            margin-top: 1px;
+        }
+        .mode-btns {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+        .mode-btn {
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 99px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all .15s;
+            border: 1.5px solid rgba(255, 255, 255, .25);
+            background: transparent;
+            color: rgba(255, 255, 255, .7);
+        }
+        .mode-btn.active {
+            background: rgba(255, 255, 255, .25);
+            border-color: rgba(255, 255, 255, .6);
+            color: #fff;
+        }
+        .conn-badge {
+            font-size: 10px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+        }
+        .conn-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #aaa;
+        }
+        .conn-dot.ok {
+            background: #4caf50;
+        }
 
-.nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto}
-.nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
-.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-.screen{display:none;padding:16px}
-.screen.active{display:block}
+        .nav {
+            display: flex;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 62px;
+            z-index: 99;
+            overflow-x: auto;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 11px 4px;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-family: 'DM Sans', sans-serif;
+            transition: all .15s;
+            white-space: nowrap;
+        }
+        .nav-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .screen {
+            display: none;
+            padding: 16px;
+        }
+        .screen.active {
+            display: block;
+        }
 
-input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,92,58,.1)}
-.field{margin-bottom:14px}
-.label{font-size:12px;color:var(--muted);margin-bottom:5px;display:block;font-weight:500}
-.btn{padding:11px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
-.btn:active{transform:scale(.98)}
-.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);width:100%;justify-content:center;padding:13px;font-size:15px}
-.btn-primary:active{background:#144d31}
-.btn-primary:disabled{background:var(--muted);border-color:var(--muted);cursor:not-allowed}
-.btn-sm{padding:9px 14px;font-size:13px}
-.btn-danger{background:var(--danger-light);color:var(--danger);border-color:#f5c6c2}
-.wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0}
-.search-wrap{display:flex;gap:8px;margin-bottom:16px}
-.room-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.room-num{background:var(--accent-light);color:var(--accent);font-size:22px;font-weight:600;padding:6px 14px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;flex-shrink:0}
-.room-num.e{background:var(--amber-light);color:var(--amber)}
-.room-summary{flex:1}
-.room-summary strong{font-size:14px;font-weight:500;display:block}
-.entry-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
-.entry-head{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
-.entry-head:active{background:var(--surface2)}
-.date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;flex-shrink:0}
-.date-badge.e{background:var(--amber-light);color:var(--amber)}
-.entry-meta{flex:1;min-width:0;overflow:hidden}
-.entry-count{font-size:11px;color:var(--muted);background:var(--surface2);border-radius:99px;padding:3px 8px;white-space:nowrap;flex-shrink:0}
-.chevron{transition:transform .2s;flex-shrink:0}
-.chevron.open{transform:rotate(90deg)}
-.entry-body{display:none}
-.entry-body.open{display:block}
-.img-scroll{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;scrollbar-width:none}
-.img-thumb{width:120px;height:90px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);flex-shrink:0;cursor:pointer;position:relative}
-.img-thumb img{width:100%;height:100%;object-fit:cover}
-.entry-footer{border-top:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface2);flex-wrap:wrap}
-.link-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif}
-.edit-btn{color:var(--amber)}
-.del-btn{color:var(--danger);border-color:#f5c6c2;background:var(--danger-light)}
-.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.tag{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);cursor:pointer;color:var(--muted);background:var(--surface);transition:all .12s;font-family:'DM Sans',sans-serif}
-.tag.on{background:var(--accent-light);color:var(--accent);border-color:var(--accent-mid)}
-.drop-zone{border:1.5px dashed var(--border);border-radius:var(--radius);padding:14px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface2);margin-bottom:0}
-.drop-zone.over{border-color:var(--accent);background:var(--accent-light)}
-.prev-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.prev-item{position:relative;width:80px;height:60px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
-.prev-item img{width:100%;height:100%;object-fit:cover}
-.prev-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(192,57,43,.85);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:600}
-.all-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;cursor:pointer}
-.all-card:active{background:var(--surface2)}
-.all-card-inner{padding:12px 14px;display:flex;align-items:center;gap:10px}
-.empty{text-align:center;padding:40px 16px;color:var(--muted);font-size:14px}
-.compress-info{font-size:11px;color:var(--accent);background:var(--accent-light);border-radius:99px;padding:2px 10px;display:inline-flex;align-items:center;gap:4px;margin-top:6px}
-.progress-bar-wrap{height:4px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:8px;display:none}
-.progress-bar-wrap.show{display:block}
-.progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .2s;width:0}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:99px;z-index:9999;display:none;white-space:nowrap;font-family:'DM Sans',sans-serif}
-.toast.show{display:block}
-.toast.success{background:var(--accent)}
-.toast.error{background:var(--danger)}
-.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;flex-direction:column}
-.lightbox.open{display:flex}
-.lb-topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0;background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);position:absolute;top:0;left:0;z-index:10}
-.lb-lbl{color:rgba(255,255,255,.7);font-size:12px;font-family:'DM Mono',monospace}
-.lb-zoom-row{display:flex;align-items:center;gap:8px}
-.lb-zoom-badge{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);color:#fff;font-size:12px;font-weight:600;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:99px;min-width:48px;text-align:center}
-.lb-reset-btn{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:none;color:#fff;font-size:14px;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.lb-close{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:none;color:#fff;font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.lb-img-wrap{flex:1;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:grab}
-.lb-img-wrap img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;transition:transform .25s ease;pointer-events:none;border-radius:4px;user-select:none;-webkit-user-drag:none}
-.lb-nav{width:100%;display:flex;gap:12px;padding:14px 16px;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);position:absolute;bottom:0;left:0}
-.lb-btn{padding:9px 20px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);backdrop-filter:blur(6px);color:#fff;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
-.lb-btn:disabled{opacity:.3;cursor:default}
-.lb-counter{color:rgba(255,255,255,.65);font-size:13px;font-family:'DM Mono',monospace}
-.lb-hint{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:rgba(255,255,255,.75);font-size:11px;padding:5px 12px;border-radius:99px;pointer-events:none;opacity:1;transition:opacity 1s ease;white-space:nowrap}
-.lb-hint.hide{opacity:0}
-.loader{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:flex-end;justify-content:center;padding:16px}
-.confirm-overlay.open{display:flex}
-.confirm-sheet{background:var(--surface);border-radius:var(--radius);padding:20px;width:100%;max-width:448px}
-.confirm-sheet h3{font-size:16px;font-weight:600;margin-bottom:8px}
-.confirm-actions{display:flex;gap:8px}
-.confirm-actions .btn{flex:1;justify-content:center}
-.pdf-panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:flex-end;justify-content:center;padding:16px}
-.pdf-panel-overlay.open{display:flex}
-.pdf-panel{background:var(--surface);border-radius:var(--radius);width:100%;max-width:448px;overflow:hidden;box-shadow:0 -4px 32px rgba(0,0,0,.12)}
-.pdf-panel-header{padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between}
-.pdf-option{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
-.pdf-sub-panel{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--surface2)}
-.pdf-sub-panel.open{display:block}
-.dl-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:flex-end;justify-content:center;padding:16px}
-.dl-overlay.open{display:flex}
-.dl-sheet{background:var(--surface);border-radius:var(--radius);padding:20px;width:100%;max-width:448px}
-.dl-bar-wrap{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:8px 0}
-.dl-bar{height:100%;background:var(--accent);width:0;transition:width .25s}
-.ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;white-space:nowrap}
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: var(--surface);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color .15s, box-shadow .15s;
+            -webkit-appearance: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26, 92, 58, .1);
+        }
+        .field {
+            margin-bottom: 14px;
+        }
+        .label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 5px;
+            display: block;
+            font-weight: 500;
+        }
+        .btn {
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            transition: all .15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:active {
+            transform: scale(.98);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            width: 100%;
+            justify-content: center;
+            padding: 13px;
+            font-size: 15px;
+        }
+        .btn-primary:active {
+            background: #144d31;
+        }
+        .btn-primary:disabled {
+            background: var(--muted);
+            border-color: var(--muted);
+            cursor: not-allowed;
+        }
+        .btn-sm {
+            padding: 9px 14px;
+            font-size: 13px;
+        }
+        .btn-danger {
+            background: var(--danger-light);
+            color: var(--danger);
+            border-color: #f5c6c2;
+        }
+        .wa-btn {
+            color: #25D366;
+            border-color: #b7f0c8;
+            background: #eafaf0;
+        }
+        .search-wrap {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .room-header {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .room-num {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 22px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-family: 'DM Mono', monospace;
+            flex-shrink: 0;
+        }
+        .room-num.e {
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+        .room-summary {
+            flex: 1;
+        }
+        .room-summary strong {
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+        }
+        .entry-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .entry-head {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .entry-head:active {
+            background: var(--surface2);
+        }
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 99px;
+            flex-shrink: 0;
+        }
+        .date-badge.e {
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+        .entry-meta {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .entry-count {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--surface2);
+            border-radius: 99px;
+            padding: 3px 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .chevron {
+            transition: transform .2s;
+            flex-shrink: 0;
+        }
+        .chevron.open {
+            transform: rotate(90deg);
+        }
+        .entry-body {
+            display: none;
+        }
+        .entry-body.open {
+            display: block;
+        }
+        .img-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 12px 14px;
+            scrollbar-width: none;
+        }
+        .img-thumb {
+            width: 120px;
+            height: 90px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+        }
+        .img-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .entry-footer {
+            border-top: 1px solid var(--border);
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: var(--surface2);
+            flex-wrap: wrap;
+        }
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--accent);
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .edit-btn {
+            color: var(--amber);
+        }
+        .del-btn {
+            color: var(--danger);
+            border-color: #f5c6c2;
+            background: var(--danger-light);
+        }
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .tag {
+            padding: 5px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--muted);
+            background: var(--surface);
+            transition: all .12s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .tag.on {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-color: var(--accent-mid);
+        }
+        .drop-zone {
+            border: 1.5px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .15s;
+            background: var(--surface2);
+            margin-bottom: 0;
+        }
+        .drop-zone.over {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .prev-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .prev-item {
+            position: relative;
+            width: 80px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .prev-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .prev-del {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(192, 57, 43, .85);
+            color: #fff;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .all-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .all-card:active {
+            background: var(--surface2);
+        }
+        .all-card-inner {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .empty {
+            text-align: center;
+            padding: 40px 16px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .compress-info {
+            font-size: 11px;
+            color: var(--accent);
+            background: var(--accent-light);
+            border-radius: 99px;
+            padding: 2px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .progress-bar-wrap {
+            height: 4px;
+            background: var(--surface2);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 8px;
+            display: none;
+        }
+        .progress-bar-wrap.show {
+            display: block;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 99px;
+            transition: width .2s;
+            width: 0;
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 99px;
+            z-index: 9999;
+            display: none;
+            white-space: nowrap;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .toast.show {
+            display: block;
+        }
+        .toast.success {
+            background: var(--accent);
+        }
+        .toast.error {
+            background: var(--danger);
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .95);
+            z-index: 2000;
+            flex-direction: column;
+        }
+        .lightbox.open {
+            display: flex;
+        }
+        .lb-topbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            flex-shrink: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, .6), transparent);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        .lb-lbl {
+            color: rgba(255, 255, 255, .7);
+            font-size: 12px;
+            font-family: 'DM Mono', monospace;
+        }
+        .lb-zoom-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lb-zoom-badge {
+            background: rgba(255, 255, 255, .15);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+            padding: 4px 10px;
+            border-radius: 99px;
+            min-width: 48px;
+            text-align: center;
+        }
+        .lb-reset-btn {
+            background: rgba(255, 255, 255, .15);
+            backdrop-filter: blur(6px);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lb-close {
+            background: rgba(255, 255, 255, .15);
+            backdrop-filter: blur(6px);
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .lb-img-wrap {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+        }
+        .lb-img-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transform-origin: center center;
+            transition: transform .25s ease;
+            pointer-events: none;
+            border-radius: 4px;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .lb-nav {
+            width: 100%;
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, .6), transparent);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .lb-btn {
+            padding: 9px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, .25);
+            background: rgba(255, 255, 255, .1);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .lb-btn:disabled {
+            opacity: .3;
+            cursor: default;
+        }
+        .lb-counter {
+            color: rgba(255, 255, 255, .65);
+            font-size: 13px;
+            font-family: 'DM Mono', monospace;
+        }
+        .lb-hint {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, .55);
+            backdrop-filter: blur(6px);
+            color: rgba(255, 255, 255, .75);
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 99px;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 1s ease;
+            white-space: nowrap;
+        }
+        .lb-hint.hide {
+            opacity: 0;
+        }
+        .loader {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 3000;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 16px;
+        }
+        .confirm-overlay.open {
+            display: flex;
+        }
+        .confirm-sheet {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            width: 100%;
+            max-width: 448px;
+        }
+        .confirm-sheet h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .confirm-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .confirm-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+        .pdf-panel-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            z-index: 300;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 16px;
+        }
+        .pdf-panel-overlay.open {
+            display: flex;
+        }
+        .pdf-panel {
+            background: var(--surface);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 448px;
+            overflow: hidden;
+            box-shadow: 0 -4px 32px rgba(0, 0, 0, .12);
+        }
+        .pdf-panel-header {
+            padding: 16px 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .pdf-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+        .pdf-sub-panel {
+            display: none;
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
+            background: var(--surface2);
+        }
+        .pdf-sub-panel.open {
+            display: block;
+        }
+        .dl-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 400;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 16px;
+        }
+        .dl-overlay.open {
+            display: flex;
+        }
+        .dl-sheet {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            width: 100%;
+            max-width: 448px;
+        }
+        .dl-bar-wrap {
+            height: 8px;
+            background: var(--surface2);
+            border-radius: 99px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .dl-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0;
+            transition: width .25s;
+        }
+        .ml-cikis-btn {
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: 1px solid #e8a020;
+            background: var(--amber-light);
+            color: var(--amber);
+            cursor: pointer;
+            white-space: nowrap;
+        }
 
-/* ─── STAT BADGES ─── */
-.elektra-top-stats{display:flex;gap:6px;padding:10px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)}
-.stat-badge{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 10px;border-radius:10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;transition:all .15s;border:2px solid transparent;min-width:58px;user-select:none;position:relative}
-.stat-badge:hover{filter:brightness(1.12);transform:translateY(-1px)}
-.stat-badge.active-filter{border-color:rgba(255,255,255,0.9);box-shadow:0 0 0 3px rgba(255,255,255,0.3)}
-.stat-badge .count{font-size:18px;font-weight:700;line-height:1}
-.stat-badge .s-label{font-size:9px;opacity:0.88;text-align:center;line-height:1.2}
-.stat-badge .tick-mark{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:9px}
-.stat-badge.active-filter .tick-mark{display:flex}
-.sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}.sb-temiz{background:#4caf50;color:#000}.sb-temiz .s-label,.sb-temiz .count{color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
+        /* ─── STAT BADGES ─── */
+        .elektra-top-stats {
+            display: flex;
+            gap: 6px;
+            padding: 10px 12px;
+            flex-wrap: wrap;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: all .15s;
+            border: 2px solid transparent;
+            min-width: 58px;
+            user-select: none;
+            position: relative;
+        }
+        .stat-badge:hover {
+            filter: brightness(1.12);
+            transform: translateY(-1px);
+        }
+        .stat-badge.active-filter {
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+        .stat-badge .count {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .stat-badge .s-label {
+            font-size: 9px;
+            opacity: 0.88;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .stat-badge .tick-mark {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+        }
+        .stat-badge.active-filter .tick-mark {
+            display: flex;
+        }
+        .sb-dolu-temiz {
+            background: #1565c0;
+        }
+        .sb-dolu-kirli {
+            background: #6a1a9a;
+        }
+        .sb-cout {
+            background: #2e7d32;
+        }
+        .sb-temiz {
+            background: #4caf50;
+            color: #000;
+        }
+        .sb-temiz .s-label, .sb-temiz .count {
+            color: #000;
+        }
+        .sb-kirli {
+            background: #ff6d00;
+        }
+        .sb-ooi {
+            background: #880e4f;
+        }
+        .sb-ariza {
+            background: #546e7a;
+        }
+        .sb-onaylı {
+            background: #4a148c;
+        }
 
-.elektra-filter{display:flex;gap:8px;align-items:center;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap}
-.elektra-filter input{width:110px;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
-.active-filter-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-mid);cursor:pointer}
-.active-filter-chip:hover{background:#d4ead8}
+        .elektra-filter {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 6px 12px;
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .elektra-filter input {
+            width: 110px;
+            font-size: 12px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .active-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid var(--accent-mid);
+            cursor: pointer;
+        }
+        .active-filter-chip:hover {
+            background: #d4ead8;
+        }
 
-/* ─── Grid ─── */
-.grid-container{padding:12px;overflow-x:auto}
-.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(55px,1fr));gap:4px}
-.room-cell{height:38px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(0,0,0,0.05);position:relative;background:var(--surface);color:var(--text);transition:transform 0.1s,filter 0.1s}
-.room-cell:hover{transform:scale(1.06);z-index:2;filter:brightness(1.15)}
-.room-flag{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#00e5ff}
-.status-dolu-temiz{background:#1565c0;color:#fff}.status-dolu-kirli{background:#6a1a9a;color:#fff}.status-cout{background:#2e7d32;color:#fff}.status-temiz{background:#4caf50;color:#fff}.status-temiz-b{background:#009688;color:#fff}.status-kirli{background:#ff6d00;color:#fff}.status-kirli-b{background:#d32f2f;color:#fff}.status-ooi{background:#880e4f;color:#fff}.status-ariza{background:#546e7a;color:#fff}.status-onaylı{background:#4a148c;color:#fff}.status-bos{background:#fff;color:#888;border:1px dashed #ccc}
-.panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500}
-.panel-overlay.open{display:block}
-.room-panel{position:fixed;top:0;right:0;bottom:0;width:540px;max-width:100vw;background:var(--surface);z-index:1501;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s;overflow:hidden;box-shadow:-4px 0 20px rgba(0,0,0,0.15)}
-.room-panel.open{transform:translateX(0)}
-.panel-header{background:var(--accent);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.panel-header h2{font-size:15px;color:#fff}
-.panel-room-badge{background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:6px;font-size:20px;font-weight:700;color:#fff;margin-right:10px}
-.panel-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
-.panel-tabs{display:flex;border-bottom:1px solid var(--border)}
-.ptab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif}
-.ptab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.panel-body{flex:1;overflow-y:auto}
-.tab-pane{display:none;padding:14px 16px}
-.tab-pane.active{display:block}
-.type-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.type-badge.giris{background:#e8f2ec;color:#1a5c3a}
-.type-badge.cikis{background:#fef3c7;color:#b45309}
+        /* ─── Grid ─── */
+        .grid-container {
+            padding: 12px;
+            overflow-x: auto;
+        }
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 4px;
+        }
+        .room-cell {
+            height: 38px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            background: var(--surface);
+            color: var(--text);
+            transition: transform 0.1s, filter 0.1s;
+        }
+        .room-cell:hover {
+            transform: scale(1.06);
+            z-index: 2;
+            filter: brightness(1.15);
+        }
+        .room-cell.hidden-cell {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .room-flag {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00e5ff;
+        }
+        .status-dolu-temiz {
+            background: #1565c0;
+            color: #fff;
+        }
+        .status-dolu-kirli {
+            background: #6a1a9a;
+            color: #fff;
+        }
+        .status-cout {
+            background: #2e7d32;
+            color: #fff;
+        }
+        .status-temiz {
+            background: #4caf50;
+            color: #fff;
+        }
+        .status-temiz-b {
+            background: #009688;
+            color: #fff;
+        }
+        .status-kirli {
+            background: #ff6d00;
+            color: #fff;
+        }
+        .status-kirli-b {
+            background: #d32f2f;
+            color: #fff;
+        }
+        .status-ooi {
+            background: #880e4f;
+            color: #fff;
+        }
+        .status-ariza {
+            background: #546e7a;
+            color: #fff;
+        }
+        .status-onaylı {
+            background: #4a148c;
+            color: #fff;
+        }
+        .status-bos {
+            background: #fff;
+            color: #888;
+            border: 1px dashed #ccc;
+        }
+        .panel-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+        }
+        .panel-overlay.open {
+            display: block;
+        }
+        .room-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 540px;
+            max-width: 100vw;
+            background: var(--surface);
+            z-index: 1501;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.28s;
+            overflow: hidden;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+        }
+        .room-panel.open {
+            transform: translateX(0);
+        }
+        .panel-header {
+            background: var(--accent);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .panel-header h2 {
+            font-size: 15px;
+            color: #fff;
+        }
+        .panel-room-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-right: 10px;
+        }
+        .panel-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        .ptab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .ptab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .tab-pane {
+            display: none;
+            padding: 14px 16px;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .type-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .type-badge.giris {
+            background: #e8f2ec;
+            color: #1a5c3a;
+        }
+        .type-badge.cikis {
+            background: #fef3c7;
+            color: #b45309;
+        }
 
-/* ─── PROFESYONEL FORM ─── */
-.elegant-form{background:var(--surface);border-radius:var(--radius);padding:16px}
-.form-section{margin-bottom:18px}
-.form-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.form-label svg{flex-shrink:0}
-.type-btns{display:flex;gap:8px}
-.type-btn{flex:1;padding:16px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;border:2px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:all .18s;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px}
-.type-btn:hover{background:var(--bg)}
-.type-btn .tb-icon{font-size:22px}
-.type-btn .tb-label{font-size:13px;font-weight:600}
-.type-btn .tb-desc{font-size:11px;color:var(--muted)}
-.type-btn.active-giris{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
-.type-btn.active-giris .tb-desc{color:var(--accent-mid)}
-.type-btn.active-cikis{border-color:var(--amber);background:var(--amber-light);color:var(--amber)}
-.type-btn.active-cikis .tb-desc{color:#8a4000}
-.form-field-row{display:flex;gap:10px}
-.form-field-row .form-field{flex:1}
-.form-field{margin-bottom:0}
-.form-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s,box-shadow .15s}
-.form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,92,58,.1)}
-.photo-drop{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:20px 14px;text-align:center;cursor:pointer;background:var(--surface2);transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:6px}
-.photo-drop:hover{border-color:var(--accent);background:var(--accent-light)}
-.photo-drop .pd-icon{font-size:24px}
-.photo-drop .pd-text{font-size:13px;font-weight:500;color:var(--text)}
-.photo-drop .pd-sub{font-size:11px;color:var(--muted)}
-.photo-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.photo-btn{padding:12px 10px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;text-align:center;transition:all .15s;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px}
-.photo-btn:hover{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
-.photo-btn .pb-icon{font-size:20px}
-.photo-btn .pb-label{font-size:12px}
-.form-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
-.save-btn-wrap{position:sticky;bottom:0;background:var(--surface);padding:12px 0 4px;margin-top:4px}
-.save-btn-inner{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);width:100%;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
-.save-btn-inner:disabled{background:var(--muted);cursor:not-allowed}
-.save-btn-inner:not(:disabled):hover{background:#144d31}
+        /* ─── PROFESYONEL FORM ─── */
+        .elegant-form {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+        .form-section {
+            margin-bottom: 18px;
+        }
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .form-label svg {
+            flex-shrink: 0;
+        }
+        .type-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .type-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            cursor: pointer;
+            text-align: center;
+            transition: all .18s;
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .type-btn:hover {
+            background: var(--bg);
+        }
+        .type-btn .tb-icon {
+            font-size: 22px;
+        }
+        .type-btn .tb-label {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .type-btn .tb-desc {
+            font-size: 11px;
+            color: var(--muted);
+        }
+        .type-btn.active-giris {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .type-btn.active-giris .tb-desc {
+            color: var(--accent-mid);
+        }
+        .type-btn.active-cikis {
+            border-color: var(--amber);
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+        .type-btn.active-cikis .tb-desc {
+            color: #8a4000;
+        }
+        .form-field-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-field-row .form-field {
+            flex: 1;
+        }
+        .form-field {
+            margin-bottom: 0;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            background: var(--surface);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color .15s, box-shadow .15s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26, 92, 58, .1);
+        }
+        .photo-drop {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            background: var(--surface2);
+            transition: all .15s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .photo-drop:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .photo-drop .pd-icon {
+            font-size: 24px;
+        }
+        .photo-drop .pd-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .photo-drop .pd-sub {
+            font-size: 11px;
+            color: var(--muted);
+        }
+        .photo-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .photo-btn {
+            padding: 12px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            border: 1.5px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            cursor: pointer;
+            text-align: center;
+            transition: all .15s;
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .photo-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .photo-btn .pb-icon {
+            font-size: 20px;
+        }
+        .photo-btn .pb-label {
+            font-size: 12px;
+        }
+        .form-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 18px 0;
+        }
+        .save-btn-wrap {
+            position: sticky;
+            bottom: 0;
+            background: var(--surface);
+            padding: 12px 0 4px;
+            margin-top: 4px;
+        }
+        .save-btn-inner {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all .15s;
+        }
+        .save-btn-inner:disabled {
+            background: var(--muted);
+            cursor: not-allowed;
+        }
+        .save-btn-inner:not(:disabled):hover {
+            background: #144d31;
+        }
 
-/* ─── Durum paneli ─── */
-.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.status-opt{padding:12px;border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer;text-align:center;font-size:13px;font-weight:600;transition:all .15s;font-family:'DM Sans',sans-serif}
-.status-opt:hover{filter:brightness(1.05)}
-.status-opt.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(0,0,0,0.25);transform:scale(1.02)}
+        /* ─── Durum paneli ─── */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .status-opt {
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all .15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .status-opt:hover {
+            filter: brightness(1.05);
+        }
+        .status-opt.sel {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+            transform: scale(1.02);
+        }
 
-.list-container{display:none;padding:12px}
-.list-container.active{display:block}
-.grid-container.hidden{display:none}
-.readonly-view{display:none;padding:16px}
-.readonly-view.active{display:block}
-.view-toggle{display:flex;gap:4px;margin-left:auto}
-.view-btn{padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer}
-.view-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .list-container {
+            display: none;
+            padding: 12px;
+        }
+        .list-container.active {
+            display: block;
+        }
+        .grid-container.hidden {
+            display: none;
+        }
+        .readonly-view {
+            display: none;
+            padding: 16px;
+        }
+        .readonly-view.active {
+            display: block;
+        }
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+        .view-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+        }
+        .view-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
 
-/* ─── INLINE DÜZENLEME PANELİ ─── */
-.inline-edit-panel{display:none;padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2)}
-.inline-edit-panel.open{display:block}
-.inline-edit-field{margin-bottom:10px}
-.inline-edit-field label{font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
-.inline-edit-field input,.inline-edit-field textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--surface)}
-.inline-edit-field input:focus,.inline-edit-field textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 2px rgba(26,92,58,.08)}
-.inline-edit-actions{display:flex;gap:8px;justify-content:flex-end}
-.inline-edit-save{background:var(--accent);color:#fff;border:1px solid var(--accent);padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
-.inline-edit-save:disabled{background:var(--muted);border-color:var(--muted)}
-.inline-edit-cancel{background:var(--surface);border:1px solid var(--border);padding:8px 18px;border-radius:6px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
-</style>
+        /* ─── INLINE DÜZENLEME PANELİ ─── */
+        .inline-edit-panel {
+            display: none;
+            padding: 12px 14px;
+            border-top: 1px solid var(--border);
+            background: var(--surface2);
+        }
+        .inline-edit-panel.open {
+            display: block;
+        }
+        .inline-edit-field {
+            margin-bottom: 10px;
+        }
+        .inline-edit-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+        .inline-edit-field input, .inline-edit-field textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--surface);
+        }
+        .inline-edit-field input:focus, .inline-edit-field textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 92, 58, .08);
+        }
+        .inline-edit-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .inline-edit-save {
+            background: var(--accent);
+            color: #fff;
+            border: 1px solid var(--accent);
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .inline-edit-save:disabled {
+            background: var(--muted);
+            border-color: var(--muted);
+        }
+        .inline-edit-cancel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
 </head>
 <body>
 <div class="app" id="app">
-<div class="topbar" id="topbar">
-<div class="topbar-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg></div>
-<div style="flex:1"><h1 id="topbar-title">Demirbaş Takibi</h1><p id="topbar-sub">Bağlanıyor...</p></div>
-<div class="conn-badge"><div class="conn-dot" id="conn-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
-<div class="mode-btns">
-<button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
-<button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
-</div>
+    <div class="topbar" id="topbar">
+        <div class="topbar-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
+        </div>
+        <div style="flex:1">
+            <h1 id="topbar-title">Demirbaş Takibi</h1>
+            <p id="topbar-sub">Bağlanıyor...</p>
+        </div>
+        <div class="conn-badge"><div class="conn-dot" id="conn-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
+        <div class="mode-btns">
+            <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
+            <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
+        </div>
+    </div>
+
+    <div id="demirbas-ui">
+        <div class="nav" id="main-nav">
+            <button class="nav-btn active" onclick="goDemirbasTab(0)">Ara</button>
+            <button class="nav-btn" onclick="goDemirbasTab(1)">Ekle</button>
+            <button class="nav-btn" onclick="goDemirbasTab(2)">Tüm Odalar</button>
+        </div>
+        <div class="screen active" id="ds0">
+            <div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
+                <button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)" onclick="setDemirbasSearchTab('room')">Oda No</button>
+                <button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)" onclick="setDemirbasSearchTab('date')">Tarih Aralığı</button>
+            </div>
+            <div id="stab-room-content"><div class="search-wrap"><input id="dsinput" type="number" placeholder="Oda no girin" onkeydown="if(event.key==='Enter')demirbasSearch()"><button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="demirbasSearch()">Ara</button></div></div>
+            <div id="stab-date-content" style="display:none"><div style="display:flex;gap:8px;align-items:flex-end"><div style="flex:1"><span class="label">Başlangıç</span><input id="d-from" type="date"></div><div style="flex:1"><span class="label">Bitiş</span><input id="d-to" type="date"></div><button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);flex-shrink:0" onclick="demirbasDateSearch()">Ara</button></div></div>
+            <div id="dsresult"><div class="empty">Numara girin</div></div>
+        </div>
+        <div class="screen" id="ds1">
+            <div class="field"><span class="label">Dönem Aralığı</span><select id="f-donem"><option value="">Seçiniz</option><option>1 - 15 Ocak</option><option>16 - 30 Ocak</option><option>31 Ocak - 14 Şubat</option><option>15 Şubat - 1 Mart</option><option>2 - 16 Mart</option><option>17 - 31 Mart</option><option>1 - 15 Nisan</option><option>16 - 30 Nisan</option><option>1 - 15 Mayıs</option><option>16 - 30 Mayıs</option><option>31 Mayıs - 14 Haziran</option><option>15 - 29 Haziran</option><option>30 Haziran - 14 Temmuz</option><option>15 - 29 Temmuz</option><option>30 Temmuz - 13 Ağustos</option><option>14 - 28 Ağustos</option><option>29 Ağustos - 12 Eylül</option><option>13 - 27 Eylül</option><option>28 Eylül - 12 Ekim</option><option>13 - 27 Ekim</option><option>2 - 16 Kasım</option><option>17 Kasım - 1 Aralık</option><option>2 - 16 Aralık</option><option>17 - 31 Aralık</option></select></div>
+            <div class="field"><span class="label">Oda numarası *</span><input id="f-room" type="number" placeholder="örn: 307"></div>
+            <div class="field"><span class="label">Giriş tarihi *</span><input id="f-date" type="date"></div>
+            <div class="field"><span class="label">Kategori</span><div class="tags-row" id="f-tags"><span class="tag" onclick="this.classList.toggle('on')">1+1</span><span class="tag" onclick="this.classList.toggle('on')">2+1</span></div></div>
+            <div class="field"><span class="label">Not</span><textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea></div>
+            <div class="field"><span class="label">Fotoğraflar *</span>
+                <div style="display:flex;gap:10px;margin-bottom:10px">
+                    <button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto" onclick="document.getElementById('fcam').click()"><span>📷 Fotoğraf Çek</span></button>
+                    <button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto" onclick="document.getElementById('fgal').click()"><span>🖼 Galeriden Seç</span></button>
+                </div>
+                <div class="drop-zone" id="dropz" onclick="document.getElementById('fgal').click()"><p>veya buraya sürükle bırak</p></div>
+                <input type="file" id="fgal" accept="image/*" multiple style="display:none" onchange="demirbasAddFiles(this.files)">
+                <input type="file" id="fcam" accept="image/*" capture="environment" style="display:none" onchange="demirbasAddFiles(this.files)">
+                <div id="compress-status"></div><div class="prev-row" id="prev-row"></div>
+                <div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
+            </div>
+            <button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()"><span id="save-label">Kaydet</span></button>
+        </div>
+        <div class="screen" id="ds2">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <span style="font-size:13px;color:var(--muted)"></span>
+                <button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)">📄 PDF Dışa Aktar</button>
+            </div>
+            <div id="rlist"><div class="empty">Yükleniyor...</div></div>
+        </div>
+    </div>
+
+    <div id="elektra-ui" style="display:none">
+        <div class="elektra-top-stats" id="estats">
+            <div class="stat-badge sb-dolu-temiz" id="sb-dolu-temiz" onclick="toggleStatFilter('dolu-temiz')">
+                <span class="count" id="cnt-dt">0</span><span class="s-label">Dolu Temiz</span><span class="tick-mark">✓</span>
+            </div>
+            <!-- diğer stat badge'ler aynı -->
+            <div class="stat-badge sb-dolu-kirli" id="sb-dolu-kirli" onclick="toggleStatFilter('dolu-kirli')"><span class="count" id="cnt-dk">0</span><span class="s-label">Dolu Kirli</span><span class="tick-mark">✓</span></div>
+            <div class="stat-badge sb-cout" id="sb-cout" onclick="toggleStatFilter('cout')"><span class="count" id="cnt-co">0</span><span class="s-label">C/Out</span><span class="tick-mark">✓</span></div>
+            <div class="stat-badge sb-temiz" id="sb-temiz" onclick="toggleStatFilter('temiz')"><span class="count" id="cnt-t">0</span><span class="s-label">Temiz</span><span class="tick-mark" style="color:#000">✓</span></div>
+            <div class="stat-badge sb-kirli" id="sb-kirli" onclick="toggleStatFilter('kirli')"><span class="count" id="cnt-k">0</span><span class="s-label">Kirli</span><span class="tick-mark">✓</span></div>
+            <div class="stat-badge sb-ooi" id="sb-ooi" onclick="toggleStatFilter('ooi')"><span class="count" id="cnt-ooi">0</span><span class="s-label">OOI</span><span class="tick-mark">✓</span></div>
+            <div class="stat-badge sb-ariza" id="sb-ariza" onclick="toggleStatFilter('ariza')"><span class="count" id="cnt-ar">0</span><span class="s-label">Arıza</span><span class="tick-mark">✓</span></div>
+            <div class="stat-badge sb-onaylı" id="sb-onaylı" onclick="toggleStatFilter('onaylı')"><span class="count" id="cnt-on">0</span><span class="s-label">Onaylı</span><span class="tick-mark">✓</span></div>
+        </div>
+        <div class="elektra-filter">
+            <input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:110px">
+            <div id="active-filter-display"></div>
+            <div class="view-toggle" style="margin-left:auto">
+                <button class="view-btn active" id="ebtn-grid" onclick="setElektraView('grid')">Grid</button>
+                <button class="view-btn" id="ebtn-list" onclick="setElektraView('list')">Liste</button>
+            </div>
+        </div>
+        <div class="grid-container" id="egrid-container"></div>
+        <div class="list-container" id="elist-container"></div>
+        <div class="readonly-view" id="ereadonly-view"></div>
+    </div>
+
+    <!-- ELEKTRA ODA PANELİ -->
+    <div class="panel-overlay" id="epanel-overlay" onclick="if(event.target===this)closeElektraPanel()"></div>
+    <div class="room-panel" id="eroom-panel">
+        <div class="panel-header">
+            <div style="display:flex;align-items:center;gap:10px">
+                <div class="panel-room-badge" id="epanel-room-num">-</div>
+                <h2 id="epanel-floor-label">-</h2>
+            </div>
+            <button class="panel-close" onclick="closeElektraPanel()">✕</button>
+        </div>
+        <div class="panel-tabs">
+            <button class="ptab active" id="eptab-kayitlar" onclick="switchElektraPanelTab('kayitlar')">📋 Kayıtlar</button>
+            <button class="ptab" id="eptab-ekle" onclick="switchElektraPanelTab('ekle')">➕ Yeni Kayıt</button>
+            <button class="ptab" id="eptab-durum" onclick="switchElektraPanelTab('durum')">🏠 Oda Durumu</button>
+        </div>
+        <div class="panel-body">
+            <div class="tab-pane active" id="epane-kayitlar"><div id="eentries-list"></div></div>
+            <div class="tab-pane" id="epane-ekle">
+                <!-- Yeni Kayıt Formu -->
+                <div class="elegant-form">
+                    <div class="form-section">
+                        <div class="form-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>İşlem Türü</div>
+                        <div class="type-btns">
+                            <button class="type-btn" id="ebtn-giris" onclick="setElektraEntryType('giris')"><span class="tb-icon">⬇️</span><span class="tb-label">Giriş</span><span class="tb-desc">Misafir girişi</span></button>
+                            <button class="type-btn" id="ebtn-cikis" onclick="setElektraEntryType('cikis')"><span class="tb-icon">⬆️</span><span class="tb-label">Çıkış</span><span class="tb-desc">Misafir çıkışı</span></button>
+                        </div>
+                    </div>
+                    <hr class="form-divider">
+                    <div class="form-section"><div class="form-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Tarih</div><input type="date" id="ef-date" class="form-input"></div>
+                    <div class="form-section"><div class="form-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Not</div><textarea id="ef-note" class="form-input" rows="2" placeholder="Açıklama..."></textarea></div>
+                    <hr class="form-divider">
+                    <div class="form-section">
+                        <div class="form-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Fotoğraflar</div>
+                        <div class="photo-btns">
+                            <button type="button" class="photo-btn" onclick="document.getElementById('ef-cam').click()"><span class="pb-icon">📷</span><span class="pb-label">Kamera</span></button>
+                            <button type="button" class="photo-btn" onclick="document.getElementById('ef-photos').click()"><span class="pb-icon">🖼</span><span class="pb-label">Galeri</span></button>
+                        </div>
+                        <div class="photo-drop" id="edrop-zone" onclick="document.getElementById('ef-photos').click()"><span class="pd-icon">☁️</span><span class="pd-text">Sürükle & Bırak</span><span class="pd-sub">veya yukarıdaki butonlardan seç</span></div>
+                        <input type="file" id="ef-photos" accept="image/*" multiple style="display:none" onchange="elektraHandleFiles(this.files)">
+                        <input type="file" id="ef-cam" accept="image/*" capture="environment" style="display:none" onchange="elektraHandleFiles(this.files)">
+                        <div id="ecompress-status" style="margin-top:6px;font-size:11px;color:var(--accent)"></div>
+                        <div class="prev-row" id="eprev-row" style="margin-top:10px"></div>
+                        <div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div>
+                    </div>
+                    <div class="save-btn-wrap"><button class="save-btn-inner" id="esave-btn" onclick="elektraSaveEntry()">Kaydet</button></div>
+                </div>
+            </div>
+            <div class="tab-pane" id="epane-durum">
+                <!-- Oda Durumu -->
+                <div class="status-grid">
+                    <div class="status-opt" style="background:#1565c0;color:#fff" onclick="selectStatus(this,'dolu-temiz')">Dolu Temiz</div>
+                    <div class="status-opt" style="background:#6a1a9a;color:#fff" onclick="selectStatus(this,'dolu-kirli')">Dolu Kirli</div>
+                    <div class="status-opt" style="background:#2e7d32;color:#fff" onclick="selectStatus(this,'cout')">C/Out</div>
+                    <div class="status-opt" style="background:#4caf50;color:#000" onclick="selectStatus(this,'temiz')">Temiz</div>
+                    <div class="status-opt" style="background:#ff6d00;color:#fff" onclick="selectStatus(this,'kirli')">Kirli</div>
+                    <div class="status-opt" style="background:#880e4f;color:#fff" onclick="selectStatus(this,'ooi')">OOI</div>
+                    <div class="status-opt" style="background:#546e7a;color:#fff" onclick="selectStatus(this,'ariza')">Arıza</div>
+                    <div class="status-opt" style="background:#4a148c;color:#fff" onclick="selectStatus(this,'onaylı')">Onaylı</div>
+                    <div class="status-opt" style="background:#fff;color:#888;border:2px dashed #ccc" onclick="selectStatus(this,'bos')">Boş</div>
+                </div>
+                <input type="hidden" id="ef-status" value="bos">
+                <div id="selected-status-info">Lütfen bir durum seçin</div>
+                <button class="save-btn-inner" onclick="saveElektraRoomStatus()">Durumu Kaydet</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- DEMIRBAS UI -->
-<div id="demirbas-ui">
-<div class="nav" id="main-nav">
-<button class="nav-btn active" onclick="goDemirbasTab(0)">Ara</button>
-<button class="nav-btn" onclick="goDemirbasTab(1)">Ekle</button>
-<button class="nav-btn" onclick="goDemirbasTab(2)">Tüm Odalar</button>
-</div>
-<div class="screen active" id="ds0">
-<div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
-<button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)" onclick="setDemirbasSearchTab('room')">Oda No</button>
-<button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)" onclick="setDemirbasSearchTab('date')">Tarih Aralığı</button>
-</div>
-<div id="stab-room-content"><div class="search-wrap"><input id="dsinput" type="number" placeholder="Oda no girin" onkeydown="if(event.key==='Enter')demirbasSearch()"><button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="demirbasSearch()">Ara</button></div></div>
-<div id="stab-date-content" style="display:none"><div style="display:flex;gap:8px;align-items:flex-end"><div style="flex:1"><span class="label">Başlangıç</span><input id="d-from" type="date"></div><div style="flex:1"><span class="label">Bitiş</span><input id="d-to" type="date"></div><button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);flex-shrink:0" onclick="demirbasDateSearch()">Ara</button></div></div>
-<div id="dsresult"><div class="empty">Numara girin</div></div>
-</div>
-<div class="screen" id="ds1">
-<div class="field"><span class="label">Dönem Aralığı</span><select id="f-donem"><option value="">Seçiniz</option><option>1 - 15 Ocak</option><option>16 - 30 Ocak</option><option>31 Ocak - 14 Şubat</option><option>15 Şubat - 1 Mart</option><option>2 - 16 Mart</option><option>17 - 31 Mart</option><option>1 - 15 Nisan</option><option>16 - 30 Nisan</option><option>1 - 15 Mayıs</option><option>16 - 30 Mayıs</option><option>31 Mayıs - 14 Haziran</option><option>15 - 29 Haziran</option><option>30 Haziran - 14 Temmuz</option><option>15 - 29 Temmuz</option><option>30 Temmuz - 13 Ağustos</option><option>14 - 28 Ağustos</option><option>29 Ağustos - 12 Eylül</option><option>13 - 27 Eylül</option><option>28 Eylül - 12 Ekim</option><option>13 - 27 Ekim</option><option>2 - 16 Kasım</option><option>17 Kasım - 1 Aralık</option><option>2 - 16 Aralık</option><option>17 - 31 Aralık</option></select></div>
-<div class="field"><span class="label">Oda numarası *</span><input id="f-room" type="number" placeholder="örn: 307"></div>
-<div class="field"><span class="label">Giriş tarihi *</span><input id="f-date" type="date"></div>
-<div class="field"><span class="label">Kategori</span><div class="tags-row" id="f-tags"><span class="tag" onclick="this.classList.toggle('on')">1+1</span><span class="tag" onclick="this.classList.toggle('on')">2+1</span></div></div>
-<div class="field"><span class="label">Not</span><textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea></div>
-<div class="field"><span class="label">Fotoğraflar *</span>
-<div style="display:flex;gap:10px;margin-bottom:10px">
-<button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto" onclick="document.getElementById('fcam').click()"><span>📷 Fotoğraf Çek</span></button>
-<button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto" onclick="document.getElementById('fgal').click()"><span>🖼 Galeriden Seç</span></button>
-</div>
-<div class="drop-zone" id="dropz" onclick="document.getElementById('fgal').click()"><p>veya buraya sürükle bırak</p></div>
-<input type="file" id="fgal" accept="image/*" multiple style="display:none" onchange="demirbasAddFiles(this.files)">
-<input type="file" id="fcam" accept="image/*" capture="environment" style="display:none" onchange="demirbasAddFiles(this.files)">
-<div id="compress-status"></div><div class="prev-row" id="prev-row"></div>
-<div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
-</div>
-<button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()"><span id="save-label">Kaydet</span></button>
-</div>
-<div class="screen" id="ds2">
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-<span style="font-size:13px;color:var(--muted)"></span>
-<button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)">📄 PDF Dışa Aktar</button>
-</div>
-<div id="rlist"><div class="empty">Yükleniyor...</div></div>
-</div>
-<!-- PDF PANEL -->
-<div class="pdf-panel-overlay" id="pdf-panel-overlay" onclick="if(event.target===this)closePdfPanel()">
-<div class="pdf-panel">
-<div class="pdf-panel-header"><h3>PDF Dışa Aktar</h3><button class="pdf-panel-close" onclick="closePdfPanel()">✕</button></div>
-<div class="pdf-option" onclick="selectPdfOpt('all')"><div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a5c3a" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg></div><div><strong>Hepsini İndir</strong><span>Tüm odalar tek PDF</span></div></div>
-<div class="pdf-sub-panel" id="pdf-sub-all"><button class="btn btn-primary" id="pdf-all-btn" onclick="runPdfAll()">Tüm Odaları PDF İndir</button></div>
-<div class="pdf-option" onclick="selectPdfOpt('date')"><div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><strong>Tarih Aralığı</strong><span>Seçilen tarihler arası</span></div></div>
-<div class="pdf-sub-panel" id="pdf-sub-date"><div class="field"><span class="label">Başlangıç</span><input type="date" id="pdf-date-from"></div><div class="field"><span class="label">Bitiş</span><input type="date" id="pdf-date-to"></div><button class="btn btn-primary" id="pdf-date-btn" onclick="runPdfDate()">Tarihe Göre PDF İndir</button></div>
-<div class="pdf-option" onclick="selectPdfOpt('rooms')"><div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><strong>Oda Numarası</strong><span>Virgülle ayırarak yazın</span></div></div>
-<div class="pdf-sub-panel" id="pdf-sub-rooms"><div class="field"><span class="label">Oda numaraları</span><input type="text" id="pdf-rooms-input" placeholder="101,205,307"></div><button class="btn btn-primary" id="pdf-rooms-btn" onclick="runPdfRooms()">Seçili Odaları PDF İndir</button></div>
-</div>
-</div>
-<!-- DOWNLOAD OVERLAY -->
-<div class="dl-overlay" id="dl-overlay"><div class="dl-sheet">
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="loader" style="border-top-color:var(--accent);width:14px;height:14px;border-width:2px"></span><span>İndiriliyor...</span></div>
-<div id="dl-percent" style="font-size:13px;color:var(--muted)">0%</div>
-<div class="dl-bar-wrap"><div class="dl-bar" id="dl-bar"></div></div>
-<div style="display:flex;justify-content:space-between"><span id="dl-stats-left"></span><span id="dl-stats-right"></span></div>
-</div></div>
-</div>
-
-<!-- ELEKTRA UI -->
-<div id="elektra-ui" style="display:none">
-<!-- Tıklanabilir Stat Rozetleri -->
-<div class="elektra-top-stats" id="estats">
-<div class="stat-badge sb-dolu-temiz" id="sb-dolu-temiz" onclick="toggleStatFilter('dolu-temiz')">
-  <span class="count" id="cnt-dt">0</span>
-  <span class="s-label">Dolu Temiz</span>
-  <span class="tick-mark">✓</span>
-</div>
-<div class="stat-badge sb-dolu-kirli" id="sb-dolu-kirli" onclick="toggleStatFilter('dolu-kirli')">
-  <span class="count" id="cnt-dk">0</span>
-  <span class="s-label">Dolu Kirli</span>
-  <span class="tick-mark">✓</span>
-</div>
-<div class="stat-badge sb-cout" id="sb-cout" onclick="toggleStatFilter('cout')">
-  <span class="count" id="cnt-co">0</span>
-  <span class="s-label">C/Out</span>
-  <span class="tick-mark">✓</span>
-</div>
-<div class="stat-badge sb-temiz" id="sb-temiz" onclick="toggleStatFilter('temiz')">
-  <span class="count" id="cnt-t">0</span>
-  <span class="s-label">Temiz</span>
-  <span class="tick-mark" style="color:#000">✓</span>
-</div>
-<div class="stat-badge sb-kirli" id="sb-kirli" onclick="toggleStatFilter('kirli')">
-  <span class="count" id="cnt-k">0</span>
-  <span class="s-label">Kirli</span>
-  <span class="tick-mark">✓</span>
-</div>
-<div class="stat-badge sb-ooi" id="sb-ooi" onclick="toggleStatFilter('ooi')">
-  <span class="count" id="cnt-ooi">0</span>
-  <span class="s-label">OOI</span>
-  <span class="tick-mark">✓</span>
-</div>
-<div class="stat-badge sb-ariza" id="sb-ariza" onclick="toggleStatFilter('ariza')">
-  <span class="count" id="cnt-ar">0</span>
-  <span class="s-label">Arıza</span>
-  <span class="tick-mark">✓</span>
-</div>
-<div class="stat-badge sb-onaylı" id="sb-onaylı" onclick="toggleStatFilter('onaylı')">
-  <span class="count" id="cnt-on">0</span>
-  <span class="s-label">Onaylı</span>
-  <span class="tick-mark">✓</span>
-</div>
-</div>
-<div class="elektra-filter">
-<input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:110px">
-<div id="active-filter-display"></div>
-<div class="view-toggle" style="margin-left:auto">
-<button class="view-btn active" id="ebtn-grid" onclick="setElektraView('grid')">Grid</button>
-<button class="view-btn" id="ebtn-list" onclick="setElektraView('list')">Liste</button>
-</div>
-</div>
-<div class="grid-container" id="egrid-container"></div>
-<div class="list-container" id="elist-container"></div>
-<div class="readonly-view" id="ereadonly-view"></div>
-
-<div class="panel-overlay" id="epanel-overlay" onclick="if(event.target===this)closeElektraPanel()"></div>
-<div class="room-panel" id="eroom-panel">
-<div class="panel-header">
-<div style="display:flex;align-items:center;gap:10px">
-<div class="panel-room-badge" id="epanel-room-num">-</div>
-<h2 id="epanel-floor-label">-</h2>
-</div>
-<button class="panel-close" onclick="closeElektraPanel()">✕</button>
-</div>
-<div class="panel-tabs">
-<button class="ptab active" id="eptab-kayitlar" onclick="switchElektraPanelTab('kayitlar')">📋 Kayıtlar</button>
-<button class="ptab" id="eptab-ekle" onclick="switchElektraPanelTab('ekle')">➕ Yeni Kayıt</button>
-<button class="ptab" id="eptab-durum" onclick="switchElektraPanelTab('durum')">🏠 Oda Durumu</button>
-</div>
-<div class="panel-body">
-<div class="tab-pane active" id="epane-kayitlar"><div id="eentries-list"></div></div>
-
-<!-- PROFESYONEL YENİ KAYIT FORMU -->
-<div class="tab-pane" id="epane-ekle">
-<div class="elegant-form">
-  <div class="form-section">
-    <div class="form-label">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      İşlem Türü
-    </div>
-    <div class="type-btns">
-      <button class="type-btn" id="ebtn-giris" onclick="setElektraEntryType('giris')">
-        <span class="tb-icon">⬇️</span>
-        <span class="tb-label">Giriş</span>
-        <span class="tb-desc">Misafir girişi</span>
-      </button>
-      <button class="type-btn" id="ebtn-cikis" onclick="setElektraEntryType('cikis')">
-        <span class="tb-icon">⬆️</span>
-        <span class="tb-label">Çıkış</span>
-        <span class="tb-desc">Misafir çıkışı</span>
-      </button>
-    </div>
-  </div>
-  <hr class="form-divider">
-  <div class="form-section">
-    <div class="form-label">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Tarih
-    </div>
-    <input type="date" id="ef-date" class="form-input">
-  </div>
-  <div class="form-section">
-    <div class="form-label">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      Not
-    </div>
-    <textarea id="ef-note" class="form-input" rows="2" placeholder="Açıklama, uyarı veya özel durum..."></textarea>
-  </div>
-  <hr class="form-divider">
-  <div class="form-section">
-    <div class="form-label">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      Fotoğraflar
-    </div>
-    <div class="photo-btns">
-      <button type="button" class="photo-btn" onclick="document.getElementById('ef-cam').click()">
-        <span class="pb-icon">📷</span>
-        <span class="pb-label">Kamera</span>
-      </button>
-      <button type="button" class="photo-btn" onclick="document.getElementById('ef-photos').click()">
-        <span class="pb-icon">🖼</span>
-        <span class="pb-label">Galeri</span>
-      </button>
-    </div>
-    <div class="photo-drop" id="edrop-zone" onclick="document.getElementById('ef-photos').click()">
-      <span class="pd-icon">☁️</span>
-      <span class="pd-text">Sürükle & Bırak</span>
-      <span class="pd-sub">veya yukarıdaki butonlardan seç</span>
-    </div>
-    <input type="file" id="ef-photos" accept="image/*" multiple style="display:none" onchange="elektraHandleFiles(this.files)">
-    <input type="file" id="ef-cam" accept="image/*" capture="environment" style="display:none" onchange="elektraHandleFiles(this.files)">
-    <div id="ecompress-status" style="margin-top:6px;font-size:11px;color:var(--accent)"></div>
-    <div class="prev-row" id="eprev-row" style="margin-top:10px"></div>
-    <div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div>
-  </div>
-  <div class="save-btn-wrap">
-    <button class="save-btn-inner" id="esave-btn" onclick="elektraSaveEntry()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Kaydet
-    </button>
-  </div>
-</div>
-</div>
-
-<!-- Oda Durumu -->
-<div class="tab-pane" id="epane-durum">
-  <div class="form-label" style="margin-bottom:14px">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
-    Oda Durumunu Seç
-  </div>
-  <div class="status-grid">
-    <div class="status-opt" style="background:#1565c0;color:#fff" onclick="selectStatus(this,'dolu-temiz')">Dolu Temiz</div>
-    <div class="status-opt" style="background:#6a1a9a;color:#fff" onclick="selectStatus(this,'dolu-kirli')">Dolu Kirli</div>
-    <div class="status-opt" style="background:#2e7d32;color:#fff" onclick="selectStatus(this,'cout')">C/Out</div>
-    <div class="status-opt" style="background:#4caf50;color:#000" onclick="selectStatus(this,'temiz')">Temiz</div>
-    <div class="status-opt" style="background:#ff6d00;color:#fff" onclick="selectStatus(this,'kirli')">Kirli</div>
-    <div class="status-opt" style="background:#880e4f;color:#fff" onclick="selectStatus(this,'ooi')">OOI</div>
-    <div class="status-opt" style="background:#546e7a;color:#fff" onclick="selectStatus(this,'ariza')">Arıza</div>
-    <div class="status-opt" style="background:#4a148c;color:#fff" onclick="selectStatus(this,'onaylı')">Onaylı</div>
-    <div class="status-opt" style="background:#fff;color:#888;border:2px dashed #ccc" onclick="selectStatus(this,'bos')">Boş</div>
-  </div>
-  <input type="hidden" id="ef-status" value="bos">
-  <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--muted);margin-bottom:14px" id="selected-status-info">Lütfen bir durum seçin</div>
-  <button class="save-btn-inner" onclick="saveElektraRoomStatus()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-    Durumu Kaydet
-  </button>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX, CONFIRM, PDF PANEL, DL OVERLAY AYNI ŞEKİLDE -->
 <div class="lightbox" id="lb">
-<div class="lb-topbar"><span class="lb-lbl" id="lb-lbl"></span><div class="lb-zoom-row"><span class="lb-zoom-badge" id="lb-zoom-badge">%100</span><button class="lb-reset-btn" onclick="lbResetZoom()">↺</button><button class="lb-close" onclick="closeLb()">✕</button></div></div>
-<div class="lb-img-wrap" id="lb-img-wrap"><img id="lb-img" src=""><div class="lb-hint" id="lb-hint">Çift dokun / kaydır → yakınlaştır</div></div>
-<div class="lb-nav"><button class="lb-btn" id="lb-prev" onclick="lbMove(-1)">← Önceki</button><span class="lb-counter" id="lb-counter"></span><button class="lb-btn" id="lb-next" onclick="lbMove(1)">Sonraki →</button></div>
+    <div class="lb-topbar"><span class="lb-lbl" id="lb-lbl"></span><div class="lb-zoom-row"><span class="lb-zoom-badge" id="lb-zoom-badge">%100</span><button class="lb-reset-btn" onclick="lbResetZoom()">↺</button><button class="lb-close" onclick="closeLb()">✕</button></div></div>
+    <div class="lb-img-wrap" id="lb-img-wrap"><img id="lb-img" src=""><div class="lb-hint" id="lb-hint">Çift dokun / kaydır → yakınlaştır</div></div>
+    <div class="lb-nav"><button class="lb-btn" id="lb-prev" onclick="lbMove(-1)">← Önceki</button><span class="lb-counter" id="lb-counter"></span><button class="lb-btn" id="lb-next" onclick="lbMove(1)">Sonraki →</button></div>
 </div>
 <div class="confirm-overlay" id="confirm-overlay" onclick="if(event.target===this)closeConfirm()"><div class="confirm-sheet"><h3 id="confirm-title">Emin misiniz?</h3><p id="confirm-msg"></p><div class="confirm-actions"><button class="btn" onclick="closeConfirm()">İptal</button><button class="btn btn-danger" id="confirm-ok">Sil</button></div></div></div>
 <div class="toast" id="toast"></div>
