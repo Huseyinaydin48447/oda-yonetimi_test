@@ -507,7 +507,7 @@ const FLOORS=Array.from({length:15},(_,i)=>({label:(i+1)+'. Kat',prefix:i+1,room
 
 let roomStatusCache={};
 let roomStatusLoaded=false;
-let activeStatFilter=null;
+let activeStatFilter=null; // tıklanan stat badge filtresi
 
 let mode='demirbaş',demirbasTab=0,demirbasSearchTab='room',demirbasPending=[],demirbasSelTags=[];
 let elektraView='grid',elektraCurrentRoom=null,elektraPending=[],elektraEntryType=null,elektraCurrentEntries=[],elektraAllData=[],roomsWithEntries=new Set();
@@ -559,6 +559,7 @@ function toggleStatFilter(status){
   }else{
     activeStatFilter=status;
   }
+  // Tüm badge'leri güncelle
   document.querySelectorAll('.stat-badge').forEach(el=>{
     el.classList.remove('active-filter');
   });
@@ -566,6 +567,7 @@ function toggleStatFilter(status){
     const el=q('sb-'+activeStatFilter);
     if(el)el.classList.add('active-filter');
   }
+  // Filtre chip'ini güncelle
   updateActiveFilterDisplay();
   renderElektraView();
 }
@@ -754,16 +756,14 @@ function renderElektraGrid(){
   let count=0;
   allRoomNos().forEach(n=>{
     const s=getRoomStatus(n);
+    // activeStatFilter kullan (badge filtresi) VEYA metin araması
     if(activeStatFilter&&s!==activeStatFilter)return;
     if(sv&&!String(n).includes(sv))return;
     const cell=document.createElement('div');
-    cell.className='room-cell '+statusClass(s);
-    cell.textContent=n;
-    cell.dataset.room=String(n);
+    cell.className='room-cell '+statusClass(s);cell.textContent=n;
     if(roomsWithEntries.has(String(n))){const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl);}
     cell.addEventListener('click',()=>openElektraPanel(n));
-    grid.appendChild(cell);
-    count++;
+    grid.appendChild(cell);count++;
   });
   if(count===0){container.innerHTML='<div class="empty">Oda bulunamadı</div>';return;}
   container.appendChild(grid);
@@ -799,6 +799,7 @@ function openElektraPanel(num){
   q('epanel-room-num').textContent=num;
   const fl=Math.floor(num/100);
   q('epanel-floor-label').textContent=fl+'. Kat';
+  // Durum panelini hazırla
   const currentStatus=getRoomStatus(num);
   q('ef-status').value=currentStatus;
   highlightStatusOpt(currentStatus);
@@ -822,6 +823,7 @@ function switchElektraPanelTab(t){
   });
 }
 
+// ─── Durum seçici (görsel) ───
 function selectStatus(el,status){
   document.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
@@ -947,19 +949,8 @@ async function saveElektraRoomStatus(){
   const origText=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
   await saveRoomStatusToDB(elektraCurrentRoom,status);
   btn.disabled=false;btn.innerHTML=origText;
-  updateElektraStats();
-  
-  // ✅ Sadece ilgili hücreyi güncelle - scroll pozisyonu korunur
-  updateSingleRoomCell(elektraCurrentRoom, status);
-  
+  updateElektraStats();renderElektraView();
   showToast('Durum kaydedildi');
-}
-
-function updateSingleRoomCell(roomNo, status){
-  const cell=q('egrid-container').querySelector(`[data-room="${roomNo}"]`);
-  if(cell){
-    cell.className='room-cell '+statusClass(status);
-  }
 }
 
 // ═══════════════ DROP ZONES ═══════════════
