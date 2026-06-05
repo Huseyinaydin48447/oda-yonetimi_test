@@ -129,12 +129,23 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .dl-bar-wrap{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:8px 0}
 .dl-bar{height:100%;background:var(--accent);width:0;transition:width .25s}
 .ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;white-space:nowrap}
-.stat-badge{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:#fff;background:rgba(255,255,255,0.15);cursor:default}
-.stat-badge .count{font-size:14px;font-weight:700}
-.sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}.sb-temiz{background:#4caf50;color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
-.elektra-top-stats{display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)}
-.elektra-filter{display:flex;gap:8px;align-items:center;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
-.elektra-filter select,.elektra-filter input{width:auto;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
+
+/* ─── STAT BADGES - tıklanabilir ─── */
+.elektra-top-stats{display:flex;gap:6px;padding:10px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)}
+.stat-badge{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 10px;border-radius:10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;transition:all .15s;border:2px solid transparent;min-width:58px;user-select:none;position:relative}
+.stat-badge:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.stat-badge.active-filter{border-color:rgba(255,255,255,0.9);box-shadow:0 0 0 3px rgba(255,255,255,0.3)}
+.stat-badge .count{font-size:18px;font-weight:700;line-height:1}
+.stat-badge .s-label{font-size:9px;opacity:0.88;text-align:center;line-height:1.2}
+.stat-badge .tick-mark{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:9px}
+.stat-badge.active-filter .tick-mark{display:flex}
+.sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}.sb-temiz{background:#4caf50;color:#000}.sb-temiz .s-label,.sb-temiz .count{color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}.sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
+
+.elektra-filter{display:flex;gap:8px;align-items:center;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.elektra-filter input{width:110px;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
+.active-filter-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-mid);cursor:pointer}
+.active-filter-chip:hover{background:#d4ead8}
+
 /* ─── Grid: kat başlığı YOK, tüm odalar tek blok ─── */
 .grid-container{padding:12px;overflow-x:auto}
 .room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(55px,1fr));gap:4px}
@@ -159,15 +170,49 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .type-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .type-badge.giris{background:#e8f2ec;color:#1a5c3a}
 .type-badge.cikis{background:#fef3c7;color:#b45309}
-.elegant-form{background:var(--surface);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-.form-section{margin-bottom:16px}
-.form-label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+
+/* ─── PROFESYONel FORM ─── */
+.elegant-form{background:var(--surface);border-radius:var(--radius);padding:16px}
+.form-section{margin-bottom:18px}
+.form-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.form-label svg{flex-shrink:0}
 .type-btns{display:flex;gap:8px}
-.type-btn{flex:1;padding:14px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;border:2px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center}
+.type-btn{flex:1;padding:16px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;border:2px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:all .18s;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px}
+.type-btn:hover{background:var(--bg)}
+.type-btn .tb-icon{font-size:22px}
+.type-btn .tb-label{font-size:13px;font-weight:600}
+.type-btn .tb-desc{font-size:11px;color:var(--muted)}
 .type-btn.active-giris{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.type-btn.active-giris .tb-desc{color:var(--accent-mid)}
 .type-btn.active-cikis{border-color:var(--amber);background:var(--amber-light);color:var(--amber)}
-.photo-drop{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;background:var(--surface2)}
+.type-btn.active-cikis .tb-desc{color:#8a4000}
+.form-field-row{display:flex;gap:10px}
+.form-field-row .form-field{flex:1}
+.form-field{margin-bottom:0}
+.form-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s,box-shadow .15s}
+.form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,92,58,.1)}
+.photo-drop{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:20px 14px;text-align:center;cursor:pointer;background:var(--surface2);transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:6px}
 .photo-drop:hover{border-color:var(--accent);background:var(--accent-light)}
+.photo-drop .pd-icon{font-size:24px}
+.photo-drop .pd-text{font-size:13px;font-weight:500;color:var(--text)}
+.photo-drop .pd-sub{font-size:11px;color:var(--muted)}
+.photo-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.photo-btn{padding:12px 10px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;text-align:center;transition:all .15s;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px}
+.photo-btn:hover{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.photo-btn .pb-icon{font-size:20px}
+.photo-btn .pb-label{font-size:12px}
+.form-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+.save-btn-wrap{position:sticky;bottom:0;background:var(--surface);padding:12px 0 4px;margin-top:4px}
+.save-btn-inner{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);width:100%;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.save-btn-inner:disabled{background:var(--muted);cursor:not-allowed}
+.save-btn-inner:not(:disabled):hover{background:#144d31}
+
+/* ─── Durum paneli ─── */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.status-opt{padding:12px;border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer;text-align:center;font-size:13px;font-weight:600;transition:all .15s;font-family:'DM Sans',sans-serif}
+.status-opt:hover{filter:brightness(1.05)}
+.status-opt.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(0,0,0,0.25);transform:scale(1.02)}
+
 .list-container{display:none;padding:12px}
 .list-container.active{display:block}
 .grid-container.hidden{display:none}
@@ -176,9 +221,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .view-toggle{display:flex;gap:4px;margin-left:auto}
 .view-btn{padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer}
 .view-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-/* Saving indicator */
-.saving-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ffd54f;margin-left:4px;opacity:0;transition:opacity .2s}
-.saving-dot.show{opacity:1}
 </style>
 </head>
 <body>
@@ -258,37 +300,57 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 
 <!-- ELEKTRA UI -->
 <div id="elektra-ui" style="display:none">
+<!-- ─── Tıklanabilir Stat Rozetleri ─── -->
 <div class="elektra-top-stats" id="estats">
-<div class="stat-badge sb-dolu-temiz"><span class="count" id="cnt-dt">0</span>Dolu Temiz</div>
-<div class="stat-badge sb-dolu-kirli"><span class="count" id="cnt-dk">0</span>Dolu Kirli</div>
-<div class="stat-badge sb-cout"><span class="count" id="cnt-co">0</span>C/Out</div>
-<div class="stat-badge sb-temiz"><span class="count" id="cnt-t">0</span>Temiz</div>
-<div class="stat-badge sb-kirli"><span class="count" id="cnt-k">0</span>Kirli</div>
-<div class="stat-badge sb-ooi"><span class="count" id="cnt-ooi">0</span>OOI</div>
-<div class="stat-badge sb-ariza"><span class="count" id="cnt-ar">0</span>Arıza</div>
-<div class="stat-badge sb-onaylı"><span class="count" id="cnt-on">0</span>Onaylı</div>
+<div class="stat-badge sb-dolu-temiz" id="sb-dolu-temiz" onclick="toggleStatFilter('dolu-temiz')">
+  <span class="count" id="cnt-dt">0</span>
+  <span class="s-label">Dolu Temiz</span>
+  <span class="tick-mark">✓</span>
+</div>
+<div class="stat-badge sb-dolu-kirli" id="sb-dolu-kirli" onclick="toggleStatFilter('dolu-kirli')">
+  <span class="count" id="cnt-dk">0</span>
+  <span class="s-label">Dolu Kirli</span>
+  <span class="tick-mark">✓</span>
+</div>
+<div class="stat-badge sb-cout" id="sb-cout" onclick="toggleStatFilter('cout')">
+  <span class="count" id="cnt-co">0</span>
+  <span class="s-label">C/Out</span>
+  <span class="tick-mark">✓</span>
+</div>
+<div class="stat-badge sb-temiz" id="sb-temiz" onclick="toggleStatFilter('temiz')">
+  <span class="count" id="cnt-t">0</span>
+  <span class="s-label">Temiz</span>
+  <span class="tick-mark" style="color:#000">✓</span>
+</div>
+<div class="stat-badge sb-kirli" id="sb-kirli" onclick="toggleStatFilter('kirli')">
+  <span class="count" id="cnt-k">0</span>
+  <span class="s-label">Kirli</span>
+  <span class="tick-mark">✓</span>
+</div>
+<div class="stat-badge sb-ooi" id="sb-ooi" onclick="toggleStatFilter('ooi')">
+  <span class="count" id="cnt-ooi">0</span>
+  <span class="s-label">OOI</span>
+  <span class="tick-mark">✓</span>
+</div>
+<div class="stat-badge sb-ariza" id="sb-ariza" onclick="toggleStatFilter('ariza')">
+  <span class="count" id="cnt-ar">0</span>
+  <span class="s-label">Arıza</span>
+  <span class="tick-mark">✓</span>
+</div>
+<div class="stat-badge sb-onaylı" id="sb-onaylı" onclick="toggleStatFilter('onaylı')">
+  <span class="count" id="cnt-on">0</span>
+  <span class="s-label">Onaylı</span>
+  <span class="tick-mark">✓</span>
+</div>
 </div>
 <div class="elektra-filter">
-<label style="font-size:11px;color:var(--muted)">Durum:</label>
-<select id="efilter-status" onchange="renderElektraView()">
-<option value="">Tümü</option>
-<option value="dolu-temiz">Dolu Temiz</option>
-<option value="dolu-kirli">Dolu Kirli</option>
-<option value="cout">C/Out</option>
-<option value="temiz">Temiz</option>
-<option value="kirli">Kirli</option>
-<option value="ooi">OOI</option>
-<option value="ariza">Arıza</option>
-<option value="onaylı">Onaylı</option>
-<option value="bos">Boş</option>
-</select>
-<input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:100px">
-<div class="view-toggle">
+<input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:110px">
+<div id="active-filter-display"></div>
+<div class="view-toggle" style="margin-left:auto">
 <button class="view-btn active" id="ebtn-grid" onclick="setElektraView('grid')">Grid</button>
 <button class="view-btn" id="ebtn-list" onclick="setElektraView('list')">Liste</button>
 </div>
 </div>
-<!-- Grid: tek blok, kat başlığı yok -->
 <div class="grid-container" id="egrid-container"></div>
 <div class="list-container" id="elist-container"></div>
 <div class="readonly-view" id="ereadonly-view"></div>
@@ -309,44 +371,116 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 </div>
 <div class="panel-body">
 <div class="tab-pane active" id="epane-kayitlar"><div id="eentries-list"></div></div>
+
+<!-- ─── PROFESYONel YENİ KAYIT FORMU ─── -->
 <div class="tab-pane" id="epane-ekle">
 <div class="elegant-form">
-<div class="form-section"><div class="form-label">📌 İşlem Türü</div>
-<div class="type-btns">
-<button class="type-btn" id="ebtn-giris" onclick="setElektraEntryType('giris')">⬇️ Giriş</button>
-<button class="type-btn" id="ebtn-cikis" onclick="setElektraEntryType('cikis')">⬆️ Çıkış</button>
-</div></div>
-<div class="form-section"><div class="form-label">📅 Tarih</div><input type="date" id="ef-date"></div>
-<div class="form-section"><div class="form-label">📝 Not</div><textarea id="ef-note" rows="2" placeholder="Açıklama..."></textarea></div>
-<div class="form-section"><div class="form-label">📷 Fotoğraf</div>
-<div class="photo-drop" id="edrop-zone" onclick="document.getElementById('ef-photos').click()">
-<input type="file" id="ef-photos" accept="image/*" multiple style="display:none" onchange="elektraHandleFiles(this.files)">
-<div>📷 Fotoğraf seç veya sürükle bırak</div>
+
+  <!-- İşlem Türü -->
+  <div class="form-section">
+    <div class="form-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      İşlem Türü
+    </div>
+    <div class="type-btns">
+      <button class="type-btn" id="ebtn-giris" onclick="setElektraEntryType('giris')">
+        <span class="tb-icon">⬇️</span>
+        <span class="tb-label">Giriş</span>
+        <span class="tb-desc">Misafir girişi</span>
+      </button>
+      <button class="type-btn" id="ebtn-cikis" onclick="setElektraEntryType('cikis')">
+        <span class="tb-icon">⬆️</span>
+        <span class="tb-label">Çıkış</span>
+        <span class="tb-desc">Misafir çıkışı</span>
+      </button>
+    </div>
+  </div>
+
+  <hr class="form-divider">
+
+  <!-- Tarih -->
+  <div class="form-section">
+    <div class="form-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Tarih
+    </div>
+    <input type="date" id="ef-date" class="form-input">
+  </div>
+
+  <!-- Not -->
+  <div class="form-section">
+    <div class="form-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Not
+    </div>
+    <textarea id="ef-note" class="form-input" rows="2" placeholder="Açıklama, uyarı veya özel durum..."></textarea>
+  </div>
+
+  <hr class="form-divider">
+
+  <!-- Fotoğraf -->
+  <div class="form-section">
+    <div class="form-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Fotoğraflar
+    </div>
+    <div class="photo-btns">
+      <button type="button" class="photo-btn" onclick="document.getElementById('ef-cam').click()">
+        <span class="pb-icon">📷</span>
+        <span class="pb-label">Kamera</span>
+      </button>
+      <button type="button" class="photo-btn" onclick="document.getElementById('ef-photos').click()">
+        <span class="pb-icon">🖼</span>
+        <span class="pb-label">Galeri</span>
+      </button>
+    </div>
+    <div class="photo-drop" id="edrop-zone" onclick="document.getElementById('ef-photos').click()">
+      <span class="pd-icon">☁️</span>
+      <span class="pd-text">Sürükle & Bırak</span>
+      <span class="pd-sub">veya yukarıdaki butonlardan seç</span>
+    </div>
+    <input type="file" id="ef-photos" accept="image/*" multiple style="display:none" onchange="elektraHandleFiles(this.files)">
+    <input type="file" id="ef-cam" accept="image/*" capture="environment" style="display:none" onchange="elektraHandleFiles(this.files)">
+    <div id="ecompress-status" style="margin-top:6px;font-size:11px;color:var(--accent)"></div>
+    <div class="prev-row" id="eprev-row" style="margin-top:10px"></div>
+    <div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div>
+  </div>
+
+  <div class="save-btn-wrap">
+    <button class="save-btn-inner" id="esave-btn" onclick="elektraSaveEntry()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Kaydet
+    </button>
+  </div>
+
 </div>
-<div id="ecompress-status" class="compress-info" style="display:block"></div>
-<div class="prev-row" id="eprev-row"></div>
-<div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div>
 </div>
-<button class="btn btn-primary" id="esave-btn" onclick="elektraSaveEntry()" style="width:100%">💾 Kaydet</button>
-</div>
-</div>
+
+<!-- Oda Durumu -->
 <div class="tab-pane" id="epane-durum">
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-<label style="font-weight:500">Oda Durumu</label>
-<select id="ef-status">
-<option value="bos">Boş</option>
-<option value="dolu-temiz">Dolu Temiz</option>
-<option value="dolu-kirli">Dolu Kirli</option>
-<option value="cout">C/Out</option>
-<option value="temiz">Temiz</option>
-<option value="kirli">Kirli</option>
-<option value="ooi">OOI</option>
-<option value="ariza">Arıza</option>
-<option value="onaylı">Onaylı</option>
-</select>
+  <div class="form-label" style="margin-bottom:14px">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
+    Oda Durumunu Seç
+  </div>
+  <div class="status-grid">
+    <div class="status-opt" style="background:#1565c0;color:#fff" onclick="selectStatus(this,'dolu-temiz')">Dolu Temiz</div>
+    <div class="status-opt" style="background:#6a1a9a;color:#fff" onclick="selectStatus(this,'dolu-kirli')">Dolu Kirli</div>
+    <div class="status-opt" style="background:#2e7d32;color:#fff" onclick="selectStatus(this,'cout')">C/Out</div>
+    <div class="status-opt" style="background:#4caf50;color:#000" onclick="selectStatus(this,'temiz')">Temiz</div>
+    <div class="status-opt" style="background:#ff6d00;color:#fff" onclick="selectStatus(this,'kirli')">Kirli</div>
+    <div class="status-opt" style="background:#880e4f;color:#fff" onclick="selectStatus(this,'ooi')">OOI</div>
+    <div class="status-opt" style="background:#546e7a;color:#fff" onclick="selectStatus(this,'ariza')">Arıza</div>
+    <div class="status-opt" style="background:#4a148c;color:#fff" onclick="selectStatus(this,'onaylı')">Onaylı</div>
+    <div class="status-opt" style="background:#fff;color:#888;border:2px dashed #ccc" onclick="selectStatus(this,'bos')">Boş</div>
+  </div>
+  <input type="hidden" id="ef-status" value="bos">
+  <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--muted);margin-bottom:14px" id="selected-status-info">Lütfen bir durum seçin</div>
+  <button class="save-btn-inner" onclick="saveElektraRoomStatus()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    Durumu Kaydet
+  </button>
 </div>
-<button class="btn btn-primary" onclick="saveElektraRoomStatus()">💾 Durumu Kaydet</button>
-</div>
+
 </div>
 </div>
 </div>
@@ -371,14 +505,15 @@ const BUCKETS={demirbaş:'photos',elektrik:'meters'};
 const CMAX=1600,CQ=0.82;
 const FLOORS=Array.from({length:15},(_,i)=>({label:(i+1)+'. Kat',prefix:i+1,rooms:18}));
 
-// ── Supabase oda durumu önbelleği ──
-let roomStatusCache = {}; // { roomNo: 'bos'|'dolu-temiz'|... }
-let roomStatusLoaded = false;
+let roomStatusCache={};
+let roomStatusLoaded=false;
+let activeStatFilter=null; // tıklanan stat badge filtresi
 
 let mode='demirbaş',demirbasTab=0,demirbasSearchTab='room',demirbasPending=[],demirbasSelTags=[];
 let elektraView='grid',elektraCurrentRoom=null,elektraPending=[],elektraEntryType=null,elektraCurrentEntries=[],elektraAllData=[],roomsWithEntries=new Set();
 let lbImages=[],lbIndex=0,confirmCb=null;
 let activePdfOpt=null;
+let selectedStatusEl=null;
 
 function q(id){return document.getElementById(id)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -399,38 +534,54 @@ async function createPairLink(roomNo,girisDate,cikisDate,mod){const token=genTok
 async function checkConn(){try{const r=await api('/rest/v1/entries?select=id&limit=1');if(r.ok){q('conn-dot').classList.add('ok');q('conn-text').textContent='Bağlantı aktif';q('topbar-sub').textContent='Bağlantı aktif'}else throw 0}catch{q('conn-text').textContent='Bağlantı yok';q('topbar-sub').textContent='Bağlantı yok'}}
 
 // ═══════════════ SUPABASE ODA DURUMU ═══════════════
-// rooms tablosundan tüm oda durumlarını çek, önbelleğe al
 async function loadRoomStatuses(){
   try{
-    const r = await api('/rest/v1/rooms?select=room_no,status');
-    if(!r.ok) return;
-    const data = await r.json();
-    roomStatusCache = {};
-    data.forEach(row => { roomStatusCache[String(row.room_no)] = row.status || 'bos'; });
-    roomStatusLoaded = true;
-  }catch(e){
-    console.warn('Oda durumları yüklenemedi:',e);
-  }
+    const r=await api('/rest/v1/rooms?select=room_no,status');
+    if(!r.ok)return;
+    const data=await r.json();
+    roomStatusCache={};
+    data.forEach(row=>{roomStatusCache[String(row.room_no)]=row.status||'bos';});
+    roomStatusLoaded=true;
+  }catch(e){console.warn('Oda durumları yüklenemedi:',e);}
 }
-
-// Tek oda durumunu önbellekten oku
-function getRoomStatus(roomNo){
-  return roomStatusCache[String(roomNo)] || 'bos';
-}
-
-// Oda durumunu Supabase'e kaydet (upsert)
-async function saveRoomStatusToDB(roomNo, status){
-  roomStatusCache[String(roomNo)] = status;
+function getRoomStatus(roomNo){return roomStatusCache[String(roomNo)]||'bos'}
+async function saveRoomStatusToDB(roomNo,status){
+  roomStatusCache[String(roomNo)]=status;
   try{
-    await api('/rest/v1/rooms', {
-      method: 'POST',
-      headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
-      body: JSON.stringify({ room_no: String(roomNo), status })
-    });
-  }catch(e){
-    console.warn('Durum kaydedilemedi:',e);
-    showToast('Durum kaydedilemedi','error');
+    await api('/rest/v1/rooms',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({room_no:String(roomNo),status})});
+  }catch(e){console.warn('Durum kaydedilemedi:',e);showToast('Durum kaydedilemedi','error');}
+}
+
+// ═══════════════ STAT BADGE FİLTRE ═══════════════
+function toggleStatFilter(status){
+  if(activeStatFilter===status){
+    activeStatFilter=null;
+  }else{
+    activeStatFilter=status;
   }
+  // Tüm badge'leri güncelle
+  document.querySelectorAll('.stat-badge').forEach(el=>{
+    el.classList.remove('active-filter');
+  });
+  if(activeStatFilter){
+    const el=q('sb-'+activeStatFilter);
+    if(el)el.classList.add('active-filter');
+  }
+  // Filtre chip'ini güncelle
+  updateActiveFilterDisplay();
+  renderElektraView();
+}
+
+function updateActiveFilterDisplay(){
+  const wrap=q('active-filter-display');
+  if(!activeStatFilter){wrap.innerHTML='';return;}
+  const labels={
+    'dolu-temiz':'Dolu Temiz','dolu-kirli':'Dolu Kirli','cout':'C/Out',
+    'temiz':'Temiz','kirli':'Kirli','ooi':'OOI','ariza':'Arıza','onaylı':'Onaylı','bos':'Boş'
+  };
+  wrap.innerHTML=`<span class="active-filter-chip" onclick="toggleStatFilter('${activeStatFilter}')">
+    ${labels[activeStatFilter]||activeStatFilter} <span style="font-size:13px">×</span>
+  </span>`;
 }
 
 // ═══════════════ LIGHTBOX ═══════════════
@@ -458,14 +609,11 @@ function openLb(urls,idx){
   let arr=urls;
   if(typeof urls==='string'){try{arr=JSON.parse(urls)}catch(e){arr=[urls]}}
   lbImages=arr;lbIndex=idx;
-  const img=q('lb-img');
-  img.src=lbImages[lbIndex];
+  const img=q('lb-img');img.src=lbImages[lbIndex];
   q('lb-lbl').textContent='Fotoğraf '+(lbIndex+1)+' / '+lbImages.length;
   q('lb-counter').textContent=(lbIndex+1)+' / '+lbImages.length;
-  q('lb-prev').disabled=lbIndex===0;
-  q('lb-next').disabled=lbIndex===lbImages.length-1;
-  lbResetZoom(false);
-  q('lb').classList.add('open');
+  q('lb-prev').disabled=lbIndex===0;q('lb-next').disabled=lbIndex===lbImages.length-1;
+  lbResetZoom(false);q('lb').classList.add('open');
   const hint=q('lb-hint');hint.classList.remove('hide');setTimeout(()=>hint.classList.add('hide'),2800);
 }
 function closeLb(){q('lb').classList.remove('open')}
@@ -539,11 +687,9 @@ async function loadPhoto(url){const res=await fetch(url);const blob=await res.bl
 async function exportBulkPDF(rooms,entries,filename){
   if(typeof window.jspdf==='undefined'){showToast('jsPDF yüklenemedi','error');return}
   const{jsPDF}=window.jspdf,doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const total=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-  let processed=0;
+  const total=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);let processed=0;
   function updateProgress(){q('dl-bar').style.width=Math.round(processed/total*100)+'%';q('dl-percent').textContent=Math.round(processed/total*100)+'%';q('dl-stats-left').textContent=processed+' / '+total}
-  q('dl-overlay').classList.add('open');updateProgress();
-  let first=true;
+  q('dl-overlay').classList.add('open');updateProgress();let first=true;
   for(const entry of entries){const urls=entry.photo_urls||[];for(const url of urls){const{dataUrl,pw,ph}=await loadPhoto(url);if(!first)doc.addPage('a4');first=false;doc.addImage(dataUrl,'JPEG',10,10,190,ph/pw*190);processed++;updateProgress()}}
   doc.save(filename);q('dl-overlay').classList.remove('open');showToast('PDF indirildi!')
 }
@@ -564,10 +710,7 @@ async function initElektra(){
 
 function updateElektraStats(){
   const c={};
-  allRoomNos().forEach(n=>{
-    const s=getRoomStatus(n);
-    c[s]=(c[s]||0)+1;
-  });
+  allRoomNos().forEach(n=>{const s=getRoomStatus(n);c[s]=(c[s]||0)+1;});
   q('cnt-dt').textContent=c['dolu-temiz']||0;
   q('cnt-dk').textContent=c['dolu-kirli']||0;
   q('cnt-co').textContent=(c['cout']||0)+(c['cout-b']||0);
@@ -602,47 +745,27 @@ function renderElektraView(){
 }
 
 function statusClass(s){
-  const m={
-    'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli',
-    'cout':'status-cout','cout-b':'status-cout',
-    'temiz':'status-temiz','temiz-b':'status-temiz-b',
-    'kirli':'status-kirli','kirli-b':'status-kirli-b',
-    'ooi':'status-ooi','ariza':'status-ariza',
-    'onaylı':'status-onaylı','onaylı-b':'status-onaylı',
-    'bos':'status-bos'
-  };
+  const m={'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli','cout':'status-cout','cout-b':'status-cout','temiz':'status-temiz','temiz-b':'status-temiz-b','kirli':'status-kirli','kirli-b':'status-kirli-b','ooi':'status-ooi','ariza':'status-ariza','onaylı':'status-onaylı','onaylı-b':'status-onaylı','bos':'status-bos'};
   return m[s]||'status-bos';
 }
 
-// Grid: KAT BAŞLIĞI YOK — tüm odalar tek bir grid içinde
 function renderElektraGrid(){
-  const fs=q('efilter-status').value,sv=q('esearch-room').value.trim().toLowerCase();
-  const container=q('egrid-container');
-  container.innerHTML='';
-
-  const grid=document.createElement('div');
-  grid.className='room-grid';
-
+  const sv=q('esearch-room').value.trim().toLowerCase();
+  const container=q('egrid-container');container.innerHTML='';
+  const grid=document.createElement('div');grid.className='room-grid';
   let count=0;
   allRoomNos().forEach(n=>{
     const s=getRoomStatus(n);
-    if(fs&&s!==fs)return;
+    // activeStatFilter kullan (badge filtresi) VEYA metin araması
+    if(activeStatFilter&&s!==activeStatFilter)return;
     if(sv&&!String(n).includes(sv))return;
     const cell=document.createElement('div');
-    cell.className='room-cell '+statusClass(s);
-    cell.textContent=n;
-    if(roomsWithEntries.has(String(n))){
-      const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl);
-    }
+    cell.className='room-cell '+statusClass(s);cell.textContent=n;
+    if(roomsWithEntries.has(String(n))){const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl);}
     cell.addEventListener('click',()=>openElektraPanel(n));
-    grid.appendChild(cell);
-    count++;
+    grid.appendChild(cell);count++;
   });
-
-  if(count===0){
-    container.innerHTML='<div class="empty">Oda bulunamadı</div>';
-    return;
-  }
+  if(count===0){container.innerHTML='<div class="empty">Oda bulunamadı</div>';return;}
   container.appendChild(grid);
 }
 
@@ -655,34 +778,17 @@ async function renderElektraList(){
     const sv=q('esearch-room').value.trim().toLowerCase();
     const filtered=elektraAllData.filter(e=>{
       if(sv&&!String(e.room_no).includes(sv)&&!(e.note||'').toLowerCase().includes(sv))return false;
+      if(activeStatFilter){const rs=getRoomStatus(e.room_no);if(rs!==activeStatFilter)return false;}
       return true;
     });
     if(!filtered.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>';return}
     const pairedC=new Set(),pairedG=new Set(),gB={},cB={};
-    elektraAllData.forEach(e=>{
-      if(e.type==='giris'||!e.type){if(!gB[e.room_no])gB[e.room_no]=[];gB[e.room_no].push(e)}
-      else{if(!cB[e.room_no])cB[e.room_no]=[];cB[e.room_no].push(e)}
-    });
-    Object.keys(gB).forEach(r=>{
-      const gl=[...gB[r]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-      const cl=[...(cB[r]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-      const used=new Set();
-      gl.forEach(g=>{const m=cl.find(c=>!used.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){used.add(m.id);pairedC.add(m.id);pairedG.add(g.id)}});
-    });
+    elektraAllData.forEach(e=>{if(e.type==='giris'||!e.type){if(!gB[e.room_no])gB[e.room_no]=[];gB[e.room_no].push(e)}else{if(!cB[e.room_no])cB[e.room_no]=[];cB[e.room_no].push(e)}});
+    Object.keys(gB).forEach(r=>{const gl=[...gB[r]].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));const cl=[...(cB[r]||[])].sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));const used=new Set();gl.forEach(g=>{const m=cl.find(c=>!used.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){used.add(m.id);pairedC.add(m.id);pairedG.add(g.id)}});});
     let html=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:var(--surface2)"><th style="padding:8px">Oda</th><th>Giriş</th><th>Çıkış</th><th></th></tr></thead><tbody>`;
     const shownC=new Set();
-    filtered.forEach(e=>{
-      const isG=e.type==='giris'||!e.type;
-      if(isG){
-        const ce=pairedG.has(e.id)?(cB[e.room_no]||[]).find(c=>pairedC.has(c.id)&&c.checkin_date>=e.checkin_date):null;
-        if(ce)shownC.add(ce.id);
-        html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td><td style="color:#b45309">${ce?fmtShort(ce.checkin_date):'—'}</td><td>${ce?`<button class="btn btn-sm" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${ce.checkin_date}','elektrik')">Link</button>`:`<button class="ml-cikis-btn" onclick="event.stopPropagation();quickCikis('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button>`}</td></tr>`;
-      }else if(!shownC.has(e.id)){
-        html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`;
-      }
-    });
-    html+='</tbody></table></div>';
-    wrap.innerHTML=html;
+    filtered.forEach(e=>{const isG=e.type==='giris'||!e.type;if(isG){const ce=pairedG.has(e.id)?(cB[e.room_no]||[]).find(c=>pairedC.has(c.id)&&c.checkin_date>=e.checkin_date):null;if(ce)shownC.add(ce.id);html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td style="color:#1a5c3a">${fmtShort(e.checkin_date)}</td><td style="color:#b45309">${ce?fmtShort(ce.checkin_date):'—'}</td><td>${ce?`<button class="btn btn-sm" onclick="event.stopPropagation();createPairLink('${e.room_no}','${e.checkin_date}','${ce.checkin_date}','elektrik')">Link</button>`:`<button class="ml-cikis-btn" onclick="event.stopPropagation();quickCikis('${e.room_no}','${e.checkin_date}')">Çıkış Yap</button>`}</td></tr>`;}else if(!shownC.has(e.id)){html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td>—</td><td style="color:#b45309">${fmtShort(e.checkin_date)}</td><td></td></tr>`;}});
+    html+='</tbody></table></div>';wrap.innerHTML=html;
   }catch(e){wrap.innerHTML='<div style="text-align:center;padding:40px">Hata</div>'}
 }
 
@@ -693,20 +799,21 @@ function openElektraPanel(num){
   q('epanel-room-num').textContent=num;
   const fl=Math.floor(num/100);
   q('epanel-floor-label').textContent=fl+'. Kat';
-  q('ef-status').value=getRoomStatus(num);
+  // Durum panelini hazırla
+  const currentStatus=getRoomStatus(num);
+  q('ef-status').value=currentStatus;
+  highlightStatusOpt(currentStatus);
+  updateSelectedStatusInfo(currentStatus);
   resetElektraAddForm();
   switchElektraPanelTab('kayitlar');
-  q('epanel-overlay').classList.add('open');
-  q('eroom-panel').classList.add('open');
+  q('epanel-overlay').classList.add('open');q('eroom-panel').classList.add('open');
   document.body.style.overflow='hidden';
   loadElektraEntries();
 }
 
 function closeElektraPanel(){
-  q('epanel-overlay').classList.remove('open');
-  q('eroom-panel').classList.remove('open');
-  document.body.style.overflow='';
-  elektraCurrentRoom=null;
+  q('epanel-overlay').classList.remove('open');q('eroom-panel').classList.remove('open');
+  document.body.style.overflow='';elektraCurrentRoom=null;
 }
 
 function switchElektraPanelTab(t){
@@ -714,6 +821,37 @@ function switchElektraPanelTab(t){
     q('epane-'+x).classList.toggle('active',x===t);
     q('eptab-'+x).classList.toggle('active',x===t);
   });
+}
+
+// ─── Durum seçici (görsel) ───
+function selectStatus(el,status){
+  document.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  q('ef-status').value=status;
+  updateSelectedStatusInfo(status);
+}
+
+function highlightStatusOpt(status){
+  document.querySelectorAll('.status-opt').forEach(el=>{
+    el.classList.remove('sel');
+    const onclick=el.getAttribute('onclick')||'';
+    if(onclick.includes("'"+status+"'")||onclick.includes('"'+status+'"')){
+      el.classList.add('sel');
+    }
+  });
+}
+
+function updateSelectedStatusInfo(status){
+  const labels={
+    'dolu-temiz':'Dolu Temiz seçildi','dolu-kirli':'Dolu Kirli seçildi',
+    'cout':'C/Out seçildi','temiz':'Temiz seçildi','kirli':'Kirli seçildi',
+    'ooi':'OOI seçildi','ariza':'Arıza seçildi','onaylı':'Onaylı seçildi','bos':'Boş seçildi'
+  };
+  const el=q('selected-status-info');
+  if(el){
+    el.textContent=labels[status]||'Durum seçilmedi';
+    el.style.color=status&&status!=='bos'?'var(--text)':'var(--muted)';
+  }
 }
 
 async function loadElektraEntries(){
@@ -745,23 +883,17 @@ function buildElektraCard(entry){
 async function deleteElektraEntry(id){
   openConfirm('Sil','Bu kayıt silinecek.',async()=>{
     await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
-    showToast('Silindi');
-    loadElektraEntries();
-    loadElektraRoomsWithEntries();
+    showToast('Silindi');loadElektraEntries();loadElektraRoomsWithEntries();
   });
 }
-async function editElektraEntry(id, date, note) {
-  const newDate = prompt('Tarih (YYYY-MM-DD):', date);
-  if (!newDate) return;
-  const newNote = prompt('Not:', note);
-  if (newNote === null) return;
-  await api(`/rest/v1/entries?id=eq.${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ checkin_date: newDate, note: newNote })
-  });
-  showToast('Güncellendi');
-  loadElektraEntries();
+
+async function editElektraEntry(id,date,note){
+  const newDate=prompt('Tarih (YYYY-MM-DD):',date);if(!newDate)return;
+  const newNote=prompt('Not:',note);if(newNote===null)return;
+  await api(`/rest/v1/entries?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({checkin_date:newDate,note:newNote})});
+  showToast('Güncellendi');loadElektraEntries();
 }
+
 function setElektraEntryType(t){
   elektraEntryType=t;
   q('ebtn-giris').className='type-btn'+(t==='giris'?' active-giris':'');
@@ -793,7 +925,7 @@ function elektraRenderPrev(){
 async function elektraSaveEntry(){
   if(!elektraCurrentRoom||!elektraEntryType||!elektraPending.length){showToast('Eksik bilgi','error');return}
   const btn=q('esave-btn'),lbl=btn.innerHTML;
-  btn.disabled=true;btn.innerHTML='<span class="loader"></span>';
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
   const pw=q('eprogress-wrap'),pb=q('eprogress-bar');pw.classList.add('show');pb.style.width='0%';
   try{
     const date=q('ef-date').value,note=q('ef-note').value.trim(),urls=[];
@@ -803,25 +935,21 @@ async function elektraSaveEntry(){
     }
     await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:String(elektraCurrentRoom),mode:'elektrik',checkin_date:date,type:elektraEntryType,note,photo_urls:urls})});
     showToast('Kayıt oluşturuldu');
-    resetElektraAddForm();
-    switchElektraPanelTab('kayitlar');
-    loadElektraEntries();
-    loadElektraRoomsWithEntries();
+    resetElektraAddForm();switchElektraPanelTab('kayitlar');
+    loadElektraEntries();loadElektraRoomsWithEntries();
   }catch(e){showToast('Hata: '+e.message,'error')}
   finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')}
 }
 
-// ── Oda durumunu Supabase'e kaydet ──
 async function saveElektraRoomStatus(){
   if(!elektraCurrentRoom)return;
   const status=q('ef-status').value;
-  const btn=document.querySelector('#epane-durum .btn-primary');
-  const origText=btn.innerHTML;
-  btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
+  if(!status){showToast('Durum seçin','error');return}
+  const btn=document.querySelector('#epane-durum .save-btn-inner');
+  const origText=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
   await saveRoomStatusToDB(elektraCurrentRoom,status);
   btn.disabled=false;btn.innerHTML=origText;
-  updateElektraStats();
-  renderElektraView();
+  updateElektraStats();renderElektraView();
   showToast('Durum kaydedildi');
 }
 
@@ -839,56 +967,38 @@ const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get
 
 if(_oda&&_token){
   const _m=_mod==='elektrik'?'elektrik':'demirbaş';
-  mode=_m;
-  q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';
+  mode=_m;q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';
   q('topbar-title').textContent=_m==='elektrik'?'⚡ ELEKTRA SAYAÇ PANELİ':'Demirbaş Takibi';
-
   if(_m==='elektrik'){
-    // Bağlantı badge ve mod butonlarını gizle
-    q('conn-badge').style.display = 'none';
-    q('mode-btns').style.display = 'none';
-    q('elektra-ui').style.display='';
-    q('egrid-container').style.display='none';
-    q('elist-container').style.display='none';
-    q('ereadonly-view').classList.add('active');
-    q('app').classList.add('wide');
+    q('conn-badge').style.display='none';q('mode-btns').style.display='none';
+    q('elektra-ui').style.display='';q('egrid-container').style.display='none';q('elist-container').style.display='none';
+    q('ereadonly-view').classList.add('active');q('app').classList.add('wide');
     api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
-      .then(r=>r.json())
-      .then(data=>{
+      .then(r=>r.json()).then(data=>{
         if(!data||!data.length){showAccessError();return}
-        const tr=data[0];
-        const tarih=_tarih||tr.entry_date||today();
+        const tr=data[0];const tarih=_tarih||tr.entry_date||today();
         if(_tarih&&tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return}
         showElektraReadonly(_oda,_m,tarih,_type);
-      })
-      .catch(()=>showAccessError());
+      }).catch(()=>showAccessError());
   }else{
-    q('conn-badge').style.display = 'none';
-    q('mode-btns').style.display = 'none';
-    q('demirbas-ui').style.display='';
-    q('dsresult').innerHTML='<div class="empty">Yükleniyor...</div>';
+    q('conn-badge').style.display='none';q('mode-btns').style.display='none';
+    q('demirbas-ui').style.display='';q('dsresult').innerHTML='<div class="empty">Yükleniyor...</div>';
     api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
-      .then(r=>r.json())
-      .then(data=>{
+      .then(r=>r.json()).then(data=>{
         if(!data||!data.length){showAccessError();return}
         const tarih=_tarih||data[0].entry_date||today();
         api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(_oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.demirbaş`)
-          .then(r=>r.json())
-          .then(d=>{
+          .then(r=>r.json()).then(d=>{
             if(!d.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}
             q('dsresult').innerHTML='<div class="room-header"><div class="room-num">'+_oda+'</div><div class="room-summary"><strong>Oda '+_oda+' · '+fmtDate(tarih)+'</strong><span>Salt okunur</span></div></div>'+d.map(e=>buildDemirbasCard(e)).join('');
-          })
-          .catch(()=>showAccessError());
-      })
-      .catch(()=>showAccessError());
+          }).catch(()=>showAccessError());
+      }).catch(()=>showAccessError());
   }
-}else if(_oda&&!_token){
-  showAccessError();
-}else{
+}else if(_oda&&!_token){showAccessError();}
+else{
   let savedMode='demirbaş';
   try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
-  setMode(savedMode);
-  checkConn();
+  setMode(savedMode);checkConn();
 }
 
 function showAccessError(){
@@ -898,20 +1008,16 @@ function showAccessError(){
 }
 
 async function showElektraReadonly(oda,mod,tarih,entryType){
-  const rw=q('ereadonly-view');
-  rw.innerHTML='<div style="text-align:center;padding:40px">Yükleniyor...</div>';
-  q('topbar-title').textContent=`Sayaç ${oda}`;
-  q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
+  const rw=q('ereadonly-view');rw.innerHTML='<div style="text-align:center;padding:40px">Yükleniyor...</div>';
+  q('topbar-title').textContent=`Sayaç ${oda}`;q('topbar-sub').textContent=`${fmtDate(tarih)} · Salt okunur`;
   if(entryType==='pair'){
     const td=await api(`/rest/v1/tokens?token=eq.${_token}&select=paired_date`).then(r=>r.json()).catch(()=>[]);
-    const cd=td[0]?.paired_date;
-    if(!cd){showAccessError();return}
+    const cd=td[0]?.paired_date;if(!cd){showAccessError();return}
     const[gd,cid]=await Promise.all([
       api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&type=eq.giris`).then(r=>r.json()),
       api(`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${cd}&mode=eq.${mod}&type=eq.cikis`).then(r=>r.json())
     ]);
-    const g=gd[0],c=cid[0];
-    if(!g&&!c){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}
+    const g=gd[0],c=cid[0];if(!g&&!c){rw.innerHTML='<div class="empty">Kayıt yok</div>';return}
     rw.innerHTML=`<div class="room-header"><div class="room-num e">${oda}</div><div><strong>Sayaç ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cd)} · Salt Okunur</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${g?buildElektraCard(g):''}${c?buildElektraCard(c):''}</div>`;
   }else{
     let url=`/rest/v1/entries?room_no=eq.${oda}&checkin_date=eq.${tarih}&mode=eq.${mod}&order=checkin_date.desc`;
