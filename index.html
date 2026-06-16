@@ -1394,7 +1394,7 @@
     function showAccessError(){q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';q('topbar-title').textContent='Erişim Yok';document.body.innerHTML+='<div style="text-align:center;padding:60px;font-size:17px">Geçersiz veya süresi dolmuş link.</div>'}
     function openPdfPanel(){showToast('PDF özelliği yakında eklenecek','error')}
 
-    async function createEntryLink(roomNo,date,mod,btnEl,entryId){ 
+    async function createEntryLink(roomNo,date,mod,btnEl,entryId){
         const orig=btnEl.innerHTML;btnEl.innerHTML='<span class="loader"></span>';btnEl.disabled=true;
         try{const token=genToken();await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_id=eq.${encodeURIComponent(entryId)}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod:mod,token:token,entry_id:entryId})});const url=`${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url))}catch(e){showToast('Hata: '+e.message,'error')}finally{btnEl.innerHTML=orig;btnEl.disabled=false}
     }
