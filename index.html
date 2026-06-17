@@ -7,182 +7,173 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
         :root {
-            --bg: #f5f4f0;
-            --surface: #fff;
-            --surface2: #f0efe9;
-            --border: #e2e1d9;
-            --text: #1a1a18;
-            --muted: #7a7a72;
-            --accent: #1a5c3a;
-            --accent-light: #e8f2ec;
-            --accent-mid: #2d7a52;
-            --danger: #c0392b;
-            --danger-light: #fdf0ee;
-            --amber: #b45309;
-            --amber-light: #fef3c7;
-            --radius: 12px;
-            --radius-sm: 8px;
+            --bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:#e2e1d9;
+            --text:#1a1a18;--muted:#7a7a72;--accent:#1a5c3a;--accent-light:#e8f2ec;
+            --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
+            --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
-        .app { max-width: 550px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
-        .app.wide { max-width: 1300px; }
-        .topbar { background: var(--accent); padding: 14px 16px 12px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
-        .topbar-icon { width: 34px; height: 34px; background: rgba(255,255,255,.15); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .topbar h1 { font-size: 16px; font-weight: 600; color: #fff; }
-        .topbar p { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 1px; }
-        .mode-btns { display: flex; gap: 5px; flex-shrink: 0; margin-left: auto; }
-        .mode-btn { padding: 5px 10px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; border: 1.5px solid rgba(255,255,255,.25); background: transparent; color: rgba(255,255,255,.7); }
-        .mode-btn.active { background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.6); color: #fff; }
-        .nav { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 62px; z-index: 99; overflow-x: auto; }
-        .nav-btn { flex: 1; padding: 11px 4px; font-size: 12px; font-weight: 500; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; font-family: 'DM Sans', sans-serif; transition: all .15s; white-space: nowrap; }
-        .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .screen { display: none; padding: 16px; }
-        .screen.active { display: block; }
-        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; transition: border-color .15s, box-shadow .15s; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,92,58,.1); }
-        .field { margin-bottom: 14px; }
-        .label { font-size: 12px; color: var(--muted); margin-bottom: 5px; display: block; font-weight: 500; }
-        .btn { padding: 11px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
-        .btn:active { transform: scale(.98); }
-        .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); width: 100%; justify-content: center; padding: 13px; font-size: 15px; }
-        .btn-primary:disabled { background: var(--muted); border-color: var(--muted); cursor: not-allowed; }
-        .btn-danger { background: var(--danger-light); color: var(--danger); border-color: #f5c6c2; }
-        .wa-btn { color: #25D366; border-color: #b7f0c8; background: #eafaf0; }
-        .search-wrap { display: flex; gap: 8px; margin-bottom: 16px; }
-        .room-header { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .room-num { background: var(--accent-light); color: var(--accent); font-size: 22px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-sm); font-family: 'DM Mono', monospace; flex-shrink: 0; }
-        .room-num.e { background: var(--amber-light); color: var(--amber); }
-        .entries-flex { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
-        .entry-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; width: max-content; max-width: 100%; flex-shrink: 0; margin-bottom: 0; }
-        .entry-head { padding: 10px 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .entry-head:active { background: var(--surface2); }
-        .date-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px; flex-shrink: 0; }
-        .date-badge.e { background: var(--amber-light); color: var(--amber); }
-        .entry-meta { flex: 1; min-width: 0; overflow: hidden; }
-        .entry-count { font-size: 11px; color: var(--muted); background: var(--surface2); border-radius: 99px; padding: 3px 8px; white-space: nowrap; flex-shrink: 0; }
-        .chevron { transition: transform .2s; flex-shrink: 0; }
-        .chevron.open { transform: rotate(90deg); }
-        .entry-body { display: none; }
-        .entry-body.open { display: block; }
-        .photo-gallery { display: flex; flex-wrap: wrap; gap: 10px; padding: 8px 14px; }
-        .photo-card { width: 200px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface2); display: flex; flex-direction: column; flex-shrink: 0; }
-        .photo-card-image { width: 100%; height: 140px; object-fit: cover; cursor: pointer; display: block; }
-        .photo-card-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; }
-        .photo-card-desc { font-size: 12px; color: var(--text); line-height: 1.4; word-break: break-word; }
-        .photo-card-desc.empty { color: var(--muted); font-style: italic; }
-        .entry-footer { border-top: 1px solid var(--border); padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--surface2); flex-wrap: wrap; }
-        .link-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); background: var(--surface); color: var(--accent); cursor: pointer; font-family: 'DM Sans', sans-serif; }
-        .edit-btn { color: var(--amber); border-color: #fcd9a0; background: var(--amber-light); }
-        .del-btn { color: var(--danger); border-color: #f5c6c2; background: var(--danger-light); }
-        .edit-panel { display: none; padding: 14px; border-top: 1px solid var(--border); background: var(--surface2); }
-        .edit-panel.open { display: block; }
-        .edit-panel .field { margin-bottom: 10px; }
-        .edit-panel .label { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: block; font-weight: 600; }
-        .edit-panel textarea, .edit-panel input, .edit-panel select { font-size: 13px; padding: 8px 10px; }
-        .edit-photo-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
-        .edit-photo-row { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 8px; }
-        .edit-photo-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
-        .edit-photo-input { flex: 1; font-size: 12px; padding: 5px 8px; }
-        .tag { padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); cursor: pointer; color: var(--muted); background: var(--surface); transition: all .12s; font-family: 'DM Sans', sans-serif; }
-        .tag.on { background: var(--accent-light); color: var(--accent); border-color: var(--accent-mid); }
-        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 99px; z-index: 9999; display: none; white-space: nowrap; font-family: 'DM Sans', sans-serif; }
-        .toast.show { display: block; }
-        .toast.success { background: var(--accent); }
-        .toast.error { background: var(--danger); }
-        .loader { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .elektra-top-stats { display: flex; gap: 6px; padding: 10px 12px; flex-wrap: wrap; background: var(--surface); border-bottom: 1px solid var(--border); }
-        .stat-badge { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; color: #fff; cursor: pointer; transition: all .15s; border: 2px solid transparent; min-width: 58px; user-select: none; position: relative; }
-        .stat-badge.active-filter { border-color: rgba(255,255,255,0.9); box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
-        .sb-dolu-temiz { background: #1565c0; } .sb-dolu-kirli { background: #6a1a9a; } .sb-cout { background: #2e7d32; } .sb-temiz { background: #4caf50; color: #000; } .sb-kirli { background: #ff6d00; } .sb-ooi { background: #880e4f; } .sb-ariza { background: #546e7a; } .sb-onaylı { background: #4a148c; }
-        .elektra-filter { display: flex; gap: 8px; align-items: center; padding: 6px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-        .grid-container { padding: 12px; overflow-x: auto; }
-        .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap: 0px; }
-        .room-cell { height: 38px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); position: relative; background: var(--surface); color: var(--text); transition: transform 0.1s, filter 0.1s; }
-        .room-cell:hover { transform: scale(1.06); z-index: 2; filter: brightness(1.15); }
-        .room-flag { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; }
-        .status-dolu-temiz { background: #1565c0; color: #fff; } .status-dolu-kirli { background: #6a1a9a; color: #fff; } .status-cout { background: #2e7d32; color: #fff; } .status-temiz { background: #4caf50; color: #fff; } .status-kirli { background: #ff6d00; color: #fff; } .status-ooi { background: #880e4f; color: #fff; } .status-ariza { background: #546e7a; color: #fff; } .status-onaylı { background: #4a148c; color: #fff; } .status-bos { background: #fff; color: #888; border: 0.5px solid #ccc; }
-        .panel-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500; }
-        .panel-overlay.open { display: block; }
-        .room-panel { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; max-width: 100%; background: var(--surface); z-index: 1501; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.28s; overflow: hidden; box-shadow: -4px 0 20px rgba(0,0,0,0.15); }
-        .room-panel.open { transform: translateX(0); }
-        .panel-header { background: var(--accent); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-        .panel-header h2 { font-size: 15px; color: #fff; }
-        .panel-room-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 6px; font-size: 20px; font-weight: 700; color: #fff; margin-right: 10px; }
-        .panel-close { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
-        .panel-tabs { display: flex; border-bottom: 1px solid var(--border); }
-        .ptab { flex: 1; padding: 12px; text-align: center; font-size: 13px; font-weight: 600; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; font-family: 'DM Sans', sans-serif; }
-        .ptab.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .panel-body { flex: 1; overflow-y: auto; }
-        .tab-pane { display: none; padding: 14px 16px; }
-        .tab-pane.active { display: block; }
-        .elegant-form { background: var(--surface); border-radius: var(--radius); padding: 16px; }
-        .form-section { margin-bottom: 14px; }
-        .form-label { font-size: 12px; color: var(--muted); margin-bottom: 5px; font-weight: 600; }
-        .form-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; }
-        .form-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
-        .photo-btns { display: flex; gap: 8px; margin-bottom: 8px; }
-        .photo-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; }
-        .photo-drop { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; cursor: pointer; font-size: 13px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .save-btn-wrap { position: sticky; bottom: 0; background: var(--surface); padding: 12px 0 4px; margin-top: 4px; }
-        .save-btn-inner { background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); width: 100%; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-        .status-opt { padding: 12px; border-radius: var(--radius-sm); border: 2px solid var(--border); cursor: pointer; text-align: center; font-size: 13px; font-weight: 600; transition: all .15s; font-family: 'DM Sans', sans-serif; }
-        .status-opt.sel { border-color: #fff; box-shadow: 0 0 0 3px rgba(0,0,0,0.25); transform: scale(1.02); }
-        .photo-preview-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-        .photo-preview-item { display: flex; flex-direction: column; gap: 4px; align-items: center; width: 90px; flex-shrink: 0; }
-        .photo-preview-img { width: 80px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--border); }
-        .photo-preview-desc { width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid var(--border); border-radius: 3px; background: var(--surface); font-family: 'DM Sans', sans-serif; }
-        .photo-preview-del { font-size: 9px; cursor: pointer; color: var(--danger); font-weight: 600; }
-        .progress-bar-wrap { height: 4px; background: var(--surface2); border-radius: 99px; margin-top: 8px; display: none; }
-        .progress-bar-wrap.show { display: block; }
-        .progress-bar { height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s; }
-        .drop-zone { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; cursor: pointer; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-        .drop-zone.over { border-color: var(--accent); background: var(--accent-light); }
-        .prev-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-        .prev-item { position: relative; }
-        .prev-item img { width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); display: block; }
-        .prev-del { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 700; }
-        .compress-info { font-size: 11px; color: var(--accent); margin-top: 4px; }
-        .all-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
-        .all-card:active { background: var(--surface2); }
-        .all-card-inner { display: flex; align-items: center; gap: 10px; }
-        .sel-btn { padding: 7px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
-        .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
-        .tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
-        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 9000; flex-direction: column; }
-        .lightbox.open { display: flex; }
-        .lb-topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; flex-shrink: 0; }
-        .lb-lbl { color: rgba(255,255,255,.6); font-size: 13px; }
-        .lb-zoom-row { display: flex; align-items: center; gap: 8px; }
-        .lb-zoom-badge { color: rgba(255,255,255,.6); font-size: 12px; }
-        .lb-reset-btn { background: rgba(255,255,255,.15); border: none; color: #fff; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 14px; }
-        .lb-close { background: rgba(255,255,255,.15); border: none; color: #fff; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 16px; }
-        .lb-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .lb-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center center; transition: transform .2s; }
-        .lb-hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.4); font-size: 12px; pointer-events: none; }
-        .lb-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; flex-shrink: 0; }
-        .lb-btn { background: rgba(255,255,255,.15); border: none; color: #fff; border-radius: 8px; padding: 8px 16px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; }
-        .lb-btn:disabled { opacity: .3; }
-        .lb-counter { color: rgba(255,255,255,.6); font-size: 13px; }
-        .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 9500; align-items: flex-end; justify-content: center; }
-        .confirm-overlay.open { display: flex; }
-        .confirm-sheet { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px 16px 32px; width: 100%; max-width: 500px; }
-        .confirm-sheet h3 { font-size: 16px; margin-bottom: 8px; }
-        .confirm-sheet p { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
-        .confirm-actions { display: flex; gap: 8px; }
-        .confirm-actions .btn { flex: 1; justify-content: center; }
-        .active-filter-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-mid); cursor: pointer; }
-        .view-toggle { display: flex; gap: 4px; }
-        .view-btn { padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; }
-        .view-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-        .list-container { display: none; padding: 12px; }
-        .list-container.active { display: block; }
-        .readonly-view { display: none; padding: 14px; }
-        .readonly-view.active { display: block; }
-        .hidden { display: none !important; }
-        #selected-status-info { padding: 8px 12px; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface2); border-radius: var(--radius-sm); }
+        *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+        .app{max-width:550px;margin:0 auto;min-height:100vh;background:var(--bg)}
+        .app.wide{max-width:1300px}
+        .topbar{background:var(--accent);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+        .topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .topbar h1{font-size:16px;font-weight:600;color:#fff}
+        .topbar p{font-size:11px;color:rgba(255,255,255,.65);margin-top:1px}
+        .mode-btns{display:flex;gap:5px;flex-shrink:0;margin-left:auto}
+        .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
+        .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
+        .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto}
+        .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+        .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+        .screen{display:none;padding:16px}.screen.active{display:block}
+        input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,92,58,.1)}
+        .field{margin-bottom:14px}
+        .label{font-size:12px;color:var(--muted);margin-bottom:5px;display:block;font-weight:500}
+        .btn{padding:11px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+        .btn:active{transform:scale(.98)}
+        .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);width:100%;justify-content:center;padding:13px;font-size:15px}
+        .btn-primary:disabled{background:var(--muted);border-color:var(--muted);cursor:not-allowed}
+        .btn-danger{background:var(--danger-light);color:var(--danger);border-color:#f5c6c2}
+        .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0}
+        .search-wrap{display:flex;gap:8px;margin-bottom:16px}
+        .room-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+        .room-num{background:var(--accent-light);color:var(--accent);font-size:22px;font-weight:600;padding:6px 14px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;flex-shrink:0}
+        .room-num.e{background:var(--amber-light);color:var(--amber)}
+        .entries-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
+        .entry-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;width:max-content;max-width:100%;flex-shrink:0}
+        .entry-head{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
+        .entry-head:active{background:var(--surface2)}
+        .date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;flex-shrink:0}
+        .date-badge.e{background:var(--amber-light);color:var(--amber)}
+        .entry-meta{flex:1;min-width:0;overflow:hidden}
+        .entry-meta div{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .chevron{transition:transform .2s;flex-shrink:0}
+        .chevron.open{transform:rotate(90deg)}
+        .entry-body{display:none}.entry-body.open{display:block}
+        .photo-gallery{display:flex;flex-wrap:wrap;gap:10px;padding:10px 14px}
+        .photo-card{width:200px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;background:var(--surface2);display:flex;flex-direction:column;flex-shrink:0}
+        .photo-card-image{width:100%;height:140px;object-fit:cover;cursor:pointer;display:block}
+        .photo-card-body{padding:8px 10px}
+        .photo-card-desc{font-size:12px;color:var(--text);line-height:1.4;word-break:break-word}
+        .photo-card-desc.empty{color:var(--muted);font-style:italic}
+        .entry-footer{border-top:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface2);flex-wrap:wrap}
+        .link-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif}
+        .edit-btn{color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)}
+        .del-btn{color:var(--danger);border-color:#f5c6c2;background:var(--danger-light)}
+
+        /* DÜZENLEME PANELİ */
+        .edit-panel{display:none;padding:14px;border-top:1px solid var(--border);background:#fafaf8}
+        .edit-panel.open{display:block}
+        .edit-panel .e-label{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.4px}
+        .edit-panel textarea,.edit-panel input{font-size:13px;padding:8px 10px;margin-bottom:10px}
+        .edit-photo-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+        .edit-photo-row{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 8px}
+        .edit-photo-thumb{width:44px;height:44px;object-fit:cover;border-radius:5px;flex-shrink:0;cursor:pointer}
+        .edit-photo-input{flex:1;font-size:12px;padding:5px 8px;margin-bottom:0}
+        .edit-save-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;width:100%;justify-content:center}
+
+        .tag{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);cursor:pointer;color:var(--muted);background:var(--surface);transition:all .12s;font-family:'DM Sans',sans-serif}
+        .tag.on{background:var(--accent-light);color:var(--accent);border-color:var(--accent-mid)}
+        .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:99px;z-index:9999;display:none;white-space:nowrap;font-family:'DM Sans',sans-serif}
+        .toast.show{display:block}.toast.success{background:var(--accent)}.toast.error{background:var(--danger)}
+        .loader{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .elektra-top-stats{display:flex;gap:6px;padding:10px 12px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--border)}
+        .stat-badge{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 10px;border-radius:10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;transition:all .15s;border:2px solid transparent;min-width:58px;user-select:none}
+        .stat-badge.active-filter{border-color:rgba(255,255,255,0.9);box-shadow:0 0 0 3px rgba(255,255,255,0.3)}
+        .sb-dolu-temiz{background:#1565c0}.sb-dolu-kirli{background:#6a1a9a}.sb-cout{background:#2e7d32}
+        .sb-temiz{background:#4caf50;color:#000}.sb-kirli{background:#ff6d00}.sb-ooi{background:#880e4f}
+        .sb-ariza{background:#546e7a}.sb-onaylı{background:#4a148c}
+        .elektra-filter{display:flex;gap:8px;align-items:center;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+        .grid-container{padding:12px;overflow-x:auto}
+        .room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(55px,1fr));gap:0}
+        .room-cell{height:38px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;cursor:pointer;border:1px solid rgba(0,0,0,0.05);position:relative;background:var(--surface);color:var(--text);transition:transform 0.1s,filter 0.1s}
+        .room-cell:hover{transform:scale(1.06);z-index:2;filter:brightness(1.15)}
+        .room-flag{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#00e5ff}
+        .status-dolu-temiz{background:#1565c0;color:#fff}.status-dolu-kirli{background:#6a1a9a;color:#fff}
+        .status-cout{background:#2e7d32;color:#fff}.status-temiz{background:#4caf50;color:#fff}
+        .status-kirli{background:#ff6d00;color:#fff}.status-ooi{background:#880e4f;color:#fff}
+        .status-ariza{background:#546e7a;color:#fff}.status-onaylı{background:#4a148c;color:#fff}
+        .status-bos{background:#fff;color:#888;border:0.5px solid #ccc}
+        .panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500}
+        .panel-overlay.open{display:block}
+        .room-panel{position:fixed;top:0;left:0;bottom:0;width:100%;max-width:100%;background:var(--surface);z-index:1501;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s;overflow:hidden;box-shadow:-4px 0 20px rgba(0,0,0,0.15)}
+        .room-panel.open{transform:translateX(0)}
+        .panel-header{background:var(--accent);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+        .panel-header h2{font-size:15px;color:#fff}
+        .panel-room-badge{background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:6px;font-size:20px;font-weight:700;color:#fff;margin-right:10px}
+        .panel-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+        .panel-tabs{display:flex;border-bottom:1px solid var(--border)}
+        .ptab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif}
+        .ptab.active{color:var(--accent);border-bottom-color:var(--accent)}
+        .panel-body{flex:1;overflow-y:auto}
+        .tab-pane{display:none;padding:14px 16px}.tab-pane.active{display:block}
+        .elegant-form{background:var(--surface);border-radius:var(--radius);padding:16px}
+        .form-section{margin-bottom:14px}
+        .form-label{font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:600}
+        .form-input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif}
+        .form-divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+        .photo-btns{display:flex;gap:8px;margin-bottom:8px}
+        .photo-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px}
+        .photo-drop{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center;cursor:pointer;font-size:13px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px}
+        .save-btn-wrap{position:sticky;bottom:0;background:var(--surface);padding:12px 0 4px;margin-top:4px}
+        .save-btn-inner{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);width:100%;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+        .status-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+        .status-opt{padding:12px;border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer;text-align:center;font-size:13px;font-weight:600;transition:all .15s;font-family:'DM Sans',sans-serif}
+        .status-opt.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(0,0,0,0.25);transform:scale(1.02)}
+        .photo-preview-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+        .photo-preview-item{display:flex;flex-direction:column;gap:4px;align-items:center;width:90px;flex-shrink:0}
+        .photo-preview-img{width:80px;height:60px;border-radius:var(--radius-sm);object-fit:cover;border:1px solid var(--border)}
+        .photo-preview-desc{width:80px;font-size:10px;padding:2px 4px;border:1px solid var(--border);border-radius:3px;background:var(--surface);font-family:'DM Sans',sans-serif}
+        .photo-preview-del{font-size:9px;cursor:pointer;color:var(--danger);font-weight:600}
+        .progress-bar-wrap{height:4px;background:var(--surface2);border-radius:99px;margin-top:8px;display:none}
+        .progress-bar-wrap.show{display:block}
+        .progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+        .drop-zone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center;cursor:pointer;font-size:13px;color:var(--muted);margin-bottom:8px}
+        .drop-zone.over{border-color:var(--accent);background:var(--accent-light)}
+        .prev-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+        .prev-item{position:relative}
+        .prev-item img{width:60px;height:60px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border);display:block}
+        .prev-del{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700}
+        .all-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:8px;cursor:pointer}
+        .all-card:active{background:var(--surface2)}
+        .all-card-inner{display:flex;align-items:center;gap:10px}
+        .sel-btn{padding:7px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px}
+        .empty{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+        .tags-row{display:flex;flex-wrap:wrap;gap:6px}
+        .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;flex-direction:column}
+        .lightbox.open{display:flex}
+        .lb-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0}
+        .lb-lbl{color:rgba(255,255,255,.6);font-size:13px}
+        .lb-zoom-row{display:flex;align-items:center;gap:8px}
+        .lb-zoom-badge{color:rgba(255,255,255,.6);font-size:12px}
+        .lb-reset-btn{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:14px}
+        .lb-close{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:16px}
+        .lb-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+        .lb-img-wrap img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center}
+        .lb-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.4);font-size:12px;pointer-events:none}
+        .lb-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0}
+        .lb-btn{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif}
+        .lb-btn:disabled{opacity:.3}
+        .lb-counter{color:rgba(255,255,255,.6);font-size:13px}
+        .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9500;align-items:flex-end;justify-content:center}
+        .confirm-overlay.open{display:flex}
+        .confirm-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px 32px;width:100%;max-width:500px}
+        .confirm-sheet h3{font-size:16px;margin-bottom:8px}
+        .confirm-sheet p{font-size:14px;color:var(--muted);margin-bottom:16px}
+        .confirm-actions{display:flex;gap:8px}
+        .confirm-actions .btn{flex:1;justify-content:center}
+        .active-filter-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-mid);cursor:pointer}
+        .view-toggle{display:flex;gap:4px}
+        .view-btn{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+        .view-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .list-container{display:none;padding:12px}.list-container.active{display:block}
+        .readonly-view{display:none;padding:14px}.readonly-view.active{display:block}
+        .hidden{display:none!important}
+        #selected-status-info{padding:8px 12px;margin-bottom:12px;font-size:13px;font-weight:600;color:var(--muted);background:var(--surface2);border-radius:var(--radius-sm)}
+        .compress-info{font-size:11px;color:var(--accent);margin-top:4px}
     </style>
 </head>
 <body>
@@ -240,7 +231,7 @@
                 <div class="prev-row" id="prev-row"></div>
                 <div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
             </div>
-            <button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()"><span id="save-label">Kaydet</span></button>
+            <button class="btn btn-primary" id="save-btn" onclick="demirbasSaveEntry()">Kaydet</button>
         </div>
         <div class="screen" id="ds2">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
@@ -252,15 +243,15 @@
     </div>
 
     <div id="elektra-ui" style="display:none">
-        <div class="elektra-top-stats" id="estats">
-            <div class="stat-badge sb-dolu-temiz" id="sb-dolu-temiz" onclick="toggleStatFilter('dolu-temiz')"><span class="count" id="cnt-dt">0</span><span class="s-label">Dolu Temiz</span></div>
-            <div class="stat-badge sb-dolu-kirli" id="sb-dolu-kirli" onclick="toggleStatFilter('dolu-kirli')"><span class="count" id="cnt-dk">0</span><span class="s-label">Dolu Kirli</span></div>
-            <div class="stat-badge sb-cout" id="sb-cout" onclick="toggleStatFilter('cout')"><span class="count" id="cnt-co">0</span><span class="s-label">C/Out</span></div>
-            <div class="stat-badge sb-temiz" id="sb-temiz" onclick="toggleStatFilter('temiz')"><span class="count" id="cnt-t">0</span><span class="s-label">Temiz</span></div>
-            <div class="stat-badge sb-kirli" id="sb-kirli" onclick="toggleStatFilter('kirli')"><span class="count" id="cnt-k">0</span><span class="s-label">Kirli</span></div>
-            <div class="stat-badge sb-ooi" id="sb-ooi" onclick="toggleStatFilter('ooi')"><span class="count" id="cnt-ooi">0</span><span class="s-label">OOI</span></div>
-            <div class="stat-badge sb-ariza" id="sb-ariza" onclick="toggleStatFilter('ariza')"><span class="count" id="cnt-ar">0</span><span class="s-label">Arıza</span></div>
-            <div class="stat-badge sb-onaylı" id="sb-onaylı" onclick="toggleStatFilter('onaylı')"><span class="count" id="cnt-on">0</span><span class="s-label">Onaylı</span></div>
+        <div class="elektra-top-stats">
+            <div class="stat-badge sb-dolu-temiz" id="sb-dolu-temiz" onclick="toggleStatFilter('dolu-temiz')"><span id="cnt-dt">0</span><span>Dolu Temiz</span></div>
+            <div class="stat-badge sb-dolu-kirli" id="sb-dolu-kirli" onclick="toggleStatFilter('dolu-kirli')"><span id="cnt-dk">0</span><span>Dolu Kirli</span></div>
+            <div class="stat-badge sb-cout" id="sb-cout" onclick="toggleStatFilter('cout')"><span id="cnt-co">0</span><span>C/Out</span></div>
+            <div class="stat-badge sb-temiz" id="sb-temiz" onclick="toggleStatFilter('temiz')"><span id="cnt-t">0</span><span>Temiz</span></div>
+            <div class="stat-badge sb-kirli" id="sb-kirli" onclick="toggleStatFilter('kirli')"><span id="cnt-k">0</span><span>Kirli</span></div>
+            <div class="stat-badge sb-ooi" id="sb-ooi" onclick="toggleStatFilter('ooi')"><span id="cnt-ooi">0</span><span>OOI</span></div>
+            <div class="stat-badge sb-ariza" id="sb-ariza" onclick="toggleStatFilter('ariza')"><span id="cnt-ar">0</span><span>Arıza</span></div>
+            <div class="stat-badge sb-onaylı" id="sb-onaylı" onclick="toggleStatFilter('onaylı')"><span id="cnt-on">0</span><span>Onaylı</span></div>
         </div>
         <div class="elektra-filter">
             <input type="text" id="esearch-room" placeholder="Oda ara..." oninput="renderElektraView()" style="width:110px">
@@ -275,7 +266,6 @@
         <div class="readonly-view" id="ereadonly-view"></div>
     </div>
 
-    <!-- ELEKTRA ODA PANELİ -->
     <div class="panel-overlay" id="epanel-overlay" onclick="if(event.target===this)closeElektraPanel()"></div>
     <div class="room-panel" id="eroom-panel">
         <div class="panel-header">
@@ -291,26 +281,11 @@
             <button class="ptab" id="eptab-durum" onclick="switchElektraPanelTab('durum')">🏠 Oda Durumu</button>
         </div>
         <div class="panel-body">
-            <div class="tab-pane active" id="epane-kayitlar">
-                <div id="eentries-list"></div>
-            </div>
+            <div class="tab-pane active" id="epane-kayitlar"><div id="eentries-list"></div></div>
             <div class="tab-pane" id="epane-ekle">
                 <div class="elegant-form">
-                    <div class="form-section">
-                        <div class="form-label">Tarih</div>
-                        <input type="date" id="ef-date" class="form-input">
-                    </div>
-                    <div class="form-section">
-                        <div class="form-label">Not</div>
-                        <textarea id="ef-note" class="form-input" rows="2" placeholder="Açıklama..."></textarea>
-                    </div>
-                    <div class="form-section">
-                        <div class="form-label">İşlem Türü</div>
-                        <select id="ef-type" class="form-input">
-                            <option value="giris">Giriş</option>
-                            <option value="cikis">Çıkış</option>
-                        </select>
-                    </div>
+                    <div class="form-section"><div class="form-label">Tarih</div><input type="date" id="ef-date" class="form-input"></div>
+                    <div class="form-section"><div class="form-label">Açıklama / Not</div><textarea id="ef-note" class="form-input" rows="2" placeholder="Açıklama..."></textarea></div>
                     <hr class="form-divider">
                     <div class="form-section">
                         <div class="form-label">📷 Fotoğraflar (açıklama girebilirsiniz)</div>
@@ -325,9 +300,7 @@
                         <div class="photo-preview-wrap" id="eprev-wrap" style="margin-top:10px"></div>
                         <div class="progress-bar-wrap" id="eprogress-wrap"><div class="progress-bar" id="eprogress-bar"></div></div>
                     </div>
-                    <div class="save-btn-wrap">
-                        <button class="save-btn-inner" id="esave-btn" onclick="elektraSaveEntry()">Kaydet</button>
-                    </div>
+                    <div class="save-btn-wrap"><button class="save-btn-inner" id="esave-btn" onclick="elektraSaveEntry()">Kaydet</button></div>
                 </div>
             </div>
             <div class="tab-pane" id="epane-durum">
@@ -350,287 +323,168 @@
     </div>
 </div>
 
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lb">
-    <div class="lb-topbar">
-        <span class="lb-lbl" id="lb-lbl"></span>
-        <div class="lb-zoom-row">
-            <span class="lb-zoom-badge" id="lb-zoom-badge">%100</span>
-            <button class="lb-reset-btn" onclick="lbResetZoom()">↺</button>
-            <button class="lb-close" onclick="closeLb()">✕</button>
-        </div>
-    </div>
-    <div class="lb-img-wrap" id="lb-img-wrap">
-        <img id="lb-img" src="" alt="">
-        <div class="lb-hint" id="lb-hint">Çift dokun / kaydır → yakınlaştır</div>
-    </div>
-    <div class="lb-nav">
-        <button class="lb-btn" id="lb-prev" onclick="lbMove(-1)">← Önceki</button>
-        <span class="lb-counter" id="lb-counter"></span>
-        <button class="lb-btn" id="lb-next" onclick="lbMove(1)">Sonraki →</button>
-    </div>
+    <div class="lb-topbar"><span class="lb-lbl" id="lb-lbl"></span><div class="lb-zoom-row"><span class="lb-zoom-badge" id="lb-zoom-badge">%100</span><button class="lb-reset-btn" onclick="lbResetZoom()">↺</button><button class="lb-close" onclick="closeLb()">✕</button></div></div>
+    <div class="lb-img-wrap" id="lb-img-wrap"><img id="lb-img" src="" alt=""><div class="lb-hint">Çift dokun / kaydır → yakınlaştır</div></div>
+    <div class="lb-nav"><button class="lb-btn" id="lb-prev" onclick="lbMove(-1)">← Önceki</button><span class="lb-counter" id="lb-counter"></span><button class="lb-btn" id="lb-next" onclick="lbMove(1)">Sonraki →</button></div>
 </div>
-
 <div class="confirm-overlay" id="confirm-overlay" onclick="if(event.target===this)closeConfirm()">
-    <div class="confirm-sheet">
-        <h3 id="confirm-title">Emin misiniz?</h3>
-        <p id="confirm-msg"></p>
-        <div class="confirm-actions">
-            <button class="btn" onclick="closeConfirm()">İptal</button>
-            <button class="btn btn-danger" id="confirm-ok">Sil</button>
-        </div>
-    </div>
+    <div class="confirm-sheet"><h3 id="confirm-title">Emin misiniz?</h3><p id="confirm-msg"></p>
+    <div class="confirm-actions"><button class="btn" onclick="closeConfirm()">İptal</button><button class="btn btn-danger" id="confirm-ok">Sil</button></div></div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-// ─── SABITLER ───────────────────────────────────────────────────────────────
-const SB  = 'https://tpfdsmexywjnsbkfphwq.supabase.co';
-const KEY = 'sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
-const BUCKETS = { demirbaş: 'photos', elektrik: 'meters' };
-const CMAX = 1600, CQ = 0.82;
-const FLOORS = Array.from({length:15}, (_,i) => ({label:(i+1)+'. Kat', prefix:i+1, rooms:18}));
+const SB='https://tpfdsmexywjnsbkfphwq.supabase.co';
+const KEY='sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
+const BUCKETS={demirbaş:'photos',elektrik:'meters'};
+const CMAX=1600,CQ=0.82;
+const FLOORS=Array.from({length:15},(_,i)=>({label:(i+1)+'. Kat',prefix:i+1,rooms:18}));
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
-let roomStatusCache = {}, roomStatusLoaded = false, activeStatFilter = null;
-let mode = 'demirbaş', demirbasTab = 0, demirbasSearchTab = 'room', demirbasPending = [];
-let elektraView = 'grid', elektraCurrentRoom = null, elektraPending = [],
-    elektraCurrentEntries = [], elektraAllData = [], roomsWithEntries = new Set();
-let lbImages = [], lbIndex = 0, confirmCb = null;
+let roomStatusCache={},activeStatFilter=null;
+let mode='demirbaş',demirbasTab=0,demirbasSearchTab='room',demirbasPending=[];
+let elektraView='grid',elektraCurrentRoom=null,elektraPending=[],
+    elektraCurrentEntries=[],elektraAllData=[],roomsWithEntries=new Set();
+let lbImages=[],lbIndex=0,confirmCb=null;
 
-// ─── YARDIMCILAR ─────────────────────────────────────────────────────────────
-function q(id) { return document.getElementById(id); }
-function today() { return new Date().toISOString().slice(0,10); }
-function fmtDate(iso) {
-    if (!iso) return '';
-    const [y,m,d] = iso.split('-');
-    const a = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
-    return parseInt(d)+' '+a[parseInt(m)-1]+' '+y;
-}
-function fmtShort(iso) {
-    if (!iso) return '';
-    const [y,m,d] = iso.split('-');
-    const a = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
-    return parseInt(d)+' '+a[parseInt(m)-1]+' '+y.slice(2);
-}
-async function api(path, opts = {}) {
-    return fetch(SB + path, {
-        ...opts,
-        headers: {
-            'apikey': KEY,
-            'Authorization': 'Bearer ' + KEY,
-            'Content-Type': 'application/json',
-            ...(opts.headers || {})
-        }
-    });
-}
-function showToast(msg, type = 'success') {
-    const t = q('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2500);
-}
-function openConfirm(title, msg, cb) {
-    q('confirm-title').textContent = title;
-    q('confirm-msg').textContent = msg;
-    confirmCb = cb;
-    q('confirm-overlay').classList.add('open');
-}
-function closeConfirm() { q('confirm-overlay').classList.remove('open'); confirmCb = null; }
-q('confirm-ok').addEventListener('click', () => { if (confirmCb) confirmCb(); closeConfirm(); });
-function genToken() {
-    return Array.from(crypto.getRandomValues(new Uint8Array(12)))
-        .map(b => b.toString(36).padStart(2,'0')).join('').slice(0,16);
-}
+function q(id){return document.getElementById(id)}
+function today(){return new Date().toISOString().slice(0,10)}
+function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const a=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return parseInt(d)+' '+a[parseInt(m)-1]+' '+y}
+function fmtShort(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const a=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return parseInt(d)+' '+a[parseInt(m)-1]+' '+y.slice(2)}
 
-// ─── GÖRSEL SIKIŞTIRMA & YÜKLEME ─────────────────────────────────────────────
-async function compressImage(file) {
-    return new Promise(resolve => {
-        const img = new Image(), url = URL.createObjectURL(file);
-        img.onload = () => {
-            let w = img.width, h = img.height;
-            const orig = file.size;
-            if (w <= CMAX && h <= CMAX && orig < 512000) {
-                URL.revokeObjectURL(url);
-                resolve({file, compressed:false, origSize:orig, newSize:orig});
-                return;
-            }
-            if (w > h) { if (w > CMAX) { h = Math.round(h*CMAX/w); w = CMAX; } }
-            else        { if (h > CMAX) { w = Math.round(w*CMAX/h); h = CMAX; } }
-            const c = document.createElement('canvas');
-            c.width = w; c.height = h;
-            c.getContext('2d').drawImage(img, 0, 0, w, h);
+async function api(path,opts={}){
+    return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}});
+}
+function showToast(msg,type='success'){const t=q('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',2500)}
+function openConfirm(title,msg,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;confirmCb=cb;q('confirm-overlay').classList.add('open')}
+function closeConfirm(){q('confirm-overlay').classList.remove('open');confirmCb=null}
+q('confirm-ok').addEventListener('click',()=>{if(confirmCb)confirmCb();closeConfirm()});
+function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16)}
+
+async function compressImage(file){
+    return new Promise(resolve=>{
+        const img=new Image(),url=URL.createObjectURL(file);
+        img.onload=()=>{
+            let w=img.width,h=img.height;const orig=file.size;
+            if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return}
+            if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX}}
+            const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
             URL.revokeObjectURL(url);
-            c.toBlob(b => {
-                resolve({
-                    file: new File([b], file.name.replace(/\.[^.]+$/,'.jpg'), {type:'image/jpeg'}),
-                    compressed: true, origSize: orig, newSize: b.size
-                });
-            }, 'image/jpeg', CQ);
-        };
-        img.src = url;
+            c.toBlob(b=>{resolve({file:new File([b],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:b.size})},'image/jpeg',CQ);
+        };img.src=url;
     });
 }
-async function uploadImg(file, roomNo, bucket) {
-    const ext = file.name.split('.').pop();
-    const path = `${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const r = await fetch(`${SB}/storage/v1/object/${bucket}/${path}`, {
-        method: 'POST',
-        headers: {'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},
-        body: file
-    });
-    if (!r.ok) throw new Error('Yükleme başarısız');
-    return `${SB}/storage/v1/object/public/${bucket}/${path}`;
+async function uploadImg(file,roomNo,bucket){
+    const ext=file.name.split('.').pop();
+    const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});
+    if(!r.ok)throw new Error('Yükleme başarısız');
+    return`${SB}/storage/v1/object/public/${bucket}/${path}`;
 }
 
-// ─── BAĞLANTI KONTROLÜ ───────────────────────────────────────────────────────
-async function checkConn() {
-    try {
-        const r = await api('/rest/v1/entries?select=id&limit=1');
-        if (r.ok) {
-            q('topbar-sub').textContent = 'Bağlantı aktif';
-        } else throw 0;
-    } catch {
-        q('topbar-sub').textContent = 'Bağlantı yok';
-    }
+async function checkConn(){
+    try{const r=await api('/rest/v1/entries?select=id&limit=1');q('topbar-sub').textContent=r.ok?'Bağlantı aktif':'Bağlantı yok'}
+    catch{q('topbar-sub').textContent='Bağlantı yok'}
 }
 
-// ─── FOTO VERİSİ YARDIMCISI ──────────────────────────────────────────────────
-function getPhotoData(entry) {
-    if (entry.photo_data && Array.isArray(entry.photo_data)) return entry.photo_data;
-    if (entry.photo_urls && Array.isArray(entry.photo_urls)) {
-        return entry.photo_urls.map(url => ({url, desc:''}));
-    }
-    return [];
+function getPhotoData(entry){
+    if(entry.photo_data&&Array.isArray(entry.photo_data))return entry.photo_data;
+    if(entry.photo_urls&&Array.isArray(entry.photo_urls))return entry.photo_urls.map(url=>({url,desc:''}));
+    return[];
 }
 
 // ─── ODA DURUMLARI ───────────────────────────────────────────────────────────
-async function loadRoomStatuses() {
-    try {
-        const r = await api('/rest/v1/rooms?select=room_no,status');
-        if (!r.ok) return;
-        const data = await r.json();
-        roomStatusCache = {};
-        data.forEach(row => { roomStatusCache[String(row.room_no)] = row.status || 'bos'; });
-        roomStatusLoaded = true;
-    } catch(e) { console.warn(e); }
+async function loadRoomStatuses(){
+    try{const r=await api('/rest/v1/rooms?select=room_no,status');if(!r.ok)return;
+    const data=await r.json();roomStatusCache={};data.forEach(row=>{roomStatusCache[String(row.room_no)]=row.status||'bos'})}
+    catch(e){console.warn(e)}
 }
-function getRoomStatus(roomNo) { return roomStatusCache[String(roomNo)] || 'bos'; }
-async function saveRoomStatusToDB(roomNo, status) {
-    roomStatusCache[String(roomNo)] = status;
-    try {
-        await api('/rest/v1/rooms', {
-            method: 'POST',
-            headers: {'Prefer':'resolution=merge-duplicates,return=minimal'},
-            body: JSON.stringify({room_no: String(roomNo), status})
-        });
-    } catch(e) { showToast('Durum kaydedilemedi','error'); }
+function getRoomStatus(roomNo){return roomStatusCache[String(roomNo)]||'bos'}
+async function saveRoomStatusToDB(roomNo,status){
+    roomStatusCache[String(roomNo)]=status;
+    try{await api('/rest/v1/rooms',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({room_no:String(roomNo),status})})}
+    catch(e){showToast('Durum kaydedilemedi','error')}
 }
 
 // ─── STAT FİLTRE ─────────────────────────────────────────────────────────────
-function toggleStatFilter(status) {
-    activeStatFilter = activeStatFilter === status ? null : status;
-    document.querySelectorAll('.stat-badge').forEach(el => el.classList.remove('active-filter'));
-    if (activeStatFilter) { const el = q('sb-'+activeStatFilter); if (el) el.classList.add('active-filter'); }
-    updateActiveFilterDisplay();
-    renderElektraView();
+function toggleStatFilter(status){
+    activeStatFilter=activeStatFilter===status?null:status;
+    document.querySelectorAll('.stat-badge').forEach(el=>el.classList.remove('active-filter'));
+    if(activeStatFilter){const el=q('sb-'+activeStatFilter);if(el)el.classList.add('active-filter')}
+    updateActiveFilterDisplay();renderElektraView();
 }
-function updateActiveFilterDisplay() {
-    const wrap = q('active-filter-display');
-    if (!activeStatFilter) { wrap.innerHTML = ''; return; }
-    const labels = {'dolu-temiz':'Dolu Temiz','dolu-kirli':'Dolu Kirli','cout':'C/Out','temiz':'Temiz','kirli':'Kirli','ooi':'OOI','ariza':'Arıza','onaylı':'Onaylı','bos':'Boş'};
-    wrap.innerHTML = `<span class="active-filter-chip" onclick="toggleStatFilter('${activeStatFilter}')">${labels[activeStatFilter]||activeStatFilter} ×</span>`;
+function updateActiveFilterDisplay(){
+    const wrap=q('active-filter-display');if(!activeStatFilter){wrap.innerHTML='';return}
+    const labels={'dolu-temiz':'Dolu Temiz','dolu-kirli':'Dolu Kirli','cout':'C/Out','temiz':'Temiz','kirli':'Kirli','ooi':'OOI','ariza':'Arıza','onaylı':'Onaylı','bos':'Boş'};
+    wrap.innerHTML=`<span class="active-filter-chip" onclick="toggleStatFilter('${activeStatFilter}')">${labels[activeStatFilter]||activeStatFilter} ×</span>`;
 }
 
 // ─── LİGHTBOX ────────────────────────────────────────────────────────────────
-const LB = {scale:1, minScale:1, maxScale:5, translateX:0, translateY:0};
-function lbApply() {
-    const img = q('lb-img');
-    img.style.transform = `translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;
-    q('lb-zoom-badge').textContent = Math.round(LB.scale*100)+'%';
+const LB={scale:1,translateX:0,translateY:0};
+function lbApply(){const img=q('lb-img');img.style.transform=`translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;q('lb-zoom-badge').textContent=Math.round(LB.scale*100)+'%'}
+function lbResetZoom(){LB.scale=1;LB.translateX=0;LB.translateY=0;lbApply()}
+function openLb(urls,idx){
+    let arr=urls;if(typeof urls==='string'){try{arr=JSON.parse(urls)}catch(e){arr=[urls]}}
+    lbImages=arr;lbIndex=idx;q('lb-img').src=lbImages[lbIndex];
+    q('lb-lbl').textContent=`${lbIndex+1}/${lbImages.length}`;q('lb-counter').textContent=`${lbIndex+1}/${lbImages.length}`;
+    q('lb-prev').disabled=lbIndex===0;q('lb-next').disabled=lbIndex===lbImages.length-1;
+    lbResetZoom();q('lb').classList.add('open');
 }
-function lbResetZoom() { LB.scale=1; LB.translateX=0; LB.translateY=0; lbApply(); }
-function openLb(urls, idx) {
-    let arr = urls;
-    if (typeof urls === 'string') { try { arr = JSON.parse(urls); } catch(e) { arr = [urls]; } }
-    lbImages = arr; lbIndex = idx;
-    q('lb-img').src = lbImages[lbIndex];
-    q('lb-lbl').textContent = `${lbIndex+1}/${lbImages.length}`;
-    q('lb-counter').textContent = `${lbIndex+1}/${lbImages.length}`;
-    q('lb-prev').disabled = lbIndex === 0;
-    q('lb-next').disabled = lbIndex === lbImages.length - 1;
-    lbResetZoom();
-    q('lb').classList.add('open');
-}
-function closeLb() { q('lb').classList.remove('open'); }
-function lbMove(d) { lbIndex = Math.max(0, Math.min(lbImages.length-1, lbIndex+d)); openLb(lbImages, lbIndex); }
+function closeLb(){q('lb').classList.remove('open')}
+function lbMove(d){lbIndex=Math.max(0,Math.min(lbImages.length-1,lbIndex+d));openLb(lbImages,lbIndex)}
 
-// ─── MOD DEĞİŞTİR ────────────────────────────────────────────────────────────
-function setMode(m) {
-    mode = m;
-    localStorage.setItem('activeMode', m);
-    const isD = m === 'demirbaş';
-    q('mode-d').classList.toggle('active', isD);
-    q('mode-e').classList.toggle('active', !isD);
-    q('demirbas-ui').style.display = isD ? '' : 'none';
-    q('elektra-ui').style.display  = isD ? 'none' : '';
-    q('app').classList.toggle('wide', !isD);
-    q('topbar-title').textContent = isD ? 'Demirbaş Takibi' : '⚡ ELEKTRA SAYAÇ PANELİ';
-    if (isD) { if (!window._demInit) { initDemirbas(); window._demInit = true; } }
-    else     { if (!window._eleInit) { initElektra();  window._eleInit = true; } else renderElektraView(); }
+// ─── MOD ─────────────────────────────────────────────────────────────────────
+function setMode(m){
+    mode=m;localStorage.setItem('activeMode',m);const isD=m==='demirbaş';
+    q('mode-d').classList.toggle('active',isD);q('mode-e').classList.toggle('active',!isD);
+    q('demirbas-ui').style.display=isD?'':'none';q('elektra-ui').style.display=isD?'none':'';
+    q('app').classList.toggle('wide',!isD);
+    q('topbar-title').textContent=isD?'Demirbaş Takibi':'⚡ ELEKTRA SAYAÇ PANELİ';
+    if(isD){if(!window._demInit){initDemirbas();window._demInit=true}}
+    else{if(!window._eleInit){initElektra();window._eleInit=true}else renderElektraView()}
 }
 
 // ─── DEMİRBAŞ ────────────────────────────────────────────────────────────────
-function initDemirbas() { q('f-date').value = today(); checkConn(); goDemirbasTab(0); }
-
-function goDemirbasTab(i) {
-    demirbasTab = i;
-    document.querySelectorAll('#main-nav .nav-btn').forEach((b,j) => b.classList.toggle('active', j===i));
-    document.querySelectorAll('#demirbas-ui .screen').forEach((s,j) => s.classList.toggle('active', j===i));
-    if (i === 2) demirbasLoadAll();
+function initDemirbas(){q('f-date').value=today();checkConn();goDemirbasTab(0)}
+function goDemirbasTab(i){
+    demirbasTab=i;
+    document.querySelectorAll('#main-nav .nav-btn').forEach((b,j)=>b.classList.toggle('active',j===i));
+    document.querySelectorAll('#demirbas-ui .screen').forEach((s,j)=>s.classList.toggle('active',j===i));
+    if(i===2)demirbasLoadAll();
 }
-
-function setDemirbasSearchTab(t) {
-    demirbasSearchTab = t;
-    const isR = t === 'room';
-    q('stab-room-content').style.display = isR ? 'block' : 'none';
-    q('stab-date-content').style.display = isR ? 'none'  : 'block';
-    const onStyle  = 'flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)';
-    const offStyle = 'flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)';
-    q('stab-room').style.cssText = isR ? onStyle : offStyle;
-    q('stab-date').style.cssText = isR ? offStyle : onStyle;
+function setDemirbasSearchTab(t){
+    demirbasSearchTab=t;const isR=t==='room';
+    q('stab-room-content').style.display=isR?'block':'none';q('stab-date-content').style.display=isR?'none':'block';
+    const on='flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent)';
+    const off='flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted)';
+    q('stab-room').style.cssText=isR?on:off;q('stab-date').style.cssText=isR?off:on;
 }
-
-async function demirbasSearch() {
-    const val = q('dsinput').value.trim();
-    if (!val) return;
-    q('dsresult').innerHTML = '<div class="empty">Aranıyor...</div>';
-    try {
-        const data = await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`).then(r=>r.json());
-        if (!data.length) { q('dsresult').innerHTML = '<div class="empty">Kayıt yok</div>'; return; }
-        let html = `<div class="room-header"><div class="room-num">${val}</div><div class="room-summary"><strong>Oda ${val}</strong><span>${data.length} kayıt</span></div></div>`;
-        const g = {};
-        data.forEach(e => { const k = e.checkin_date; if (!g[k]) g[k]=[]; g[k].push(e); });
-        Object.keys(g).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk => {
-            html += `<div style="margin:15px 0 8px;font-size:13px;font-weight:600;color:var(--muted)">${fmtDate(dk)}</div>`;
-            g[dk].forEach(e => html += buildDemirbasCard(e));
+async function demirbasSearch(){
+    const val=q('dsinput').value.trim();if(!val)return;
+    q('dsresult').innerHTML='<div class="empty">Aranıyor...</div>';
+    try{
+        const data=await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`).then(r=>r.json());
+        if(!data.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}
+        let html=`<div class="room-header"><div class="room-num">${val}</div><div><strong>Oda ${val}</strong> · ${data.length} kayıt</div></div>`;
+        const g={};data.forEach(e=>{if(!g[e.checkin_date])g[e.checkin_date]=[];g[e.checkin_date].push(e)});
+        Object.keys(g).sort((a,b)=>new Date(b)-new Date(a)).forEach(dk=>{
+            html+=`<div style="margin:15px 0 8px;font-size:13px;font-weight:600;color:var(--muted)">${fmtDate(dk)}</div>`;
+            g[dk].forEach(e=>html+=buildDemirbasCard(e));
         });
-        q('dsresult').innerHTML = html;
-    } catch(e) { q('dsresult').innerHTML = '<div class="empty">Hata</div>'; }
+        q('dsresult').innerHTML=html;
+    }catch(e){q('dsresult').innerHTML='<div class="empty">Hata</div>'}
 }
-
-function buildDemirbasCard(entry) {
-    const urls = entry.photo_urls||[], cats = (entry.category||'').split(',').filter(Boolean);
-    const ps = JSON.stringify(urls).replace(/"/g,'&quot;');
-    const thumbs = urls.map((u,i)=>`<div class="prev-item" style="flex-shrink:0"><img src="${u}" loading="lazy" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="openLb('${ps}',${i})"></div>`).join('');
-    return `<div class="entry-card">
+function buildDemirbasCard(entry){
+    const urls=entry.photo_urls||[],cats=(entry.category||'').split(',').filter(Boolean);
+    const ps=JSON.stringify(urls).replace(/"/g,'&quot;');
+    const thumbs=urls.map((u,i)=>`<div class="prev-item" style="flex-shrink:0"><img src="${u}" loading="lazy" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="openLb('${ps}',${i})"></div>`).join('');
+    return`<div class="entry-card">
         <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')">
             <div class="date-badge">${fmtDate(entry.checkin_date)}</div>
             <div class="entry-meta">${cats.length?`<div>${cats.join(' · ')}</div>`:''}${entry.note?`<div>${entry.note}</div>`:''}</div>
-            <span class="entry-count">${urls.length} foto</span>
+            <span style="font-size:11px;color:var(--muted);background:var(--surface2);border-radius:99px;padding:3px 8px">${urls.length} foto</span>
             <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
         </div>
         <div class="entry-body">
@@ -640,321 +494,165 @@ function buildDemirbasCard(entry) {
                 <div style="display:flex;gap:6px">
                     <button class="link-btn wa-btn" onclick="window.open('https://web.whatsapp.com/','_blank')">WhatsApp</button>
                     <button class="link-btn" onclick="createEntryLink('${entry.room_no}','${entry.checkin_date}','demirbaş',this,'${entry.id}')">Link</button>
-                    <button class="btn btn-danger" style="padding:6px 12px;font-size:12px" onclick="demirbasDeleteEntry('${entry.id}')">Sil</button>
+                    <button class="link-btn del-btn" onclick="demirbasDeleteEntry('${entry.id}')">🗑️ Sil</button>
                 </div>
             </div>
         </div>
     </div>`;
 }
-
-async function demirbasAddFiles(files) {
-    const se = q('compress-status');
-    se.innerHTML = '';
-    let to=0, tn=0, cc=0;
-    for (const f of files) {
-        const r = await compressImage(f);
-        demirbasPending.push({file:r.file, url:URL.createObjectURL(r.file)});
-        to += r.origSize; tn += r.newSize;
-        if (r.compressed) cc++;
-    }
-    demirbasRenderPrev();
-    if (cc > 0) se.innerHTML = `<div class="compress-info">${cc} foto sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü</div>`;
+async function demirbasAddFiles(files){
+    const se=q('compress-status');se.innerHTML='';let to=0,tn=0,cc=0;
+    for(const f of files){const r=await compressImage(f);demirbasPending.push({file:r.file,url:URL.createObjectURL(r.file)});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++}
+    demirbasRenderPrev();if(cc>0)se.innerHTML=`<div class="compress-info">${cc} foto sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü</div>`;
 }
-
-function demirbasRenderPrev() {
-    q('prev-row').innerHTML = demirbasPending.map((p,i) =>
-        `<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="demirbasPending.splice(${i},1);demirbasRenderPrev()">✕</div></div>`
-    ).join('');
+function demirbasRenderPrev(){
+    q('prev-row').innerHTML=demirbasPending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="demirbasPending.splice(${i},1);demirbasRenderPrev()">✕</div></div>`).join('');
 }
-
-async function demirbasSaveEntry() {
-    const room = q('f-room').value.trim(), date = q('f-date').value,
-          note = q('f-note').value.trim(), donem = q('f-donem').value;
-    if (!room || !date || !demirbasPending.length) { showToast('Eksik bilgi','error'); return; }
-    const btn = q('save-btn'); btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span>';
-    const pw = q('progress-wrap'), pb = q('progress-bar');
-    pw.classList.add('show'); pb.style.width = '0%';
-    try {
-        const tags = [...document.querySelectorAll('#f-tags .tag.on')].map(t=>t.textContent).join(',');
-        const urls = [];
-        for (let i = 0; i < demirbasPending.length; i++) {
-            urls.push(await uploadImg(demirbasPending[i].file, room, BUCKETS.demirbaş));
-            pb.style.width = Math.round((i+1)/demirbasPending.length*100)+'%';
-        }
-        await api('/rest/v1/entries', {
-            method: 'POST',
-            body: JSON.stringify({room_no:room, mode:'demirbaş', checkin_date:date, category:tags, note, photo_urls:urls, donem})
-        });
+async function demirbasSaveEntry(){
+    const room=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim(),donem=q('f-donem').value;
+    if(!room||!date||!demirbasPending.length){showToast('Eksik bilgi','error');return}
+    const btn=q('save-btn');btn.disabled=true;btn.innerHTML='<span class="loader"></span>';
+    const pw=q('progress-wrap'),pb=q('progress-bar');pw.classList.add('show');pb.style.width='0%';
+    try{
+        const tags=[...document.querySelectorAll('#f-tags .tag.on')].map(t=>t.textContent).join(',');
+        const urls=[];
+        for(let i=0;i<demirbasPending.length;i++){urls.push(await uploadImg(demirbasPending[i].file,room,BUCKETS.demirbaş));pb.style.width=Math.round((i+1)/demirbasPending.length*100)+'%'}
+        // Sadece bilinen kolonları gönder
+        await api('/rest/v1/entries',{method:'POST',body:JSON.stringify({room_no:room,mode:'demirbaş',checkin_date:date,category:tags,note,photo_urls:urls,donem})});
         showToast('Kayıt oluşturuldu');
-        demirbasPending = [];
-        q('f-room').value=''; q('f-note').value=''; q('prev-row').innerHTML='';
-        q('compress-status').innerHTML=''; q('f-donem').value='';
+        demirbasPending=[];q('f-room').value='';q('f-note').value='';q('prev-row').innerHTML='';q('compress-status').innerHTML='';q('f-donem').value='';
         document.querySelectorAll('#f-tags .tag.on').forEach(t=>t.classList.remove('on'));
-    } catch(e) { showToast('Hata: '+e.message,'error'); }
-    finally { btn.disabled=false; btn.innerHTML='<span id="save-label">Kaydet</span>'; pw.classList.remove('show'); }
+    }catch(e){showToast('Hata: '+e.message,'error')}
+    finally{btn.disabled=false;btn.innerHTML='Kaydet';pw.classList.remove('show')}
 }
-
-async function demirbasLoadAll() {
-    const el = q('rlist');
-    el.innerHTML = '<div class="empty">Yükleniyor...</div>';
-    try {
-        const data = await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls&mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());
-        if (!data.length) { el.innerHTML = '<div class="empty">Kayıt yok</div>'; return; }
-        const gr = {};
-        data.forEach(e => { if (!gr[e.room_no]) gr[e.room_no]=[]; gr[e.room_no].push(e); });
-        const rooms = Object.keys(gr).sort((a,b) => parseInt(a)-parseInt(b));
-        el.innerHTML = rooms.map(rno => {
-            const e = gr[rno][0], cover = (e.photo_urls||[])[0];
-            return `<div class="all-card" onclick="q('dsinput').value='${rno}';goDemirbasTab(0);demirbasSearch()"><div class="all-card-inner">${cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">`:'<div style="width:56px;height:56px;background:var(--surface2);border-radius:8px"></div>'}<div><strong>Oda ${rno}</strong><div style="font-size:12px;color:var(--muted)">${gr[rno].length} kayıt</div></div></div></div>`;
+async function demirbasLoadAll(){
+    const el=q('rlist');el.innerHTML='<div class="empty">Yükleniyor...</div>';
+    try{
+        const data=await api(`/rest/v1/entries?select=room_no,checkin_date,category,photo_urls&mode=eq.demirbaş&order=room_no.asc,checkin_date.desc`).then(r=>r.json());
+        if(!data.length){el.innerHTML='<div class="empty">Kayıt yok</div>';return}
+        const gr={};data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});
+        const rooms=Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b));
+        el.innerHTML=rooms.map(rno=>{const e=gr[rno][0],cover=(e.photo_urls||[])[0];
+            return`<div class="all-card" onclick="q('dsinput').value='${rno}';goDemirbasTab(0);demirbasSearch()"><div class="all-card-inner">${cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">`:'<div style="width:56px;height:56px;background:var(--surface2);border-radius:8px"></div>'}<div><strong>Oda ${rno}</strong><div style="font-size:12px;color:var(--muted)">${gr[rno].length} kayıt</div></div></div></div>`;
         }).join('');
-    } catch(e) { el.innerHTML = '<div class="empty">Hata</div>'; }
+    }catch(e){el.innerHTML='<div class="empty">Hata</div>'}
+}
+async function demirbasDeleteEntry(id){openConfirm('Sil','Bu kayıt silinecek.',async()=>{await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});showToast('Silindi');demirbasSearch()})}
+async function demirbasDateSearch(){
+    const f=q('d-from').value,t=q('d-to').value;if(!f||!t)return;
+    q('dsresult').innerHTML='<div class="empty">Aranıyor...</div>';
+    try{
+        const data=await api(`/rest/v1/entries?checkin_date=gte.${f}&checkin_date=lte.${t}&mode=eq.demirbaş&order=checkin_date.desc,room_no.asc`).then(r=>r.json());
+        if(!data.length){q('dsresult').innerHTML='<div class="empty">Kayıt yok</div>';return}
+        const gr={};data.forEach(e=>{if(!gr[e.room_no])gr[e.room_no]=[];gr[e.room_no].push(e)});
+        let html=`<div class="room-header"><div class="room-num">${Object.keys(gr).length} oda</div><div><strong>${fmtDate(f)} – ${fmtDate(t)}</strong> · ${data.length} kayıt</div></div>`;
+        Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(rno=>{html+=`<div style="margin-top:12px;font-weight:600">Oda ${rno}</div>`;gr[rno].forEach(e=>html+=buildDemirbasCard(e))});
+        q('dsresult').innerHTML=html;
+    }catch(e){q('dsresult').innerHTML='<div class="empty">Hata</div>'}
 }
 
-async function demirbasDeleteEntry(id) {
-    openConfirm('Sil','Bu kayıt silinecek.',async()=>{
-        await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
-        showToast('Silindi');
-        demirbasSearch();
+// ─── ELEKTRİK ────────────────────────────────────────────────────────────────
+function allRoomNos(){const a=[];FLOORS.forEach(f=>{for(let i=1;i<=f.rooms;i++)a.push(f.prefix*100+i)});return a}
+async function initElektra(){
+    q('egrid-container').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Yükleniyor...</div>';
+    await loadRoomStatuses();await loadElektraRoomsWithEntries();updateElektraStats();renderElektraView();
+}
+function updateElektraStats(){
+    const c={};allRoomNos().forEach(n=>{const s=getRoomStatus(n);c[s]=(c[s]||0)+1});
+    q('cnt-dt').textContent=c['dolu-temiz']||0;q('cnt-dk').textContent=c['dolu-kirli']||0;
+    q('cnt-co').textContent=(c['cout']||0);q('cnt-t').textContent=(c['temiz']||0);
+    q('cnt-k').textContent=(c['kirli']||0);q('cnt-ooi').textContent=c['ooi']||0;
+    q('cnt-ar').textContent=c['ariza']||0;q('cnt-on').textContent=(c['onaylı']||0);
+}
+async function loadElektraRoomsWithEntries(){
+    try{const r=await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);roomsWithEntries=new Set((await r.json()).map(e=>String(e.room_no)))}catch(e){}
+}
+function setElektraView(v){elektraView=v;q('ebtn-grid').classList.toggle('active',v==='grid');q('ebtn-list').classList.toggle('active',v==='list');renderElektraView()}
+function renderElektraView(){
+    if(elektraView==='grid'){q('egrid-container').classList.remove('hidden');q('elist-container').classList.remove('active');renderElektraGrid()}
+    else{q('egrid-container').classList.add('hidden');q('elist-container').classList.add('active');renderElektraList()}
+}
+function statusClass(s){const m={'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli','cout':'status-cout','temiz':'status-temiz','kirli':'status-kirli','ooi':'status-ooi','ariza':'status-ariza','onaylı':'status-onaylı','bos':'status-bos'};return m[s]||'status-bos'}
+function renderElektraGrid(){
+    const sv=q('esearch-room').value.trim().toLowerCase();const container=q('egrid-container');container.innerHTML='';
+    const grid=document.createElement('div');grid.className='room-grid';let count=0;
+    allRoomNos().forEach(n=>{
+        const s=getRoomStatus(n);
+        if(activeStatFilter&&s!==activeStatFilter)return;
+        if(sv&&!String(n).includes(sv))return;
+        const cell=document.createElement('div');cell.className='room-cell '+statusClass(s);cell.textContent=n;
+        if(roomsWithEntries.has(String(n))){const fl=document.createElement('div');fl.className='room-flag';cell.appendChild(fl)}
+        cell.addEventListener('click',()=>openElektraPanel(n));grid.appendChild(cell);count++;
     });
-}
-
-async function demirbasDateSearch() {
-    const f = q('d-from').value, t = q('d-to').value;
-    if (!f || !t) return;
-    q('dsresult').innerHTML = '<div class="empty">Aranıyor...</div>';
-    try {
-        const data = await api(`/rest/v1/entries?checkin_date=gte.${f}&checkin_date=lte.${t}&mode=eq.demirbaş&order=checkin_date.desc,room_no.asc`).then(r=>r.json());
-        if (!data.length) { q('dsresult').innerHTML = '<div class="empty">Kayıt yok</div>'; return; }
-        const gr = {};
-        data.forEach(e => { if (!gr[e.room_no]) gr[e.room_no]=[]; gr[e.room_no].push(e); });
-        let html = `<div class="room-header"><div class="room-num">${Object.keys(gr).length} oda</div><div class="room-summary"><strong>${fmtDate(f)} – ${fmtDate(t)}</strong><span>${data.length} kayıt</span></div></div>`;
-        Object.keys(gr).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(rno => {
-            html += `<div style="margin-top:12px;font-weight:600">Oda ${rno}</div>`;
-            gr[rno].forEach(e => html += buildDemirbasCard(e));
-        });
-        q('dsresult').innerHTML = html;
-    } catch(e) { q('dsresult').innerHTML = '<div class="empty">Hata</div>'; }
-}
-
-// ─── ELEKTRİK (SAYAÇ) ────────────────────────────────────────────────────────
-function allRoomNos() {
-    const a = [];
-    FLOORS.forEach(f => { for (let i=1; i<=f.rooms; i++) a.push(f.prefix*100+i); });
-    return a;
-}
-
-async function initElektra() {
-    q('egrid-container').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Yükleniyor...</div>';
-    await loadRoomStatuses();
-    await loadElektraRoomsWithEntries();
-    updateElektraStats();
-    renderElektraView();
-}
-
-function updateElektraStats() {
-    const c = {};
-    allRoomNos().forEach(n => { const s = getRoomStatus(n); c[s] = (c[s]||0)+1; });
-    q('cnt-dt').textContent  = c['dolu-temiz']||0;
-    q('cnt-dk').textContent  = c['dolu-kirli']||0;
-    q('cnt-co').textContent  = (c['cout']||0)+(c['cout-b']||0);
-    q('cnt-t').textContent   = (c['temiz']||0)+(c['temiz-b']||0);
-    q('cnt-k').textContent   = (c['kirli']||0)+(c['kirli-b']||0);
-    q('cnt-ooi').textContent = c['ooi']||0;
-    q('cnt-ar').textContent  = c['ariza']||0;
-    q('cnt-on').textContent  = (c['onaylı']||0)+(c['onaylı-b']||0);
-}
-
-async function loadElektraRoomsWithEntries() {
-    try {
-        const r = await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);
-        roomsWithEntries = new Set((await r.json()).map(e=>String(e.room_no)));
-    } catch(e) {}
-}
-
-function setElektraView(v) {
-    elektraView = v;
-    q('ebtn-grid').classList.toggle('active', v==='grid');
-    q('ebtn-list').classList.toggle('active', v==='list');
-    renderElektraView();
-}
-
-function renderElektraView() {
-    if (elektraView === 'grid') {
-        q('egrid-container').classList.remove('hidden');
-        q('elist-container').classList.remove('active');
-        renderElektraGrid();
-    } else {
-        q('egrid-container').classList.add('hidden');
-        q('elist-container').classList.add('active');
-        renderElektraList();
-    }
-}
-
-function statusClass(s) {
-    const m = {
-        'dolu-temiz':'status-dolu-temiz','dolu-kirli':'status-dolu-kirli',
-        'cout':'status-cout','cout-b':'status-cout',
-        'temiz':'status-temiz','temiz-b':'status-temiz',
-        'kirli':'status-kirli','kirli-b':'status-kirli',
-        'ooi':'status-ooi','ariza':'status-ariza',
-        'onaylı':'status-onaylı','onaylı-b':'status-onaylı',
-        'bos':'status-bos'
-    };
-    return m[s] || 'status-bos';
-}
-
-function renderElektraGrid() {
-    const sv = q('esearch-room').value.trim().toLowerCase();
-    const container = q('egrid-container');
-    container.innerHTML = '';
-    const grid = document.createElement('div');
-    grid.className = 'room-grid';
-    let count = 0;
-    allRoomNos().forEach(n => {
-        const s = getRoomStatus(n);
-        if (activeStatFilter && s !== activeStatFilter) return;
-        if (sv && !String(n).includes(sv)) return;
-        const cell = document.createElement('div');
-        cell.className = 'room-cell ' + statusClass(s);
-        cell.textContent = n;
-        if (roomsWithEntries.has(String(n))) {
-            const fl = document.createElement('div');
-            fl.className = 'room-flag';
-            cell.appendChild(fl);
-        }
-        cell.addEventListener('click', () => openElektraPanel(n));
-        grid.appendChild(cell);
-        count++;
-    });
-    if (count === 0) { container.innerHTML = '<div class="empty">Oda bulunamadı</div>'; return; }
+    if(count===0){container.innerHTML='<div class="empty">Oda bulunamadı</div>';return}
     container.appendChild(grid);
 }
-
-async function renderElektraList() {
-    const wrap = q('elist-container');
-    wrap.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">Yükleniyor...</div>';
-    try {
-        const res = await api(`/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,note`);
-        elektraAllData = await res.json();
-        const sv = q('esearch-room').value.trim().toLowerCase();
-        const filtered = elektraAllData.filter(e => {
-            if (sv && !String(e.room_no).includes(sv) && !(e.note||'').toLowerCase().includes(sv)) return false;
-            if (activeStatFilter && getRoomStatus(e.room_no) !== activeStatFilter) return false;
+async function renderElektraList(){
+    const wrap=q('elist-container');wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">Yükleniyor...</div>';
+    try{
+        const res=await api(`/rest/v1/entries?mode=eq.elektrik&order=checkin_date.desc,room_no.asc&select=id,room_no,checkin_date,note`);
+        elektraAllData=await res.json();
+        const sv=q('esearch-room').value.trim().toLowerCase();
+        const filtered=elektraAllData.filter(e=>{
+            if(sv&&!String(e.room_no).includes(sv)&&!(e.note||'').toLowerCase().includes(sv))return false;
+            if(activeStatFilter&&getRoomStatus(e.room_no)!==activeStatFilter)return false;
             return true;
         });
-        if (!filtered.length) { wrap.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>'; return; }
-        let html = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-            <thead><tr style="background:var(--surface2)"><th style="padding:8px;text-align:left">Oda</th><th style="padding:8px;text-align:left">Tarih</th></tr></thead><tbody>`;
-        filtered.forEach(e => {
-            html += `<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td style="padding:8px">${fmtShort(e.checkin_date)}</td></tr>`;
-        });
-        html += '</tbody></table></div>';
-        wrap.innerHTML = html;
-    } catch(e) { wrap.innerHTML = '<div style="text-align:center;padding:40px">Hata</div>'; }
+        if(!filtered.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Kayıt yok</div>';return}
+        let html=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:var(--surface2)"><th style="padding:8px;text-align:left">Oda</th><th style="padding:8px;text-align:left">Tarih</th><th style="padding:8px;text-align:left">Not</th></tr></thead><tbody>`;
+        filtered.forEach(e=>{html+=`<tr style="border-bottom:1px solid var(--border);cursor:pointer" onclick="openElektraPanel('${e.room_no}')"><td style="padding:8px;font-weight:600">${e.room_no}</td><td style="padding:8px">${fmtShort(e.checkin_date)}</td><td style="padding:8px;color:var(--muted);font-size:12px">${e.note||''}</td></tr>`});
+        html+='</tbody></table></div>';wrap.innerHTML=html;
+    }catch(e){wrap.innerHTML='<div style="text-align:center;padding:40px">Hata</div>'}
 }
 
-// ─── ELEKTRİK ODA PANELİ ─────────────────────────────────────────────────────
-function openElektraPanel(num) {
-    elektraCurrentRoom = num;
-    q('epanel-room-num').textContent = num;
-    const fl = Math.floor(num/100);
-    q('epanel-floor-label').textContent = fl+'. Kat';
-    const currentStatus = getRoomStatus(num);
-    q('ef-status').value = currentStatus;
-    highlightStatusOpt(currentStatus);
-    updateSelectedStatusInfo(currentStatus);
-    resetElektraAddForm();
-    switchElektraPanelTab('kayitlar');
-    q('epanel-overlay').classList.add('open');
-    q('eroom-panel').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    loadElektraEntries();
+// ─── PANEL ───────────────────────────────────────────────────────────────────
+function openElektraPanel(num){
+    elektraCurrentRoom=num;q('epanel-room-num').textContent=num;
+    q('epanel-floor-label').textContent=Math.floor(num/100)+'. Kat';
+    const cs=getRoomStatus(num);q('ef-status').value=cs;highlightStatusOpt(cs);updateSelectedStatusInfo(cs);
+    resetElektraAddForm();switchElektraPanelTab('kayitlar');
+    q('epanel-overlay').classList.add('open');q('eroom-panel').classList.add('open');
+    document.body.style.overflow='hidden';loadElektraEntries();
 }
+function closeElektraPanel(){q('epanel-overlay').classList.remove('open');q('eroom-panel').classList.remove('open');document.body.style.overflow='';elektraCurrentRoom=null}
+function switchElektraPanelTab(t){['kayitlar','ekle','durum'].forEach(x=>{q('epane-'+x).classList.toggle('active',x===t);q('eptab-'+x).classList.toggle('active',x===t)})}
+function selectStatus(el,status){document.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');q('ef-status').value=status;updateSelectedStatusInfo(status)}
+function highlightStatusOpt(status){document.querySelectorAll('.status-opt').forEach(el=>{el.classList.remove('sel');const oc=el.getAttribute('onclick')||'';if(oc.includes("'"+status+"'"))el.classList.add('sel')})}
+function updateSelectedStatusInfo(status){const labels={'dolu-temiz':'Dolu Temiz seçildi','dolu-kirli':'Dolu Kirli seçildi','cout':'C/Out seçildi','temiz':'Temiz seçildi','kirli':'Kirli seçildi','ooi':'OOI seçildi','ariza':'Arıza seçildi','onaylı':'Onaylı seçildi','bos':'Boş seçildi'};const el=q('selected-status-info');if(el){el.textContent=labels[status]||'Durum seçilmedi';el.style.color=(status&&status!=='bos')?'var(--text)':'var(--muted)'}}
 
-function closeElektraPanel() {
-    q('epanel-overlay').classList.remove('open');
-    q('eroom-panel').classList.remove('open');
-    document.body.style.overflow = '';
-    elektraCurrentRoom = null;
-}
-
-function switchElektraPanelTab(t) {
-    ['kayitlar','ekle','durum'].forEach(x => {
-        q('epane-'+x).classList.toggle('active', x===t);
-        q('eptab-'+x).classList.toggle('active', x===t);
-    });
-}
-
-function selectStatus(el, status) {
-    document.querySelectorAll('.status-opt').forEach(o => o.classList.remove('sel'));
-    el.classList.add('sel');
-    q('ef-status').value = status;
-    updateSelectedStatusInfo(status);
-}
-
-function highlightStatusOpt(status) {
-    document.querySelectorAll('.status-opt').forEach(el => {
-        el.classList.remove('sel');
-        const onclick = el.getAttribute('onclick') || '';
-        if (onclick.includes("'"+status+"'") || onclick.includes('"'+status+'"')) el.classList.add('sel');
-    });
-}
-
-function updateSelectedStatusInfo(status) {
-    const labels = {
-        'dolu-temiz':'Dolu Temiz seçildi','dolu-kirli':'Dolu Kirli seçildi','cout':'C/Out seçildi',
-        'temiz':'Temiz seçildi','kirli':'Kirli seçildi','ooi':'OOI seçildi',
-        'ariza':'Arıza seçildi','onaylı':'Onaylı seçildi','bos':'Boş seçildi'
-    };
-    const el = q('selected-status-info');
-    if (el) {
-        el.textContent = labels[status] || 'Durum seçilmedi';
-        el.style.color = (status && status !== 'bos') ? 'var(--text)' : 'var(--muted)';
-    }
-}
-
-// ─── ELEKTRİK KAYITLAR ───────────────────────────────────────────────────────
-async function loadElektraEntries() {
-    q('eentries-list').innerHTML = '<div style="text-align:center;padding:20px">Yükleniyor...</div>';
-    try {
-        elektraCurrentEntries = await api(
-            `/rest/v1/entries?room_no=eq.${elektraCurrentRoom}&mode=eq.elektrik&order=checkin_date.desc&select=*`
-        ).then(r=>r.json());
+// ─── KAYITLAR ────────────────────────────────────────────────────────────────
+async function loadElektraEntries(){
+    q('eentries-list').innerHTML='<div style="text-align:center;padding:20px">Yükleniyor...</div>';
+    try{
+        elektraCurrentEntries=await api(`/rest/v1/entries?room_no=eq.${elektraCurrentRoom}&mode=eq.elektrik&order=checkin_date.desc&select=*`).then(r=>r.json());
         renderElektraEntries();
-    } catch(e) { q('eentries-list').innerHTML = '<div style="text-align:center;padding:20px">Hata</div>'; }
+    }catch(e){q('eentries-list').innerHTML='<div style="text-align:center;padding:20px">Hata</div>'}
 }
 
-function renderElektraEntries() {
-    const w = q('eentries-list');
-    if (!elektraCurrentEntries.length) {
-        w.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">Kayıt yok</div>';
-        return;
-    }
-    let html = '<div class="entries-flex">';
-    elektraCurrentEntries.forEach((entry) => {
-        const photos    = getPhotoData(entry);
-        const allUrls   = photos.map(p=>p.url);
-        // "type" yerine "entry_type" kullanıyoruz (DB'de reserved keyword olmaması için)
-        const entryType = entry.entry_type || entry.type || 'giris';
-
-        html += `<div class="entry-card">
+function renderElektraEntries(){
+    const w=q('eentries-list');
+    if(!elektraCurrentEntries.length){w.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted)">Kayıt yok</div>';return}
+    let html='<div class="entries-flex">';
+    elektraCurrentEntries.forEach(entry=>{
+        const photos=getPhotoData(entry);
+        const allUrls=photos.map(p=>p.url);
+        html+=`<div class="entry-card">
             <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')">
-                <div class="date-badge e">${entryType==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
+                <div class="date-badge e">${fmtDate(entry.checkin_date)}</div>
                 <div class="entry-meta"><div>${entry.note||'Not yok'}</div></div>
                 <span style="font-size:12px;color:var(--muted)">📷${photos.length}</span>
                 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </div>
             <div class="entry-body open">
                 ${photos.length
-                    ? `<div class="photo-gallery">${photos.map((p,idx)=>`
+                    ?`<div class="photo-gallery">${photos.map((p,idx)=>`
                         <div class="photo-card">
                             <img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(allUrls)},${idx})">
                             <div class="photo-card-body">
-                                <div class="photo-card-desc${p.desc?'':' empty'}" id="pdesc-${entry.id}-${idx}">${p.desc||'Açıklama yok'}</div>
+                                <div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div>
                             </div>
                         </div>`).join('')}</div>`
-                    : '<div style="padding:12px;text-align:center;color:var(--muted)">Fotoğraf yok</div>'
+                    :'<div style="padding:12px;text-align:center;color:var(--muted)">Fotoğraf yok</div>'
                 }
                 <div class="entry-footer">
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -965,278 +663,191 @@ function renderElektraEntries() {
                     </div>
                 </div>
                 <div class="edit-panel" id="edit-panel-${entry.id}">
-                    <div class="field"><span class="label">Tarih</span>
-                        <input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date}">
-                    </div>
-                    <div class="field"><span class="label">İşlem Türü</span>
-                        <select id="edit-type-${entry.id}">
-                            <option value="giris" ${entryType==='giris'?'selected':''}>Giriş</option>
-                            <option value="cikis" ${entryType==='cikis'?'selected':''}>Çıkış</option>
-                        </select>
-                    </div>
-                    <div class="field"><span class="label">Not</span>
-                        <textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea>
-                    </div>
-                    <div class="field"><span class="label">📷 Fotoğraf Açıklamaları</span>
-                        <div class="edit-photo-list" id="edit-photos-${entry.id}">
-                            ${photos.map((p,idx)=>`
-                            <div class="edit-photo-row">
-                                <img src="${p.url}" class="edit-photo-thumb">
-                                <input class="edit-photo-input" type="text" placeholder="Açıklama..." value="${p.desc||''}" id="edit-pdesc-${entry.id}-${idx}" maxlength="150">
-                            </div>`).join('')}
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveEdit('${entry.id}',${photos.length})">💾 Kaydet</button>
+                    <span class="e-label">Tarih</span>
+                    <input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date}">
+                    <span class="e-label">Açıklama / Not</span>
+                    <textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea>
+                    ${photos.length?`
+                    <span class="e-label">Fotoğraf Açıklamaları</span>
+                    <div class="edit-photo-list">
+                        ${photos.map((p,idx)=>`
+                        <div class="edit-photo-row">
+                            <img src="${p.url}" class="edit-photo-thumb" onclick="openLb(${JSON.stringify(allUrls)},${idx})">
+                            <input class="edit-photo-input" type="text" placeholder="Açıklama..." value="${(p.desc||'').replace(/"/g,'&quot;')}" id="edit-pdesc-${entry.id}-${idx}" maxlength="150">
+                        </div>`).join('')}
+                    </div>`:''}
+                    <button class="edit-save-btn" onclick="saveEdit('${entry.id}',${photos.length})">💾 Kaydet</button>
                 </div>
             </div>
         </div>`;
     });
-    html += '</div>';
-    w.innerHTML = html;
+    html+='</div>';
+    w.innerHTML=html;
 }
 
-function toggleEditPanel(entryId) {
-    const panel = q('edit-panel-'+entryId);
+function toggleEditPanel(entryId){
+    const panel=q('edit-panel-'+entryId);
     panel.classList.toggle('open');
 }
 
-async function saveEdit(entryId, photoCount) {
-    const entry = elektraCurrentEntries.find(e => e.id === entryId);
-    if (!entry) return;
-    const date  = q('edit-date-'+entryId).value;
-    const etype = q('edit-type-'+entryId).value;
-    const note  = q('edit-note-'+entryId).value.trim();
+async function saveEdit(entryId,photoCount){
+    const entry=elektraCurrentEntries.find(e=>e.id===entryId);
+    if(!entry)return;
+    const date=q('edit-date-'+entryId).value;
+    const note=q('edit-note-'+entryId).value.trim();
 
     // Fotoğraf açıklamalarını güncelle
-    const photos = getPhotoData(entry);
-    for (let i = 0; i < photoCount; i++) {
-        const inp = q(`edit-pdesc-${entryId}-${i}`);
-        if (inp && photos[i]) photos[i].desc = inp.value.trim();
+    const photos=getPhotoData(entry);
+    for(let i=0;i<photoCount;i++){
+        const inp=q(`edit-pdesc-${entryId}-${i}`);
+        if(inp&&photos[i])photos[i].desc=inp.value.trim();
     }
 
-    const btn = document.querySelector(`#edit-panel-${entryId} .btn-primary`);
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span> Kaydediliyor...';
+    const btn=q('edit-panel-'+entryId).querySelector('.edit-save-btn');
+    const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
 
-    try {
-        await api(`/rest/v1/entries?id=eq.${entryId}`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-                checkin_date: date,
-                entry_type: etype,   // ← "type" yerine "entry_type"
-                note,
-                photo_data: photos,
-                photo_urls: photos.map(p=>p.url)
-            })
-        });
+    try{
+        // Sadece tabloda var olan kolonları gönder
+        const payload={checkin_date:date,note,photo_data:photos,photo_urls:photos.map(p=>p.url)};
+        const r=await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'PATCH',body:JSON.stringify(payload)});
+        if(!r.ok){const err=await r.json();throw new Error(err.message||err.details||'Güncelleme başarısız')}
         showToast('Güncellendi ✓');
         loadElektraEntries();
-    } catch(e) { showToast('Hata: '+e.message,'error'); }
-    finally { btn.disabled = false; btn.innerHTML = orig; }
+    }catch(e){showToast('Hata: '+e.message,'error')}
+    finally{btn.disabled=false;btn.innerHTML=orig}
 }
 
-async function deleteElektraEntry(entryId) {
+async function deleteElektraEntry(entryId){
     openConfirm('Sil','Bu sayaç kaydı silinecek.',async()=>{
-        await api(`/rest/v1/entries?id=eq.${entryId}`, {method:'DELETE'});
-        showToast('Silindi');
-        loadElektraEntries();
-        loadElektraRoomsWithEntries();
+        await api(`/rest/v1/entries?id=eq.${entryId}`,{method:'DELETE'});
+        showToast('Silindi');loadElektraEntries();loadElektraRoomsWithEntries();
     });
 }
 
-// ─── ELEKTRİK YENİ KAYIT ─────────────────────────────────────────────────────
-function resetElektraAddForm() {
-    elektraPending = [];
-    q('ef-date').value   = today();
-    q('ef-note').value   = '';
-    q('eprev-wrap').innerHTML = '';
-    q('ecompress-status').innerHTML = '';
-    q('eprogress-wrap').classList.remove('show');
-    q('ef-photos').value = '';
+// ─── YENİ KAYIT ──────────────────────────────────────────────────────────────
+function resetElektraAddForm(){
+    elektraPending=[];q('ef-date').value=today();q('ef-note').value='';
+    q('eprev-wrap').innerHTML='';q('ecompress-status').innerHTML='';
+    q('eprogress-wrap').classList.remove('show');q('ef-photos').value='';
 }
-
-async function elektraHandleFiles(files) {
-    const se = q('ecompress-status');
-    se.innerHTML = '';
-    let to=0, tn=0, cc=0;
-    for (const f of files) {
-        const r = await compressImage(f);
-        elektraPending.push({file:r.file, url:URL.createObjectURL(r.file), desc:''});
-        to += r.origSize; tn += r.newSize;
-        if (r.compressed) cc++;
-    }
-    elektraRenderPrev();
-    if (cc > 0) se.textContent = `${cc} foto sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü`;
-    q('ef-photos').value = '';
+async function elektraHandleFiles(files){
+    const se=q('ecompress-status');se.innerHTML='';let to=0,tn=0,cc=0;
+    for(const f of files){const r=await compressImage(f);elektraPending.push({file:r.file,url:URL.createObjectURL(r.file),desc:''});to+=r.origSize;tn+=r.newSize;if(r.compressed)cc++}
+    elektraRenderPrev();if(cc>0)se.textContent=`${cc} foto sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü`;q('ef-photos').value='';
 }
-
-function elektraRenderPrev() {
-    const wrap = q('eprev-wrap');
-    wrap.innerHTML = elektraPending.map((p,i) =>
-        `<div class="photo-preview-item">
+function elektraRenderPrev(){
+    q('eprev-wrap').innerHTML=elektraPending.map((p,i)=>`
+        <div class="photo-preview-item">
             <img src="${p.url}" class="photo-preview-img">
             <input class="photo-preview-desc" placeholder="Açıklama" value="${p.desc}" oninput="elektraPending[${i}].desc=this.value" maxlength="100">
             <span class="photo-preview-del" onclick="elektraPending.splice(${i},1);elektraRenderPrev()">✕ Sil</span>
-        </div>`
-    ).join('');
+        </div>`).join('');
 }
 
-// ─── FİX: 400 HATASI ─ "type" yerine "entry_type" kullanıyoruz ───────────────
-async function elektraSaveEntry() {
-    if (!elektraCurrentRoom || !elektraPending.length) { showToast('Eksik bilgi','error'); return; }
-    const btn = q('esave-btn'), lbl = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span> Kaydediliyor...';
-    const pw = q('eprogress-wrap'), pb = q('eprogress-bar');
-    pw.classList.add('show'); pb.style.width = '0%';
-    try {
-        const date  = q('ef-date').value;
-        const note  = q('ef-note').value.trim();
-        const etype = q('ef-type').value || 'giris';
-        const photoData = [];
-        for (let i = 0; i < elektraPending.length; i++) {
-            const url = await uploadImg(elektraPending[i].file, elektraCurrentRoom, BUCKETS.elektrik);
-            photoData.push({url, desc: elektraPending[i].desc || ''});
-            pb.style.width = Math.round((i+1)/elektraPending.length*100)+'%';
+// ─── KAYDET (400 HATA DÜZELTMESİ: sadece bilinen kolonlar) ──────────────────
+async function elektraSaveEntry(){
+    if(!elektraCurrentRoom||!elektraPending.length){showToast('Fotoğraf ekleyin','error');return}
+    const btn=q('esave-btn'),lbl=btn.innerHTML;
+    btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
+    const pw=q('eprogress-wrap'),pb=q('eprogress-bar');pw.classList.add('show');pb.style.width='0%';
+    try{
+        const date=q('ef-date').value;
+        const note=q('ef-note').value.trim();
+        const photoData=[];
+        for(let i=0;i<elektraPending.length;i++){
+            const url=await uploadImg(elektraPending[i].file,elektraCurrentRoom,BUCKETS.elektrik);
+            photoData.push({url,desc:elektraPending[i].desc||''});
+            pb.style.width=Math.round((i+1)/elektraPending.length*100)+'%';
         }
-        await api('/rest/v1/entries', {
-            method: 'POST',
-            body: JSON.stringify({
-                room_no: String(elektraCurrentRoom),
-                mode: 'elektrik',
-                checkin_date: date,
-                note,
-                photo_data: photoData,
-                photo_urls: photoData.map(p=>p.url),
-                entry_type: etype   // ← "type" yerine "entry_type" (400 hatasının düzeltmesi)
-            })
-        });
+        // NOT: 'type' veya 'entry_type' GÖNDERMİYORUZ — tabloda yok, 400'e sebep oluyordu
+        const payload={
+            room_no:String(elektraCurrentRoom),
+            mode:'elektrik',
+            checkin_date:date,
+            note,
+            photo_data:photoData,
+            photo_urls:photoData.map(p=>p.url)
+        };
+        const r=await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(payload)});
+        if(!r.ok){const err=await r.json();throw new Error(err.message||err.details||'Kayıt başarısız')}
         showToast('Kayıt oluşturuldu ✓');
-        resetElektraAddForm();
-        switchElektraPanelTab('kayitlar');
-        loadElektraEntries();
-        loadElektraRoomsWithEntries();
-    } catch(e) { showToast('Hata: '+e.message,'error'); }
-    finally { btn.disabled=false; btn.innerHTML=lbl; pw.classList.remove('show'); }
+        resetElektraAddForm();switchElektraPanelTab('kayitlar');loadElektraEntries();loadElektraRoomsWithEntries();
+    }catch(e){showToast('Hata: '+e.message,'error')}
+    finally{btn.disabled=false;btn.innerHTML=lbl;pw.classList.remove('show')}
 }
 
-async function saveElektraRoomStatus() {
-    if (!elektraCurrentRoom) return;
-    const status = q('ef-status').value;
-    if (!status) { showToast('Durum seçin','error'); return; }
-    const btn = document.querySelector('#epane-durum .save-btn-inner');
-    const origText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span> Kaydediliyor...';
-    await saveRoomStatusToDB(elektraCurrentRoom, status);
-    btn.disabled = false;
-    btn.innerHTML = origText;
-    updateElektraStats();
-    renderElektraView();
-    showToast('Durum kaydedildi ✓');
+async function saveElektraRoomStatus(){
+    if(!elektraCurrentRoom)return;const status=q('ef-status').value;
+    if(!status){showToast('Durum seçin','error');return}
+    const btn=document.querySelector('#epane-durum .save-btn-inner');const orig=btn.innerHTML;
+    btn.disabled=true;btn.innerHTML='<span class="loader"></span> Kaydediliyor...';
+    await saveRoomStatusToDB(elektraCurrentRoom,status);
+    btn.disabled=false;btn.innerHTML=orig;updateElektraStats();renderElektraView();showToast('Durum kaydedildi ✓');
 }
 
-// ─── LINK OLUŞTUR ─────────────────────────────────────────────────────────────
-async function createEntryLink(roomNo, date, mod, btnEl, entryId) {
-    const orig = btnEl.innerHTML;
-    btnEl.innerHTML = '<span class="loader"></span>';
-    btnEl.disabled = true;
-    try {
-        const token = genToken();
-        await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_id=eq.${encodeURIComponent(entryId)}`, {
-            method: 'DELETE',
-            headers: {'apikey':KEY,'Authorization':'Bearer '+KEY}
-        });
-        await fetch(`${SB}/rest/v1/tokens`, {
-            method: 'POST',
-            headers: {'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-            body: JSON.stringify({room_no:roomNo, mod, token, entry_id:entryId})
-        });
-        const url = `${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;
+// ─── LINK ────────────────────────────────────────────────────────────────────
+async function createEntryLink(roomNo,date,mod,btnEl,entryId){
+    const orig=btnEl.innerHTML;btnEl.innerHTML='<span class="loader"></span>';btnEl.disabled=true;
+    try{
+        const token=genToken();
+        await fetch(`${SB}/rest/v1/tokens?room_no=eq.${encodeURIComponent(roomNo)}&mod=eq.${encodeURIComponent(mod)}&entry_id=eq.${encodeURIComponent(entryId)}`,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+        await fetch(`${SB}/rest/v1/tokens`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({room_no:roomNo,mod,token,entry_id:entryId})});
+        const url=`${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;
         navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url));
-    } catch(e) { showToast('Hata: '+e.message,'error'); }
-    finally { btnEl.innerHTML = orig; btnEl.disabled = false; }
+    }catch(e){showToast('Hata: '+e.message,'error')}
+    finally{btnEl.innerHTML=orig;btnEl.disabled=false}
 }
 
-// ─── SÜRÜKLE BIRAK ────────────────────────────────────────────────────────────
-q('edrop-zone').addEventListener('dragover', e => { e.preventDefault(); q('edrop-zone').style.borderColor='var(--accent)'; });
-q('edrop-zone').addEventListener('dragleave', () => q('edrop-zone').style.borderColor='');
-q('edrop-zone').addEventListener('drop', e => { e.preventDefault(); q('edrop-zone').style.borderColor=''; elektraHandleFiles(e.dataTransfer.files); });
-q('dropz').addEventListener('dragover',  e => { e.preventDefault(); q('dropz').classList.add('over'); });
-q('dropz').addEventListener('dragleave', () => q('dropz').classList.remove('over'));
-q('dropz').addEventListener('drop', e => { e.preventDefault(); q('dropz').classList.remove('over'); demirbasAddFiles(e.dataTransfer.files); });
+// ─── SÜRÜKLE BIRAK ───────────────────────────────────────────────────────────
+q('edrop-zone').addEventListener('dragover',e=>{e.preventDefault();q('edrop-zone').style.borderColor='var(--accent)'});
+q('edrop-zone').addEventListener('dragleave',()=>q('edrop-zone').style.borderColor='');
+q('edrop-zone').addEventListener('drop',e=>{e.preventDefault();q('edrop-zone').style.borderColor='';elektraHandleFiles(e.dataTransfer.files)});
+q('dropz').addEventListener('dragover',e=>{e.preventDefault();q('dropz').classList.add('over')});
+q('dropz').addEventListener('dragleave',()=>q('dropz').classList.remove('over'));
+q('dropz').addEventListener('drop',e=>{e.preventDefault();q('dropz').classList.remove('over');demirbasAddFiles(e.dataTransfer.files)});
 
-// ─── TOKEN / SALT OKUNUR GÖRÜNÜM ─────────────────────────────────────────────
-const _p = new URLSearchParams(location.search);
-const _oda = _p.get('oda'), _mod = _p.get('mod'), _token = _p.get('token'), _tarih = _p.get('tarih');
-
-if (_oda && _token) {
-    const _m = _mod === 'elektrik' ? 'elektrik' : 'demirbaş';
-    mode = _m;
-    q('demirbas-ui').style.display = 'none';
-    q('elektra-ui').style.display  = 'none';
-    q('topbar-title').textContent = _m === 'elektrik' ? '⚡ ELEKTRA SAYAÇ PANELİ' : 'Demirbaş Takibi';
-    if (_m === 'elektrik') {
-        q('mode-btns').style.display = 'none';
-        q('elektra-ui').style.display = '';
-        q('egrid-container').style.display  = 'none';
-        q('elist-container').style.display  = 'none';
-        q('ereadonly-view').classList.add('active');
-        q('app').classList.add('wide');
-        api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`)
-            .then(r=>r.json()).then(data => {
-                if (!data || !data.length) { showAccessError(); return; }
-                const tarih = _tarih || data[0].entry_date || today();
-                api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(_oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(_m)}`)
-                    .then(r=>r.json()).then(d => {
-                        if (!d.length) { q('ereadonly-view').innerHTML = '<div class="empty">Kayıt yok</div>'; return; }
-                        let html = `<div class="room-header"><div class="room-num e">${_oda}</div><div><strong>Sayaç ${_oda} · ${fmtDate(tarih)}</strong><span>${d.length} kayıt · Salt Okunur</span></div></div><div class="entries-flex">`;
-                        d.forEach(entry => {
-                            const photos = getPhotoData(entry);
-                            html += `<div class="entry-card">
-                                <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')">
-                                    <div class="date-badge e">${fmtDate(entry.checkin_date)}</div>
-                                    <div class="entry-meta"><div>${entry.note||'Not yok'}</div></div>
-                                    <span>📷${photos.length}</span>
-                                    <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-                                </div>
-                                <div class="entry-body open">
-                                    ${photos.length
-                                        ? `<div class="photo-gallery">${photos.map((p,idx)=>`
-                                            <div class="photo-card">
-                                                <img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(photos.map(x=>x.url))},${idx})">
-                                                <div class="photo-card-body">
-                                                    <div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div>
-                                                </div>
-                                            </div>`).join('')}</div>`
-                                        : '<div style="padding:12px;text-align:center;color:var(--muted)">Fotoğraf yok</div>'
-                                    }
-                                </div>
-                            </div>`;
-                        });
-                        html += '</div>';
-                        q('ereadonly-view').innerHTML = html;
-                    }).catch(() => showAccessError());
-            }).catch(() => showAccessError());
-    } else { showAccessError(); }
-} else if (_oda && !_token) {
-    showAccessError();
-} else {
-    let savedMode = 'demirbaş';
-    try { savedMode = localStorage.getItem('activeMode') || 'demirbaş'; } catch(e) {}
-    setMode(savedMode);
-    checkConn();
+// ─── TOKEN / SALT OKUNUR ─────────────────────────────────────────────────────
+const _p=new URLSearchParams(location.search);
+const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih');
+if(_oda&&_token){
+    const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
+    q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';
+    q('topbar-title').textContent=_m==='elektrik'?'⚡ ELEKTRA SAYAÇ PANELİ':'Demirbaş Takibi';
+    if(_m==='elektrik'){
+        q('mode-btns').style.display='none';q('elektra-ui').style.display='';
+        q('egrid-container').style.display='none';q('elist-container').style.display='none';
+        q('ereadonly-view').classList.add('active');q('app').classList.add('wide');
+        api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date`).then(r=>r.json()).then(data=>{
+            if(!data||!data.length){showAccessError();return}
+            const tarih=_tarih||data[0].entry_date||today();
+            api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(_oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(_m)}`).then(r=>r.json()).then(d=>{
+                if(!d.length){q('ereadonly-view').innerHTML='<div class="empty">Kayıt yok</div>';return}
+                let html=`<div class="room-header"><div class="room-num e">${_oda}</div><div><strong>Sayaç ${_oda} · ${fmtDate(tarih)}</strong><div style="font-size:12px;color:var(--muted)">${d.length} kayıt · Salt Okunur</div></div></div><div class="entries-flex">`;
+                d.forEach(entry=>{
+                    const photos=getPhotoData(entry);
+                    html+=`<div class="entry-card">
+                        <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')">
+                            <div class="date-badge e">${fmtDate(entry.checkin_date)}</div>
+                            <div class="entry-meta"><div>${entry.note||'Not yok'}</div></div>
+                            <span>📷${photos.length}</span>
+                            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </div>
+                        <div class="entry-body open">
+                            ${photos.length?`<div class="photo-gallery">${photos.map((p,idx)=>`<div class="photo-card"><img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(photos.map(x=>x.url))},${idx})"><div class="photo-card-body"><div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div></div></div>`).join('')}</div>`:'<div style="padding:12px;text-align:center;color:var(--muted)">Fotoğraf yok</div>'}
+                        </div>
+                    </div>`;
+                });
+                html+='</div>';q('ereadonly-view').innerHTML=html;
+            }).catch(()=>showAccessError());
+        }).catch(()=>showAccessError());
+    }else{showAccessError()}
+}else if(_oda&&!_token){showAccessError()}
+else{
+    let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş'}catch(e){}
+    setMode(savedMode);checkConn();
 }
-
-function showAccessError() {
-    q('demirbas-ui').style.display = 'none';
-    q('elektra-ui').style.display  = 'none';
-    q('topbar-title').textContent  = 'Erişim Yok';
-    document.body.innerHTML += '<div style="text-align:center;padding:60px;font-size:17px">Geçersiz veya süresi dolmuş link.</div>';
-}
-
-function openPdfPanel() { showToast('PDF özelliği yakında eklenecek','error'); }
+function showAccessError(){q('demirbas-ui').style.display='none';q('elektra-ui').style.display='none';q('topbar-title').textContent='Erişim Yok';document.body.innerHTML+='<div style="text-align:center;padding:60px;font-size:17px">Geçersiz veya süresi dolmuş link.</div>'}
+function openPdfPanel(){showToast('PDF özelliği yakında eklenecek','error')}
 </script>
 </body>
 </html>
