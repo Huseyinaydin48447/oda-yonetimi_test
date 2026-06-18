@@ -7,93 +7,62 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
         :root {
-            --bg: #f5f4f0;
-            --surface: #fff;
-            --surface2: #f0efe9;
-            --border: #e2e1d9;
-            --text: #1a1a18;
-            --muted: #7a7a72;
-            --accent: #1a5c3a;
-            --accent-light: #e8f2ec;
-            --accent-mid: #2d7a52;
-            --danger: #c0392b;
-            --danger-light: #fdf0ee;
-            --amber: #b45309;
-            --amber-light: #fef3c7;
-            --radius: 12px;
-            --radius-sm: 8px;
+            --bg: #f5f4f0; --surface: #fff; --surface2: #f0efe9; --border: #e2e1d9;
+            --text: #1a1a18; --muted: #7a7a72; --accent: #1a5c3a; --accent-light: #e8f2ec;
+            --danger: #c0392b; --amber: #b45309; --radius: 12px; --radius-sm: 8px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .app { max-width: 550px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
-        .app.wide { max-width: 1400px; } /* 18 sütun için genişletildi */
+        .app.wide { max-width: 1200px; }
         
-        .topbar { background: var(--accent); padding: 14px 16px 12px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+        /* Topbar */
+        .topbar { background: var(--accent); padding: 14px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
         .topbar h1 { font-size: 16px; font-weight: 600; color: #fff; flex: 1; }
-        
-        .mode-btns { display: flex; gap: 5px; }
-        .mode-btn { padding: 5px 10px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; border: 1.5px solid rgba(255,255,255,.25); background: transparent; color: rgba(255,255,255,.7); }
-        .mode-btn.active { background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.6); color: #fff; }
-        
-        .nav { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 62px; z-index: 99; overflow-x: auto; }
-        .nav-btn { flex: 1; padding: 11px 4px; font-size: 12px; font-weight: 500; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .mode-btn { padding: 5px 12px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.3); background: transparent; color: #fff; opacity: 0.7; }
+        .mode-btn.active { opacity: 1; background: rgba(255,255,255,0.2); border-color: #fff; }
+
+        /* Nav */
+        .nav { display: flex; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 58px; z-index: 999; }
+        .nav-btn { flex: 1; padding: 12px; font-size: 12px; font-weight: 600; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
         .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-        
-        .screen { display: none; padding: 16px; }
-        .screen.active { display: block; }
-        
-        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; background: var(--surface); font-family: inherit; }
-        .label { font-size: 12px; color: var(--muted); margin-bottom: 5px; display: block; font-weight: 500; }
-        .btn { padding: 11px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); display: inline-flex; align-items: center; gap: 6px; }
-        .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); width: 100%; justify-content: center; padding: 13px; font-size: 15px; }
-        
-        /* Elektra Grid 18x15 */
-        .grid-container { padding: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .room-grid { 
-            display: grid; 
-            grid-template-columns: repeat(18, 50px); /* 18 Sütun */
-            gap: 2px; 
-            width: max-content;
-            margin: 0 auto;
-        }
-        .room-cell { 
-            height: 38px; border-radius: 4px; display: flex; align-items: center; justify-content: center; 
-            font-size: 13px; font-weight: 600; cursor: pointer; position: relative; border: 1px solid rgba(0,0,0,0.05);
-        }
+
+        /* Grid */
+        .grid-container { padding: 12px; overflow-x: auto; background: var(--bg); }
+        .room-grid { display: grid; grid-template-columns: repeat(18, 50px); gap: 3px; width: max-content; margin: 0 auto; }
+        .room-cell { height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
         .room-flag { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; }
 
-        /* Kartlar */
-        .entry-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
-        .entry-head { padding: 10px 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .date-badge { background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 99px; }
-        .photo-gallery { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: var(--surface2); }
-        .photo-card { width: 120px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); background: #fff; }
-        .photo-card img { width: 100%; height: 90px; object-fit: cover; display: block; cursor: pointer; }
-        
-        /* Lightbox (Resim Büyütme) */
-        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 9000; flex-direction: column; }
+        /* Panels */
+        .screen { display: none; padding: 16px; }
+        .screen.active { display: block; }
+        .entry-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+        .entry-head { padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .entry-body { display: none; padding: 12px; border-top: 1px solid var(--border); background: #fafafa; }
+        .entry-body.open { display: block; }
+
+        /* Edit Panel */
+        .edit-panel { background: #f0f4f2; padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px dashed var(--accent); }
+        .edit-photo-row { display: flex; align-items: center; gap: 8px; background: #fff; padding: 6px; border-radius: 6px; margin-bottom: 5px; border: 1px solid var(--border); }
+        .edit-photo-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        .edit-photo-input { flex: 1; padding: 6px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px; }
+        .edit-photo-del-btn { background: var(--danger); color: #fff; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; }
+
+        /* General UI */
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; margin-top: 4px; }
+        .btn { padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: var(--accent); color: #fff; width: 100%; }
+        .photo-gallery { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .photo-card { width: 100px; height: 100px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+        .photo-card img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+
+        /* Lightbox */
+        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .lightbox.open { display: flex; }
-        .lb-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        #lb-img { max-width: 100%; max-height: 100%; transition: transform 0.2s; }
-        .lb-topbar { display: flex; justify-content: space-between; padding: 15px; color: #fff; }
-        .lb-close { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+        .lightbox img { max-width: 95%; max-height: 85%; object-fit: contain; }
+        .lb-close { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 30px; cursor: pointer; }
 
-        /* Statlar */
-        .elektra-top-stats { display: flex; overflow-x: auto; gap: 8px; padding: 12px; background: #fff; border-bottom: 1px solid var(--border); }
-        .stat-badge { flex: 0 0 auto; padding: 8px 12px; border-radius: 8px; color: #fff; text-align: center; cursor: pointer; min-width: 80px; }
-        
-        /* Panel */
-        .panel-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .room-panel { position: fixed; right: 0; top: 0; bottom: 0; width: 100%; max-width: 450px; background: #fff; z-index: 1001; transform: translateX(100%); transition: 0.3s; display: flex; flex-direction: column; }
-        .room-panel.open { transform: translateX(0); }
-        
-        /* Form */
-        .photo-preview-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .photo-preview-item { position: relative; width: 80px; }
-        .photo-preview-img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; }
-        .photo-preview-del { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
-
-        /* Durum Renkleri */
+        /* Status Colors */
         .status-dolu-temiz { background: #1565c0; color: #fff; }
         .status-dolu-kirli { background: #6a1a9a; color: #fff; }
         .status-cout { background: #2e7d32; color: #fff; }
@@ -103,127 +72,110 @@
         .status-ariza { background: #546e7a; color: #fff; }
         .status-onaylı { background: #4a148c; color: #fff; }
         .status-bos { background: #fff; color: #888; border: 1px solid #ddd; }
+
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; z-index: 11000; display: none; }
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid var(--accent); border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; z-index: 10000; display: none; }
-        .loader { width: 14px; height: 14px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Preview */
+        .prev-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        .prev-item { position: relative; width: 60px; height: 60px; }
+        .prev-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+        .prev-del { position: absolute; top: -5px; right: -5px; background: red; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="app" id="app">
     <div class="topbar">
-        <h1 id="topbar-title">Yükleniyor...</h1>
+        <h1>Oda Yönetimi</h1>
         <div class="mode-btns">
             <button class="mode-btn" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
             <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
         </div>
     </div>
 
-    <!-- ELEKTRA UI -->
     <div id="elektra-ui" style="display:none">
-        <div class="elektra-top-stats" id="estats">
-            <div class="stat-badge" style="background:#1565c0" onclick="toggleStatFilter('dolu-temiz')">DT: <span id="cnt-dt">0</span></div>
-            <div class="stat-badge" style="background:#6a1a9a" onclick="toggleStatFilter('dolu-kirli')">DK: <span id="cnt-dk">0</span></div>
-            <div class="stat-badge" style="background:#2e7d32" onclick="toggleStatFilter('cout')">CO: <span id="cnt-co">0</span></div>
-            <div class="stat-badge" style="background:#4caf50" onclick="toggleStatFilter('temiz')">T: <span id="cnt-t">0</span></div>
-            <div class="stat-badge" style="background:#ff6d00" onclick="toggleStatFilter('kirli')">K: <span id="cnt-k">0</span></div>
-            <div class="stat-badge" style="background:#880e4f" onclick="toggleStatFilter('ooi')">OOI: <span id="cnt-ooi">0</span></div>
-        </div>
-        
         <div class="grid-container">
             <div class="room-grid" id="egrid"></div>
         </div>
     </div>
 
-    <!-- DEMİRBAŞ UI -->
     <div id="demirbas-ui">
         <div class="nav">
-            <button class="nav-btn active" onclick="goDemirbasTab(0)">Ara</button>
-            <button class="nav-btn" onclick="goDemirbasTab(1)">Ekle</button>
-            <button class="nav-btn" onclick="goDemirbasTab(2)">Hepsi</button>
+            <button class="nav-btn active" onclick="goTab(0)">Ara</button>
+            <button class="nav-btn" onclick="goTab(1)">Ekle</button>
         </div>
-        <div class="screen active" id="ds0">
-            <input type="number" id="dsinput" placeholder="Oda no girin..." style="margin-bottom:10px">
-            <button class="btn btn-primary" onclick="demirbasSearch()">Ara</button>
-            <div id="dsresult" style="margin-top:15px"></div>
+        <div class="screen active" id="tab0">
+            <input type="number" id="ds-input" placeholder="Oda no girin...">
+            <button class="btn btn-primary" style="margin-top:10px" onclick="searchRoom()">Ara</button>
+            <div id="search-results" style="margin-top:20px"></div>
         </div>
-        <div class="screen" id="ds1">
-            <div class="field"><span class="label">Oda No *</span><input id="f-room" type="number"></div>
-            <div class="field"><span class="label">Tarih *</span><input id="f-date" type="date"></div>
-            <div class="field"><span class="label">Not</span><textarea id="f-note" rows="2"></textarea></div>
-            <div class="field">
-                <span class="label">Fotoğraflar</span>
-                <button class="btn" onclick="q('fgal').click()" style="width:100%;margin-bottom:10px">Resim Seç</button>
-                <input type="file" id="fgal" multiple style="display:none" onchange="handleFiles(this.files, 'demirbas')">
-                <div id="d-prev" class="photo-preview-wrap"></div>
-            </div>
-            <button class="btn btn-primary" id="d-save-btn" onclick="saveDemirbas()">Kaydet</button>
-        </div>
-        <div class="screen" id="ds2">
-            <div id="rlist"></div>
-        </div>
-    </div>
-
-    <!-- ODA PANELİ (ELEKTRA) -->
-    <div class="panel-overlay" id="epanel-overlay" onclick="closeElektraPanel()"></div>
-    <div class="room-panel" id="eroom-panel">
-        <div style="background:var(--accent); color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center;">
-            <h2 id="panel-room-title">Oda -</h2>
-            <button onclick="closeElektraPanel()" style="background:none; border:none; color:#fff; font-size:20px;">✕</button>
-        </div>
-        <div style="display:flex; border-bottom:1px solid #ddd;">
-            <button class="nav-btn active" id="btn-tab-list" onclick="switchPanelTab('list')">Kayıtlar</button>
-            <button class="nav-btn" id="btn-tab-add" onclick="switchPanelTab('add')">Ekle</button>
-            <button class="nav-btn" id="btn-tab-status" onclick="switchPanelTab('status')">Durum</button>
-        </div>
-        <div style="flex:1; overflow-y:auto; padding:15px;">
-            <div id="tab-list" class="ptab-content"></div>
-            <div id="tab-add" class="ptab-content" style="display:none">
-                <input type="date" id="ef-date" style="margin-bottom:10px">
-                <textarea id="ef-note" placeholder="Notunuz..." rows="3" style="margin-bottom:10px"></textarea>
-                <button class="btn" onclick="q('ef-photos').click()" style="width:100%; margin-bottom:10px">Fotoğraf Seç</button>
-                <input type="file" id="ef-photos" multiple style="display:none" onchange="handleFiles(this.files, 'elektra')">
-                <div id="e-prev" class="photo-preview-wrap"></div>
-                <button class="btn btn-primary" id="e-save-btn" onclick="saveElektraEntry()" style="margin-top:15px">Kaydet</button>
-            </div>
-            <div id="tab-status" class="ptab-content" style="display:none">
-                <div id="status-opts">
-                    <!-- Dinamik dolacak -->
-                </div>
-            </div>
+        <div class="screen" id="tab1">
+            <label class="label">Oda No</label><input type="number" id="f-room">
+            <label class="label">Tarih</label><input type="date" id="f-date">
+            <label class="label">Not</label><textarea id="f-note" rows="3"></textarea>
+            <label class="label">Fotoğraflar</label>
+            <button class="btn" onclick="document.getElementById('f-file').click()" style="width:100%; border:1px solid #ddd">Resim Seç</button>
+            <input type="file" id="f-file" multiple style="display:none" onchange="handleNewFiles(this.files)">
+            <div id="f-preview" class="prev-row" style="margin-top:10px"></div>
+            <button class="btn btn-primary" id="save-btn" onclick="saveNewEntry()" style="margin-top:20px">Kaydet</button>
         </div>
     </div>
 </div>
 
-<!-- LIGHTBOX -->
+<!-- Panel (Elektra) -->
+<div class="lightbox" id="panel-overlay" onclick="closePanel()"></div>
+<div class="room-panel" id="room-panel" style="position:fixed; right:0; top:0; bottom:0; width:100%; max-width:450px; background:#fff; z-index:10001; transform:translateX(100%); transition:0.3s; display:flex; flex-direction:column; box-shadow:-5px 0 15px rgba(0,0,0,0.1)">
+    <div style="background:var(--accent); color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center">
+        <h2 id="panel-title">Oda -</h2>
+        <span onclick="closePanel()" style="cursor:pointer; font-size:24px">✕</span>
+    </div>
+    <div style="display:flex; border-bottom:1px solid #ddd">
+        <button class="nav-btn active" id="p-btn-list" onclick="switchPTab('list')">Kayıtlar</button>
+        <button class="nav-btn" id="p-btn-add" onclick="switchPTab('add')">Ekle</button>
+        <button class="nav-btn" id="p-btn-status" onclick="switchPTab('status')">Durum</button>
+    </div>
+    <div style="flex:1; overflow-y:auto; padding:15px">
+        <div id="p-list"></div>
+        <div id="p-add" style="display:none">
+            <input type="date" id="ef-date">
+            <textarea id="ef-note" placeholder="Notunuz..."></textarea>
+            <button class="btn" onclick="document.getElementById('ef-file').click()" style="width:100%; margin-top:10px; border:1px solid #ddd">Fotoğraf Seç</button>
+            <input type="file" id="ef-file" multiple style="display:none" onchange="handleNewFiles(this.files, 'elektra')">
+            <div id="ef-preview" class="prev-row" style="margin-top:10px"></div>
+            <button class="btn btn-primary" id="ef-save-btn" onclick="saveElektraEntry()" style="margin-top:20px">Kaydet</button>
+        </div>
+        <div id="p-status" style="display:none">
+            <div id="status-options"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox -->
 <div class="lightbox" id="lb">
-    <div class="lb-topbar">
-        <span id="lb-counter">1/1</span>
-        <button class="lb-close" onclick="closeLb()">✕</button>
-    </div>
-    <div class="lb-img-wrap" id="lb-img-wrap">
-        <img id="lb-img" src="">
-    </div>
+    <span class="lb-close" onclick="closeLb()">✕</span>
+    <img id="lb-img" src="">
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// --- CONFIG & STATE ---
 const SB = 'https://tpfdsmexywjnsbkfphwq.supabase.co';
 const KEY = 'sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
 const BUCKETS = { demirbaş: 'photos', elektrik: 'meters' };
-let mode = 'demirbaş';
+
+let currentMode = 'demirbaş';
 let currentRoom = null;
 let roomStatuses = {};
-let pendingFiles = [];
+let pendingFiles = []; 
+let editPendingFiles = []; // Düzenleme sırasında eklenen yeni dosyalar
 let roomsWithEntries = new Set();
-let activeStatFilter = null;
 
 const q = id => document.getElementById(id);
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => new Date().toISOString().slice(0,10);
 
+// --- API ---
 async function api(path, opts = {}) {
     return fetch(SB + path, {
         ...opts,
@@ -231,286 +183,304 @@ async function api(path, opts = {}) {
             'apikey': KEY,
             'Authorization': 'Bearer ' + KEY,
             'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
             ...(opts.headers || {})
         }
     });
 }
 
-// --- INITIALIZE ---
+// --- INIT ---
 window.onload = () => {
-    const saved = localStorage.getItem('activeMode') || 'demirbaş';
-    setMode(saved);
+    setMode(localStorage.getItem('mode') || 'demirbaş');
     q('f-date').value = today();
-    q('ef-date').value = today();
 };
 
 function setMode(m) {
-    mode = m;
-    localStorage.setItem('activeMode', m);
+    currentMode = m;
+    localStorage.setItem('mode', m);
     q('mode-d').classList.toggle('active', m === 'demirbaş');
     q('mode-e').classList.toggle('active', m === 'elektrik');
     q('demirbas-ui').style.display = m === 'demirbaş' ? 'block' : 'none';
     q('elektra-ui').style.display = m === 'elektrik' ? 'block' : 'none';
-    q('topbar-title').textContent = m === 'demirbaş' ? 'Demirbaş Takibi' : 'Elektra Sayaç';
     q('app').classList.toggle('wide', m === 'elektrik');
-    
-    if (m === 'elektrik') initElektra();
+    if(m === 'elektrik') initElektra();
 }
 
-// --- ELEKTRA LOGIC ---
+function goTab(i) {
+    document.querySelectorAll('.screen').forEach((s, j) => s.classList.toggle('active', i === j));
+    document.querySelectorAll('.nav-btn').forEach((b, j) => b.classList.toggle('active', i === j));
+}
+
+// --- ELEKTRA (Grid) ---
 async function initElektra() {
     await loadStatuses();
     await loadRoomsWithEntries();
     renderGrid();
-    updateStats();
 }
 
 async function loadStatuses() {
     try {
         const res = await api('/rest/v1/rooms?select=room_no,status');
         const data = await res.json();
-        roomStatuses = {};
         data.forEach(r => roomStatuses[r.room_no] = r.status);
     } catch(e) {}
 }
 
 async function loadRoomsWithEntries() {
     try {
-        const res = await api('/rest/v1/entries?mode=eq.elektrik&select=room_no');
+        const res = await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);
         const data = await res.json();
         roomsWithEntries = new Set(data.map(d => String(d.room_no)));
     } catch(e) {}
 }
 
 function renderGrid() {
-    const grid = q('egrid');
-    grid.innerHTML = '';
-    // 15 Kat, her katta 18 Oda = 270 Hücre
-    for (let kat = 1; kat <= 15; kat++) {
-        for (let oda = 1; oda <= 18; oda++) {
-            const rno = kat * 100 + oda;
+    const grid = q('egrid'); grid.innerHTML = '';
+    // 15 Satır x 18 Sütun
+    for (let f = 1; f <= 15; f++) {
+        for (let r = 1; r <= 18; r++) {
+            const rno = f * 100 + r;
             const status = roomStatuses[rno] || 'bos';
-            
-            if (activeStatFilter && status !== activeStatFilter) {
-                // Filtre varsa ve uymuyorsa boş göster veya pasif yap
-            }
-
             const cell = document.createElement('div');
             cell.className = `room-cell status-${status}`;
+            cell.style.position = 'relative';
             cell.textContent = rno;
-            if (roomsWithEntries.has(String(rno))) {
+            if(roomsWithEntries.has(String(rno))) {
                 const flag = document.createElement('div');
                 flag.className = 'room-flag';
                 cell.appendChild(flag);
             }
-            cell.onclick = () => openElektraPanel(rno);
+            cell.onclick = () => openPanel(rno);
             grid.appendChild(cell);
         }
     }
 }
 
-function updateStats() {
-    const counts = { dt:0, dk:0, co:0, t:0, k:0, ooi:0 };
-    Object.values(roomStatuses).forEach(s => {
-        if(s === 'dolu-temiz') counts.dt++;
-        if(s === 'dolu-kirli') counts.dk++;
-        if(s === 'cout') counts.co++;
-        if(s === 'temiz') counts.t++;
-        if(s === 'kirli') counts.k++;
-        if(s === 'ooi') counts.ooi++;
-    });
-    q('cnt-dt').textContent = counts.dt;
-    q('cnt-dk').textContent = counts.dk;
-    q('cnt-co').textContent = counts.co;
-    q('cnt-t').textContent = counts.t;
-    q('cnt-k').textContent = counts.k;
-    q('cnt-ooi').textContent = counts.ooi;
-}
-
-// --- PANEL LOGIC ---
-async function openElektraPanel(rno) {
+// --- PANEL ---
+function openPanel(rno) {
     currentRoom = rno;
-    q('panel-room-title').textContent = `Oda ${rno}`;
-    q('eroom-panel').classList.add('open');
-    q('epanel-overlay').style.display = 'block';
-    switchPanelTab('list');
-    loadRoomEntries(rno);
+    q('panel-title').textContent = `Oda ${rno}`;
+    q('room-panel').style.transform = 'translateX(0)';
+    q('panel-overlay').style.display = 'block';
+    q('ef-date').value = today();
+    switchPTab('list');
+    loadRoomEntries();
 }
 
-function closeElektraPanel() {
-    q('eroom-panel').classList.remove('open');
-    q('epanel-overlay').style.display = 'none';
-    currentRoom = null;
+function closePanel() {
+    q('room-panel').style.transform = 'translateX(100%)';
+    q('panel-overlay').style.display = 'none';
+    pendingFiles = []; q('ef-preview').innerHTML = '';
 }
 
-function switchPanelTab(t) {
-    document.querySelectorAll('.ptab-content').forEach(p => p.style.display = 'none');
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    q('tab-' + t).style.display = 'block';
-    q('btn-tab-' + t).classList.add('active');
-    
+function switchPTab(t) {
+    ['list','add','status'].forEach(x => {
+        q('p-'+x).style.display = x === t ? 'block' : 'none';
+        q('p-btn-'+x).classList.toggle('active', x === t);
+    });
     if(t === 'status') renderStatusOptions();
 }
 
-async function loadRoomEntries(rno) {
-    const list = q('tab-list');
-    list.innerHTML = 'Yükleniyor...';
+async function loadRoomEntries() {
+    const list = q('p-list'); list.innerHTML = 'Yükleniyor...';
     try {
-        const res = await api(`/rest/v1/entries?room_no=eq.${rno}&mode=eq.elektrik&order=checkin_date.desc`);
+        const res = await api(`/rest/v1/entries?room_no=eq.${currentRoom}&mode=eq.elektrik&order=checkin_date.desc`);
         const data = await res.json();
-        if(!data.length) { list.innerHTML = 'Kayıt bulunamadı.'; return; }
+        if(!data.length) { list.innerHTML = 'Kayıt yok.'; return; }
         
         list.innerHTML = data.map(entry => {
-            const urls = entry.photo_urls || [];
+            const photos = entry.photo_data || (entry.photo_urls || []).map(u => ({url:u, desc:''}));
             return `
-                <div class="entry-card">
-                    <div class="entry-head" onclick="toggleCard(this)">
+                <div class="entry-card" id="card-${entry.id}">
+                    <div class="entry-head" onclick="toggleCard('${entry.id}')">
                         <span class="date-badge">${entry.checkin_date}</span>
-                        <div style="flex:1; font-size:13px; margin-left:10px">${entry.note || ''}</div>
-                        <span style="font-size:12px; color:#888">📷 ${urls.length}</span>
+                        <div style="flex:1; font-size:13px">${entry.note || ''}</div>
+                        <span style="font-size:12px; color:#888">📷 ${photos.length}</span>
                     </div>
-                    <div class="entry-body" style="display:none; padding:10px; border-top:1px solid #eee">
+                    <div class="entry-body" id="body-${entry.id}">
                         <div class="photo-gallery">
-                            ${urls.map((u, i) => `
-                                <div class="photo-card">
-                                    <img src="${u}" onclick="openLb(${JSON.stringify(urls)}, ${i})">
-                                </div>
+                            ${photos.map((p, i) => `
+                                <div class="photo-card"><img src="${p.url}" onclick="openLb('${p.url}')"></div>
                             `).join('')}
                         </div>
-                        <div style="margin-top:10px; display:flex; gap:5px">
-                            <button class="btn" style="font-size:11px" onclick="toggleEdit('${entry.id}')">Düzenle</button>
-                            <button class="btn" style="font-size:11px; color:red" onclick="deleteEntry('${entry.id}')">Sil</button>
+                        <div style="margin-top:10px; display:flex; gap:10px">
+                            <button class="btn" style="background:#eee; font-size:12px" onclick="openEditPanel('${entry.id}')">Düzenle</button>
+                            <button class="btn" style="background:var(--danger-light); color:var(--danger); font-size:12px" onclick="deleteEntry('${entry.id}')">Sil</button>
                         </div>
-                        <div id="edit-${entry.id}" style="display:none; margin-top:10px; background:#f9f9f9; padding:10px; border-radius:8px">
-                            <input type="date" id="edate-${entry.id}" value="${entry.checkin_date}" style="margin-bottom:5px">
-                            <textarea id="enote-${entry.id}" style="margin-bottom:5px">${entry.note || ''}</textarea>
-                            <button class="btn btn-primary" onclick="saveUpdate('${entry.id}')">Güncelle</button>
-                        </div>
+                        <div id="edit-area-${entry.id}"></div>
                     </div>
                 </div>
             `;
         }).join('');
-    } catch(e) { list.innerHTML = 'Hata oluştu.'; }
+    } catch(e) { list.innerHTML = 'Hata.'; }
 }
 
-function toggleCard(el) {
-    const body = el.nextElementSibling;
-    body.style.display = body.style.display === 'none' ? 'block' : 'none';
+function toggleCard(id) {
+    const body = q('body-' + id);
+    body.classList.toggle('open');
 }
 
-function toggleEdit(id) {
-    const el = q('edit-' + id);
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+// --- DÜZENLEME MANTIĞI (saveEdit Fix) ---
+let currentEditingData = null;
+
+async function openEditPanel(id) {
+    const area = q('edit-area-' + id);
+    if(area.innerHTML !== '') { area.innerHTML = ''; return; }
+    
+    // Veriyi çek
+    const res = await api(`/rest/v1/entries?id=eq.${id}`);
+    const data = (await res.json())[0];
+    currentEditingData = data;
+    const photos = data.photo_data || (data.photo_urls || []).map(u => ({url:u, desc:''}));
+    editPendingFiles = []; // Yeni eklenenler için temizle
+
+    area.innerHTML = `
+        <div class="edit-panel">
+            <label class="label">Tarih</label>
+            <input type="date" id="edit-date-${id}" value="${data.checkin_date}">
+            <label class="label">Açıklama</label>
+            <textarea id="edit-note-${id}" rows="2">${data.note || ''}</textarea>
+            
+            <label class="label">📷 Fotoğraflar</label>
+            <div id="edit-existing-photos-${id}">
+                ${photos.map((p, idx) => `
+                    <div class="edit-photo-row" id="edit-row-${id}-${idx}">
+                        <img src="${p.url}" class="edit-photo-thumb">
+                        <input class="edit-photo-input" type="text" value="${p.desc || ''}" id="edit-desc-${id}-${idx}" placeholder="Açıklama...">
+                        <button class="edit-photo-del-btn" onclick="removeExistingPhoto('${id}', ${idx})">✕</button>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div id="edit-new-previews-${id}" class="prev-row" style="margin-top:10px"></div>
+            
+            <button class="btn" style="width:100%; margin-top:10px; border:1px dashed #aaa" onclick="q('edit-file-${id}').click()">+ Fotoğraf Ekle</button>
+            <input type="file" id="edit-file-${id}" multiple style="display:none" onchange="handleEditNewFiles('${id}', this.files)">
+            
+            <button class="btn btn-primary" id="edit-save-btn-${id}" style="margin-top:15px" onclick="saveEdit('${id}')">💾 Kaydet</button>
+        </div>
+    `;
 }
 
-// --- DOSYA İŞLEMLERİ ---
-async function handleFiles(files, target) {
-    for (const file of files) {
+function removeExistingPhoto(entryId, idx) {
+    const row = q(`edit-row-${entryId}-${idx}`);
+    if(row) row.remove();
+}
+
+function handleEditNewFiles(id, files) {
+    for (let f of files) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const id = Math.random().toString(36).substr(2, 9);
-            pendingFiles.push({ id, file, data: e.target.result });
-            renderPreviews(target);
+            const fileId = Math.random().toString(36).substr(2,5);
+            editPendingFiles.push({ id: fileId, file: f, data: e.target.result });
+            renderEditPreviews(id);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(f);
     }
 }
 
-function renderPreviews(target) {
-    const container = target === 'elektra' ? q('e-prev') : q('d-prev');
-    container.innerHTML = pendingFiles.map(f => `
-        <div class="photo-preview-item">
-            <img src="${f.data}" class="photo-preview-img">
-            <div class="photo-preview-del" onclick="removeFile('${f.id}', '${target}')">✕</div>
+function renderEditPreviews(id) {
+    const wrap = q('edit-new-previews-' + id);
+    wrap.innerHTML = editPendingFiles.map(f => `
+        <div class="prev-item">
+            <img src="${f.data}">
+            <div class="prev-del" onclick="removeEditPending('${id}','${f.id}')">✕</div>
         </div>
     `).join('');
 }
 
-function removeFile(id, target) {
-    pendingFiles = pendingFiles.filter(f => f.id !== id);
-    renderPreviews(target);
+function removeEditPending(entryId, fileId) {
+    editPendingFiles = editPendingFiles.filter(f => f.id !== fileId);
+    renderEditPreviews(entryId);
 }
 
-// --- KAYDETME FONKSİYONLARI ---
-async function saveElektraEntry() {
-    if (!currentRoom || pendingFiles.length === 0) {
-        toast('Lütfen oda seçin ve en az 1 resim ekleyin.');
-        return;
-    }
-    const btn = q('e-save-btn');
+async function saveEdit(id) {
+    const btn = q('edit-save-btn-' + id);
+    const originalText = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<span class="loader"></span> Kaydediliyor...';
-    
+
     try {
-        const urls = [];
-        for (const f of pendingFiles) {
+        // 1. Yeni resimleri yükle
+        const newPhotoData = [];
+        for (let f of editPendingFiles) {
             const url = await uploadToSupabase(f.file, BUCKETS.elektrik);
-            urls.push(url);
+            newPhotoData.push({ url, desc: '' });
         }
-        
+
+        // 2. Mevcut resimleri topla (silinmeyenleri)
+        const updatedPhotoData = [];
+        const existingRows = document.querySelectorAll(`#edit-existing-photos-${id} .edit-photo-row`);
+        existingRows.forEach(row => {
+            const idx = row.id.split('-').pop();
+            const url = row.querySelector('img').src;
+            const desc = row.querySelector('input').value;
+            updatedPhotoData.push({ url, desc });
+        });
+
+        // 3. Birleştir
+        const finalPhotoData = [...updatedPhotoData, ...newPhotoData];
+        const finalPhotoUrls = finalPhotoData.map(p => p.url);
+
+        // 4. Veritabanını güncelle
         const payload = {
-            room_no: String(currentRoom),
-            checkin_date: q('ef-date').value,
-            note: q('ef-note').value,
-            mode: 'elektrik',
-            photo_urls: urls
+            checkin_date: q('edit-date-' + id).value,
+            note: q('edit-note-' + id).value,
+            photo_data: finalPhotoData,
+            photo_urls: finalPhotoUrls
         };
-        
-        const res = await api('/rest/v1/entries', {
-            method: 'POST',
+
+        const res = await api(`/rest/v1/entries?id=eq.${id}`, {
+            method: 'PATCH',
             body: JSON.stringify(payload)
         });
-        
-        if (res.ok) {
-            toast('Kayıt başarıyla eklendi!');
-            pendingFiles = [];
-            q('ef-note').value = '';
-            q('e-prev').innerHTML = '';
-            loadRoomEntries(currentRoom);
-            loadRoomsWithEntries();
-            renderGrid();
-        } else { throw new Error('DB Hatası'); }
+
+        if(res.ok) {
+            toast('Başarıyla güncellendi');
+            loadRoomEntries();
+        } else {
+            const err = await res.json();
+            throw new Error(err.message || 'Güncelleme hatası');
+        }
     } catch(e) {
         toast('Hata: ' + e.message, 'error');
-    } finally {
         btn.disabled = false;
-        btn.innerHTML = 'Kaydet';
+        btn.innerHTML = originalText;
     }
 }
 
-async function saveUpdate(id) {
-    const date = q('edate-' + id).value;
-    const note = q('enote-' + id).value;
-    try {
-        const res = await api(`/rest/v1/entries?id=eq.${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ checkin_date: date, note: note })
-        });
-        if(res.ok) {
-            toast('Güncellendi');
-            loadRoomEntries(currentRoom);
-        }
-    } catch(e) { toast('Güncellenemedi'); }
+// --- DOSYA YÜKLEME ---
+function handleNewFiles(files, type = 'demirbas') {
+    for (let f of files) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const id = Math.random().toString(36).substr(2,5);
+            pendingFiles.push({ id, file: f, data: e.target.result });
+            renderNewPreviews(type);
+        };
+        reader.readAsDataURL(f);
+    }
 }
 
-async function deleteEntry(id) {
-    if(!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
-    try {
-        const res = await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
-        if(res.ok) {
-            toast('Silindi');
-            loadRoomEntries(currentRoom);
-            loadRoomsWithEntries();
-            renderGrid();
-        }
-    } catch(e) { toast('Silinemedi'); }
+function renderNewPreviews(type) {
+    const wrap = type === 'elektra' ? q('ef-preview') : q('f-preview');
+    wrap.innerHTML = pendingFiles.map(f => `
+        <div class="prev-item">
+            <img src="${f.data}">
+            <div class="prev-del" onclick="removePending('${f.id}','${type}')">✕</div>
+        </div>
+    `).join('');
+}
+
+function removePending(id, type) {
+    pendingFiles = pendingFiles.filter(f => f.id !== id);
+    renderNewPreviews(type);
 }
 
 async function uploadToSupabase(file, bucket) {
     const ext = file.name.split('.').pop();
-    const name = `${Date.now()}_${Math.random().toString(36).substr(2,9)}.${ext}`;
-    const path = `${currentRoom || 'all'}/${name}`;
-    
+    const name = `${Date.now()}_${Math.random().toString(36).substr(2,11)}.${ext}`;
+    const path = `${currentRoom || 'general'}/${name}`;
     const res = await fetch(`${SB}/storage/v1/object/${bucket}/${path}`, {
         method: 'POST',
         headers: {
@@ -524,71 +494,134 @@ async function uploadToSupabase(file, bucket) {
     return `${SB}/storage/v1/object/public/${bucket}/${path}`;
 }
 
-// --- LIGHTBOX ---
-let lbList = [];
-let lbIdx = 0;
-function openLb(urls, idx) {
-    lbList = urls;
-    lbIdx = idx;
-    q('lb-img').src = urls[idx];
-    q('lb-counter').textContent = `${idx + 1} / ${urls.length}`;
-    q('lb').classList.add('open');
+// --- YENİ KAYIT (Elektra/Demirbaş) ---
+async function saveElektraEntry() {
+    if(!pendingFiles.length) { toast('En az 1 resim gerekli','error'); return; }
+    const btn = q('ef-save-btn');
+    btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Yükleniyor...';
+    
+    try {
+        const photoData = [];
+        for(let f of pendingFiles) {
+            const url = await uploadToSupabase(f.file, BUCKETS.elektrik);
+            photoData.push({ url, desc: '' });
+        }
+        
+        const payload = {
+            room_no: String(currentRoom),
+            checkin_date: q('ef-date').value,
+            note: q('ef-note').value,
+            mode: 'elektrik',
+            photo_data: photoData,
+            photo_urls: photoData.map(p => p.url)
+        };
+        
+        const res = await api('/rest/v1/entries', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        
+        if(res.ok) {
+            toast('Kayıt eklendi');
+            switchPTab('list');
+            loadRoomEntries();
+            loadRoomsWithEntries();
+            renderGrid();
+        } else {
+            const err = await res.json();
+            throw new Error(err.message);
+        }
+    } catch(e) {
+        toast('Hata: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false; btn.innerHTML = 'Kaydet';
+    }
 }
-function closeLb() { q('lb').classList.remove('open'); }
+
+async function saveNewEntry() {
+    const room = q('f-room').value;
+    if(!room || !pendingFiles.length) { toast('Oda ve resim gerekli','error'); return; }
+    const btn = q('save-btn');
+    btn.disabled = true; btn.innerHTML = '<span class="loader"></span>...';
+    
+    try {
+        const photoUrls = [];
+        for(let f of pendingFiles) {
+            const url = await uploadToSupabase(f.file, BUCKETS.demirbaş);
+            photoUrls.push(url);
+        }
+        
+        const res = await api('/rest/v1/entries', {
+            method: 'POST',
+            body: JSON.stringify({
+                room_no: String(room),
+                checkin_date: q('f-date').value,
+                note: q('f-note').value,
+                mode: 'demirbaş',
+                photo_urls: photoUrls
+            })
+        });
+        
+        if(res.ok) {
+            toast('Başarıyla kaydedildi');
+            q('f-room').value = ''; q('f-note').value = '';
+            pendingFiles = []; q('f-preview').innerHTML = '';
+            goTab(0);
+        }
+    } catch(e) { toast('Hata','error'); }
+    finally { btn.disabled = false; btn.innerHTML = 'Kaydet'; }
+}
+
+// --- STATUS ---
+function renderStatusOptions() {
+    const statuses = ['dolu-temiz','dolu-kirli','cout','temiz','kirli','ooi','ariza','onaylı','bos'];
+    const container = q('status-options');
+    container.innerHTML = statuses.map(s => `
+        <div class="status-opt status-${s}" style="padding:15px; margin-bottom:8px; border-radius:8px; cursor:pointer; font-weight:700; text-align:center" onclick="updateRoomStatus('${s}')">
+            ${s.toUpperCase()} ${roomStatuses[currentRoom] === s ? '✓' : ''}
+        </div>
+    `).join('');
+}
+
+async function updateRoomStatus(status) {
+    try {
+        await api('/rest/v1/rooms', {
+            method: 'POST',
+            body: JSON.stringify({ room_no: currentRoom, status: status })
+        });
+        roomStatuses[currentRoom] = status;
+        toast('Durum güncellendi');
+        renderStatusOptions();
+        renderGrid();
+    } catch(e) { toast('Hata'); }
+}
 
 // --- UTILS ---
 function toast(msg, type = 'success') {
     const t = q('toast');
     t.textContent = msg;
     t.style.display = 'block';
-    t.style.background = type === 'error' ? '#c0392b' : '#333';
+    t.style.background = type === 'error' ? '#c0392b' : '#1a5c3a';
     setTimeout(() => t.style.display = 'none', 3000);
 }
 
-// Demirbaş tabları arası geçiş
-function goDemirbasTab(i) {
-    document.querySelectorAll('#demirbas-ui .screen').forEach((s, j) => s.classList.toggle('active', i === j));
-    document.querySelectorAll('#demirbas-ui .nav-btn').forEach((b, j) => b.classList.toggle('active', i === j));
+function openLb(url) {
+    q('lb-img').src = url;
+    q('lb').classList.add('open');
 }
 
-// Durum Güncelleme
-function renderStatusOptions() {
-    const statuses = [
-        {id:'dolu-temiz', label:'Dolu Temiz', color:'#1565c0'},
-        {id:'dolu-kirli', label:'Dolu Kirli', color:'#6a1a9a'},
-        {id:'cout', label:'C/Out', color:'#2e7d32'},
-        {id:'temiz', label:'Temiz', color:'#4caf50'},
-        {id:'kirli', label:'Kirli', color:'#ff6d00'},
-        {id:'ooi', label:'OOI', color:'#880e4f'},
-        {id:'ariza', label:'Arıza', color:'#546e7a'},
-        {id:'onaylı', label:'Onaylı', color:'#4a148c'},
-        {id:'bos', label:'Boş', color:'#888'}
-    ];
-    const current = roomStatuses[currentRoom] || 'bos';
-    q('status-opts').innerHTML = statuses.map(s => `
-        <div onclick="updateRoomStatus('${s.id}')" style="padding:12px; margin-bottom:5px; border-radius:8px; background:${s.color}; color:#fff; cursor:pointer; display:flex; justify-content:space-between;">
-            ${s.label} ${current === s.id ? '✓' : ''}
-        </div>
-    `).join('');
-}
+function closeLb() { q('lb').classList.remove('open'); }
 
-async function updateRoomStatus(newStatus) {
-    try {
-        const res = await api('/rest/v1/rooms', {
-            method: 'POST',
-            headers: { 'Prefer': 'resolution=merge-duplicates' },
-            body: JSON.stringify({ room_no: currentRoom, status: newStatus })
-        });
-        if(res.ok) {
-            roomStatuses[currentRoom] = newStatus;
-            toast('Durum güncellendi');
-            renderStatusOptions();
-            renderGrid();
-            updateStats();
-        }
-    } catch(e) { toast('Hata!'); }
+async function deleteEntry(id) {
+    if(!confirm('Emin misiniz?')) return;
+    const res = await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
+    if(res.ok) {
+        toast('Silindi');
+        loadRoomEntries();
+        loadRoomsWithEntries();
+        renderGrid();
+    }
 }
-
 </script>
 </body>
 </html>
