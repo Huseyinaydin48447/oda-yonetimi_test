@@ -12,85 +12,88 @@
             --danger: #c0392b; --amber: #b45309; --radius: 12px; --radius-sm: 8px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-        
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .app { max-width: 550px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
         .app.wide { max-width: 1400px; }
-
-        /* Topbar */
+        
         .topbar { background: var(--accent); padding: 14px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
         .topbar h1 { font-size: 16px; font-weight: 600; color: #fff; flex: 1; }
+        .mode-btns { display: flex; gap: 5px; }
         .mode-btn { padding: 5px 12px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.3); background: transparent; color: #fff; opacity: 0.7; }
         .mode-btn.active { opacity: 1; background: rgba(255,255,255,0.2); border-color: #fff; }
 
-        /* Filtreleme Üst Bar */
+        /* Filtreleme */
         .elektra-top-stats { display: flex; gap: 6px; padding: 12px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); scrollbar-width: none; }
-        .elektra-top-stats::-webkit-scrollbar { display: none; }
-        .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 10px; min-width: 70px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-        .stat-badge.active-filter { border-color: rgba(0,0,0,0.3); transform: scale(1.05); }
+        .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 10px; min-width: 70px; cursor: pointer; border: 2px solid transparent; }
         .stat-badge .count { font-size: 16px; font-weight: 700; color: #fff; }
         .stat-badge .s-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .stat-badge.active-filter { border-color: #333; transform: scale(1.05); }
 
-        /* Durum Renkleri */
         .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
         .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
         .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
 
-        /* Oda Izgarası - 18x15 */
-        .grid-container { padding: 12px; overflow-x: auto; background: var(--bg); -webkit-overflow-scrolling: touch; }
-        .room-grid { display: grid; grid-template-columns: repeat(18, 55px); gap: 2px; width: max-content; margin: 0 auto; }
-        .room-cell { height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); position: relative; }
+        /* 18 Sütunlu Grid */
+        .grid-container { padding: 12px; overflow-x: auto; background: var(--bg); }
+        .room-grid { display: grid; grid-template-columns: repeat(18, 55px); gap: 3px; width: max-content; margin: 0 auto; }
+        .room-cell { height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); position: relative; }
         .room-flag { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; box-shadow: 0 0 5px #00e5ff; }
 
-        /* ODA PANELİ - TÜM EKRANI KAPLAR */
-        .room-panel { position: fixed; inset: 0; width: 100%; height: 100%; background: #fff; z-index: 10001; transform: translateY(100%); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        /* FULL SCREEN PANEL (Tüm Ekranı Kaplayan Oda Detayı) */
+        .room-panel { position: fixed; inset: 0; background: #fff; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
         .room-panel.open { transform: translateY(0); }
         
-        /* Panel İçeriği Dikey Liste */
-        .entries-container { display: flex; flex-direction: column; gap: 16px; padding: 16px; flex: 1; overflow-y: auto; }
-        .entry-card-mini { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .panel-header { background: var(--accent); padding: 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
+        .panel-room-badge { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 8px; font-size: 18px; font-weight: 800; }
         
-        /* Fotoğraf Galerisi */
-        .photo-grid-mini { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; padding: 12px; background: #fafafa; }
-        .photo-item-mini { aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid #eee; }
-        .photo-item-mini img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Sekmeler */
-        .nav-tabs { display: flex; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 10; }
-        .nav-tab-btn { flex: 1; padding: 16px; font-size: 13px; font-weight: 700; border: none; background: #fff; cursor: pointer; border-bottom: 3px solid transparent; color: var(--muted); }
+        .nav-tabs { display: flex; border-bottom: 1px solid var(--border); }
+        .nav-tab-btn { flex: 1; padding: 15px; font-size: 13px; font-weight: 700; border: none; background: #fff; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
         .nav-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
         
-        .tab-pane { display: none; flex: 1; overflow-y: auto; padding: 0; }
-        .tab-pane.active { display: flex; flex-direction: column; }
+        .panel-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+        /* Kayıt Kartları (Dikey Liste) */
+        .entry-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .entry-head { padding: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; border-bottom: 1px solid #eee; background: #fafafa; }
+        .date-badge { background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
+        
+        .photo-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; padding: 12px; }
+        .photo-card { aspect-ratio: 1/1; border-radius: 10px; overflow: hidden; border: 1px solid #eee; cursor: pointer; }
+        .photo-card img { width: 100%; height: 100%; object-fit: cover; }
 
         /* Form Elemanları */
-        .form-group { padding: 16px; }
-        input[type="date"], textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; font-family: inherit; font-size: 15px; background: #fafafa; }
-        .btn-save { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; }
+        label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 5px; display: block; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; margin-bottom: 15px; font-size: 15px; background: #fafafa; }
+        .btn-primary { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; }
+        .btn-primary:disabled { opacity: 0.5; }
+
+        /* Preview */
+        .prev-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .prev-item { position: relative; width: 70px; height: 70px; }
+        .prev-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .prev-del { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; border: 2px solid #fff; }
 
         /* Lightbox */
         .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
         .lightbox.open { display: flex; }
         #lb-img { max-width: 98%; max-height: 90%; object-fit: contain; }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 25px; border-radius: 50px; z-index: 30000; display: none; font-size: 14px; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 25px; border-radius: 50px; z-index: 30000; display: none; }
         .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .edit-area { background: #f0f4f2; padding: 15px; border-radius: 12px; margin: 10px; border: 1px dashed var(--accent); }
     </style>
 </head>
 <body class="app wide">
 
     <div class="topbar">
-        <h1 id="topbar-title">Oda Yönetimi</h1>
+        <h1>Oda Yönetimi</h1>
         <div class="mode-btns">
             <button class="mode-btn" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
             <button class="mode-btn active" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
         </div>
     </div>
 
-    <!-- ELEKTRA ANA GÖRÜNÜM -->
+    <!-- ANA EKRAN (ELEKTRA) -->
     <div id="elektra-ui">
         <div class="elektra-top-stats" id="estats"></div>
         <div class="grid-container">
@@ -98,53 +101,48 @@
         </div>
     </div>
 
-    <!-- DEMİRBAŞ ARA GÖRÜNÜM -->
+    <!-- DEMİRBAŞ EKRANI -->
     <div id="demirbas-ui" style="display:none; padding:20px">
         <input type="number" id="ds-input" placeholder="Oda no girin...">
-        <button onclick="searchDemirbas()" class="btn-save" style="margin-top:10px">ARA</button>
+        <button onclick="searchDemirbas()" class="btn-primary" style="margin-top:10px">ARA</button>
         <div id="ds-results" style="margin-top:20px"></div>
     </div>
 
-    <!-- ODA PANELİ (TAM EKRAN) -->
+    <!-- TAM EKRAN ODA PANELİ -->
     <div class="room-panel" id="room-panel">
-        <div style="background:var(--accent); color:#fff; padding:16px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:20">
-            <h2 id="panel-room-title" style="font-size:18px; font-weight:700">ODA -</h2>
+        <div class="panel-header">
+            <div class="panel-room-badge" id="panel-room-title">ODA -</div>
             <div onclick="closePanel()" style="cursor:pointer; width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px">✕</div>
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab-btn active" id="tab-btn-list" onclick="switchPTab('list')">GEÇMİŞ KAYITLAR</button>
+            <button class="nav-tab-btn active" id="tab-btn-list" onclick="switchPTab('list')">KAYITLAR</button>
             <button class="nav-tab-btn" id="tab-btn-add" onclick="switchPTab('add')">YENİ EKLE</button>
-            <button class="nav-tab-btn" id="tab-btn-status" onclick="switchPTab('status')">DURUMU GÜNCELLE</button>
+            <button class="nav-tab-btn" id="tab-btn-status" onclick="switchPTab('status')">DURUM</button>
         </div>
 
-        <!-- Kayıt Listesi -->
-        <div id="p-list" class="tab-pane active">
-            <div class="entries-container" id="entries-scroll">
-                <!-- Kayıtlar dikey düzende buraya gelecek -->
+        <div class="panel-content">
+            <!-- Kayıt Listesi Tabı -->
+            <div id="p-list" style="display:block">
+                <div id="entries-list"></div>
             </div>
-        </div>
 
-        <!-- Yeni Kayıt Ekleme -->
-        <div id="p-add" class="tab-pane">
-            <div class="form-group">
-                <label style="font-size:12px; font-weight:700; color:var(--muted); display:block; margin-bottom:5px">İŞLEM TARİHİ</label>
+            <!-- Yeni Kayıt Tabı -->
+            <div id="p-add" style="display:none">
+                <label>TARİH</label>
                 <input type="date" id="ef-date">
-                
-                <label style="font-size:12px; font-weight:700; color:var(--muted); display:block; margin-bottom:5px">NOT / AÇIKLAMA</label>
-                <textarea id="ef-note" rows="3" placeholder="Örn: Sayaç okundu, sorun yok..."></textarea>
-                
-                <button onclick="q('ef-file').click()" style="width:100%; padding:16px; border:2px dashed var(--border); border-radius:12px; margin-bottom:16px; background:#fafafa; font-weight:700; color:var(--muted)">📷 FOTOĞRAF ÇEK / SEÇ</button>
+                <label>NOTLAR</label>
+                <textarea id="ef-note" rows="3" placeholder="Sayaç detayları..."></textarea>
+                <button onclick="q('ef-file').click()" style="width:100%; padding:15px; border:2px dashed var(--border); border-radius:10px; margin-bottom:15px; background:#fafafa; font-weight:700; color:var(--muted)">📷 FOTOĞRAF EKLE</button>
                 <input type="file" id="ef-file" multiple style="display:none" onchange="handleNewFiles(this.files)">
-                
-                <div id="ef-preview" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px"></div>
-                <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-save">KAYDI SİSTEME İŞLE</button>
+                <div id="ef-preview" class="prev-row"></div>
+                <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-primary">KAYDET</button>
             </div>
-        </div>
 
-        <!-- Durum Güncelleme -->
-        <div id="p-status" class="tab-pane">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px" id="status-opts"></div>
+            <!-- Durum Tabı -->
+            <div id="p-status" style="display:none">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px" id="status-opts"></div>
+            </div>
         </div>
     </div>
 
@@ -252,15 +250,15 @@ function renderGrid() {
             const status = roomStatuses[rno] || 'bos';
             if(activeStatFilter && status !== activeStatFilter) continue;
             const cell = document.createElement('div');
-            let colorClass = 'bg-bos';
-            if(status === 'dolu-temiz') colorClass = 'bg-dt';
-            else if(status === 'dolu-kirli') colorClass = 'bg-dk';
-            else if(status === 'cout') colorClass = 'bg-co';
-            else if(status === 'temiz') colorClass = 'bg-t';
-            else if(status === 'kirli') colorClass = 'bg-k';
-            else if(status === 'ooi') colorClass = 'bg-ooi';
-            
-            cell.className = `room-cell ${colorClass}`;
+            let cName = 'bg-bos';
+            if(status === 'dolu-temiz') cName = 'bg-dt';
+            else if(status === 'dolu-kirli') cName = 'bg-dk';
+            else if(status === 'cout') cName = 'bg-co';
+            else if(status === 'temiz') cName = 'bg-t';
+            else if(status === 'kirli') cName = 'bg-k';
+            else if(status === 'ooi') cName = 'bg-ooi';
+
+            cell.className = `room-cell ${cName}`;
             cell.textContent = rno;
             if(roomsWithEntries.has(String(rno))) {
                 const flag = document.createElement('div'); flag.className = 'room-flag'; cell.appendChild(flag);
@@ -273,7 +271,7 @@ function renderGrid() {
 
 async function openPanel(rno) {
     currentRoom = rno;
-    q('panel-room-title').textContent = `ODA ${rno} - SAYAÇ KAYITLARI`;
+    q('panel-room-title').textContent = `ODA ${rno}`;
     q('room-panel').classList.add('open');
     switchPTab('list'); loadEntries();
 }
@@ -284,44 +282,41 @@ function closePanel() {
 }
 
 function switchPTab(t) {
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
-    q('p-' + t).classList.add('active');
-    q('tab-btn-' + t).classList.add('active');
+    ['list','add','status'].forEach(x => {
+        q('p-' + x).style.display = (x === t) ? 'block' : 'none';
+        q('tab-btn-' + x).classList.toggle('active', x === t);
+    });
     if(t === 'status') renderStatusSelection();
 }
 
 async function loadEntries() {
-    const wrap = q('entries-scroll');
-    wrap.innerHTML = '<div style="padding:40px; text-align:center; color:#888">Yükleniyor...</div>';
+    const wrap = q('entries-list');
+    wrap.innerHTML = '<div style="padding:20px; text-align:center">Yükleniyor...</div>';
     try {
         const res = await api(`/rest/v1/entries?room_no=eq.${currentRoom}&mode=eq.elektrik&order=checkin_date.desc`);
         const data = await res.json();
-        if(!data.length) { wrap.innerHTML = '<div style="padding:80px 40px; text-align:center; color:#888; width:100%">Bu odaya ait henüz bir sayaç kaydı bulunmuyor.</div>'; return; }
+        if(!data.length) { wrap.innerHTML = '<div style="padding:40px; text-align:center; color:#888">Kayıt yok.</div>'; return; }
         
         wrap.innerHTML = data.map(e => `
-            <div class="entry-card-mini">
-                <div style="padding:16px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; background:#fcfcfc">
-                    <span style="font-weight:700; color:var(--accent); font-size:15px">📅 ${fmtDate(e.checkin_date)}</span>
-                    <div style="display:flex; gap:12px">
-                        <button onclick="toggleEdit('${e.id}')" style="border:none; background:none; cursor:pointer; font-size:18px">✏️</button>
-                        <button onclick="deleteEntry('${e.id}')" style="border:none; background:none; cursor:pointer; font-size:18px">🗑️</button>
-                    </div>
+            <div class="entry-card">
+                <div class="entry-head">
+                    <span class="date-badge">${fmtDate(e.checkin_date)}</span>
+                    <div style="flex:1"></div>
+                    <button onclick="toggleEdit('${e.id}')" style="border:none; background:none; cursor:pointer; font-size:18px">✏️</button>
+                    <button onclick="deleteEntry('${e.id}')" style="border:none; background:none; cursor:pointer; font-size:18px; margin-left:10px">🗑️</button>
                 </div>
-                <div class="photo-grid-mini">
-                    ${(e.photo_urls || []).map(u => `<div class="photo-item-mini"><img src="${u}" onclick="openLb('${u}')"></div>`).join('')}
+                <div class="photo-gallery">
+                    ${(e.photo_urls || []).map(u => `<div class="photo-card"><img src="${u}" onclick="openLb('${u}')"></div>`).join('')}
                 </div>
-                <div style="padding:16px; font-size:14px; line-height:1.5; color:#444">
-                    ${e.note || '<span style="color:#bbb; font-style:italic">Not eklenmemiş.</span>'}
-                </div>
-                <div id="edit-${e.id}" style="display:none; padding:16px; background:#f0f7f4; border-top:1px solid #ddd">
+                <div style="padding:14px; font-size:14px">${e.note || '<span style="color:#ccc">Not yok.</span>'}</div>
+                <div id="edit-${e.id}" class="edit-area" style="display:none; padding:15px; background:#f0f7f4; border-top:1px solid #ddd">
                     <input type="date" id="edate-${e.id}" value="${e.checkin_date}">
-                    <textarea id="enote-${e.id}" placeholder="Notu güncelle...">${e.note || ''}</textarea>
-                    <button onclick="saveEdit('${e.id}')" style="width:100%; background:var(--accent); color:#fff; border:none; padding:14px; border-radius:10px; font-weight:700">DEĞİŞİKLİKLERİ KAYDET</button>
+                    <textarea id="enote-${e.id}">${e.note || ''}</textarea>
+                    <button onclick="saveEdit('${e.id}')" class="btn-primary" style="padding:10px">GÜNCELLE</button>
                 </div>
             </div>
         `).join('');
-    } catch(e) { wrap.innerHTML = '<div style="padding:40px; text-align:center; color:red">Bir hata oluştu.</div>'; }
+    } catch(e) { wrap.innerHTML = 'Hata.'; }
 }
 
 function handleNewFiles(files) {
@@ -338,16 +333,16 @@ function handleNewFiles(files) {
 
 function renderPreviews() {
     q('ef-preview').innerHTML = pendingFiles.map(f => `
-        <div style="position:relative; width:80px; height:80px">
-            <img src="${f.data}" style="width:100%; height:100%; object-fit:cover; border-radius:10px; border:1px solid #ddd">
-            <div style="position:absolute; top:-8px; right:-8px; background:var(--danger); color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.2)" onclick="pendingFiles = pendingFiles.filter(x=>x.id!=='${f.id}'); renderPreviews();">✕</div>
+        <div class="prev-item">
+            <img src="${f.data}">
+            <div class="prev-del" onclick="pendingFiles = pendingFiles.filter(x=>x.id!=='${f.id}'); renderPreviews();">✕</div>
         </div>
     `).join('');
 }
 
 async function saveElektraEntry() {
-    if(!pendingFiles.length) { showToast('Lütfen en az 1 fotoğraf ekleyin.','error'); return; }
-    const btn = q('ef-save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span> GÖNDERİLİYOR...';
+    if(!pendingFiles.length) { showToast('Resim ekleyin','error'); return; }
+    const btn = q('ef-save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
     try {
         const urls = [];
         for(let f of pendingFiles) {
@@ -359,22 +354,21 @@ async function saveElektraEntry() {
             });
             if(upload.ok) urls.push(`${SB}/storage/v1/object/public/meters/${currentRoom}/${name}`);
         }
-        const res = await api('/rest/v1/entries', {
+        await api('/rest/v1/entries', {
             method: 'POST',
-            body: JSON.stringify({
-                room_no: String(currentRoom),
-                checkin_date: q('ef-date').value,
-                note: q('ef-note').value,
-                mode: 'elektrik',
-                photo_urls: urls
+            body: JSON.stringify({ 
+                room_no: String(currentRoom), 
+                checkin_date: q('ef-date').value, 
+                note: q('ef-note').value, 
+                mode: 'elektrik', 
+                photo_urls: urls // Dizi formatında gönderim (Fix 400)
             })
         });
-        if(!res.ok) throw new Error('Veri kaydedilemedi.');
-        showToast('Kayıt başarıyla eklendi.');
+        showToast('Kayıt eklendi');
         pendingFiles = []; q('ef-preview').innerHTML = ''; q('ef-note').value = '';
         switchPTab('list'); loadEntries(); loadRoomsWithEntries(); renderGrid();
-    } catch(e) { showToast('Hata: ' + e.message, 'error'); }
-    finally { btn.disabled = false; btn.innerHTML = 'KAYDI SİSTEME İŞLE'; }
+    } catch(e) { showToast('Hata oluştu'); }
+    finally { btn.disabled = false; btn.innerHTML = 'KAYDET'; }
 }
 
 function toggleEdit(id) {
@@ -384,24 +378,18 @@ function toggleEdit(id) {
 
 async function saveEdit(id) {
     try {
-        const res = await api(`/rest/v1/entries?id=eq.${id}`, {
+        await api(`/rest/v1/entries?id=eq.${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({
-                checkin_date: q('edate-' + id).value,
-                note: q('enote-' + id).value
-            })
+            body: JSON.stringify({ checkin_date: q('edate-' + id).value, note: q('enote-' + id).value })
         });
-        if(!res.ok) throw new Error('Güncellenemedi');
-        showToast('Kayıt güncellendi.'); loadEntries();
-    } catch(e) { showToast('Güncelleme hatası.', 'error'); }
+        showToast('Güncellendi'); loadEntries();
+    } catch(e) { showToast('Hata'); }
 }
 
 async function deleteEntry(id) {
-    if(!confirm('Bu kaydı kalıcı olarak silmek istediğinize emin misiniz?')) return;
-    try {
-        await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
-        showToast('Kayıt silindi.'); loadEntries(); loadRoomsWithEntries(); renderGrid();
-    } catch(e) { showToast('Silme hatası.', 'error'); }
+    if(!confirm('Silinsin mi?')) return;
+    await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
+    showToast('Silindi'); loadEntries(); loadRoomsWithEntries(); renderGrid();
 }
 
 function renderStatusSelection() {
@@ -427,7 +415,7 @@ async function updateStatus(s) {
         body: JSON.stringify({ room_no: currentRoom, status: s })
     });
     roomStatuses[currentRoom] = s;
-    showToast('Oda durumu güncellendi.'); renderStatusSelection(); renderStats(); renderGrid();
+    showToast('Durum güncellendi'); renderStatusSelection(); renderStats(); renderGrid();
 }
 
 function showToast(msg, type = 'success') {
@@ -444,19 +432,19 @@ function closeLb() { q('lb').classList.remove('open'); }
 async function searchDemirbas() {
     const val = q('ds-input').value;
     if(!val) return;
-    q('ds-results').innerHTML = '<div style="text-align:center; padding:20px">Aranıyor...</div>';
+    q('ds-results').innerHTML = 'Aranıyor...';
     try {
         const res = await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`);
         const data = await res.json();
         q('ds-results').innerHTML = data.map(e => `
-            <div style="background:#fff; padding:16px; border-radius:16px; margin-bottom:12px; border:1px solid #ddd; box-shadow:0 2px 5px rgba(0,0,0,0.05)">
-                <div style="font-weight:700; color:var(--accent); margin-bottom:10px">📅 ${fmtDate(e.checkin_date)}</div>
-                <div style="display:flex; gap:8px; margin-top:10px; overflow-x:auto; padding-bottom:5px">
-                    ${(e.photo_urls || []).map(u => `<img src="${u}" style="width:100px; height:100px; object-fit:cover; border-radius:8px; border:1px solid #eee" onclick="openLb('${u}')">`).join('')}
+            <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:12px; border:1px solid #ddd">
+                <div style="font-weight:700; color:var(--accent)">📅 ${fmtDate(e.checkin_date)}</div>
+                <div style="display:flex; gap:8px; margin-top:10px; overflow-x:auto">
+                    ${(e.photo_urls || []).map(u => `<img src="${u}" style="width:100px; height:100px; object-fit:cover; border-radius:8px" onclick="openLb('${u}')">`).join('')}
                 </div>
-                <div style="margin-top:12px; font-size:14px; color:#444">${e.note || '<span style="color:#ccc">Not yok.</span>'}</div>
+                <div style="margin-top:12px; font-size:14px">${e.note || ''}</div>
             </div>
-        `).join('') || '<div style="text-align:center; padding:20px; color:#888">Kayıt bulunamadı.</div>';
+        `).join('') || 'Kayıt bulunamadı.';
     } catch(e) { q('ds-results').innerHTML = 'Hata.'; }
 }
 </script>
