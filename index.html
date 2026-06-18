@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -309,7 +310,7 @@
                         <input type="date" id="ef-date" class="form-input">
                     </div>
                     <div class="form-section">
-                        <div class="form-label">Not</div>
+                        <div class="form-label">Açıklama</div>
                         <textarea id="ef-note" class="form-input" rows="2" placeholder="Açıklama..."></textarea>
                     </div>
                     <hr class="form-divider">
@@ -401,7 +402,7 @@ let mode = 'demirbaş', demirbasTab = 0, demirbasSearchTab = 'room', demirbasPen
 let elektraView = 'grid', elektraCurrentRoom = null, elektraPending = [],
     elektraCurrentEntries = [], elektraAllData = [], roomsWithEntries = new Set();
 let lbImages = [], lbIndex = 0, confirmCb = null;
-let editPendingFiles = {}; // entryId -> [{file, url, desc}]
+let editPendingFiles = {};
 
 // ─── YARDIMCILAR ─────────────────────────────────────────────────────────────
 function q(id) { return document.getElementById(id); }
@@ -643,7 +644,6 @@ async function checkConn() {
 
 // ─── FOTO VERİSİ YARDIMCISI ──────────────────────────────────────────────────
 function getPhotoData(entry) {
-    // photo_data: [{url, desc}] (yeni format) veya photo_urls: [string] (eski format)
     if (entry.photo_data && Array.isArray(entry.photo_data)) return entry.photo_data;
     if (entry.photo_urls && Array.isArray(entry.photo_urls)) {
         return entry.photo_urls.map(url => ({url, desc: ''}));
@@ -980,7 +980,7 @@ function renderElektraEntries() {
         html += `<div class="entry-card">
             <div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')">
                 <div class="date-badge e">${fmtDate(entry.checkin_date)}</div>
-                <div class="entry-meta"><div>${entry.note||'Not yok'}</div></div>
+                <div class="entry-meta"><div>${entry.note||'Açıklama yok'}</div></div>
                 <span style="font-size:12px;color:var(--muted)">📷${photos.length}</span>
                 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </div>
@@ -1002,7 +1002,7 @@ function renderElektraEntries() {
                 </div>
                 <div class="edit-panel" id="edit-panel-${entry.id}">
                     <div class="field"><span class="label">Tarih</span><input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date}"></div>
-                    <div class="field"><span class="label">Not</span><textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea></div>
+                    <div class="field"><span class="label">Açıklama</span><textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea></div>
                     <div class="field"><span class="label">📷 Fotoğraflar</span>
                         <div class="edit-photo-list" id="edit-photos-${entry.id}">
                             ${photos.map((p,idx)=>`
@@ -1071,7 +1071,6 @@ function removeEditPhoto(entryId, idx) {
     if (!entry) return;
     const photos = getPhotoData(entry);
     photos.splice(idx, 1);
-    // Güncelle: photo_urls ve photo_data
     const newUrls = photos.map(p=>p.url);
     const newData = photos;
     api(`/rest/v1/entries?id=eq.${entryId}`, {
@@ -1089,7 +1088,6 @@ async function saveEdit(entryId) {
     const date = q('edit-date-'+entryId).value;
     const note = q('edit-note-'+entryId).value.trim();
 
-    // Mevcut fotoğrafları al
     const existingPhotos = getPhotoData(entry);
     // Açıklamaları güncelle
     for (let i = 0; i < existingPhotos.length; i++) {
@@ -1097,7 +1095,6 @@ async function saveEdit(entryId) {
         if (inp) existingPhotos[i].desc = inp.value.trim();
     }
 
-    // Yeni eklenen dosyaları yükle
     const pending = editPendingFiles[entryId] || [];
     const newPhotoData = [];
     const pw = q('eprogress-wrap'), pb = q('eprogress-bar');
@@ -1113,7 +1110,6 @@ async function saveEdit(entryId) {
             newPhotoData.push({url, desc: pending[i].desc || ''});
             pb.style.width = Math.round((i+1)/pending.length*100)+'%';
         }
-        // Birleştir: mevcut + yeni
         const allPhotos = [...existingPhotos, ...newPhotoData];
         const allUrls = allPhotos.map(p=>p.url);
 
@@ -1206,7 +1202,7 @@ async function elektraSaveEntry() {
                 room_no: String(elektraCurrentRoom),
                 mode: 'elektrik',
                 checkin_date: date,
-                note,
+                note: note,
                 photo_urls: photoUrls,
                 photo_data: photoData
             })
@@ -1216,7 +1212,6 @@ async function elektraSaveEntry() {
         switchElektraPanelTab('kayitlar');
         loadElektraEntries();
         loadElektraRoomsWithEntries();
-        // Grid'deki flag'i güncelle
         roomsWithEntries.add(String(elektraCurrentRoom));
         renderElektraView();
     } catch(e) {
@@ -1299,7 +1294,7 @@ if (_oda && _token) {
                         d.forEach(entry => {
                             const photos = getPhotoData(entry);
                             const allUrls = photos.map(p=>p.url);
-                            html += `<div class="entry-card"><div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><div class="date-badge e">${fmtDate(entry.checkin_date)}</div><div class="entry-meta"><div>${entry.note||'Not yok'}</div></div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${photos.length?`<div class="photo-gallery">${photos.map((p,idx)=>`<div class="photo-card"><img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(allUrls)},${idx})"><div class="photo-card-body"><div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div></div></div>`).join('')}</div>`:'Fotoğraf yok'}</div></div>`;
+                            html += `<div class="entry-card"><div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><div class="date-badge e">${fmtDate(entry.checkin_date)}</div><div class="entry-meta"><div>${entry.note||'Açıklama yok'}</div></div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${photos.length?`<div class="photo-gallery">${photos.map((p,idx)=>`<div class="photo-card"><img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(allUrls)},${idx})"><div class="photo-card-body"><div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div></div></div>`).join('')}</div>`:'Fotoğraf yok'}</div></div>`;
                         });
                         html += '</div>'; q('ereadonly-view').innerHTML = html;
                     }).catch(() => showAccessError());
@@ -1322,3 +1317,4 @@ function openPdfPanel() { showToast('PDF özelliği yakında eklenecek','error')
 </script>
 </body>
 </html>
+```
