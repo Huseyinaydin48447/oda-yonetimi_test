@@ -3,122 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oda Yönetimi · Demirbaş & Elektrik</title>
+    <title>Profesyonel Oda & Sayaç Yönetimi</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
-        :root {
-            --bg: #f5f4f0; --surface: #fff; --surface2: #f0efe9; --border: #e2e1d9;
-            --text: #1a1a18; --muted: #7a7a72; --accent: #1a5c3a; --accent-light: #e8f2ec;
-            --danger: #c0392b; --amber: #b45309; --radius: 12px; --radius-sm: 8px;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@500&display=swap');
         
-        .app { max-width: 550px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
-        .app.wide { max-width: 1400px; }
+        :root {
+            --bg: #f8f9fa; --surface: #ffffff; --border: #e9ecef;
+            --text: #212529; --muted: #6c757d; --accent: #1a5c3a; --accent-light: #e8f2ec;
+            --danger: #dc3545; --amber: #fd7e14; --radius: 16px; --radius-sm: 8px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
 
         /* Topbar */
-        .topbar { background: var(--accent); padding: 14px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
-        .topbar h1 { font-size: 16px; font-weight: 600; color: #fff; flex: 1; }
-        .mode-btns { display: flex; gap: 5px; }
-        .mode-btn { padding: 5px 12px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.3); background: transparent; color: #fff; opacity: 0.7; }
-        .mode-btn.active { opacity: 1; background: rgba(255,255,255,0.2); border-color: #fff; }
+        .topbar { background: var(--accent); padding: 16px 20px; display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 1100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .topbar h1 { font-size: 18px; font-weight: 700; color: #fff; flex: 1; letter-spacing: -0.5px; }
+        .mode-btns { display: flex; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 99px; }
+        .mode-btn { padding: 6px 16px; font-size: 12px; font-weight: 700; border-radius: 99px; cursor: pointer; border: none; background: transparent; color: #fff; opacity: 0.6; transition: 0.3s; }
+        .mode-btn.active { opacity: 1; background: #fff; color: var(--accent); }
 
-        /* Filtreleme */
-        .elektra-top-stats { display: flex; gap: 6px; padding: 12px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); scrollbar-width: none; }
-        .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 10px; min-width: 70px; cursor: pointer; border: 2px solid transparent; }
-        .stat-badge .count { font-size: 16px; font-weight: 700; color: #fff; }
-        .stat-badge .s-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.9); }
-        .stat-badge.active-filter { border-color: #333; transform: scale(1.05); }
+        /* Stats Bar */
+        .elektra-top-stats { display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+        .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 10px 15px; border-radius: 12px; min-width: 80px; cursor: pointer; transition: 0.2s; border: 2px solid transparent; }
+        .stat-badge .count { font-size: 18px; font-weight: 700; color: #fff; }
+        .stat-badge .s-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; margin-top: 2px; }
+        .stat-badge.active-filter { border-color: #212529; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
-        .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
-        .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
+        .bg-dt { background: #0d6efd; } .bg-dk { background: #6610f2; } .bg-co { background: #198754; }
+        .bg-t { background: #20c997; } .bg-k { background: #fd7e14; } .bg-ooi { background: #d63384; }
+        .bg-bos { background: #fff; color: #adb5bd; border: 1px solid #dee2e6; }
 
-        /* Grid 18x15 */
-        .grid-container { padding: 12px; overflow-x: auto; background: var(--bg); }
-        .room-grid { display: grid; grid-template-columns: repeat(18, 55px); gap: 3px; width: max-content; margin: 0 auto; }
-        .room-cell { height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); position: relative; }
-        .room-flag { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; }
+        /* Main Grid 18x15 */
+        .grid-container { padding: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .room-grid { display: grid; grid-template-columns: repeat(18, 58px); gap: 4px; width: max-content; margin: 0 auto; }
+        .room-cell { height: 42px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.03); position: relative; transition: 0.2s; }
+        .room-cell:hover { filter: brightness(0.9); transform: scale(1.05); z-index: 10; }
+        .room-flag { position: absolute; top: 3px; right: 3px; width: 7px; height: 7px; border-radius: 50%; background: #00f2ff; box-shadow: 0 0 8px #00f2ff; }
 
-        /* ODA PANELİ (FULL SCREEN) */
-        .room-panel { position: fixed; inset: 0; background: #f5f4f0; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
+        /* FULL SCREEN PANEL */
+        .room-panel { position: fixed; inset: 0; background: var(--bg); z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
         .room-panel.open { transform: translateY(0); }
         
-        .panel-header { background: var(--accent); padding: 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
-        .panel-room-badge { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 8px; font-size: 18px; font-weight: 800; }
+        .panel-header { background: var(--accent); padding: 20px; display: flex; align-items: center; justify-content: space-between; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .panel-title-wrap { display: flex; align-items: center; gap: 12px; }
+        .panel-room-badge { background: #fff; color: var(--accent); padding: 6px 16px; border-radius: 10px; font-size: 20px; font-weight: 800; font-family: 'DM Mono'; }
         
-        .nav-tabs { display: flex; border-bottom: 1px solid var(--border); background: #fff; }
-        .nav-tab-btn { flex: 1; padding: 15px; font-size: 13px; font-weight: 700; border: none; background: #fff; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
+        .nav-tabs { display: flex; background: #fff; border-bottom: 1px solid var(--border); padding: 0 10px; }
+        .nav-tab-btn { flex: 1; padding: 18px 5px; font-size: 13px; font-weight: 700; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
         .nav-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
         
-        .panel-content { flex: 1; overflow-y: auto; padding: 20px; }
+        .panel-scroll-area { flex: 1; overflow-y: auto; padding: 20px; }
 
-        /* KAYIT KARTLARININ YAN YANA DİZİLMESİ (WRAP) */
-        #entries-list { 
-            display: flex; 
-            flex-wrap: wrap; /* Bir satırı doldurunca alta geç */
-            gap: 15px; 
-            justify-content: center; 
+        /* KAYITLAR GRID (Profesyonel Dikey & Yatay Karma) */
+        .entries-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 20px; 
+            align-items: start;
         }
 
         .entry-card { 
-            background: #fff; 
-            border: 1px solid var(--border); 
-            border-radius: 16px; 
+            background: var(--surface); 
+            border-radius: var(--radius); 
             overflow: hidden; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            width: 300px; /* Kartların genişliği sabitlendi */
-            max-width: 100%;
-            display: flex;
-            flex-direction: column;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: 0.3s;
         }
-        .entry-head { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; background: #fafafa; border-bottom: 1px solid #eee; }
-        .date-badge { background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+        .entry-card:hover { transform: translateY(-5px); }
         
-        /* Kart İçi Resimler (Yan Yana) */
-        .photo-gallery { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* Bir satırda 2 resim kalsın */
-            gap: 3px; 
-            padding: 5px; 
-            background: #fff;
-        }
-        .photo-card { aspect-ratio: 4/3; border-radius: 4px; overflow: hidden; border: 1px solid #eee; cursor: pointer; }
-        .photo-card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-top { padding: 15px; display: flex; align-items: center; justify-content: space-between; background: #fcfcfc; border-bottom: 1px solid #f1f1f1; }
+        .date-chip { background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 8px; display: flex; align-items: center; gap: 5px; }
+        
+        .action-btns { display: flex; gap: 8px; }
+        .action-btn { width: 34px; height: 34px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #f1f3f5; color: var(--muted); transition: 0.2s; }
+        .action-btn:hover { background: #e9ecef; color: var(--text); }
+        .btn-del:hover { background: #fff5f5; color: var(--danger); }
 
-        /* Form */
-        .p-add-container { max-width: 450px; margin: 0 auto; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; font-family: inherit; font-size: 15px; background: #fff; }
-        .btn-primary { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; }
+        .card-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; padding: 12px; }
+        .img-box { aspect-ratio: 1/1; border-radius: 8px; overflow: hidden; border: 1px solid #f1f1f1; cursor: pointer; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .img-box:hover img { transform: scale(1.1); }
 
-        /* Preview */
-        .prev-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .prev-item { position: relative; width: 65px; height: 65px; }
-        .prev-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
-        .prev-del { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; }
+        .card-note { padding: 15px; font-size: 14px; color: #495057; border-top: 1px solid #f8f9fa; min-height: 50px; }
+
+        /* Form Controls */
+        .form-card { background: #fff; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); max-width: 500px; margin: 0 auto; box-shadow: var(--shadow); }
+        label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        input, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 20px; font-family: inherit; font-size: 15px; background: #fafafa; transition: 0.2s; }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 4px var(--accent-light); }
+        
+        .btn-main { width: 100%; padding: 18px; background: var(--accent); color: #fff; border: none; border-radius: 14px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(26,92,58,0.3); transition: 0.3s; }
+        .btn-main:active { transform: scale(0.98); }
 
         /* Lightbox */
-        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
+        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; align-items: center; justify-content: center; }
         .lightbox.open { display: flex; }
-        #lb-img { max-width: 98%; max-height: 90%; object-fit: contain; }
+        #lb-img { max-width: 95%; max-height: 85%; object-fit: contain; border-radius: 4px; box-shadow: 0 0 40px rgba(0,0,0,0.5); }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 25px; border-radius: 50px; z-index: 30000; display: none; }
-        .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #212529; color: #fff; padding: 14px 28px; border-radius: 99px; z-index: 5000; display: none; font-weight: 500; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
+        .loader { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fff; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; display: inline-block; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .entries-grid { grid-template-columns: 1fr; }
+            .room-panel { padding-bottom: 20px; }
+        }
     </style>
 </head>
 <body class="app wide">
 
     <div class="topbar">
-        <h1>Oda Yönetimi</h1>
+        <h1>Dashboard</h1>
         <div class="mode-btns">
             <button class="mode-btn" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
             <button class="mode-btn active" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
         </div>
     </div>
 
-    <!-- ELEKTRA ANA GÖRÜNÜM -->
+    <!-- ELEKTRA DASHBOARD -->
     <div id="elektra-ui">
         <div class="elektra-top-stats" id="estats"></div>
         <div class="grid-container">
@@ -126,44 +132,57 @@
         </div>
     </div>
 
-    <!-- DEMİRBAŞ ARA GÖRÜNÜM -->
-    <div id="demirbas-ui" style="display:none; padding:20px">
-        <input type="number" id="ds-input" placeholder="Oda no girin...">
-        <button onclick="searchDemirbas()" class="btn-primary" style="margin-top:10px">ARA</button>
-        <div id="ds-results" style="margin-top:20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    <!-- DEMİRBAŞ ARA -->
+    <div id="demirbas-ui" style="display:none; padding:30px">
+        <div class="form-card">
+            <label>Oda Numarası</label>
+            <input type="number" id="ds-input" placeholder="Örn: 305">
+            <button onclick="searchDemirbas()" class="btn-main">KAYITLARI GETİR</button>
+        </div>
+        <div id="ds-results" class="entries-grid" style="margin-top:30px"></div>
     </div>
 
-    <!-- TAM EKRAN ODA PANELİ -->
+    <!-- ODA PANELİ (TÜM EKRAN) -->
     <div class="room-panel" id="room-panel">
         <div class="panel-header">
-            <div class="panel-room-badge" id="panel-room-title">ODA -</div>
-            <div onclick="closePanel()" style="cursor:pointer; width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px">✕</div>
+            <div class="panel-title-wrap">
+                <div class="panel-room-badge" id="panel-room-title">-</div>
+                <span style="font-weight: 500; opacity: 0.9;">Oda Detayları</span>
+            </div>
+            <div onclick="closePanel()" style="cursor:pointer; width:40px; height:40px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px">✕</div>
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab-btn active" id="tab-btn-list" onclick="switchPTab('list')">KAYITLAR</button>
-            <button class="nav-tab-btn" id="tab-btn-add" onclick="switchPTab('add')">YENİ EKLE</button>
+            <button class="nav-tab-btn active" id="tab-btn-list" onclick="switchPTab('list')">SAYAÇ GEÇMİŞİ</button>
+            <button class="nav-tab-btn" id="tab-btn-add" onclick="switchPTab('add')">YENİ OKUMA</button>
             <button class="nav-tab-btn" id="tab-btn-status" onclick="switchPTab('status')">DURUM</button>
         </div>
 
-        <div class="panel-content">
-            <div id="p-list" style="display:block">
-                <div id="entries-list"></div>
+        <div class="panel-scroll-area">
+            <!-- Kayıtlar -->
+            <div id="p-list" class="tab-pane active">
+                <div class="entries-grid" id="entries-list"></div>
             </div>
 
-            <div id="p-add" style="display:none" class="p-add-container">
-                <label>İŞLEM TARİHİ</label>
-                <input type="date" id="ef-date">
-                <label>NOTLAR</label>
-                <textarea id="ef-note" rows="3" placeholder="Sayaç detayları..."></textarea>
-                <button onclick="q('ef-file').click()" style="width:100%; padding:15px; border:2px dashed var(--border); border-radius:10px; margin-bottom:15px; background:#fff; font-weight:700; color:var(--muted)">📷 FOTOĞRAF SEÇ</button>
-                <input type="file" id="ef-file" multiple style="display:none" onchange="handleNewFiles(this.files)">
-                <div id="ef-preview" class="prev-row"></div>
-                <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-primary">KAYDET</button>
+            <!-- Ekleme -->
+            <div id="p-add" class="tab-pane">
+                <div class="form-card">
+                    <label>Okuma Tarihi</label>
+                    <input type="date" id="ef-date">
+                    <label>Açıklama / Not</label>
+                    <textarea id="ef-note" rows="3" placeholder="Örn: Mühür kontrol edildi, sorun yok..."></textarea>
+                    
+                    <button onclick="q('ef-file').click()" style="width:100%; padding:15px; border:2px dashed #ced4da; border-radius:12px; margin-bottom:20px; background:#fff; font-weight:700; color:var(--muted); cursor:pointer">📸 FOTOĞRAF EKLE</button>
+                    <input type="file" id="ef-file" multiple style="display:none" onchange="handleNewFiles(this.files)">
+                    
+                    <div id="ef-preview" class="prev-row"></div>
+                    <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-main">SİSTEME KAYDET</button>
+                </div>
             </div>
 
-            <div id="p-status" style="display:none">
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width: 450px; margin: 0 auto;" id="status-opts"></div>
+            <!-- Durum Seçimi -->
+            <div id="p-status" class="tab-pane">
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:15px; max-width: 600px; margin: 0 auto;" id="status-opts"></div>
             </div>
         </div>
     </div>
@@ -272,14 +291,15 @@ function renderGrid() {
             const status = roomStatuses[rno] || 'bos';
             if(activeStatFilter && status !== activeStatFilter) continue;
             const cell = document.createElement('div');
-            let color = 'bg-bos';
-            if(status === 'dolu-temiz') color = 'bg-dt';
-            else if(status === 'dolu-kirli') color = 'bg-dk';
-            else if(status === 'cout') color = 'bg-co';
-            else if(status === 'temiz') color = 'bg-t';
-            else if(status === 'kirli') color = 'bg-k';
-            else if(status === 'ooi') color = 'bg-ooi';
-            cell.className = `room-cell ${color}`;
+            let cName = 'bg-bos';
+            if(status === 'dolu-temiz') cName = 'bg-dt';
+            else if(status === 'dolu-kirli') cName = 'bg-dk';
+            else if(status === 'cout') cName = 'bg-co';
+            else if(status === 'temiz') cName = 'bg-t';
+            else if(status === 'kirli') cName = 'bg-k';
+            else if(status === 'ooi') cName = 'bg-ooi';
+
+            cell.className = `room-cell ${cName}`;
             cell.textContent = rno;
             if(roomsWithEntries.has(String(rno))) {
                 const flag = document.createElement('div'); flag.className = 'room-flag'; cell.appendChild(flag);
@@ -292,7 +312,7 @@ function renderGrid() {
 
 async function openPanel(rno) {
     currentRoom = rno;
-    q('panel-room-title').textContent = `ODA ${rno}`;
+    q('panel-room-title').textContent = rno;
     q('room-panel').classList.add('open');
     switchPTab('list'); loadEntries();
 }
@@ -303,42 +323,42 @@ function closePanel() {
 }
 
 function switchPTab(t) {
-    ['list','add','status'].forEach(x => {
-        q('p-' + x).style.display = (x === t) ? 'block' : 'none';
-        q('tab-btn-' + x).classList.toggle('active', x === t);
-    });
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+    q('p-' + t).classList.add('active');
+    q('tab-btn-' + t).classList.add('active');
     if(t === 'status') renderStatusSelection();
 }
 
 async function loadEntries() {
     const wrap = q('entries-list');
-    wrap.innerHTML = '<div style="padding:20px; text-align:center">Yükleniyor...</div>';
+    wrap.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; color:#888;">Veriler yükleniyor...</div>';
     try {
         const res = await api(`/rest/v1/entries?room_no=eq.${currentRoom}&mode=eq.elektrik&order=checkin_date.desc`);
         const data = await res.json();
-        if(!data.length) { wrap.innerHTML = '<div style="padding:40px; text-align:center; color:#888">Kayıt yok.</div>'; return; }
+        if(!data.length) { wrap.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:100px; color:#adb5bd;">Geçmiş kayıt bulunamadı.</div>'; return; }
         
         wrap.innerHTML = data.map(e => `
             <div class="entry-card">
-                <div class="entry-head">
-                    <span class="date-badge">${fmtDate(e.checkin_date)}</span>
-                    <div style="display:flex; gap:8px">
-                        <button onclick="toggleEdit('${e.id}')" style="border:none; background:none; cursor:pointer">✏️</button>
-                        <button onclick="deleteEntry('${e.id}')" style="border:none; background:none; cursor:pointer">🗑️</button>
+                <div class="card-top">
+                    <span class="date-chip">📅 ${fmtDate(e.checkin_date)}</span>
+                    <div class="action-btns">
+                        <button class="action-btn" onclick="toggleEdit('${e.id}')">✏️</button>
+                        <button class="action-btn btn-del" onclick="deleteEntry('${e.id}')">🗑️</button>
                     </div>
                 </div>
-                <div class="photo-gallery">
-                    ${(e.photo_urls || []).map(u => `<div class="photo-card"><img src="${u}" onclick="openLb('${u}')"></div>`).join('')}
+                <div class="card-gallery">
+                    ${(e.photo_urls || []).map(u => `<div class="img-box"><img src="${u}" onclick="openLb('${u}')" loading="lazy"></div>`).join('')}
                 </div>
-                <div style="padding:12px; font-size:13px; color:#555">${e.note || '<span style="color:#ccc">Not yok.</span>'}</div>
-                <div id="edit-${e.id}" style="display:none; padding:12px; background:#f9f9f9; border-top:1px solid #eee">
+                <div class="card-note">${e.note || '<span style="color:#dee2e6; font-style:italic">Not eklenmemiş</span>'}</div>
+                <div id="edit-${e.id}" class="edit-area" style="display:none; padding:15px; border-top:1px solid #eee; background: #f8f9fa;">
                     <input type="date" id="edate-${e.id}" value="${e.checkin_date}">
-                    <textarea id="enote-${e.id}">${e.note || ''}</textarea>
-                    <button onclick="saveEdit('${e.id}')" class="btn-primary" style="padding:10px; font-size:13px">GÜNCELLE</button>
+                    <textarea id="enote-${e.id}" placeholder="Notu güncelle...">${e.note || ''}</textarea>
+                    <button onclick="saveEdit('${e.id}')" class="btn-main" style="padding:10px; font-size:13px; box-shadow:none;">GÜNCELLE</button>
                 </div>
             </div>
         `).join('');
-    } catch(e) { wrap.innerHTML = 'Hata.'; }
+    } catch(e) { wrap.innerHTML = 'Veri hatası.'; }
 }
 
 function handleNewFiles(files) {
@@ -363,7 +383,7 @@ function renderPreviews() {
 }
 
 async function saveElektraEntry() {
-    if(!pendingFiles.length) { showToast('Resim ekleyin','error'); return; }
+    if(!pendingFiles.length) { showToast('En az 1 resim eklemelisiniz.','error'); return; }
     const btn = q('ef-save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
     try {
         const urls = [];
@@ -376,28 +396,21 @@ async function saveElektraEntry() {
             });
             if(upload.ok) urls.push(`${SB}/storage/v1/object/public/meters/${currentRoom}/${name}`);
         }
-        
-        // Supabase 400 Hatasını Önlemek İçin Array Düzgünlüğü Sağlanıyor
-        const payload = { 
-            room_no: String(currentRoom), 
-            checkin_date: q('ef-date').value, 
-            note: q('ef-note').value, 
-            mode: 'elektrik', 
-            photo_urls: Array.from(urls) 
-        };
-
-        const res = await api('/rest/v1/entries', {
+        await api('/rest/v1/entries', {
             method: 'POST',
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ 
+                room_no: String(currentRoom), 
+                checkin_date: q('ef-date').value, 
+                note: q('ef-note').value, 
+                mode: 'elektrik', 
+                photo_urls: Array.from(urls) 
+            })
         });
-
-        if(res.ok) {
-            showToast('Başarıyla kaydedildi');
-            pendingFiles = []; q('ef-preview').innerHTML = ''; q('ef-note').value = '';
-            switchPTab('list'); loadEntries(); loadRoomsWithEntries(); renderGrid();
-        } else { throw new Error(); }
-    } catch(e) { showToast('Hata oluştu','error'); }
-    finally { btn.disabled = false; btn.innerHTML = 'KAYDET'; }
+        showToast('Başarıyla kaydedildi ✓');
+        pendingFiles = []; q('ef-preview').innerHTML = ''; q('ef-note').value = '';
+        switchPTab('list'); loadEntries(); loadRoomsWithEntries(); renderGrid();
+    } catch(e) { showToast('Kayıt başarısız','error'); }
+    finally { btn.disabled = false; btn.innerHTML = 'SİSTEME KAYDET'; }
 }
 
 function toggleEdit(id) {
@@ -411,16 +424,14 @@ async function saveEdit(id) {
             method: 'PATCH',
             body: JSON.stringify({ checkin_date: q('edate-' + id).value, note: q('enote-' + id).value })
         });
-        if(res.ok) {
-            showToast('Güncellendi'); loadEntries();
-        }
-    } catch(e) { showToast('Hata'); }
+        showToast('Güncellendi ✓'); loadEntries();
+    } catch(e) { showToast('Hata oluştu','error'); }
 }
 
 async function deleteEntry(id) {
-    if(!confirm('Silinsin mi?')) return;
+    if(!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
     await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
-    showToast('Silindi'); loadEntries(); loadRoomsWithEntries(); renderGrid();
+    showToast('Kayıt silindi'); loadEntries(); loadRoomsWithEntries(); renderGrid();
 }
 
 function renderStatusSelection() {
@@ -432,7 +443,7 @@ function renderStatusSelection() {
     ];
     const current = roomStatuses[currentRoom] || 'bos';
     q('status-opts').innerHTML = statuses.map(s => `
-        <div class="stat-badge ${s.class}" style="padding:20px; border-radius:12px; color:${s.id==='bos'?'#888':'#fff'}; font-weight:700; width:100%; border:${current===s.id?'3px solid #000':'none'}" onclick="updateStatus('${s.id}')">
+        <div class="stat-badge ${s.class}" style="padding:25px 10px; border-radius:12px; color:${s.id==='bos'?'#888':'#fff'}; font-weight:800; width:100%; border:${current===s.id?'3px solid #212529':'none'}" onclick="updateStatus('${s.id}')">
             ${s.label}
         </div>
     `).join('');
@@ -445,7 +456,7 @@ async function updateStatus(s) {
         body: JSON.stringify({ room_no: currentRoom, status: s })
     });
     roomStatuses[currentRoom] = s;
-    showToast('Durum güncellendi'); renderStatusSelection(); renderStats(); renderGrid();
+    showToast('Oda durumu güncellendi ✓'); renderStatusSelection(); renderStats(); renderGrid();
 }
 
 function showToast(msg, type = 'success') {
@@ -462,19 +473,19 @@ function closeLb() { q('lb').classList.remove('open'); }
 async function searchDemirbas() {
     const val = q('ds-input').value;
     if(!val) return;
-    q('ds-results').innerHTML = '<div style="text-align:center">Yükleniyor...</div>';
+    q('ds-results').innerHTML = '<div style="grid-column: 1/-1; text-align:center">Aranıyor...</div>';
     try {
         const res = await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`);
         const data = await res.json();
         q('ds-results').innerHTML = data.map(e => `
-            <div class="entry-card" style="width: 320px;">
-                <div class="entry-head"><span class="date-badge">📅 ${fmtDate(e.checkin_date)}</span></div>
-                <div class="photo-gallery">
-                    ${(e.photo_urls || []).map(u => `<div class="photo-card"><img src="${u}" onclick="openLb('${u}')"></div>`).join('')}
+            <div class="entry-card">
+                <div class="card-top"><span class="date-chip">📅 ${fmtDate(e.checkin_date)}</span></div>
+                <div class="card-gallery">
+                    ${(e.photo_urls || []).map(u => `<div class="img-box"><img src="${u}" onclick="openLb('${u}')"></div>`).join('')}
                 </div>
-                <div style="padding:12px; font-size:13px">${e.note || ''}</div>
+                <div class="card-note">${e.note || ''}</div>
             </div>
-        `).join('') || '<div style="text-align:center; color:#888">Kayıt bulunamadı.</div>';
+        `).join('') || '<div style="grid-column: 1/-1; text-align:center">Kayıt yok.</div>';
     } catch(e) { q('ds-results').innerHTML = 'Hata.'; }
 }
 </script>
