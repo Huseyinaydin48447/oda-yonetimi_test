@@ -156,12 +156,16 @@
         .lb-topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; flex-shrink: 0; }
         .lb-lbl { color: rgba(255,255,255,.6); font-size: 13px; }
         .lb-zoom-row { display: flex; align-items: center; gap: 8px; }
-        .lb-zoom-badge { color: rgba(255,255,255,.6); font-size: 12px; }
+        .lb-zoom-badge { color: rgba(255,255,255,.6); font-size: 12px; min-width: 48px; text-align: center; }
         .lb-reset-btn { background: rgba(255,255,255,.15); border: none; color: #fff; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 14px; }
         .lb-close { background: rgba(255,255,255,.15); border: none; color: #fff; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 16px; }
-        .lb-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .lb-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center center; transition: transform .2s; }
-        .lb-hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.4); font-size: 12px; pointer-events: none; }
+        .lb-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: grab; }
+        .lb-img-wrap.grabbing { cursor: grabbing; }
+        .lb-img-wrap.zoomed { cursor: move; }
+        .lb-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center center; transition: transform .25s ease; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+        .lb-img-wrap img.no-transition { transition: none !important; }
+        .lb-hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.4); font-size: 12px; pointer-events: none; opacity: 1; transition: opacity 1s ease; }
+        .lb-hint.hide { opacity: 0; }
         .lb-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; flex-shrink: 0; }
         .lb-btn { background: rgba(255,255,255,.15); border: none; color: #fff; border-radius: 8px; padding: 8px 16px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; }
         .lb-btn:disabled { opacity: .3; }
@@ -183,6 +187,10 @@
         .readonly-view.active { display: block; }
         .hidden { display: none !important; }
         #selected-status-info { padding: 8px 12px; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface2); border-radius: var(--radius-sm); }
+        .edit-add-photo-btn { padding: 6px 12px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 12px; }
+        .edit-add-photo-btn:active { opacity: .8; }
+        .edit-photo-del-btn { background: var(--danger); color: #fff; border: none; border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+        .edit-photo-del-btn:active { opacity: .8; }
     </style>
 </head>
 <body>
@@ -343,7 +351,7 @@
     </div>
 </div>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX (Gelişmiş) -->
 <div class="lightbox" id="lb">
     <div class="lb-topbar">
         <span class="lb-lbl" id="lb-lbl"></span>
@@ -393,6 +401,7 @@ let mode = 'demirbaş', demirbasTab = 0, demirbasSearchTab = 'room', demirbasPen
 let elektraView = 'grid', elektraCurrentRoom = null, elektraPending = [],
     elektraCurrentEntries = [], elektraAllData = [], roomsWithEntries = new Set();
 let lbImages = [], lbIndex = 0, confirmCb = null;
+let editPendingFiles = {}; // entryId -> [{file, url, desc}]
 
 // ─── YARDIMCILAR ─────────────────────────────────────────────────────────────
 function q(id) { return document.getElementById(id); }
@@ -439,7 +448,151 @@ function genToken() {
         .map(b => b.toString(36).padStart(2,'0')).join('').slice(0,16);
 }
 
-// ─── GÖRSEL SIKIŞTIRMA & YÜKLEME ─────────────────────────────────────────────
+// ─── LİGHTBOX (Gelişmiş) ─────────────────────────────────────────────────────
+const LB = {scale:1, minScale:1, maxScale:5, translateX:0, translateY:0,
+    isDragging:false, dragStartX:0, dragStartY:0, dragStartTX:0, dragStartTY:0,
+    isPinching:false, pinchStartDist:0, pinchStartScale:1, pinchMidX:0, pinchMidY:0,
+    lastTapTime:0, lastTapX:0, lastTapY:0};
+
+function lbApply(anim) {
+    const img = q('lb-img');
+    if (!anim) img.classList.add('no-transition');
+    else img.classList.remove('no-transition');
+    img.style.transform = `translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;
+    q('lb-zoom-badge').textContent = Math.round(LB.scale*100)+'%';
+}
+function lbClamp() {
+    const wrap = q('lb-img-wrap'), img = q('lb-img');
+    const wW = wrap.clientWidth, wH = wrap.clientHeight;
+    const iW = img.naturalWidth || img.offsetWidth || 1;
+    const iH = img.naturalHeight || img.offsetHeight || 1;
+    const ratio = Math.min(wW/iW, wH/iH);
+    const dispW = iW * ratio * LB.scale, dispH = iH * ratio * LB.scale;
+    const maxX = Math.max(0, (dispW - wW) / 2), maxY = Math.max(0, (dispH - wH) / 2);
+    LB.translateX = Math.max(-maxX, Math.min(maxX, LB.translateX));
+    LB.translateY = Math.max(-maxY, Math.min(maxY, LB.translateY));
+}
+function lbZoomTo(s, ox, oy, anim) {
+    const wrap = q('lb-img-wrap');
+    const rect = wrap.getBoundingClientRect();
+    const cx = (ox - rect.left) - rect.width/2, cy = (oy - rect.top) - rect.height/2;
+    const f = s / LB.scale;
+    LB.translateX = cx - f * (cx - LB.translateX);
+    LB.translateY = cy - f * (cy - LB.translateY);
+    LB.scale = s;
+    lbClamp();
+    lbApply(anim);
+    q('lb-img-wrap').classList.toggle('zoomed', LB.scale > 1.05);
+}
+function lbResetZoom(anim) {
+    LB.scale = 1; LB.translateX = 0; LB.translateY = 0;
+    lbApply(anim !== false);
+    q('lb-img-wrap').classList.remove('zoomed');
+}
+function lbOnWheel(e) {
+    e.preventDefault();
+    const ns = Math.max(LB.minScale, Math.min(LB.maxScale, LB.scale * (e.deltaY > 0 ? 0.85 : 1.18)));
+    lbZoomTo(ns, e.clientX, e.clientY, false);
+}
+function lbOnMD(e) {
+    if (LB.scale <= 1.05) return;
+    LB.isDragging = true;
+    LB.dragStartX = e.clientX; LB.dragStartY = e.clientY;
+    LB.dragStartTX = LB.translateX; LB.dragStartTY = LB.translateY;
+    q('lb-img-wrap').classList.add('grabbing');
+}
+function lbOnMM(e) {
+    if (!LB.isDragging) return;
+    LB.translateX = LB.dragStartTX + (e.clientX - LB.dragStartX);
+    LB.translateY = LB.dragStartTY + (e.clientY - LB.dragStartY);
+    lbClamp(); lbApply(false);
+}
+function lbOnMU() { LB.isDragging = false; q('lb-img-wrap').classList.remove('grabbing'); }
+function lbOnDbl(e) {
+    LB.scale > 1.3 ? lbResetZoom(true) : lbZoomTo(2.5, e.clientX, e.clientY, true);
+}
+function lbTDist(t) { const dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.sqrt(dx*dx+dy*dy); }
+function lbTMid(t) { return {x:(t[0].clientX+t[1].clientX)/2, y:(t[0].clientY+t[1].clientY)/2}; }
+function lbOnTS(e) {
+    if (e.touches.length === 2) {
+        e.preventDefault();
+        LB.isPinching = true; LB.isDragging = false;
+        LB.pinchStartDist = lbTDist(e.touches);
+        LB.pinchStartScale = LB.scale;
+        const m = lbTMid(e.touches);
+        LB.pinchMidX = m.x; LB.pinchMidY = m.y;
+    } else if (e.touches.length === 1) {
+        const now = Date.now(), t = e.touches[0];
+        if (now - LB.lastTapTime < 300 && Math.abs(t.clientX - LB.lastTapX) < 30 && Math.abs(t.clientY - LB.lastTapY) < 30) {
+            e.preventDefault();
+            LB.scale > 1.3 ? lbResetZoom(true) : lbZoomTo(2.5, t.clientX, t.clientY, true);
+            LB.lastTapTime = 0; return;
+        }
+        LB.lastTapTime = now; LB.lastTapX = t.clientX; LB.lastTapY = t.clientY;
+        if (LB.scale > 1.05) {
+            LB.isDragging = true;
+            LB.dragStartX = t.clientX; LB.dragStartY = t.clientY;
+            LB.dragStartTX = LB.translateX; LB.dragStartTY = LB.translateY;
+        }
+    }
+}
+function lbOnTM(e) {
+    if (LB.isPinching && e.touches.length === 2) {
+        e.preventDefault();
+        const ns = Math.max(LB.minScale, Math.min(LB.maxScale, LB.pinchStartScale * (lbTDist(e.touches) / LB.pinchStartDist)));
+        lbZoomTo(ns, LB.pinchMidX, LB.pinchMidY, false);
+    } else if (LB.isDragging && e.touches.length === 1 && LB.scale > 1.05) {
+        e.preventDefault();
+        const t = e.touches[0];
+        LB.translateX = LB.dragStartTX + (t.clientX - LB.dragStartX);
+        LB.translateY = LB.dragStartTY + (t.clientY - LB.dragStartY);
+        lbClamp(); lbApply(false);
+    }
+}
+function lbOnTE(e) { if (e.touches.length < 2) LB.isPinching = false; if (e.touches.length === 0) LB.isDragging = false; }
+
+function lbBind() {
+    const w = q('lb-img-wrap');
+    w.addEventListener('wheel', lbOnWheel, {passive:false});
+    w.addEventListener('mousedown', lbOnMD);
+    window.addEventListener('mousemove', lbOnMM);
+    window.addEventListener('mouseup', lbOnMU);
+    w.addEventListener('dblclick', lbOnDbl);
+    w.addEventListener('touchstart', lbOnTS, {passive:false});
+    w.addEventListener('touchmove', lbOnTM, {passive:false});
+    w.addEventListener('touchend', lbOnTE);
+}
+
+function openLb(urls, idx) {
+    let arr = urls;
+    if (typeof urls === 'string') { try { arr = JSON.parse(urls); } catch(e) { arr = [urls]; } }
+    if (!Array.isArray(arr)) arr = [arr];
+    lbImages = arr; lbIndex = Math.max(0, Math.min(idx, lbImages.length-1));
+    q('lb-img').src = lbImages[lbIndex];
+    q('lb-lbl').textContent = (lbIndex+1)+'. fotoğraf';
+    q('lb-counter').textContent = (lbIndex+1)+' / '+lbImages.length;
+    q('lb-prev').disabled = lbIndex === 0;
+    q('lb-next').disabled = lbIndex === lbImages.length - 1;
+    lbResetZoom(false);
+    q('lb').classList.add('open');
+    const h = q('lb-hint'); h.classList.remove('hide');
+    setTimeout(() => h.classList.add('hide'), 3000);
+}
+function closeLb() { q('lb').classList.remove('open'); lbResetZoom(false); }
+function lbMove(d) {
+    lbIndex = Math.max(0, Math.min(lbImages.length-1, lbIndex+d));
+    q('lb-img').src = lbImages[lbIndex];
+    q('lb-lbl').textContent = (lbIndex+1)+'. fotoğraf';
+    q('lb-counter').textContent = (lbIndex+1)+' / '+lbImages.length;
+    q('lb-prev').disabled = lbIndex === 0;
+    q('lb-next').disabled = lbIndex === lbImages.length - 1;
+    lbResetZoom(false);
+}
+q('lb').addEventListener('click', function(e) { if (e.target === this) closeLb(); });
+document.addEventListener('DOMContentLoaded', lbBind);
+if (document.readyState !== 'loading') lbBind();
+
+// ─── FOTOĞRAF İŞLEME (Sıkıştırma, Yükleme) ──────────────────────────────────
 async function compressImage(file) {
     return new Promise(resolve => {
         const img = new Image(), url = URL.createObjectURL(file);
@@ -475,7 +628,7 @@ async function uploadImg(file, roomNo, bucket) {
         headers: {'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},
         body: file
     });
-    if (!r.ok) throw new Error('Yükleme başarısız');
+    if (!r.ok) throw new Error('Yükleme başarısız: '+r.status);
     return `${SB}/storage/v1/object/public/${bucket}/${path}`;
 }
 
@@ -490,11 +643,16 @@ async function checkConn() {
 
 // ─── FOTO VERİSİ YARDIMCISI ──────────────────────────────────────────────────
 function getPhotoData(entry) {
+    // photo_data: [{url, desc}] (yeni format) veya photo_urls: [string] (eski format)
     if (entry.photo_data && Array.isArray(entry.photo_data)) return entry.photo_data;
     if (entry.photo_urls && Array.isArray(entry.photo_urls)) {
-        return entry.photo_urls.map(url => ({url, desc:''}));
+        return entry.photo_urls.map(url => ({url, desc: ''}));
     }
     return [];
+}
+function getPhotoUrls(entry) {
+    const pd = getPhotoData(entry);
+    return pd.map(p => p.url);
 }
 
 // ─── ODA DURUMLARI ───────────────────────────────────────────────────────────
@@ -535,29 +693,6 @@ function updateActiveFilterDisplay() {
     wrap.innerHTML = `<span class="active-filter-chip" onclick="toggleStatFilter('${activeStatFilter}')">${labels[activeStatFilter]||activeStatFilter} ×</span>`;
 }
 
-// ─── LİGHTBOX ────────────────────────────────────────────────────────────────
-const LB = {scale:1, minScale:1, maxScale:5, translateX:0, translateY:0};
-function lbApply() {
-    const img = q('lb-img');
-    img.style.transform = `translate(${LB.translateX}px,${LB.translateY}px) scale(${LB.scale})`;
-    q('lb-zoom-badge').textContent = Math.round(LB.scale*100)+'%';
-}
-function lbResetZoom() { LB.scale=1; LB.translateX=0; LB.translateY=0; lbApply(); }
-function openLb(urls, idx) {
-    let arr = urls;
-    if (typeof urls === 'string') { try { arr = JSON.parse(urls); } catch(e) { arr = [urls]; } }
-    lbImages = arr; lbIndex = idx;
-    q('lb-img').src = lbImages[lbIndex];
-    q('lb-lbl').textContent = `${lbIndex+1}/${lbImages.length}`;
-    q('lb-counter').textContent = `${lbIndex+1}/${lbImages.length}`;
-    q('lb-prev').disabled = lbIndex === 0;
-    q('lb-next').disabled = lbIndex === lbImages.length - 1;
-    lbResetZoom();
-    q('lb').classList.add('open');
-}
-function closeLb() { q('lb').classList.remove('open'); }
-function lbMove(d) { lbIndex = Math.max(0, Math.min(lbImages.length-1, lbIndex+d)); openLb(lbImages, lbIndex); }
-
 // ─── MOD DEĞİŞTİR ────────────────────────────────────────────────────────────
 function setMode(m) {
     mode = m;
@@ -575,14 +710,12 @@ function setMode(m) {
 
 // ─── DEMİRBAŞ ────────────────────────────────────────────────────────────────
 function initDemirbas() { q('f-date').value = today(); checkConn(); goDemirbasTab(0); }
-
 function goDemirbasTab(i) {
     demirbasTab = i;
     document.querySelectorAll('#main-nav .nav-btn').forEach((b,j) => b.classList.toggle('active', j===i));
     document.querySelectorAll('#demirbas-ui .screen').forEach((s,j) => s.classList.toggle('active', j===i));
     if (i === 2) demirbasLoadAll();
 }
-
 function setDemirbasSearchTab(t) {
     demirbasSearchTab = t;
     const isR = t === 'room';
@@ -613,7 +746,7 @@ async function demirbasSearch() {
 }
 
 function buildDemirbasCard(entry) {
-    const urls = entry.photo_urls||[], cats = (entry.category||'').split(',').filter(Boolean);
+    const urls = getPhotoUrls(entry), cats = (entry.category||'').split(',').filter(Boolean);
     const ps = JSON.stringify(urls).replace(/"/g,'&quot;');
     const thumbs = urls.map((u,i)=>`<div class="prev-item" style="flex-shrink:0"><img src="${u}" loading="lazy" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="openLb('${ps}',${i})"></div>`).join('');
     return `<div class="entry-card">
@@ -649,13 +782,11 @@ async function demirbasAddFiles(files) {
     demirbasRenderPrev();
     if (cc > 0) se.innerHTML = `<div class="compress-info">${cc} foto sıkıştırıldı · %${Math.round((1-tn/to)*100)} küçüldü</div>`;
 }
-
 function demirbasRenderPrev() {
     q('prev-row').innerHTML = demirbasPending.map((p,i) =>
         `<div class="prev-item"><img src="${p.url}"><div class="prev-del" onclick="demirbasPending.splice(${i},1);demirbasRenderPrev()">✕</div></div>`
     ).join('');
 }
-
 async function demirbasSaveEntry() {
     const room = q('f-room').value.trim(), date = q('f-date').value,
           note = q('f-note').value.trim(), donem = q('f-donem').value;
@@ -680,7 +811,6 @@ async function demirbasSaveEntry() {
     } catch(e) { showToast('Hata: '+e.message,'error'); }
     finally { btn.disabled=false; btn.innerHTML='<span id="save-label">Kaydet</span>'; pw.classList.remove('show'); }
 }
-
 async function demirbasLoadAll() {
     const el = q('rlist'); el.innerHTML = '<div class="empty">Yükleniyor...</div>';
     try {
@@ -695,7 +825,6 @@ async function demirbasLoadAll() {
         }).join('');
     } catch(e) { el.innerHTML = '<div class="empty">Hata</div>'; }
 }
-
 async function demirbasDeleteEntry(id) {
     openConfirm('Sil','Bu kayıt silinecek.',async()=>{
         await api(`/rest/v1/entries?id=eq.${id}`,{method:'DELETE'});
@@ -703,7 +832,6 @@ async function demirbasDeleteEntry(id) {
         demirbasSearch();
     });
 }
-
 async function demirbasDateSearch() {
     const f = q('d-from').value, t = q('d-to').value;
     if (!f || !t) return;
@@ -875,54 +1003,139 @@ function renderElektraEntries() {
                 <div class="edit-panel" id="edit-panel-${entry.id}">
                     <div class="field"><span class="label">Tarih</span><input type="date" id="edit-date-${entry.id}" value="${entry.checkin_date}"></div>
                     <div class="field"><span class="label">Not</span><textarea id="edit-note-${entry.id}" rows="2">${entry.note||''}</textarea></div>
-                    <div class="field"><span class="label">📷 Fotoğraf Açıklamaları</span>
+                    <div class="field"><span class="label">📷 Fotoğraflar</span>
                         <div class="edit-photo-list" id="edit-photos-${entry.id}">
                             ${photos.map((p,idx)=>`
-                            <div class="edit-photo-row">
+                            <div class="edit-photo-row" data-idx="${idx}">
                                 <img src="${p.url}" class="edit-photo-thumb">
                                 <input class="edit-photo-input" type="text" placeholder="Açıklama..." value="${p.desc||''}" id="edit-pdesc-${entry.id}-${idx}" maxlength="150">
+                                <button class="edit-photo-del-btn" onclick="removeEditPhoto('${entry.id}',${idx})">✕</button>
                             </div>`).join('')}
                         </div>
+                        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                            <button class="edit-add-photo-btn" onclick="document.getElementById('edit-file-${entry.id}').click()">➕ Fotoğraf Ekle</button>
+                            <input type="file" id="edit-file-${entry.id}" accept="image/*" multiple style="display:none" onchange="editAddPhotos('${entry.id}',this.files)">
+                        </div>
+                        <div id="edit-preview-${entry.id}" class="prev-row" style="margin-top:6px"></div>
                     </div>
-                    <button class="btn btn-primary" onclick="saveEdit('${entry.id}',${photos.length})">💾 Kaydet</button>
+                    <button class="btn btn-primary" onclick="saveEdit('${entry.id}')">💾 Kaydet</button>
                 </div>
             </div>
         </div>`;
     });
     html += '</div>';
     w.innerHTML = html;
+    // Her entry için editPendingFiles başlat
+    elektraCurrentEntries.forEach(e => { if (!editPendingFiles[e.id]) editPendingFiles[e.id] = []; });
 }
 
-function toggleEditPanel(entryId) { q('edit-panel-'+entryId).classList.toggle('open'); }
+// ─── ELEKTRİK DÜZENLEME ──────────────────────────────────────────────────────
+function toggleEditPanel(entryId) {
+    const panel = q('edit-panel-'+entryId);
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open') && !editPendingFiles[entryId]) {
+        editPendingFiles[entryId] = [];
+    }
+}
 
-async function saveEdit(entryId, photoCount) {
+function editAddPhotos(entryId, files) {
+    const preview = q('edit-preview-'+entryId);
+    if (!editPendingFiles[entryId]) editPendingFiles[entryId] = [];
+    let to=0, tn=0, cc=0;
+    const promises = [];
+    for (const f of files) {
+        promises.push(compressImage(f).then(r => {
+            editPendingFiles[entryId].push({file:r.file, url:URL.createObjectURL(r.file), desc:''});
+            to += r.origSize; tn += r.newSize;
+            if (r.compressed) cc++;
+        }));
+    }
+    Promise.all(promises).then(() => {
+        renderEditPreview(entryId);
+        if (cc > 0) showToast(cc+' foto sıkıştırıldı', 'success');
+    });
+    document.getElementById('edit-file-'+entryId).value = '';
+}
+
+function renderEditPreview(entryId) {
+    const preview = q('edit-preview-'+entryId);
+    if (!preview) return;
+    const files = editPendingFiles[entryId] || [];
+    preview.innerHTML = files.map((p,i) =>
+        `<div class="prev-item"><img src="${p.url}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border)"><div class="prev-del" onclick="editPendingFiles['${entryId}'].splice(${i},1);renderEditPreview('${entryId}')">✕</div></div>`
+    ).join('');
+}
+
+function removeEditPhoto(entryId, idx) {
+    const entry = elektraCurrentEntries.find(e => e.id === entryId);
+    if (!entry) return;
+    const photos = getPhotoData(entry);
+    photos.splice(idx, 1);
+    // Güncelle: photo_urls ve photo_data
+    const newUrls = photos.map(p=>p.url);
+    const newData = photos;
+    api(`/rest/v1/entries?id=eq.${entryId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({photo_urls: newUrls, photo_data: newData})
+    }).then(() => {
+        showToast('Fotoğraf silindi', 'success');
+        loadElektraEntries();
+    }).catch(e => showToast('Hata: '+e.message, 'error'));
+}
+
+async function saveEdit(entryId) {
     const entry = elektraCurrentEntries.find(e => e.id === entryId);
     if (!entry) return;
     const date = q('edit-date-'+entryId).value;
     const note = q('edit-note-'+entryId).value.trim();
-    // Fotoğraf açıklamalarını güncelle
-    const photos = getPhotoData(entry);
-    for (let i = 0; i < photoCount; i++) {
+
+    // Mevcut fotoğrafları al
+    const existingPhotos = getPhotoData(entry);
+    // Açıklamaları güncelle
+    for (let i = 0; i < existingPhotos.length; i++) {
         const inp = q(`edit-pdesc-${entryId}-${i}`);
-        if (inp && photos[i]) photos[i].desc = inp.value.trim();
+        if (inp) existingPhotos[i].desc = inp.value.trim();
     }
+
+    // Yeni eklenen dosyaları yükle
+    const pending = editPendingFiles[entryId] || [];
+    const newPhotoData = [];
+    const pw = q('eprogress-wrap'), pb = q('eprogress-bar');
+    pw.classList.add('show'); pb.style.width = '0%';
+
     const btn = document.querySelector(`#edit-panel-${entryId} .btn-primary`);
     const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Kaydediliyor...';
+
     try {
+        for (let i = 0; i < pending.length; i++) {
+            const url = await uploadImg(pending[i].file, entry.room_no, BUCKETS.elektrik);
+            newPhotoData.push({url, desc: pending[i].desc || ''});
+            pb.style.width = Math.round((i+1)/pending.length*100)+'%';
+        }
+        // Birleştir: mevcut + yeni
+        const allPhotos = [...existingPhotos, ...newPhotoData];
+        const allUrls = allPhotos.map(p=>p.url);
+
         await api(`/rest/v1/entries?id=eq.${entryId}`, {
             method: 'PATCH',
             body: JSON.stringify({
                 checkin_date: date,
-                note,
-                photo_data: photos,
-                photo_urls: photos.map(p=>p.url)
+                note: note,
+                photo_urls: allUrls,
+                photo_data: allPhotos
             })
         });
-        showToast('Güncellendi ✓');
-        loadElektraEntries();   // yeniden render et, açıklamalar güncellensin
-    } catch(e) { showToast('Hata: '+e.message,'error'); }
-    finally { btn.disabled = false; btn.innerHTML = orig; }
+        showToast('Güncellendi ✓', 'success');
+        editPendingFiles[entryId] = [];
+        q('edit-preview-'+entryId).innerHTML = '';
+        loadElektraEntries();
+    } catch(e) {
+        showToast('Hata: '+e.message, 'error');
+    } finally {
+        btn.disabled = false; btn.innerHTML = orig;
+        pw.classList.remove('show'); pb.style.width = '0%';
+    }
 }
 
 async function deleteElektraEntry(entryId) {
@@ -971,7 +1184,8 @@ function elektraRenderPrev() {
 }
 
 async function elektraSaveEntry() {
-    if (!elektraCurrentRoom || !elektraPending.length) { showToast('Eksik bilgi','error'); return; }
+    if (!elektraCurrentRoom) { showToast('Oda seçili değil','error'); return; }
+    if (!elektraPending.length) { showToast('En az bir fotoğraf ekleyin','error'); return; }
     const btn = q('esave-btn'), lbl = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Kaydediliyor...';
     const pw = q('eprogress-wrap'), pb = q('eprogress-bar');
@@ -985,6 +1199,7 @@ async function elektraSaveEntry() {
             photoData.push({url, desc: elektraPending[i].desc || ''});
             pb.style.width = Math.round((i+1)/elektraPending.length*100)+'%';
         }
+        const photoUrls = photoData.map(p=>p.url);
         await api('/rest/v1/entries', {
             method: 'POST',
             body: JSON.stringify({
@@ -992,17 +1207,24 @@ async function elektraSaveEntry() {
                 mode: 'elektrik',
                 checkin_date: date,
                 note,
-                photo_data: photoData,
-                photo_urls: photoData.map(p=>p.url)
+                photo_urls: photoUrls,
+                photo_data: photoData
             })
         });
-        showToast('Kayıt oluşturuldu ✓');
+        showToast('Kayıt oluşturuldu ✓', 'success');
         resetElektraAddForm();
         switchElektraPanelTab('kayitlar');
         loadElektraEntries();
         loadElektraRoomsWithEntries();
-    } catch(e) { showToast('Hata: '+e.message,'error'); }
-    finally { btn.disabled=false; btn.innerHTML=lbl; pw.classList.remove('show'); }
+        // Grid'deki flag'i güncelle
+        roomsWithEntries.add(String(elektraCurrentRoom));
+        renderElektraView();
+    } catch(e) {
+        showToast('Hata: '+e.message, 'error');
+    } finally {
+        btn.disabled=false; btn.innerHTML=lbl;
+        pw.classList.remove('show'); pb.style.width = '0%';
+    }
 }
 
 async function saveElektraRoomStatus() {
@@ -1015,7 +1237,7 @@ async function saveElektraRoomStatus() {
     btn.disabled = false; btn.innerHTML = 'Durumu Kaydet';
     updateElektraStats();
     renderElektraView();
-    showToast('Durum kaydedildi ✓');
+    showToast('Durum kaydedildi ✓', 'success');
 }
 
 // ─── LINK OLUŞTUR ─────────────────────────────────────────────────────────────
@@ -1035,18 +1257,24 @@ async function createEntryLink(roomNo, date, mod, btnEl, entryId) {
             body: JSON.stringify({room_no:roomNo, mod, token, entry_id:entryId})
         });
         const url = `${location.origin+location.pathname}?oda=${encodeURIComponent(roomNo)}&mod=${encodeURIComponent(mod)}&tarih=${encodeURIComponent(date)}&token=${token}`;
-        navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!')).catch(()=>prompt('Link:',url));
+        navigator.clipboard.writeText(url).then(()=>showToast('Link kopyalandı!', 'success')).catch(()=>prompt('Link:',url));
     } catch(e) { showToast('Hata: '+e.message,'error'); }
     finally { btnEl.innerHTML = orig; btnEl.disabled = false; }
 }
 
 // ─── SÜRÜKLE BIRAK ────────────────────────────────────────────────────────────
-q('edrop-zone').addEventListener('dragover', e => { e.preventDefault(); q('edrop-zone').style.borderColor='var(--accent)'; });
-q('edrop-zone').addEventListener('dragleave', () => q('edrop-zone').style.borderColor='');
-q('edrop-zone').addEventListener('drop', e => { e.preventDefault(); q('edrop-zone').style.borderColor=''; elektraHandleFiles(e.dataTransfer.files); });
-q('dropz').addEventListener('dragover',  e => { e.preventDefault(); q('dropz').classList.add('over'); });
-q('dropz').addEventListener('dragleave', () => q('dropz').classList.remove('over'));
-q('dropz').addEventListener('drop', e => { e.preventDefault(); q('dropz').classList.remove('over'); demirbasAddFiles(e.dataTransfer.files); });
+const dropz = q('edrop-zone');
+if (dropz) {
+    dropz.addEventListener('dragover', e => { e.preventDefault(); dropz.style.borderColor='var(--accent)'; });
+    dropz.addEventListener('dragleave', () => dropz.style.borderColor='');
+    dropz.addEventListener('drop', e => { e.preventDefault(); dropz.style.borderColor=''; elektraHandleFiles(e.dataTransfer.files); });
+}
+const dropz2 = q('dropz');
+if (dropz2) {
+    dropz2.addEventListener('dragover',  e => { e.preventDefault(); dropz2.classList.add('over'); });
+    dropz2.addEventListener('dragleave', () => dropz2.classList.remove('over'));
+    dropz2.addEventListener('drop', e => { e.preventDefault(); dropz2.classList.remove('over'); demirbasAddFiles(e.dataTransfer.files); });
+}
 
 // ─── TOKEN / SALT OKUNUR GÖRÜNÜM ─────────────────────────────────────────────
 const _p = new URLSearchParams(location.search);
@@ -1070,7 +1298,8 @@ if (_oda && _token) {
                         let html = `<div class="room-header"><div class="room-num e">${_oda}</div><div><strong>Sayaç ${_oda} · ${fmtDate(tarih)}</strong><span>${d.length} kayıt · Salt Okunur</span></div></div><div class="entries-flex">`;
                         d.forEach(entry => {
                             const photos = getPhotoData(entry);
-                            html += `<div class="entry-card"><div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><div class="date-badge e">${fmtDate(entry.checkin_date)}</div><div class="entry-meta"><div>${entry.note||'Not yok'}</div></div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${photos.length?`<div class="photo-gallery">${photos.map((p,idx)=>`<div class="photo-card"><img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(photos.map(x=>x.url))},${idx})"><div class="photo-card-body"><div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div></div></div>`).join('')}</div>`:'Fotoğraf yok'}</div></div>`;
+                            const allUrls = photos.map(p=>p.url);
+                            html += `<div class="entry-card"><div class="entry-head" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').classList.toggle('open')"><div class="date-badge e">${fmtDate(entry.checkin_date)}</div><div class="entry-meta"><div>${entry.note||'Not yok'}</div></div><span>📷${photos.length}</span><svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div><div class="entry-body open">${photos.length?`<div class="photo-gallery">${photos.map((p,idx)=>`<div class="photo-card"><img src="${p.url}" class="photo-card-image" onclick="openLb(${JSON.stringify(allUrls)},${idx})"><div class="photo-card-body"><div class="photo-card-desc${p.desc?'':' empty'}">${p.desc||'Açıklama yok'}</div></div></div>`).join('')}</div>`:'Fotoğraf yok'}</div></div>`;
                         });
                         html += '</div>'; q('ereadonly-view').innerHTML = html;
                     }).catch(() => showAccessError());
