@@ -17,14 +17,12 @@
         .app { max-width: 550px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
         .app.wide { max-width: 1400px; }
 
-        /* Topbar */
         .topbar { background: var(--accent); padding: 14px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
         .topbar h1 { font-size: 16px; font-weight: 600; color: #fff; flex: 1; }
         .mode-btns { display: flex; gap: 5px; }
         .mode-btn { padding: 5px 12px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.3); background: transparent; color: #fff; opacity: 0.7; }
         .mode-btn.active { opacity: 1; background: rgba(255,255,255,0.2); border-color: #fff; }
 
-        /* Sayaç Üst Statlar */
         .elektra-top-stats { display: flex; gap: 6px; padding: 12px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); scrollbar-width: none; }
         .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 10px; min-width: 70px; cursor: pointer; border: 2px solid transparent; }
         .stat-badge.active-filter { border-color: rgba(0,0,0,0.3); transform: scale(1.05); }
@@ -35,13 +33,11 @@
         .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
         .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
 
-        /* Sayaç Grid 18x15 */
         .grid-container { padding: 12px; overflow-x: auto; background: var(--bg); }
         .room-grid { display: grid; grid-template-columns: repeat(18, 55px); gap: 2px; width: max-content; margin: 0 auto; }
         .room-cell { height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); position: relative; }
         .room-flag { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; }
 
-        /* ODA PANELİ (SAYAÇ DETAY) - FULL SCREEN */
         .room-panel { position: fixed; inset: 0; background: #f8f9fa; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
         .room-panel.open { transform: translateY(0); }
 
@@ -53,7 +49,6 @@
         .nav-tab-btn { flex: 1; padding: 15px; font-size: 12px; font-weight: 700; border: none; background: #fff; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
         .nav-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-        /* KAYITLAR DASHBOARD DÜZENİ */
         .panel-scroll { flex: 1; overflow-y: auto; padding: 20px; }
 
         .meter-dashboard {
@@ -81,7 +76,6 @@
 
         .meter-card-footer { padding: 10px; font-size: 13px; color: #555; line-height: 1.4; border-top: 1px solid #f9f9f9; }
 
-        /* Formlar */
         .form-card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border); max-width: 450px; margin: 0 auto; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; font-family: inherit; font-size: 14px; background: #fafafa; }
         .btn-primary { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
@@ -89,7 +83,6 @@
         .drop-zone { border: 2px dashed #ccc; border-radius: 10px; padding: 20px; text-align: center; color: #888; margin-bottom: 15px; background: #fafafa; transition: 0.2s; }
         .drop-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
 
-        /* Lightbox */
         .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .lightbox.open { display: flex; }
         #lb-img { max-width: 95%; max-height: 85%; object-fit: contain; }
@@ -98,7 +91,6 @@
         .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Demirbaş Orijinal Navigasyon */
         .nav { display: flex; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 58px; z-index: 999; }
         .nav-btn { flex: 1; padding: 12px; font-size: 12px; font-weight: 600; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
         .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -131,7 +123,7 @@
         </div>
     </div>
 
-    <!-- DEMİRBAŞ GÖRÜNÜMÜ -->
+    <!-- DEMİRBAŞ GÖRÜNÜMÜ (ORİJİNAL HALİ) -->
     <div id="demirbas-ui" style="display:none">
         <div class="nav">
             <button class="nav-btn active" onclick="goTab(0)">Ara</button>
@@ -146,16 +138,9 @@
             <label>Oda No</label><input type="number" id="f-room">
             <label>Tarih</label><input type="date" id="f-date">
             <label>Not</label><textarea id="f-note" rows="3"></textarea>
-            <div class="drop-zone" id="demirbas-drop-zone" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event, 'demirbas')">
-                📷 Resimleri sürükleyip bırakın veya butonları kullanın
-            </div>
-            <div style="display:flex; gap:10px; margin-bottom:15px">
-                <button class="btn-outline" style="flex:1" onclick="q('f-file').click()">Galeriden Seç</button>
-                <button class="btn-outline" style="flex:1" onclick="q('f-camera').click()">📸 Fotoğraf Çek</button>
-            </div>
-            <input type="file" id="f-file" multiple accept="image/*" style="display:none" onchange="handleNewFiles(this.files, 'demirbas')">
-            <input type="file" id="f-camera" accept="image/*" capture="environment" style="display:none" onchange="handleNewFiles(this.files, 'demirbas')">
-            <div id="f-preview" class="thumb-grid"></div>
+            <button class="btn-primary" onclick="q('f-file').click()">Resim Seç</button>
+            <input type="file" id="f-file" multiple style="display:none" onchange="handleDemirbasFiles(this.files)">
+            <div id="f-preview" style="display:flex; gap:5px; margin-top:10px"></div>
             <button class="btn-primary" id="save-btn" onclick="saveNewEntry()" style="margin-top:20px">Kaydet</button>
         </div>
     </div>
@@ -177,40 +162,34 @@
         </div>
 
         <div class="panel-scroll">
-            <!-- Kayıt Listesi -->
             <div id="p-list" style="display:block">
                 <div class="meter-dashboard" id="entries-list"></div>
             </div>
-
-            <!-- Ekleme Formu -->
             <div id="p-add" style="display:none">
                 <div class="form-card">
                     <label>OKUMA TARİHİ</label>
                     <input type="date" id="ef-date">
                     <label>AÇIKLAMA</label>
                     <textarea id="ef-note" rows="3" placeholder="Notunuz..."></textarea>
-                    <div class="drop-zone" id="elektra-drop-zone" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event, 'elektra')">
+                    <div class="drop-zone" id="elektra-drop-zone" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleElektraDrop(event)">
                         📷 Resimleri sürükleyip bırakın veya butonları kullanın
                     </div>
                     <div style="display:flex; gap:10px; margin-bottom:15px">
                         <button class="btn-outline" style="flex:1" onclick="q('ef-file').click()">Galeriden Seç</button>
                         <button class="btn-outline" style="flex:1" onclick="q('ef-camera').click()">📸 Fotoğraf Çek</button>
                     </div>
-                    <input type="file" id="ef-file" multiple accept="image/*" style="display:none" onchange="handleNewFiles(this.files, 'elektra')">
-                    <input type="file" id="ef-camera" accept="image/*" capture="environment" style="display:none" onchange="handleNewFiles(this.files, 'elektra')">
+                    <input type="file" id="ef-file" multiple accept="image/*" style="display:none" onchange="handleElektraFiles(this.files)">
+                    <input type="file" id="ef-camera" accept="image/*" capture="environment" style="display:none" onchange="handleElektraFiles(this.files)">
                     <div id="ef-preview" class="thumb-grid"></div>
                     <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-primary">OKUMAYI KAYDET</button>
                 </div>
             </div>
-
-            <!-- Durum Seçimi -->
             <div id="p-status" style="display:none">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width: 400px; margin: 0 auto;" id="status-opts"></div>
             </div>
         </div>
     </div>
 
-    <!-- LIGHTBOX -->
     <div class="lightbox" id="lb" onclick="closeLb()">
         <img id="lb-img" src="">
     </div>
@@ -225,8 +204,9 @@ let roomStatuses = {};
 let roomsWithEntries = new Set();
 let currentRoom = null;
 let activeStatFilter = null;
-let pendingFiles = []; // Yeni ekleme için bekleyen dosyalar
-let editStates = {};   // Düzenleme state'leri: { id: { remainingUrls: [], newFiles: [] } }
+let pendingDemirbasFiles = [];   // Demirbaş için bekleyen dosyalar
+let pendingElektraFiles = [];    // Sayaç yeni kayıt için bekleyen dosyalar
+let editStates = {};            // Sayaç düzenleme state'leri
 
 const q = id => document.getElementById(id);
 const months = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
@@ -336,45 +316,69 @@ function renderGrid() {
     }
 }
 
-// --- DRAG & DROP DESTEĞİ ---
-function handleDrop(e, type) {
-    e.preventDefault();
-    e.currentTarget.classList.remove('dragover');
-    const files = e.dataTransfer.files;
-    if (files.length) handleNewFiles(files, type);
-}
-
-// --- DOSYA İŞLEME (YENİ EKLEME) ---
-function handleNewFiles(files, type) {
+// --- DEMİRBAŞ DOSYA İŞLEMLERİ (ORİJİNAL) ---
+function handleDemirbasFiles(files) {
+    pendingDemirbasFiles = [];
     for (let f of files) {
         if (!f.type.startsWith('image/')) continue;
         const reader = new FileReader();
         reader.onload = (e) => {
             const id = Math.random().toString(36).substr(2,5);
-            pendingFiles.push({ id, file: f, data: e.target.result });
-            renderPreviews(type);
+            pendingDemirbasFiles.push({ id, file: f, data: e.target.result });
+            renderDemirbasPreview();
         };
         reader.readAsDataURL(f);
     }
 }
 
-function renderPreviews(type) {
-    const wrap = type === 'elektra' ? q('ef-preview') : q('f-preview');
-    wrap.innerHTML = pendingFiles.map(f => `
+function renderDemirbasPreview() {
+    const wrap = q('f-preview');
+    wrap.innerHTML = pendingDemirbasFiles.map(f => `
+        <div style="position:relative; width:60px; height:60px">
+            <img src="${f.data}" style="width:100%; height:100%; object-fit:cover; border-radius:5px; border:1px solid #ddd">
+            <div style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:10px" onclick="pendingDemirbasFiles = pendingDemirbasFiles.filter(x=>x.id!=='${f.id}'); renderDemirbasPreview();">✕</div>
+        </div>
+    `).join('');
+}
+
+// --- SAYAÇ YENİ KAYIT DOSYA İŞLEMLERİ ---
+function handleElektraDrop(e) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length) handleElektraFiles(files);
+}
+
+function handleElektraFiles(files) {
+    for (let f of files) {
+        if (!f.type.startsWith('image/')) continue;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const id = Math.random().toString(36).substr(2,5);
+            pendingElektraFiles.push({ id, file: f, data: e.target.result });
+            renderElektraPreview();
+        };
+        reader.readAsDataURL(f);
+    }
+}
+
+function renderElektraPreview() {
+    const wrap = q('ef-preview');
+    wrap.innerHTML = pendingElektraFiles.map(f => `
         <div class="thumb-item">
             <img src="${f.data}">
-            <div class="thumb-del" onclick="pendingFiles = pendingFiles.filter(x=>x.id!=='${f.id}'); renderPreviews('${type}');">✕</div>
+            <div class="thumb-del" onclick="pendingElektraFiles = pendingElektraFiles.filter(x=>x.id!=='${f.id}'); renderElektraPreview();">✕</div>
         </div>
     `).join('');
 }
 
 // --- SAYAÇ KAYDETME ---
 async function saveElektraEntry() {
-    if(!pendingFiles.length) { showToast('En az bir resim ekleyin','error'); return; }
+    if(!pendingElektraFiles.length) { showToast('En az bir resim ekleyin','error'); return; }
     const btn = q('ef-save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
     try {
         const urls = [];
-        for(let f of pendingFiles) {
+        for(let f of pendingElektraFiles) {
             const name = `${Date.now()}_${Math.random().toString(36).substr(2,8)}.jpg`;
             const upload = await fetch(`${SB}/storage/v1/object/meters/${currentRoom}/${name}`, {
                 method: 'POST',
@@ -395,7 +399,7 @@ async function saveElektraEntry() {
         });
         if(res.ok) {
             showToast('Kaydedildi');
-            pendingFiles = []; q('ef-preview').innerHTML = ''; q('ef-note').value = '';
+            pendingElektraFiles = []; q('ef-preview').innerHTML = ''; q('ef-note').value = '';
             switchPTab('list'); loadEntries(); loadRoomsWithEntries(); renderGrid();
         }
     } catch(e) { showToast('Hata oluştu','error'); }
@@ -412,8 +416,8 @@ async function openPanel(rno) {
 
 function closePanel() {
     q('room-panel').classList.remove('open');
-    pendingFiles = []; q('ef-preview').innerHTML = '';
-    editStates = {}; // Panel kapanınca düzenleme state'leri sıfırlanır
+    pendingElektraFiles = []; q('ef-preview').innerHTML = '';
+    editStates = {};
 }
 
 function switchPTab(t) {
@@ -455,7 +459,7 @@ async function loadEntries() {
                     <div style="margin:10px 0; font-weight:600; font-size:12px">Mevcut Fotoğraflar</div>
                     <div class="thumb-grid" id="edit-remaining-${e.id}">
                         ${(e.photo_urls || []).map(u => `
-                            <div class="thumb-item" id="thumb-${e.id}-${u.split('/').pop()}">
+                            <div class="thumb-item" id="thumb-${e.id}-${encodeURIComponent(u)}">
                                 <img src="${u}">
                                 <div class="thumb-del" onclick="removeEditRemainingUrl('${e.id}', '${u}')">✕</div>
                             </div>
@@ -492,10 +496,6 @@ function initEditState(id, existingUrls) {
 function toggleEdit(id) {
     const el = q('edit-' + id);
     if (el.style.display === 'none' || !el.style.display) {
-        // Açılıyor: mevcut URL'leri al (karttan okuyabiliriz, ama loadEntries'den sonra render edildiği için oradan alamayız.
-        // Daha güvenli: data attribute olarak saklayalım ya da editStates zaten varsa kullanalım.
-        // loadEntries sırasında editStates sıfırlanmamalı. toggleEdit açılırken remainingUrls yoksa boş dizi başlatırız.
-        // Ancak mevcut fotoğrafları DOM'dan okuyabiliriz. Kartın gallery kısmındaki img src'lerini toplayalım.
         const existingImgs = el.parentElement.querySelectorAll('.meter-card-gallery img');
         const existingUrls = Array.from(existingImgs).map(img => img.src);
         initEditState(id, existingUrls);
@@ -570,7 +570,6 @@ async function saveEdit(id) {
     const btn = q('edit-' + id).querySelector('.btn-primary');
     btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
     try {
-        // Yeni dosyaları upload et
         const newUrls = [];
         for (let f of state.newFiles) {
             const name = `${Date.now()}_${Math.random().toString(36).substr(2,8)}.jpg`;
@@ -591,13 +590,12 @@ async function saveEdit(id) {
             })
         });
         showToast('Güncellendi');
-        delete editStates[id]; // Temizle
-        loadEntries(); // Yeniden yükle
+        delete editStates[id];
+        loadEntries();
     } catch(e) { showToast('Hata'); }
     finally { btn.disabled = false; btn.innerHTML = 'GÜNCELLE'; }
 }
 
-// --- SİLME ---
 async function deleteEntry(id) {
     if(!confirm('Kayıt silinsin mi?')) return;
     await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
@@ -630,14 +628,14 @@ async function updateStatus(s) {
     showToast('Güncellendi'); renderStatusSelection(); renderStats(); renderGrid();
 }
 
-// --- DEMİRBAŞ KAYDETME (Güncellendi: aynı drag-drop + kamera) ---
+// --- DEMİRBAŞ KAYDETME (ORİJİNAL) ---
 async function saveNewEntry() {
     const room = q('f-room').value;
-    if(!room || !pendingFiles.length) { showToast('Oda no ve en az bir resim gerekli','error'); return; }
+    if(!room || !pendingDemirbasFiles.length) { showToast('Oda no ve en az bir resim gerekli','error'); return; }
     const btn = q('save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
     const urls = [];
     try {
-        for(let f of pendingFiles) {
+        for(let f of pendingDemirbasFiles) {
             const name = `${Date.now()}_${Math.random().toString(36).substr(2,8)}.jpg`;
             const upload = await fetch(`${SB}/storage/v1/object/photos/${room}/${name}`, {
                 method: 'POST',
@@ -651,7 +649,7 @@ async function saveNewEntry() {
             body: JSON.stringify({ room_no: String(room), checkin_date: q('f-date').value, note: q('f-note').value, mode: 'demirbaş', photo_urls: urls })
         });
         showToast('Kaydedildi');
-        pendingFiles = []; q('f-preview').innerHTML = ''; q('f-room').value = ''; q('f-note').value = '';
+        pendingDemirbasFiles = []; q('f-preview').innerHTML = ''; q('f-room').value = ''; q('f-note').value = '';
         goTab(0);
     } catch(e) { showToast('Hata'); }
     finally { btn.disabled = false; btn.innerHTML = 'Kaydet'; }
@@ -679,7 +677,6 @@ async function searchRoom() {
     `).join('') || 'Kayıt yok.';
 }
 
-// --- YARDIMCI FONKSİYONLAR ---
 function showToast(msg, type = 'success') {
     const t = q('toast');
     t.textContent = msg;
