@@ -42,6 +42,7 @@
   .btn-sm{padding:9px 14px;font-size:13px}
   .btn-danger{background:var(--danger-light);color:var(--danger);border-color:#f5c6c2}
   .btn-danger:active{background:#fae5e2}
+  .btn-outline{padding:8px 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif}
   .search-wrap{display:flex;gap:8px;margin-bottom:16px}
   .search-wrap input{flex:1;font-size:16px;font-weight:500}
   .search-wrap input::placeholder{font-weight:400}
@@ -172,46 +173,52 @@
   .confirm-actions{display:flex;gap:8px}
   .confirm-actions .btn{flex:1;justify-content:center}
 
-  /* ELEKTRA SAYAÇ GRID */
-  .elektra-top-stats { display: flex; gap: 6px; padding: 12px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); scrollbar-width: none; }
-  .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 10px; min-width: 70px; cursor: pointer; border: 2px solid transparent; }
-  .stat-badge.active-filter { border-color: rgba(0,0,0,0.3); transform: scale(1.05); }
-  .stat-badge .count { font-size: 16px; font-weight: 700; color: #fff; }
-  .stat-badge .s-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.9); }
-  .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
-  .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
-  .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
-  .grid-container { padding: 12px; overflow-x: auto; background: var(--bg); }
-  .room-grid { display: grid; grid-template-columns: repeat(18, 55px); gap: 2px; width: max-content; margin: 0 auto; }
-  .room-cell { height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); position: relative; }
-  .room-flag { position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; }
+  /* ELEKTRA SAYAÇ GRID – TAM SAYFAYA SIĞAN YENİ TASARIM */
+  .elektra-top-stats{display:flex;gap:6px;padding:8px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--border);scrollbar-width:none}
+  .stat-badge{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:8px 10px;border-radius:10px;min-width:60px;cursor:pointer;border:2px solid transparent}
+  .stat-badge.active-filter{border-color:rgba(0,0,0,.3);transform:scale(1.05)}
+  .stat-badge .count{font-size:16px;font-weight:700;color:#fff}
+  .stat-badge .s-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.9)}
+  .bg-dt{background:#1565c0}.bg-dk{background:#6a1a9a}.bg-co{background:#2e7d32}
+  .bg-t{background:#4caf50}.bg-k{background:#ff6d00}.bg-ooi{background:#880e4f}
+  .bg-bos{background:#fff;color:#888;border:1px solid #ddd}
+  .grid-container{padding:4px;overflow-x:hidden;background:var(--bg)}
+  .room-grid{display:grid;grid-template-columns:repeat(18,1fr);gap:1px;width:100%;max-width:100%}
+  .room-cell{aspect-ratio:1/1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:clamp(7px,1.8vw,11px);font-weight:700;cursor:pointer;border:1px solid rgba(0,0,0,.05);position:relative;min-width:0;overflow:hidden}
+  .room-flag{position:absolute;top:1px;right:1px;width:5px;height:5px;border-radius:50%;background:#00e5ff}
 
   /* ODA PANELİ (SAYAÇ DETAY) */
-  .room-panel { position: fixed; inset: 0; background: #f8f9fa; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
-  .room-panel.open { transform: translateY(0); }
-  .panel-header { background: var(--accent); padding: 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
-  .panel-room-info { display: flex; align-items: center; gap: 10px; }
-  .panel-room-badge { background: #fff; color: var(--accent); padding: 4px 12px; border-radius: 6px; font-weight: 800; font-family: 'DM Mono'; font-size: 18px; }
-  .nav-tabs { display: flex; border-bottom: 1px solid var(--border); background: #fff; }
-  .nav-tab-btn { flex: 1; padding: 15px; font-size: 12px; font-weight: 700; border: none; background: #fff; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
-  .nav-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .panel-scroll { flex: 1; overflow-y: auto; padding: 20px; }
-  .meter-dashboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; align-items: start; }
-  .meter-card { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
-  .meter-card-header { padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-bottom: 1px solid #f1f1f1; }
-  .meter-date { font-weight: 700; font-size: 12px; color: var(--accent); }
-  .meter-card-gallery { display: grid; grid-template-columns: repeat(1, 1fr); gap: 2px; padding: 4px; }
-  .meter-img { aspect-ratio: 1/1; overflow: hidden; cursor: pointer; background: #eee; }
-  .meter-img img { width: 100%; height: 100%; object-fit: cover; }
-  .meter-card-footer { padding: 10px; font-size: 13px; color: #555; line-height: 1.4; border-top: 1px solid #f9f9f9; }
-  .form-card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border); max-width: 450px; margin: 0 auto; }
-  .entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
-  .entry-card{margin-bottom:0;}
+  .room-panel{position:fixed;inset:0;background:#f8f9fa;z-index:1500;display:flex;flex-direction:column;transform:translateY(100%);transition:.4s cubic-bezier(0,0,.2,1)}
+  .room-panel.open{transform:translateY(0)}
+  .panel-header{background:var(--accent);padding:16px;display:flex;align-items:center;justify-content:space-between;color:#fff}
+  .panel-room-info{display:flex;align-items:center;gap:10px}
+  .panel-room-badge{background:#fff;color:var(--accent);padding:4px 12px;border-radius:6px;font-weight:800;font-family:'DM Mono';font-size:18px}
+  .nav-tabs{display:flex;border-bottom:1px solid var(--border);background:#fff}
+  .nav-tab-btn{flex:1;padding:15px;font-size:12px;font-weight:700;border:none;background:#fff;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
+  .nav-tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .panel-scroll{flex:1;overflow-y:auto;padding:20px}
+  .meter-dashboard{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;align-items:start}
+  .meter-card{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;flex-direction:column}
+  .meter-card-header{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;background:#fafafa;border-bottom:1px solid #f1f1f1}
+  .meter-date{font-weight:700;font-size:12px;color:var(--accent)}
+  .meter-card-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:4px}
+  .meter-img{aspect-ratio:1/1;overflow:hidden;cursor:pointer;background:#eee;max-height:120px}
+  .meter-img img{width:100%;height:100%;object-fit:cover}
+  .meter-card-footer{padding:10px;font-size:13px;color:#555;line-height:1.4;border-top:1px solid #f9f9f9}
+  .form-card{background:#fff;padding:20px;border-radius:12px;border:1px solid var(--border);max-width:450px;margin:0 auto}
+  .entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+  .entry-card{margin-bottom:0}
   .spacer{height:80px}
   .ml-cikis-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #e8a020;background:var(--amber-light);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
   .ml-cikis-btn:active{background:#fde68a;}
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
+
+  /* THUMB GRID (düzenleme panelindeki küçük önizlemeler) */
+  .thumb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+  .thumb-item{aspect-ratio:1/1;border-radius:6px;overflow:hidden;position:relative;border:1px solid var(--border);max-height:100px}
+  .thumb-item img{width:100%;height:100%;object-fit:cover}
+  .thumb-del{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(192,57,43,.85);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
