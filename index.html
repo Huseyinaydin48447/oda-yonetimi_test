@@ -9,20 +9,17 @@
         :root {
             --bg: #f5f4f0; --surface: #fff; --surface2: #f0efe9; --border: #e2e1d9;
             --text: #1a1a18; --muted: #7a7a72; --accent: #1a5c3a; --accent-light: #e8f2ec;
-            --accent-mid:#2d7a52; --danger: #c0392b; --danger-light:#fdf0ee;
-            --amber: #b45309; --amber-light:#fef3c7; --radius: 12px; --radius-sm: 8px;
-            --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
+            --danger: #c0392b; --amber: #b45309; --radius: 12px; --radius-sm: 8px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size:15px; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
         .app { max-width: 550px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
         .app.wide { max-width: 1400px; }
 
         /* Topbar */
-        .topbar { background: var(--accent); padding: 14px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+        .topbar { background: var(--accent); padding: 14px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
         .topbar h1 { font-size: 16px; font-weight: 600; color: #fff; flex: 1; }
-        .topbar p { font-size:11px; color:rgba(255,255,255,.65); margin-top:1px; }
         .mode-btns { display: flex; gap: 5px; }
         .mode-btn { padding: 5px 12px; font-size: 11px; font-weight: 600; border-radius: 99px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.3); background: transparent; color: #fff; opacity: 0.7; }
         .mode-btn.active { opacity: 1; background: rgba(255,255,255,0.2); border-color: #fff; }
@@ -47,151 +44,73 @@
         /* ODA PANELİ (SAYAÇ DETAY) - FULL SCREEN */
         .room-panel { position: fixed; inset: 0; background: #f8f9fa; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
         .room-panel.open { transform: translateY(0); }
+
         .panel-header { background: var(--accent); padding: 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
         .panel-room-info { display: flex; align-items: center; gap: 10px; }
         .panel-room-badge { background: #fff; color: var(--accent); padding: 4px 12px; border-radius: 6px; font-weight: 800; font-family: 'DM Mono'; font-size: 18px; }
+
         .nav-tabs { display: flex; border-bottom: 1px solid var(--border); background: #fff; }
         .nav-tab-btn { flex: 1; padding: 15px; font-size: 12px; font-weight: 700; border: none; background: #fff; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
         .nav-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* KAYITLAR DASHBOARD DÜZENİ */
         .panel-scroll { flex: 1; overflow-y: auto; padding: 20px; }
-        .meter-dashboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; align-items: start; }
-        .meter-card { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+
+        .meter-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+            align-items: start;
+        }
+
+        .meter-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
         .meter-card-header { padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-bottom: 1px solid #f1f1f1; }
         .meter-date { font-weight: 700; font-size: 12px; color: var(--accent); }
+
         .meter-card-gallery { display: grid; grid-template-columns: repeat(1, 1fr); gap: 2px; padding: 4px; }
         .meter-img { aspect-ratio: 1/1; overflow: hidden; cursor: pointer; background: #eee; }
         .meter-img img { width: 100%; height: 100%; object-fit: cover; }
+
         .meter-card-footer { padding: 10px; font-size: 13px; color: #555; line-height: 1.4; border-top: 1px solid #f9f9f9; }
+
+        /* Formlar */
         .form-card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border); max-width: 450px; margin: 0 auto; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; font-family: inherit; font-size: 14px; background: #fafafa; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; font-family: inherit; font-size: 14px; background: #fafafa; }
         .btn-primary { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
         .btn-outline { background: #fff; color: var(--accent); border: 1.5px dashed var(--accent); padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; text-align: center; }
         .drop-zone { border: 2px dashed #ccc; border-radius: 10px; padding: 20px; text-align: center; color: #888; margin-bottom: 15px; background: #fafafa; transition: 0.2s; }
         .drop-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
+
+        /* Lightbox */
         .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .lightbox.open { display: flex; }
         #lb-img { max-width: 95%; max-height: 85%; object-fit: contain; }
+
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 25px; border-radius: 50px; z-index: 30000; display: none; }
         .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Demirbaş Gelişmiş Stilleri */
-        .nav { display: flex; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 58px; z-index: 99; overflow-x: auto; }
-        .nav-btn { flex: 1; padding: 11px 4px; font-size: 12px; font-weight: 500; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; font-family: 'DM Sans',sans-serif; transition:all .15s; white-space:nowrap; }
+        /* Demirbaş Orijinal Navigasyon */
+        .nav { display: flex; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 58px; z-index: 999; }
+        .nav-btn { flex: 1; padding: 12px; font-size: 12px; font-weight: 600; border: none; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
         .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
         .screen { display: none; padding: 16px; }
         .screen.active { display: block; }
         .entry-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
         .entry-head { padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .entry-head:active { background: var(--surface2); }
-        .date-badge { display:inline-flex; align-items:center; gap:5px; background:var(--accent-light); color:var(--accent); font-size:12px; font-weight:600; padding:4px 10px; border-radius:99px; flex-shrink:0; }
-        .date-badge.e { background:var(--amber-light); color:var(--amber); }
-        .entry-meta { flex:1; min-width:0; overflow:hidden; }
-        .entry-meta .cat { font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .entry-meta .nt { font-size:12px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .entry-count { font-size:11px; color:var(--muted); background:var(--surface2); border-radius:99px; padding:3px 8px; white-space:nowrap; flex-shrink:0; }
-        .chevron { transition:transform .2s; flex-shrink:0; }
-        .chevron.open { transform:rotate(90deg); }
-        .entry-body { display:none; }
-        .entry-body.open { display:block; }
-        .img-scroll { display:flex; gap:8px; overflow-x:auto; padding:12px 14px; scrollbar-width:none; }
-        .img-scroll::-webkit-scrollbar { display:none; }
-        .img-thumb { width:120px; height:90px; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); flex-shrink:0; cursor:pointer; position:relative; }
-        .img-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .2s; }
-        .img-thumb:active img { transform:scale(1.05); }
-        .img-thumb-del { display:none; position:absolute; top:4px; right:4px; width:20px; height:20px; border-radius:50%; background:rgba(192,57,43,.9); color:#fff; font-size:11px; align-items:center; justify-content:center; cursor:pointer; font-weight:700; z-index:2; border:none; font-family:'DM Sans',sans-serif; }
-        .edit-mode .img-thumb-del { display:flex; }
-        .entry-footer { border-top:1px solid var(--border); padding:8px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--surface2); flex-wrap:wrap; }
-        .entry-footer-info { font-size:11px; color:var(--muted); }
-        .entry-footer-actions { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-        .link-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:99px; font-size:12px; font-weight:500; border:1px solid var(--border); background:var(--surface); color:var(--accent); cursor:pointer; font-family:'DM Sans',sans-serif; }
-        .link-btn:active { background:var(--accent-light); }
-        .edit-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:99px; font-size:12px; font-weight:500; border:1px solid var(--border); background:var(--surface); color:var(--amber); cursor:pointer; font-family:'DM Sans',sans-serif; }
-        .edit-btn:active { background:var(--amber-light); }
-        .del-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:99px; font-size:12px; font-weight:500; border:1px solid #f5c6c2; background:var(--danger-light); color:var(--danger); cursor:pointer; font-family:'DM Sans',sans-serif; }
-        .del-btn:active { background:#fae5e2; }
-        .tags-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
-        .tag { padding:5px 12px; border-radius:99px; font-size:12px; font-weight:500; border:1px solid var(--border); cursor:pointer; color:var(--muted); background:var(--surface); transition:all .12s; font-family:'DM Sans',sans-serif; }
-        .tag.on { background:var(--accent-light); color:var(--accent); border-color:var(--accent-mid); }
-        .all-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:10px; cursor:pointer; }
-        .all-card:active { background:var(--surface2); }
-        .all-card-inner { padding:12px 14px; display:flex; align-items:center; gap:10px; }
-        .room-header { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-        .room-num { background:var(--accent-light); color:var(--accent); font-size:22px; font-weight:600; padding:6px 14px; border-radius:var(--radius-sm); font-family:'DM Mono',monospace; flex-shrink:0; }
-        .room-num.e { background:var(--amber-light); color:var(--amber); }
-        .room-summary { flex:1; }
-        .room-summary strong { font-size:14px; font-weight:500; display:block; }
-        .room-summary span { font-size:12px; color:var(--muted); }
-        .empty { text-align:center; padding:40px 16px; color:var(--muted); font-size:14px; }
-        .empty small { display:block; margin-top:6px; font-size:12px; }
-        .empty-icon { width:48px; height:48px; margin:0 auto 12px; opacity:.3; }
-        .status-bar { background:var(--accent-light); border:1px solid #b8ddc8; border-radius:var(--radius-sm); padding:8px 12px; font-size:12px; color:var(--accent); margin-bottom:14px; display:flex; align-items:center; gap:6px; }
-        .status-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+
         .thumb-grid { display: flex; flex-wrap: wrap; gap: 5px; }
         .thumb-item { position: relative; width: 60px; height: 60px; }
         .thumb-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
         .thumb-del { position: absolute; top: -6px; right: -6px; background: #c0392b; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
-        .prev-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
-        .prev-item { position:relative; width:80px; height:60px; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); }
-        .prev-item img { width:100%; height:100%; object-fit:cover; }
-        .prev-del { position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:rgba(192,57,43,.85); color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:600; }
-        .compress-info { font-size:11px; color:var(--accent); background:var(--accent-light); border-radius:99px; padding:2px 10px; display:inline-flex; align-items:center; gap:4px; margin-top:6px; }
-        .progress-bar-wrap { height:4px; background:var(--surface2); border-radius:99px; overflow:hidden; margin-top:8px; display:none; }
-        .progress-bar-wrap.show { display:block; }
-        .progress-bar { height:100%; background:var(--accent); border-radius:99px; transition:width .2s; width:0; }
-        .pdf-panel-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:300; align-items:flex-end; justify-content:center; padding:16px; }
-        .pdf-panel-overlay.open { display:flex; }
-        .pdf-panel { background:var(--surface); border-radius:var(--radius); width:100%; max-width:448px; overflow:hidden; box-shadow:0 -4px 32px rgba(0,0,0,.12); }
-        .pdf-panel-header { padding:16px 16px 0; display:flex; align-items:center; justify-content:space-between; }
-        .pdf-panel-header h3 { font-size:16px; font-weight:600; }
-        .pdf-panel-close { background:transparent; border:none; font-size:20px; color:var(--muted); cursor:pointer; line-height:1; padding:4px; }
-        .pdf-option { display:flex; align-items:center; gap:14px; padding:14px 16px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; }
-        .pdf-option:last-of-type { border-bottom:none; }
-        .pdf-option:active { background:var(--surface2); }
-        .pdf-option-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-        .pdf-option-icon.all { background:var(--accent-light); }
-        .pdf-option-icon.date { background:var(--amber-light); }
-        .pdf-option-icon.rooms { background:#eef2ff; }
-        .pdf-option-text strong { font-size:14px; font-weight:500; display:block; margin-bottom:2px; }
-        .pdf-option-text span { font-size:12px; color:var(--muted); }
-        .pdf-sub-panel { display:none; padding:14px 16px; border-top:1px solid var(--border); background:var(--surface2); }
-        .pdf-sub-panel.open { display:block; }
-        .pdf-sub-panel .field { margin-bottom:10px; }
-        .pdf-sub-panel input { font-size:14px; padding:9px 12px; }
-        .pdf-sub-btn { width:100%; padding:12px; background:var(--amber); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; }
-        .pdf-sub-btn:disabled { background:var(--muted); cursor:not-allowed; }
-        .pdf-option.active-opt { background:var(--surface2); }
-        .dl-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:400; align-items:flex-end; justify-content:center; padding:16px; }
-        .dl-overlay.open { display:flex; }
-        .dl-sheet { background:var(--surface); border-radius:var(--radius); width:100%; max-width:448px; padding:20px; box-shadow:0 -4px 32px rgba(0,0,0,.15); }
-        .dl-title { font-size:15px; font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
-        .dl-subtitle { font-size:12px; color:var(--muted); margin-bottom:16px; }
-        .dl-bar-wrap { height:8px; background:var(--surface2); border-radius:99px; overflow:hidden; margin-bottom:10px; }
-        .dl-bar { height:100%; background:var(--accent); border-radius:99px; transition:width .25s ease; width:0; }
-        .dl-bar.pdf-mode { background:var(--amber); }
-        .dl-stats { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:16px; }
-        .dl-percent { font-size:20px; font-weight:600; color:var(--text); text-align:center; margin-bottom:4px; }
-        .dl-step { font-size:12px; color:var(--muted); text-align:center; margin-bottom:16px; min-height:18px; }
-        .sel-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:var(--radius-sm); font-size:12px; font-weight:500; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; font-family:'DM Sans',sans-serif; }
-        .confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:300; align-items:flex-end; justify-content:center; padding:16px; }
-        .confirm-overlay.open { display:flex; }
-        .confirm-sheet { background:var(--surface); border-radius:var(--radius); padding:20px; width:100%; max-width:448px; }
-        .confirm-sheet h3 { font-size:16px; font-weight:600; margin-bottom:8px; }
-        .confirm-sheet p { font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:18px; }
-        .confirm-actions { display:flex; gap:8px; }
-        .confirm-actions .btn { flex:1; justify-content:center; }
-        .btn { padding:11px 18px; border-radius:var(--radius-sm); font-size:14px; font-weight:500; cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif; transition:all .15s; display:inline-flex; align-items:center; gap:6px; }
-        .btn:active { transform:scale(.98); }
-        .btn-sm { padding:9px 14px; font-size:13px; }
-        .btn-danger { background:var(--danger-light); color:var(--danger); border-color:#f5c6c2; }
-        .btn-danger:active { background:#fae5e2; }
-        .ml-cikis-btn { padding:5px 10px; font-size:11px; font-weight:600; border-radius:6px; border:1px solid #e8a020; background:var(--amber-light); color:var(--amber); cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
-        .ml-cikis-btn:active { background:#fde68a; }
-        .wa-btn { color:#25D366; border-color:#b7f0c8; background:#eafaf0; }
-        .wa-btn:active { background:#dff5e7; }
-        .entries-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:start; }
-        .search-wrap { display:flex; gap:8px; margin-bottom:16px; }
-        .search-wrap input { flex:1; font-size:16px; font-weight:500; }
     </style>
 </head>
 <body class="app wide">
@@ -212,125 +131,32 @@
         </div>
     </div>
 
-    <!-- DEMİRBAŞ GELİŞMİŞ GÖRÜNÜMÜ -->
+    <!-- DEMİRBAŞ GÖRÜNÜMÜ -->
     <div id="demirbas-ui" style="display:none">
-        <div class="nav" id="main-nav">
+        <div class="nav">
             <button class="nav-btn active" onclick="goTab(0)">Ara</button>
             <button class="nav-btn" onclick="goTab(1)">Ekle</button>
-            <button class="nav-btn" onclick="goTab(2)">Tüm Odalar</button>
-            <button class="nav-btn" id="nav-sayac" style="display:none" onclick="goTab(3)">Sayaç Listesi</button>
         </div>
-
-        <!-- ARA -->
-        <div class="screen active" id="s0">
-            <div style="display:flex;gap:6px;margin-bottom:14px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px">
-                <button id="stab-room" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:var(--accent);color:#fff;border-color:var(--accent);" onclick="setSTab('room')">Oda No</button>
-                <button id="stab-date" class="btn" style="flex:1;justify-content:center;font-size:13px;padding:8px;background:transparent;border-color:transparent;color:var(--muted);" onclick="setSTab('date')">Tarih Aralığı</button>
-            </div>
-            <div id="stab-room-content">
-                <div class="search-wrap">
-                    <input id="sinput" type="number" placeholder="Oda no girin (ör: 307)" oninput="doSearch(this.value)" onkeydown="if(event.key==='Enter')doSearch(this.value)"/>
-                    <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);" onclick="doSearch(document.getElementById('sinput').value)">Ara</button>
-                </div>
-            </div>
-            <div id="stab-date-content" style="display:none">
-                <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-end">
-                    <div style="flex:1"><span class="label">Başlangıç</span><input id="d-from" type="date" onchange="doDateSearch()"/></div>
-                    <div style="flex:1"><span class="label">Bitiş</span><input id="d-to" type="date" onchange="doDateSearch()"/></div>
-                    <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent);flex-shrink:0" onclick="doDateSearch()">Ara</button>
-                </div>
-            </div>
-            <div id="sresult">
-                <div class="empty">
-                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    Numara girin<small>Tüm girişler tarihe göre sıralı gelir</small>
-                </div>
-            </div>
+        <div class="screen active" id="tab0">
+            <input type="number" id="ds-input" placeholder="Oda no girin...">
+            <button class="btn-primary" style="margin-top:10px" onclick="searchRoom()">Ara</button>
+            <div id="search-results" style="margin-top:20px"></div>
         </div>
-
-        <!-- EKLE -->
-        <div class="screen" id="s1">
-            <div class="status-bar"><div class="status-dot"></div><span id="conn-text">Bağlanıyor...</span></div>
-            <div class="field" id="donem-field">
-                <span class="label">Dönem Aralığı</span>
-                <select id="f-donem">
-                    <option value="">Seçiniz</option>
-                    <option value="1 - 15 Ocak">1. Dönem: 1 - 15 Ocak</option><option value="16 - 30 Ocak">2. Dönem: 16 - 30 Ocak</option>
-                    <option value="31 Ocak - 14 Şubat">3. Dönem: 31 Ocak - 14 Şubat</option><option value="15 Şubat - 1 Mart">4. Dönem: 15 Şubat - 1 Mart</option>
-                    <option value="2 - 16 Mart">5. Dönem: 2 - 16 Mart</option><option value="17 - 31 Mart">6. Dönem: 17 - 31 Mart</option>
-                    <option value="1 - 15 Nisan">7. Dönem: 1 - 15 Nisan</option><option value="16 - 30 Nisan">8. Dönem: 16 - 30 Nisan</option>
-                    <option value="1 - 15 Mayıs">9. Dönem: 1 - 15 Mayıs</option><option value="16 - 30 Mayıs">10. Dönem: 16 - 30 Mayıs</option>
-                    <option value="31 Mayıs - 14 Haziran">11. Dönem: 31 Mayıs - 14 Haziran</option><option value="15 - 29 Haziran">12. Dönem: 15 - 29 Haziran</option>
-                    <option value="30 Haziran - 14 Temmuz">13. Dönem: 30 Haziran - 14 Temmuz</option><option value="15 - 29 Temmuz">14. Dönem: 15 - 29 Temmuz</option>
-                    <option value="30 Temmuz - 13 Ağustos">15. Dönem: 30 Temmuz - 13 Ağustos</option><option value="14 - 28 Ağustos">16. Dönem: 14 - 28 Ağustos</option>
-                    <option value="29 Ağustos - 12 Eylül">17. Dönem: 29 Ağustos - 12 Eylül</option><option value="13 - 27 Eylül">18. Dönem: 13 - 27 Eylül</option>
-                    <option value="28 Eylül - 12 Ekim">19. Dönem: 28 Eylül - 12 Ekim</option><option value="13 - 27 Ekim">20. Dönem: 13 - 27 Ekim</option>
-                    <option value="2 - 16 Kasım">21. Dönem: 2 - 16 Kasım</option><option value="17 Kasım - 1 Aralık">22. Dönem: 17 Kasım - 1 Aralık</option>
-                    <option value="2 - 16 Aralık">23. Dönem: 2 - 16 Aralık</option><option value="17 - 31 Aralık">24. Dönem: 17 - 31 Aralık</option>
-                </select>
+        <div class="screen" id="tab1">
+            <label>Oda No</label><input type="number" id="f-room">
+            <label>Tarih</label><input type="date" id="f-date">
+            <label>Not</label><textarea id="f-note" rows="3"></textarea>
+            <div class="drop-zone" id="demirbas-drop-zone" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event, 'demirbas')">
+                📷 Resimleri sürükleyip bırakın veya butonları kullanın
             </div>
-            <div class="field">
-                <span class="label" id="f-room-label">Oda numarası *</span>
-                <input id="f-room" type="number" placeholder="ör: 307"/>
+            <div style="display:flex; gap:10px; margin-bottom:15px">
+                <button class="btn-outline" style="flex:1" onclick="q('f-file').click()">Galeriden Seç</button>
+                <button class="btn-outline" style="flex:1" onclick="q('f-camera').click()">📸 Fotoğraf Çek</button>
             </div>
-            <div class="field">
-                <span class="label" id="f-date-label">Giriş tarihi *</span>
-                <input id="f-date" type="date"/>
-            </div>
-            <div class="field">
-                <span class="label">Kategori / Konum</span>
-                <div class="tags-row" id="f-tags"></div>
-            </div>
-            <div class="field">
-                <span class="label" id="f-note-label">Not</span>
-                <textarea id="f-note" rows="2" placeholder="Açıklama..."></textarea>
-            </div>
-            <div class="field">
-                <span class="label">Fotoğraflar *</span>
-                <div style="display:flex;gap:10px;margin-bottom:10px;">
-                    <button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto;" onclick="document.getElementById('fcam').click()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin:0 auto"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        <span style="font-size:13px;font-weight:500">Fotoğraf Çek</span>
-                        <span style="font-size:11px;color:var(--muted)">Kamera</span>
-                    </button>
-                    <button type="button" class="btn" style="flex:1;justify-content:center;padding:14px 10px;flex-direction:column;gap:6px;height:auto;" onclick="document.getElementById('fgal').click()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin:0 auto"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                        <span style="font-size:13px;font-weight:500">Galeriden Seç</span>
-                        <span style="font-size:11px;color:var(--muted)">Çoklu seçim</span>
-                    </button>
-                </div>
-                <div class="drop-zone" id="dropz" onclick="document.getElementById('fgal').click()" ondragover="dzOver(event)" ondragleave="dzLeave()" ondrop="dzDrop(event)">
-                    <p>veya buraya sürükle bırak</p>
-                </div>
-                <input type="file" id="fgal" accept="image/*" multiple style="display:none" onchange="addFiles(this.files)"/>
-                <input type="file" id="fcam" accept="image/*" capture="environment" style="display:none" onchange="addFiles(this.files)"/>
-                <div id="compress-status"></div>
-                <div class="prev-row" id="prev-row"></div>
-                <div id="progress-wrap" class="progress-bar-wrap"><div id="progress-bar" class="progress-bar"></div></div>
-            </div>
-            <button class="btn btn-primary" id="save-btn" onclick="saveEntry()"><span id="save-label">Kaydet</span></button>
-        </div>
-
-        <!-- TÜM ODALAR -->
-        <div class="screen" id="s2">
-            <div id="rlist"><div class="empty">Yükleniyor...</div></div>
-        </div>
-
-        <!-- SAYAÇ LİSTESİ (sadece elektrik modunda) -->
-        <div class="screen" id="s3">
-            <div class="ml-toolbar">
-                <div class="ml-row1"><input id="ml-search" type="text" placeholder="Oda, kat ara..." oninput="mlFilter()"/></div>
-                <div class="ml-row2">
-                    <select id="ml-kat" onchange="mlFilter()"><option value="">Tüm katlar</option></select>
-                    <div class="ml-typebts">
-                        <button class="mt-btn sel-all" id="mt-all" onclick="mlSetType('all')">Tümü</button>
-                        <button class="mt-btn" id="mt-giris" onclick="mlSetType('giris')">Giriş</button>
-                        <button class="mt-btn" id="mt-cikis" onclick="mlSetType('cikis')">Çıkış</button>
-                    </div>
-                </div>
-            </div>
-            <div class="ml-stats" id="ml-stats"></div>
-            <div class="ml-wrap" id="ml-wrap"><div class="ml-empty">Yükleniyor...</div></div>
+            <input type="file" id="f-file" multiple accept="image/*" style="display:none" onchange="handleNewFiles(this.files, 'demirbas')">
+            <input type="file" id="f-camera" accept="image/*" capture="environment" style="display:none" onchange="handleNewFiles(this.files, 'demirbas')">
+            <div id="f-preview" class="thumb-grid"></div>
+            <button class="btn-primary" id="save-btn" onclick="saveNewEntry()" style="margin-top:20px">Kaydet</button>
         </div>
     </div>
 
@@ -343,18 +169,29 @@
             </div>
             <div onclick="closePanel()" style="cursor:pointer; font-size:24px">✕</div>
         </div>
+        
         <div class="nav-tabs">
             <button class="nav-tab-btn active" id="tab-btn-list" onclick="switchPTab('list')">OKUMALAR</button>
             <button class="nav-tab-btn" id="tab-btn-add" onclick="switchPTab('add')">YENİ EKLE</button>
             <button class="nav-tab-btn" id="tab-btn-status" onclick="switchPTab('status')">DURUM</button>
         </div>
+
         <div class="panel-scroll">
-            <div id="p-list" style="display:block"><div class="meter-dashboard" id="entries-list"></div></div>
+            <!-- Kayıt Listesi -->
+            <div id="p-list" style="display:block">
+                <div class="meter-dashboard" id="entries-list"></div>
+            </div>
+
+            <!-- Ekleme Formu -->
             <div id="p-add" style="display:none">
                 <div class="form-card">
-                    <label>OKUMA TARİHİ</label><input type="date" id="ef-date">
-                    <label>AÇIKLAMA</label><textarea id="ef-note" rows="3" placeholder="Notunuz..."></textarea>
-                    <div class="drop-zone" id="elektra-drop-zone" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event, 'elektra')">📷 Resimleri sürükleyip bırakın veya butonları kullanın</div>
+                    <label>OKUMA TARİHİ</label>
+                    <input type="date" id="ef-date">
+                    <label>AÇIKLAMA</label>
+                    <textarea id="ef-note" rows="3" placeholder="Notunuz..."></textarea>
+                    <div class="drop-zone" id="elektra-drop-zone" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event, 'elektra')">
+                        📷 Resimleri sürükleyip bırakın veya butonları kullanın
+                    </div>
                     <div style="display:flex; gap:10px; margin-bottom:15px">
                         <button class="btn-outline" style="flex:1" onclick="q('ef-file').click()">Galeriden Seç</button>
                         <button class="btn-outline" style="flex:1" onclick="q('ef-camera').click()">📸 Fotoğraf Çek</button>
@@ -365,6 +202,8 @@
                     <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-primary">OKUMAYI KAYDET</button>
                 </div>
             </div>
+
+            <!-- Durum Seçimi -->
             <div id="p-status" style="display:none">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width: 400px; margin: 0 auto;" id="status-opts"></div>
             </div>
@@ -372,300 +211,485 @@
     </div>
 
     <!-- LIGHTBOX -->
-    <div class="lightbox" id="lb" onclick="closeLb()"><img id="lb-img" src=""></div>
+    <div class="lightbox" id="lb" onclick="closeLb()">
+        <img id="lb-img" src="">
+    </div>
+
     <div class="toast" id="toast"></div>
-
-    <!-- PDF Panel -->
-    <div class="pdf-panel-overlay" id="pdf-panel-overlay" onclick="if(event.target===this)closePdfPanel()">
-        <div class="pdf-panel">
-            <div class="pdf-panel-header"><h3>PDF Dışa Aktar</h3><button class="pdf-panel-close" onclick="closePdfPanel()">✕</button></div>
-            <div class="pdf-option" id="pdf-opt-all" onclick="selectPdfOpt('all')"><div class="pdf-option-icon all"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a5c3a" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg></div><div class="pdf-option-text"><strong>Hepsini İndir</strong><span>Tüm odaların kayıtları tek PDF'te</span></div></div>
-            <div class="pdf-sub-panel" id="pdf-sub-all"><button class="pdf-sub-btn" id="pdf-all-btn" onclick="runPdfAll()">Tüm Odaları PDF İndir</button></div>
-            <div class="pdf-option" id="pdf-opt-date" onclick="selectPdfOpt('date')"><div class="pdf-option-icon date"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><div class="pdf-option-text"><strong>Tarih Aralığında İndir</strong><span>Seçtiğin tarihler arasındaki kayıtlar</span></div></div>
-            <div class="pdf-sub-panel" id="pdf-sub-date"><div class="field"><span class="label">Başlangıç</span><input type="date" id="pdf-date-from"/></div><div class="field"><span class="label">Bitiş</span><input type="date" id="pdf-date-to"/></div><button class="pdf-sub-btn" id="pdf-date-btn" onclick="runPdfDate()">Tarihe Göre PDF İndir</button></div>
-            <div class="pdf-option" id="pdf-opt-rooms" onclick="selectPdfOpt('rooms')"><div class="pdf-option-icon rooms"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><polyline points="9 11 12 14 22 4"/></svg></div><div class="pdf-option-text"><strong>Oda Numarasına Göre İndir</strong><span>Belirli oda numaralarını yaz, PDF al</span></div></div>
-            <div class="pdf-sub-panel" id="pdf-sub-rooms"><div class="field"><span class="label">Oda numaraları (virgülle ayırın)</span><input type="text" id="pdf-rooms-input" placeholder="ör: 101, 205, 307"/></div><button class="pdf-sub-btn" id="pdf-rooms-btn" onclick="runPdfRooms()">Seçili Odaları PDF İndir</button></div>
-        </div>
-    </div>
-
-    <!-- Confirm -->
-    <div class="confirm-overlay" id="confirm-overlay" onclick="if(event.target===this)closeConfirm()">
-        <div class="confirm-sheet"><h3 id="confirm-title">Emin misiniz?</h3><p id="confirm-msg"></p><div class="confirm-actions"><button class="btn" onclick="closeConfirm()">İptal</button><button class="btn btn-danger" id="confirm-ok">Sil</button></div></div>
-    </div>
-
-    <!-- Download Overlay -->
-    <div class="dl-overlay" id="dl-overlay">
-        <div class="dl-sheet"><div class="dl-title"><span class="loader" id="dl-spinner" style="border-top-color:var(--accent);width:14px;height:14px;border-width:2px"></span><span id="dl-title-text">İndiriliyor...</span></div><div class="dl-subtitle" id="dl-subtitle">Lütfen bekleyin</div><div class="dl-percent" id="dl-percent">0%</div><div class="dl-bar-wrap"><div class="dl-bar" id="dl-bar"></div></div><div class="dl-stats"><span id="dl-stats-left">0 / 0 fotoğraf</span><span id="dl-stats-right">Hazırlanıyor...</span></div><div class="dl-step" id="dl-step"></div></div>
-    </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 const SB = 'https://tpfdsmexywjnsbkfphwq.supabase.co';
 const KEY = 'sb_publishable_3pKKUsVjgXPlF-DCzc2ofQ_Qmq3f00L';
-const BUCKETS={'demirbaş':'photos','elektrik':'meters'};
-const MODES={
-  'demirbaş':{title:'Demirbaş Takibi',ph:'Oda no girin (ör: 307)',rl:'Oda numarası *',dl:'Giriş tarihi *',nl:'Not',np:'Açıklama...',tags:['1+1','2+1']},
-  'elektrik':{title:'Elektrik Sayacı',ph:'Sayaç / oda no girin',rl:'Sayaç / Oda no *',dl:'Okuma tarihi *',nl:'Not',np:'Açıklama...',tags:['1. Kat','2. Kat','3. Kat','4. Kat','5. Kat','6. Kat','7. Kat','8. Kat']}
-};
-let mode='demirbaş',tab=0,lastVal='',pending=[],selTags=[],timer=null;
-let entryImages={},entryData={},openEntries=new Set();
-let searchTab='room',confirmCallback=null,activePdfOpt=null;
-let mlAllData=[],mlFiltered=[],mlTypeFilter='all';
-let roomStatuses = {}, roomsWithEntries = new Set(), currentRoom = null, activeStatFilter = null;
-let pendingElektraFiles = [];
-let editStates = {};
-const CMAX=1600,CQ=0.82;
 
-const q=id=>document.getElementById(id);
-const qs=s=>document.querySelectorAll(s);
-async function api(path,opts={}){return fetch(SB+path,{...opts,headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json',...(opts.headers||{})}});}
+let roomStatuses = {};
+let roomsWithEntries = new Set();
+let currentRoom = null;
+let activeStatFilter = null;
+let pendingFiles = []; // Yeni ekleme için bekleyen dosyalar
+let editStates = {};   // Düzenleme state'leri: { id: { remainingUrls: [], newFiles: [] } }
 
-function today(){return new Date().toISOString().slice(0,10)}
-function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y}`;}
-function fmtShort(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y.slice(2)}`;}
-function fmtDatePDF(iso){if(!iso)return'';const[y,m,d]=iso.split('-');const ay=['Oca','Sub','Mar','Nis','May','Haz','Tem','Agu','Eyl','Eki','Kas','Ara'];return`${parseInt(d)} ${ay[parseInt(m)-1]} ${y}`;}
-function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(0)+'KB';return(b/1048576).toFixed(1)+'MB';}
-function safe(s){if(!s)return'';return s.replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ü/g,'u').replace(/Ü/g,'U').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ı/g,'i').replace(/İ/g,'I').replace(/ö/g,'o').replace(/Ö/g,'O').replace(/ç/g,'c').replace(/Ç/g,'C');}
-function genToken(){return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,16);}
-function showToast(msg,type=''){const t=q('toast');t.textContent=msg;t.className='toast show '+(type==='error'?'error':'success');t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
-function openConfirm(title,msg,okLabel,cb){q('confirm-title').textContent=title;q('confirm-msg').textContent=msg;q('confirm-ok').textContent=okLabel;confirmCallback=cb;q('confirm-overlay').classList.add('open');}
-function closeConfirm(){q('confirm-overlay').classList.remove('open');confirmCallback=null;}
-q('confirm-ok').addEventListener('click',()=>{if(confirmCallback)confirmCallback();closeConfirm();});
+const q = id => document.getElementById(id);
+const months = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
 
-/* ── MODE & TABS ── */
-function setMode(m){
-  mode=m;
-  try{localStorage.setItem('activeMode',m);}catch(e){}
-  const cfg=MODES[m],isE=m==='elektrik';
-  q('topbar-title').textContent=cfg.title;
-  q('mode-d').classList.toggle('active',!isE);
-  q('mode-e').classList.toggle('active',isE);
-  q('demirbas-ui').style.display=isE?'none':'block';
-  q('elektra-ui').style.display=isE?'block':'none';
-  if(isE){ initElektra(); }
-  else{
-    q('f-tags').innerHTML=cfg.tags.map(t=>`<span class="tag" onclick="togTag(this)">${t}</span>`).join('');
-    selTags=[];
-    if(tab===3)goTab(0);
-    if(tab===2)loadAll(true);
-  }
-  q('nav-sayac').style.display=isE?'':'none';
+function fmtDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-function goTab(i){
-  if(i!==1){const b=q('cikis-giris-banner');if(b)b.style.display='none';}
-  tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}
-  qs('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
-  qs('.screen').forEach((s,j)=>s.classList.toggle('active',i===j));
-  if(i===2)loadAll();
-  if(i===3 && mode==='elektrik')loadMeterList();
-}
-
-/* ── DEMİRBAŞ ARAMA ── */
-function setSTab(t){
-  searchTab=t;const isR=t==='room';
-  q('stab-room-content').style.display=isR?'block':'none';
-  q('stab-date-content').style.display=isR?'none':'block';
-  q('stab-room').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(isR?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');
-  q('stab-date').style.cssText='flex:1;justify-content:center;font-size:13px;padding:8px;'+(!isR?'background:var(--accent);color:#fff;border-color:var(--accent);':'background:transparent;border-color:transparent;color:var(--muted);');
-  q('sresult').innerHTML=`<div class="empty">${isR?'Numara girin':'Tarih aralığı seçin'}</div>`;
-}
-
-async function doSearch(val,silent=false){
-  val=String(val).trim();lastVal=val;
-  if(!val){q('sresult').innerHTML='<div class="empty">Numara girin</div>';return;}
-  if(!silent)q('sresult').innerHTML='<div class="empty">Aranıyor...</div>';
-  try{
-    const res=await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(val)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`);
-    const data=await res.json();
-    if(!data.length){q('sresult').innerHTML='<div class="empty">Kayıt bulunamadı</div>';return;}
-    const fd=data.filter(e=>e.photo_urls&&e.photo_urls.length>0);
-    const isE=mode==='elektrik';
-    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${val}</div><div class="room-summary"><strong>${isE?'Sayaç':'Oda'} ${val}</strong><span>${fd.length} kayıt</span></div></div>`;
-    let gi=0;
-    if(isE){
-      const girisler=fd.filter(e=>e.type==='giris'||!e.type).sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-      const cikisler=fd.filter(e=>e.type==='cikis').sort((a,b)=>new Date(a.checkin_date)-new Date(b.checkin_date));
-      const used=new Set();
-      const pairs=[];
-      girisler.forEach(g=>{const m=cikisler.find(c=>!used.has(c.id)&&c.checkin_date>=g.checkin_date);if(m){used.add(m.id);pairs.push({giris:g,cikis:m});}else pairs.push({giris:g,cikis:null});});
-      cikisler.filter(c=>!used.has(c.id)).forEach(c=>pairs.push({giris:null,cikis:c}));
-      pairs.forEach(p=>{
-        if(p.giris&&p.cikis){
-          html+=`<div style="margin-top:14px;"><div class="entries-grid">${buildCard(p.giris,gi++,true,false)}${buildCard(p.cikis,gi++,true,false)}</div></div>`;
-        }else if(p.giris){
-          html+=`<div style="margin-top:14px;">${buildCard(p.giris,gi++,true,false)}</div>`;
-        }else if(p.cikis){
-          html+=`<div style="margin-top:14px;">${buildCard(p.cikis,gi++,true,false)}</div>`;
+async function api(path, opts = {}) {
+    return fetch(SB + path, {
+        ...opts,
+        headers: {
+            'apikey': KEY,
+            'Authorization': 'Bearer ' + KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+            ...(opts.headers || {})
         }
-      });
-    }else{
-      fd.forEach(e=>html+=buildCard(e,gi++,false,false));
-    }
-    q('sresult').innerHTML=html;
-  }catch(e){if(!silent)q('sresult').innerHTML='<div class="empty">Bağlantı hatası.</div>';}
+    });
 }
 
-async function doDateSearch(silent=false){
-  const from=q('d-from').value,to=q('d-to').value;
-  if(!from||!to)return;
-  if(!silent)q('sresult').innerHTML='<div class="empty">Aranıyor...</div>';
-  try{
-    const res=await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc,room_no.asc`);
-    const data=await res.json();
-    if(!data.length){q('sresult').innerHTML='<div class="empty">Kayıt yok</div>';return;}
-    const isE=mode==='elektrik';
-    let html=`<div class="room-header"><div class="room-num${isE?' e':''}">${data.length} kayıt</div><div class="room-summary"><strong>${fmtDate(from)} – ${fmtDate(to)}</strong></div></div>`;
-    let gi=0;
-    data.forEach(e=>html+=buildCard(e,gi++,isE,true));
-    q('sresult').innerHTML=html;
-  }catch(e){if(!silent)q('sresult').innerHTML='<div class="empty">Bağlantı hatası.</div>';}
-}
-
-/* ── KART YAPISI ── */
-function buildCard(entry,gi,isE,showRN){
-  const urls=entry.photo_urls||[];
-  entryImages[gi]=urls;entryData[gi]=entry;
-  const cats=entry.category?entry.category.split(',').filter(Boolean):[];
-  const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${gi},${i})"><img src="${u}" loading="lazy"/><button class="img-thumb-del" onclick="event.stopPropagation();deletePhoto('${entry.id}','${u}',${gi})">✕</button></div>`).join('');
-  const isOpen=openEntries.has(gi);
-  const rnb=showRN?`<div class="room-num${isE?' e':''}">${entry.room_no}</div>`:'';
-  return`<div class="entry-card">
-    <div class="entry-head" data-ei="${gi}" onclick="toggleEntry(this)">${rnb}
-      <div class="date-badge${isE?' e':''}">${fmtDate(entry.checkin_date)}</div>
-      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.donem?`<div class="nt">📅 ${entry.donem}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
-      <span class="entry-count">${urls.length} foto</span>
-      <svg class="chevron${isOpen?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-    </div>
-    <div class="entry-body${isOpen?' open':''}">
-      ${imgs?`<div class="img-scroll">${imgs}</div>`:''}
-      <div class="entry-footer">
-        <span class="entry-footer-info">${urls.length} fotoğraf</span>
-        <div class="entry-footer-actions">
-          <button class="link-btn wa-btn" onclick="goWhatsApp()">WhatsApp</button>
-          <button class="link-btn" onclick="event.stopPropagation();createEntryLink('${entry.room_no}','${entry.checkin_date}','${mode}',this,'${entry.type||''}')">Link</button>
-          <button class="edit-btn" onclick="event.stopPropagation();openEditPanel('${entry.id}',${gi})">Düzenle</button>
-          <button class="del-btn" onclick="event.stopPropagation();deleteEntry('${entry.id}',${gi})">Sil</button>
-        </div>
-      </div>
-    </div>
-    <div id="edit-panel-${entry.id}" style="display:none;padding:12px;background:var(--surface2);border-top:1px solid var(--border)">
-      <div class="field"><span class="label">Tarih</span><input type="date" id="edit-date-${entry.id}"/></div>
-      <div class="field"><span class="label">Not</span><textarea id="edit-note-${entry.id}" rows="2"></textarea></div>
-      <div class="field"><span class="label">Kategori</span><div class="tags-row" id="edit-tags-${entry.id}"></div></div>
-      <div class="field"><span class="label">Mevcut Fotoğraflar</span><div class="prev-row" id="edit-remaining-${entry.id}"></div></div>
-      <div class="field"><span class="label">Yeni Fotoğraf Ekle</span>
-        <div class="drop-zone" id="edit-drop-${entry.id}" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleEditDrop(event,'${entry.id}')">📷 Sürükle & Bırak</div>
-        <div style="display:flex;gap:6px;margin-top:8px">
-          <button class="btn btn-sm" style="flex:1" onclick="q('edit-file-${entry.id}').click()">Galeri</button>
-          <button class="btn btn-sm" style="flex:1" onclick="q('edit-camera-${entry.id}').click()">📸 Kamera</button>
-        </div>
-        <input type="file" id="edit-file-${entry.id}" multiple accept="image/*" style="display:none" onchange="handleEditFiles('${entry.id}',this.files)">
-        <input type="file" id="edit-camera-${entry.id}" accept="image/*" capture="environment" style="display:none" onchange="handleEditFiles('${entry.id}',this.files)">
-        <div class="prev-row" id="edit-new-preview-${entry.id}" style="margin-top:8px"></div>
-      </div>
-      <button class="btn btn-primary" id="edit-save-${entry.id}" onclick="event.stopPropagation();saveEdit('${entry.id}',${gi})">Güncelle</button>
-    </div>
-  </div>`;
-}
-
-function toggleEntry(head){const ei=parseInt(head.dataset.ei);const body=head.nextElementSibling;const chev=head.querySelector('.chevron');const isOpen=body.classList.contains('open');if(isOpen){body.classList.remove('open');chev.classList.remove('open');openEntries.delete(ei);}else{body.classList.add('open');chev.classList.add('open');openEntries.add(ei);}}
-
-/* ── FOTOĞRAF & KAYDETME (DEMİRBAŞ) ── */
-async function compressImage(file){return new Promise(resolve=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let{width:w,height:h}=img;const orig=file.size;if(w<=CMAX&&h<=CMAX&&orig<512000){URL.revokeObjectURL(url);resolve({file,compressed:false,origSize:orig,newSize:orig});return;}if(w>h){if(w>CMAX){h=Math.round(h*CMAX/w);w=CMAX;}}else{if(h>CMAX){w=Math.round(w*CMAX/h);h=CMAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);canvas.toBlob(blob=>{resolve({file:new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'}),compressed:true,origSize:orig,newSize:blob.size});},'image/jpeg',CQ);};img.src=url;});}
-async function addFiles(files){for(const f of files){const r=await compressImage(f);pending.push({file:r.file,url:URL.createObjectURL(r.file)});}renderPrev();}
-function renderPrev(){q('prev-row').innerHTML=pending.map((p,i)=>`<div class="prev-item"><img src="${p.url}"/><div class="prev-del" onclick="delPrev(${i})">✕</div></div>`).join('');}
-function delPrev(i){pending.splice(i,1);renderPrev();}
-function dzOver(e){e.preventDefault();q('dropz').classList.add('dragover');}
-function dzLeave(){q('dropz').classList.remove('dragover');}
-function dzDrop(e){e.preventDefault();dzLeave();addFiles(e.dataTransfer.files);}
-async function uploadImg(file,roomNo){const bucket=BUCKETS[mode];const ext=file.name.split('.').pop();const path=`${roomNo}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const r=await fetch(`${SB}/storage/v1/object/${bucket}/${path}`,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},body:file});if(!r.ok)throw new Error('Yükleme başarısız');return`${SB}/storage/v1/object/public/${bucket}/${path}`;}
-
-async function saveEntry(){
-  const roomNo=q('f-room').value.trim(),date=q('f-date').value,note=q('f-note').value.trim();
-  const donem = mode==='demirbaş' ? q('f-donem').value.trim() : null;
-  if(!roomNo||!date||!pending.length){showToast('Eksik bilgi','error');return;}
-  const btn=q('save-btn'),lbl=q('save-label');btn.disabled=true;lbl.innerHTML='<span class="loader"></span> Yükleniyor...';
-  try{
-    const urls=[];for(const p of pending)urls.push(await uploadImg(p.file,roomNo));
-    const body={room_no:roomNo,mode,checkin_date:date,category:selTags.join(','),note,photo_urls:urls,donem};
-    await api('/rest/v1/entries',{method:'POST',body:JSON.stringify(body)});
-    showToast('Kaydedildi','success');
-    pending=[];selTags=[];q('prev-row').innerHTML='';q('f-room').value='';q('f-note').value='';
-    if(tab===2)loadAll(true);
-  }catch(e){showToast('Hata: '+e.message,'error');}
-  finally{btn.disabled=false;lbl.textContent='Kaydet';}
-}
-
-function togTag(el){const tr=el.closest('.tags-row'),wasOn=el.classList.contains('on');tr.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));selTags=[];if(!wasOn){el.classList.add('on');selTags=[el.textContent];}}
-
-/* ── TÜM ODALAR ── */
-async function loadAll(silent=false){
-  const el=q('rlist');if(!silent)el.innerHTML='<div class="empty">Yükleniyor...</div>';
-  try{
-    const res=await api(`/rest/v1/entries?select=room_no,checkin_date,photo_urls&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`);
-    const data=await res.json();
-    if(!data.length){el.innerHTML='<div class="empty">Henüz kayıt yok</div>';return;}
-    const grouped={};data.forEach(r=>{if(!grouped[r.room_no])grouped[r.room_no]=[];grouped[r.room_no].push(r);});
-    const rooms=Object.keys(grouped).sort((a,b)=>parseInt(a)-parseInt(b));
-    const cards=rooms.map(rno=>{
-      const entries=grouped[rno];const latest=entries[0];const tp=entries.reduce((s,e)=>s+(e.photo_urls||[]).length,0);
-      const cover=(latest.photo_urls||[])[0];
-      const cEl=cover?`<img src="${cover}" style="width:56px;height:56px;object-fit:cover;border-radius:var(--radius-sm);flex-shrink:0"/>`:`<div style="width:56px;height:56px;border-radius:var(--radius-sm);background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>`;
-      return`<div class="all-card" onclick="goRoom('${rno}')"><div class="all-card-inner">${cEl}<div style="flex:1"><div style="font-weight:500;font-size:15px">Oda ${rno}</div><div style="font-size:12px;color:var(--muted)">${entries.length} giriş · ${tp} fotoğraf</div></div></div></div>`;
-    }).join('');
-    el.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:12px"><span>${rooms.length} oda</span><button class="sel-btn" onclick="openPdfPanel()" style="color:var(--amber);border-color:#fcd9a0;background:var(--amber-light)">PDF Dışa Aktar</button></div>${cards}`;
-  }catch(e){if(!silent)el.innerHTML='<div class="empty">Bağlantı hatası</div>';}
-}
-function goRoom(rno){openEntries.clear();q('sinput').value=rno;goTab(0);doSearch(rno);}
-
-/* ── SAYAÇ LİSTESİ ── */
-async function loadMeterList(silent=false){/* aynen korundu */ }
-function mlSetType(t){mlTypeFilter=t;['all','giris','cikis'].forEach(k=>q('mt-'+k).className='mt-btn'+(t===k?' sel-'+k:''));mlFilter();}
-function mlFilter(){/* aynen korundu */ }
-function renderMeterList(){/* aynen korundu */ }
-
-/* ── PDF ── */
-function openPdfPanel(){q('pdf-panel-overlay').classList.add('open');}
-function closePdfPanel(){q('pdf-panel-overlay').classList.remove('open');}
-function selectPdfOpt(k){/* basit */ }
-async function runPdfAll(){/* … */ }
-async function runPdfDate(){/* … */ }
-async function runPdfRooms(){/* … */ }
-
-/* ── SAYAÇ PANELİ (AYNI KALDI) ── */
-function initElektra(){/* … */ }
-async function loadStatuses(){/* … */ }
-async function loadRoomsWithEntries(){/* … */ }
-function renderStats(){/* … */ }
-function toggleFilter(s){/* … */ }
-function renderGrid(){/* … */ }
-function handleDrop(e,type){/* … */ }
-function handleNewFiles(files,type){/* … */ }
-function renderPreviews(type){/* … */ }
-async function saveElektraEntry(){/* … */ }
-async function openPanel(rno){/* … */ }
-function closePanel(){/* … */ }
-function switchPTab(t){/* … */ }
-async function loadEntries(){/* … */ }
-/* Düzenleme state fonksiyonları aynen kalacak */
-/* … */
-
-/* ── LİGHTBOX ── */
-let lbImgs=[],lbIdx=0;
-function openLb(ei,ii){lbImgs=entryImages[ei]||[];lbIdx=ii;q('lb-img').src=lbImgs[lbIdx];q('lb').classList.add('open');}
-function closeLb(){q('lb').classList.remove('open');}
-
-/* ── BAŞLANGIÇ ── */
-window.onload=()=>{
-  q('f-date').value=today();
-  setMode('elektrik'); // varsayılan sayaç ama istenirse değişir
-  // localStorage'dan son modu al
-  let savedMode='elektrik';try{savedMode=localStorage.getItem('activeMode')||'elektrik';}catch(e){}
-  setMode(savedMode);
+// --- INITIALIZE ---
+window.onload = () => {
+    setMode('elektrik');
+    q('f-date').value = new Date().toISOString().slice(0,10);
+    q('ef-date').value = new Date().toISOString().slice(0,10);
 };
+
+function setMode(m) {
+    q('mode-d').classList.toggle('active', m === 'demirbaş');
+    q('mode-e').classList.toggle('active', m === 'elektrik');
+    q('demirbas-ui').style.display = m === 'demirbaş' ? 'block' : 'none';
+    q('elektra-ui').style.display = m === 'elektrik' ? 'block' : 'none';
+    if(m === 'elektrik') initElektra();
+}
+
+async function initElektra() {
+    await loadStatuses();
+    await loadRoomsWithEntries();
+    renderStats();
+    renderGrid();
+}
+
+async function loadStatuses() {
+    try {
+        const res = await api('/rest/v1/rooms?select=room_no,status');
+        const data = await res.json();
+        roomStatuses = {};
+        data.forEach(r => roomStatuses[r.room_no] = r.status);
+    } catch(e) {}
+}
+
+async function loadRoomsWithEntries() {
+    try {
+        const res = await api(`/rest/v1/entries?mode=eq.elektrik&select=room_no`);
+        const data = await res.json();
+        roomsWithEntries = new Set(data.map(d => String(d.room_no)));
+    } catch(e) {}
+}
+
+function renderStats() {
+    const counts = { 'dolu-temiz':0, 'dolu-kirli':0, 'cout':0, 'temiz':0, 'kirli':0, 'ooi':0 };
+    Object.values(roomStatuses).forEach(s => { if(counts[s] !== undefined) counts[s]++; });
+    const stats = [
+        {id:'dolu-temiz', label:'DT', class:'bg-dt'}, {id:'dolu-kirli', label:'DK', class:'bg-dk'},
+        {id:'cout', label:'C/O', class:'bg-co'}, {id:'temiz', label:'TEMİZ', class:'bg-t'},
+        {id:'kirli', label:'KİRLİ', class:'bg-k'}, {id:'ooi', label:'OOI', class:'bg-ooi'}
+    ];
+    q('estats').innerHTML = stats.map(s => `
+        <div class="stat-badge ${s.class} ${activeStatFilter === s.id ? 'active-filter' : ''}" onclick="toggleFilter('${s.id}')">
+            <span class="count">${counts[s.id]}</span>
+            <span class="s-label">${s.label}</span>
+        </div>
+    `).join('');
+}
+
+function toggleFilter(status) {
+    activeStatFilter = activeStatFilter === status ? null : status;
+    renderStats(); renderGrid();
+}
+
+function renderGrid() {
+    const grid = q('egrid'); grid.innerHTML = '';
+    for (let f = 1; f <= 15; f++) {
+        for (let r = 1; r <= 18; r++) {
+            const rno = f * 100 + r;
+            const status = roomStatuses[rno] || 'bos';
+            if(activeStatFilter && status !== activeStatFilter) continue;
+            const cell = document.createElement('div');
+            let color = 'bg-bos';
+            if(status === 'dolu-temiz') color = 'bg-dt';
+            else if(status === 'dolu-kirli') color = 'bg-dk';
+            else if(status === 'cout') color = 'bg-co';
+            else if(status === 'temiz') color = 'bg-t';
+            else if(status === 'kirli') color = 'bg-k';
+            else if(status === 'ooi') color = 'bg-ooi';
+            cell.className = `room-cell ${color}`;
+            cell.textContent = rno;
+            if(roomsWithEntries.has(String(rno))) {
+                const flag = document.createElement('div'); flag.className = 'room-flag'; cell.appendChild(flag);
+            }
+            cell.onclick = () => openPanel(rno);
+            grid.appendChild(cell);
+        }
+    }
+}
+
+// --- DRAG & DROP DESTEĞİ ---
+function handleDrop(e, type) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length) handleNewFiles(files, type);
+}
+
+// --- DOSYA İŞLEME (YENİ EKLEME) ---
+function handleNewFiles(files, type) {
+    for (let f of files) {
+        if (!f.type.startsWith('image/')) continue;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const id = Math.random().toString(36).substr(2,5);
+            pendingFiles.push({ id, file: f, data: e.target.result });
+            renderPreviews(type);
+        };
+        reader.readAsDataURL(f);
+    }
+}
+
+function renderPreviews(type) {
+    const wrap = type === 'elektra' ? q('ef-preview') : q('f-preview');
+    wrap.innerHTML = pendingFiles.map(f => `
+        <div class="thumb-item">
+            <img src="${f.data}">
+            <div class="thumb-del" onclick="pendingFiles = pendingFiles.filter(x=>x.id!=='${f.id}'); renderPreviews('${type}');">✕</div>
+        </div>
+    `).join('');
+}
+
+// --- SAYAÇ KAYDETME ---
+async function saveElektraEntry() {
+    if(!pendingFiles.length) { showToast('En az bir resim ekleyin','error'); return; }
+    const btn = q('ef-save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
+    try {
+        const urls = [];
+        for(let f of pendingFiles) {
+            const name = `${Date.now()}_${Math.random().toString(36).substr(2,8)}.jpg`;
+            const upload = await fetch(`${SB}/storage/v1/object/meters/${currentRoom}/${name}`, {
+                method: 'POST',
+                headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'image/jpeg' },
+                body: f.file
+            });
+            if(upload.ok) urls.push(`${SB}/storage/v1/object/public/meters/${currentRoom}/${name}`);
+        }
+        const res = await api('/rest/v1/entries', {
+            method: 'POST',
+            body: JSON.stringify({ 
+                room_no: String(currentRoom), 
+                checkin_date: q('ef-date').value, 
+                note: q('ef-note').value, 
+                mode: 'elektrik', 
+                photo_urls: urls 
+            })
+        });
+        if(res.ok) {
+            showToast('Kaydedildi');
+            pendingFiles = []; q('ef-preview').innerHTML = ''; q('ef-note').value = '';
+            switchPTab('list'); loadEntries(); loadRoomsWithEntries(); renderGrid();
+        }
+    } catch(e) { showToast('Hata oluştu','error'); }
+    finally { btn.disabled = false; btn.innerHTML = 'OKUMAYI KAYDET'; }
+}
+
+// --- PANEL ---
+async function openPanel(rno) {
+    currentRoom = rno;
+    q('panel-room-title').textContent = rno;
+    q('room-panel').classList.add('open');
+    switchPTab('list'); loadEntries();
+}
+
+function closePanel() {
+    q('room-panel').classList.remove('open');
+    pendingFiles = []; q('ef-preview').innerHTML = '';
+    editStates = {}; // Panel kapanınca düzenleme state'leri sıfırlanır
+}
+
+function switchPTab(t) {
+    ['list','add','status'].forEach(x => {
+        q('p-' + x).style.display = (x === t) ? 'block' : 'none';
+        q('tab-btn-' + x).classList.toggle('active', x === t);
+    });
+    if(t === 'status') renderStatusSelection();
+}
+
+async function loadEntries() {
+    const wrap = q('entries-list');
+    wrap.innerHTML = '<div style="padding:20px; text-align:center">Yükleniyor...</div>';
+    try {
+        const res = await api(`/rest/v1/entries?room_no=eq.${currentRoom}&mode=eq.elektrik&order=checkin_date.desc`);
+        const data = await res.json();
+        if(!data.length) { wrap.innerHTML = '<div style="grid-column: 1/-1; padding:40px; text-align:center; color:#888">Kayıt yok.</div>'; return; }
+        
+        wrap.innerHTML = data.map(e => `
+            <div class="meter-card">
+                <div class="meter-card-header">
+                    <span class="meter-date">📅 ${fmtDate(e.checkin_date)}</span>
+                    <div style="display:flex; gap:8px">
+                        <button onclick="toggleEdit('${e.id}')" style="border:none; background:none; cursor:pointer; font-size:14px">✏️</button>
+                        <button onclick="deleteEntry('${e.id}')" style="border:none; background:none; cursor:pointer; font-size:14px">🗑️</button>
+                    </div>
+                </div>
+                <div class="meter-card-gallery">
+                    ${(e.photo_urls || []).map(u => `<div class="meter-img"><img src="${u}" onclick="openLb('${u}')" loading="lazy"></div>`).join('')}
+                </div>
+                <div class="meter-card-footer">
+                    ${e.note || '<span style="color:#ccc">Not yok</span>'}
+                </div>
+                <div id="edit-${e.id}" style="display:none; padding:10px; background:#f9f9f9; border-top:1px solid #eee">
+                    <label>Tarih</label>
+                    <input type="date" id="edate-${e.id}" value="${e.checkin_date}">
+                    <label>Açıklama</label>
+                    <textarea id="enote-${e.id}" style="font-size:12px">${e.note || ''}</textarea>
+                    <div style="margin:10px 0; font-weight:600; font-size:12px">Mevcut Fotoğraflar</div>
+                    <div class="thumb-grid" id="edit-remaining-${e.id}">
+                        ${(e.photo_urls || []).map(u => `
+                            <div class="thumb-item" id="thumb-${e.id}-${u.split('/').pop()}">
+                                <img src="${u}">
+                                <div class="thumb-del" onclick="removeEditRemainingUrl('${e.id}', '${u}')">✕</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="margin:10px 0; font-weight:600; font-size:12px">Yeni Fotoğraf Ekle</div>
+                    <div class="drop-zone" id="edit-drop-${e.id}" 
+                         ondragover="event.preventDefault(); this.classList.add('dragover')" 
+                         ondragleave="this.classList.remove('dragover')" 
+                         ondrop="handleEditDrop(event, '${e.id}')">
+                        📷 Sürükle & Bırak
+                    </div>
+                    <div style="display:flex; gap:6px; margin-bottom:10px">
+                        <button class="btn-outline" style="flex:1; padding:8px; font-size:11px" onclick="q('edit-file-${e.id}').click()">Galeri</button>
+                        <button class="btn-outline" style="flex:1; padding:8px; font-size:11px" onclick="q('edit-camera-${e.id}').click()">📸 Kamera</button>
+                    </div>
+                    <input type="file" id="edit-file-${e.id}" multiple accept="image/*" style="display:none" onchange="handleEditFiles('${e.id}', this.files)">
+                    <input type="file" id="edit-camera-${e.id}" accept="image/*" capture="environment" style="display:none" onchange="handleEditFiles('${e.id}', this.files)">
+                    <div class="thumb-grid" id="edit-new-preview-${e.id}"></div>
+                    <button onclick="saveEdit('${e.id}')" class="btn-primary" style="padding:10px; font-size:12px; margin-top:10px">GÜNCELLE</button>
+                </div>
+            </div>
+        `).join('');
+    } catch(e) { wrap.innerHTML = 'Hata.'; }
+}
+
+// --- DÜZENLEME STATE YÖNETİMİ ---
+function initEditState(id, existingUrls) {
+    if (!editStates[id]) {
+        editStates[id] = { remainingUrls: [...existingUrls], newFiles: [] };
+    }
+}
+
+function toggleEdit(id) {
+    const el = q('edit-' + id);
+    if (el.style.display === 'none' || !el.style.display) {
+        // Açılıyor: mevcut URL'leri al (karttan okuyabiliriz, ama loadEntries'den sonra render edildiği için oradan alamayız.
+        // Daha güvenli: data attribute olarak saklayalım ya da editStates zaten varsa kullanalım.
+        // loadEntries sırasında editStates sıfırlanmamalı. toggleEdit açılırken remainingUrls yoksa boş dizi başlatırız.
+        // Ancak mevcut fotoğrafları DOM'dan okuyabiliriz. Kartın gallery kısmındaki img src'lerini toplayalım.
+        const existingImgs = el.parentElement.querySelectorAll('.meter-card-gallery img');
+        const existingUrls = Array.from(existingImgs).map(img => img.src);
+        initEditState(id, existingUrls);
+        renderEditRemaining(id);
+        renderEditNewPreview(id);
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+function renderEditRemaining(id) {
+    const wrap = q('edit-remaining-' + id);
+    if (!wrap) return;
+    const state = editStates[id] || { remainingUrls: [] };
+    wrap.innerHTML = state.remainingUrls.map(u => `
+        <div class="thumb-item" id="thumb-${id}-${encodeURIComponent(u)}">
+            <img src="${u}">
+            <div class="thumb-del" onclick="removeEditRemainingUrl('${id}', '${u}')">✕</div>
+        </div>
+    `).join('');
+}
+
+function removeEditRemainingUrl(id, url) {
+    if (!editStates[id]) return;
+    editStates[id].remainingUrls = editStates[id].remainingUrls.filter(u => u !== url);
+    renderEditRemaining(id);
+}
+
+function handleEditDrop(e, id) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length) handleEditFiles(id, files);
+}
+
+function handleEditFiles(id, files) {
+    if (!editStates[id]) editStates[id] = { remainingUrls: [], newFiles: [] };
+    for (let f of files) {
+        if (!f.type.startsWith('image/')) continue;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const fileId = Math.random().toString(36).substr(2,5);
+            editStates[id].newFiles.push({ id: fileId, file: f, data: e.target.result });
+            renderEditNewPreview(id);
+        };
+        reader.readAsDataURL(f);
+    }
+}
+
+function renderEditNewPreview(id) {
+    const wrap = q('edit-new-preview-' + id);
+    if (!wrap) return;
+    const state = editStates[id] || { newFiles: [] };
+    wrap.innerHTML = state.newFiles.map(f => `
+        <div class="thumb-item">
+            <img src="${f.data}">
+            <div class="thumb-del" onclick="removeEditNewFile('${id}', '${f.id}')">✕</div>
+        </div>
+    `).join('');
+}
+
+function removeEditNewFile(id, fileId) {
+    if (!editStates[id]) return;
+    editStates[id].newFiles = editStates[id].newFiles.filter(f => f.id !== fileId);
+    renderEditNewPreview(id);
+}
+
+async function saveEdit(id) {
+    const state = editStates[id];
+    if (!state) return;
+    const btn = q('edit-' + id).querySelector('.btn-primary');
+    btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
+    try {
+        // Yeni dosyaları upload et
+        const newUrls = [];
+        for (let f of state.newFiles) {
+            const name = `${Date.now()}_${Math.random().toString(36).substr(2,8)}.jpg`;
+            const upload = await fetch(`${SB}/storage/v1/object/meters/${currentRoom}/${name}`, {
+                method: 'POST',
+                headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'image/jpeg' },
+                body: f.file
+            });
+            if (upload.ok) newUrls.push(`${SB}/storage/v1/object/public/meters/${currentRoom}/${name}`);
+        }
+        const finalUrls = [...state.remainingUrls, ...newUrls];
+        await api(`/rest/v1/entries?id=eq.${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ 
+                checkin_date: q('edate-' + id).value, 
+                note: q('enote-' + id).value,
+                photo_urls: finalUrls 
+            })
+        });
+        showToast('Güncellendi');
+        delete editStates[id]; // Temizle
+        loadEntries(); // Yeniden yükle
+    } catch(e) { showToast('Hata'); }
+    finally { btn.disabled = false; btn.innerHTML = 'GÜNCELLE'; }
+}
+
+// --- SİLME ---
+async function deleteEntry(id) {
+    if(!confirm('Kayıt silinsin mi?')) return;
+    await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
+    showToast('Silindi'); loadEntries(); loadRoomsWithEntries(); renderGrid();
+}
+
+// --- DURUM ---
+function renderStatusSelection() {
+    const statuses = [
+        {id:'dolu-temiz', label:'DT', class:'bg-dt'}, {id:'dolu-kirli', label:'DK', class:'bg-dk'},
+        {id:'cout', label:'C/O', class:'bg-co'}, {id:'temiz', label:'TEMİZ', class:'bg-t'},
+        {id:'kirli', label:'KİRLİ', class:'bg-k'}, {id:'ooi', label:'OOI', class:'bg-ooi'},
+        {id:'bos', label:'BOŞ', class:'bg-bos'}
+    ];
+    const current = roomStatuses[currentRoom] || 'bos';
+    q('status-opts').innerHTML = statuses.map(s => `
+        <div class="stat-badge ${s.class}" style="padding:20px 10px; border-radius:12px; color:${s.id==='bos'?'#888':'#fff'}; font-weight:800; width:100%; border:${current===s.id?'2.5px solid #212529':'none'}" onclick="updateStatus('${s.id}')">
+            ${s.label}
+        </div>
+    `).join('');
+}
+
+async function updateStatus(s) {
+    await api('/rest/v1/rooms', {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify({ room_no: currentRoom, status: s })
+    });
+    roomStatuses[currentRoom] = s;
+    showToast('Güncellendi'); renderStatusSelection(); renderStats(); renderGrid();
+}
+
+// --- DEMİRBAŞ KAYDETME (Güncellendi: aynı drag-drop + kamera) ---
+async function saveNewEntry() {
+    const room = q('f-room').value;
+    if(!room || !pendingFiles.length) { showToast('Oda no ve en az bir resim gerekli','error'); return; }
+    const btn = q('save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
+    const urls = [];
+    try {
+        for(let f of pendingFiles) {
+            const name = `${Date.now()}_${Math.random().toString(36).substr(2,8)}.jpg`;
+            const upload = await fetch(`${SB}/storage/v1/object/photos/${room}/${name}`, {
+                method: 'POST',
+                headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'image/jpeg' },
+                body: f.file
+            });
+            if(upload.ok) urls.push(`${SB}/storage/v1/object/public/photos/${room}/${name}`);
+        }
+        await api('/rest/v1/entries', {
+            method: 'POST',
+            body: JSON.stringify({ room_no: String(room), checkin_date: q('f-date').value, note: q('f-note').value, mode: 'demirbaş', photo_urls: urls })
+        });
+        showToast('Kaydedildi');
+        pendingFiles = []; q('f-preview').innerHTML = ''; q('f-room').value = ''; q('f-note').value = '';
+        goTab(0);
+    } catch(e) { showToast('Hata'); }
+    finally { btn.disabled = false; btn.innerHTML = 'Kaydet'; }
+}
+
+// --- DEMİRBAŞ ARAMA ---
+function goTab(i) {
+    document.querySelectorAll('.screen').forEach((s, j) => s.classList.toggle('active', i === j));
+    document.querySelectorAll('.nav-btn').forEach((b, j) => b.classList.toggle('active', i === j));
+}
+
+async function searchRoom() {
+    const val = q('ds-input').value;
+    if(!val) return;
+    const res = await api(`/rest/v1/entries?room_no=eq.${val}&mode=eq.demirbaş&order=checkin_date.desc`);
+    const data = await res.json();
+    q('search-results').innerHTML = data.map(e => `
+        <div class="entry-card">
+            <div class="entry-head"><span class="date-badge">📅 ${fmtDate(e.checkin_date)}</span></div>
+            <div style="display:flex; gap:5px; padding:10px; overflow-x:auto; flex-wrap:wrap">
+                ${(e.photo_urls || []).map(u => `<img src="${u}" style="width:70px; height:70px; object-fit:cover; border-radius:5px" onclick="openLb('${u}')">`).join('')}
+            </div>
+            <div style="padding:10px; font-size:14px">${e.note || ''}</div>
+        </div>
+    `).join('') || 'Kayıt yok.';
+}
+
+// --- YARDIMCI FONKSİYONLAR ---
+function showToast(msg, type = 'success') {
+    const t = q('toast');
+    t.textContent = msg;
+    t.style.background = type === 'error' ? '#c0392b' : '#1a5c3a';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+}
+
+function openLb(u) { q('lb-img').src = u; q('lb').classList.add('open'); }
+function closeLb() { q('lb').classList.remove('open'); }
 </script>
 </body>
 </html>
