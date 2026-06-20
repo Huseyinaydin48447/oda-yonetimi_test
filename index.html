@@ -12,19 +12,51 @@
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
     --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
+    --topbar-height: 120px; /* varsayılan, JS ile güncellenir */
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
   .app{max-width:450px;margin:0 auto;min-height:100vh;background:var(--bg)}
-  /* Sayaç modunda tam genişlik için */
   .app.full-width { max-width: none; }
-  .topbar{background:var(--accent);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+
+  /* TOPBAR – iki satırlı */
+  .topbar{
+    background:var(--accent);position:sticky;top:0;z-index:100;
+    display:flex;flex-direction:column;
+  }
+  .topbar-main{
+    display:flex;align-items:center;gap:10px;padding:14px 16px 12px;
+  }
   .topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .topbar h1{font-size:16px;font-weight:600;color:#fff}
   .topbar p{font-size:11px;color:rgba(255,255,255,.65);margin-top:1px}
   .mode-btns{display:flex;gap:5px;flex-shrink:0}
   .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
   .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
+
+  /* İstatistik satırı (sayaç modunda topbar'ın altında) */
+  .topbar-stats {
+    display: none; /* demirbaş modunda gizli */
+    padding: 0 12px 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: transparent;
+    gap: 6px;
+    align-items: center;
+  }
+  .topbar-stats.active { display: flex; }
+
+  .elektra-top-stats {
+    display: flex; gap: 6px; overflow-x: auto; background: transparent; scrollbar-width: none;
+  }
+  .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 6px 12px; border-radius: 10px; min-width: 60px; cursor: pointer; border: 2px solid transparent; }
+  .stat-badge.active-filter { border-color: rgba(255,255,255,0.5); transform: scale(1.05); }
+  .stat-badge .count { font-size: 16px; font-weight: 700; color: #fff; }
+  .stat-badge .s-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
+  .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
+  .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
+
   .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;}
   .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
   .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
@@ -174,20 +206,12 @@
   .confirm-actions{display:flex;gap:8px}
   .confirm-actions .btn{flex:1;justify-content:center}
 
-  /* ELEKTRA SAYAÇ GRID */
-  .elektra-top-stats { display: flex; gap: 6px; padding: 12px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); scrollbar-width: none; }
-  .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 10px; min-width: 70px; cursor: pointer; border: 2px solid transparent; }
-  .stat-badge.active-filter { border-color: rgba(0,0,0,0.3); transform: scale(1.05); }
-  .stat-badge .count { font-size: 16px; font-weight: 700; color: #fff; }
-  .stat-badge .s-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.9); }
-  .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
-  .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
-  .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
+  /* GRID */
   .grid-container { padding: 0; background: var(--bg); }
-  .room-grid { display: grid; grid-template-columns: repeat(18, minmax(0,1fr)); gap: 2px; width: 100%; margin: 0 auto; }
+  .room-grid { display: grid; grid-template-columns: repeat(18, minmax(0,1fr)); gap: 2px; width: 100%; }
   .room-cell {
     aspect-ratio: unset;
-    min-height: calc((100vh - 120px) / 15);
+    min-height: calc((100vh - var(--topbar-height)) / 15);
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -203,7 +227,7 @@
   }
   .room-flag { position: absolute; top: 1px; right: 1px; width: 5px; height: 5px; border-radius: 50%; background: #00e5ff; }
 
-  /* ODA PANELİ (SAYAÇ DETAY) */
+  /* ODA PANELİ */
   .room-panel { position: fixed; inset: 0; background: #f8f9fa; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
   .room-panel.open { transform: translateY(0); }
   .panel-header { background: var(--accent); padding: 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
@@ -241,18 +265,23 @@
 </head>
 <body>
 <div class="app">
+  <!-- TOPBAR (iki satır) -->
   <div class="topbar">
-    <div class="topbar-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
+    <div class="topbar-main">
+      <div class="topbar-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
+      </div>
+      <div style="flex:1">
+        <h1 id="topbar-title">Demirbaş Takibi</h1>
+        <p id="topbar-sub">Bağlanıyor...</p>
+      </div>
+      <div class="mode-btns">
+        <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
+        <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
+      </div>
     </div>
-    <div style="flex:1">
-      <h1 id="topbar-title">Demirbaş Takibi</h1>
-      <p id="topbar-sub">Bağlanıyor...</p>
-    </div>
-    <div class="mode-btns">
-      <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
-      <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
-    </div>
+    <!-- İstatistik çubuğu (sadece sayaç modunda) -->
+    <div class="topbar-stats" id="topbar-stats"></div>
   </div>
 
   <!-- DEMİRBAŞ UI -->
@@ -371,9 +400,8 @@
     </div>
   </div>
 
-  <!-- ELEKTRA (SAYAÇ) UI -->
+  <!-- ELEKTRA (SAYAÇ) UI – istatistikler topbar'da olduğu için burada sadece grid var -->
   <div id="elektra-ui" style="display:none">
-    <div class="elektra-top-stats" id="estats"></div>
     <div class="grid-container">
       <div class="room-grid" id="egrid"></div>
     </div>
@@ -640,13 +668,16 @@ function setMode(m){
   q('mode-e').classList.toggle('active',isE);
   q('demirbas-ui').style.display=isE?'none':'block';
   q('elektra-ui').style.display=isE?'block':'none';
-  /* Sayaç modunda tam genişlik, demirbaş modunda 450px sınır */
+  // İstatistik çubuğu göster/gizle
+  q('topbar-stats').classList.toggle('active', isE);
+  // Tam genişlik sadece sayaç modunda
   document.querySelector('.app').classList.toggle('full-width', isE);
   if(!isE){if(tab===3)goTab(0);}
   openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
   if(tab===2)loadAll(true);
   if(isE)initElektra();
+  updateTopbarHeight();
 }
 function goTab(i){
   tab=i;try{localStorage.setItem('activeTab',i);}catch(e){}
@@ -954,6 +985,16 @@ async function runPdfAll(){const btn=q('pdf-all-btn');const orig=btn.innerHTML;b
 async function runPdfDate(){const from=q('pdf-date-from').value,to=q('pdf-date-to').value;if(!from||!to){showToast('Tarih aralığı seçin','error');return;}if(from>to){showToast('Başlangıç tarihi daha küçük olmalı','error');return;}const btn=q('pdf-date-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const data=await(await api(`/rest/v1/entries?checkin_date=gte.${from}&checkin_date=lte.${to}&mode=eq.${encodeURIComponent(mode)}&order=room_no.asc,checkin_date.desc`)).json();if(!data.length){showToast('Bu aralıkta kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();await exportBulkPDFFromEntries([...new Set(data.map(e=>e.room_no))],data,`tarih_${from}_${to}.pdf`,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 async function runPdfRooms(){const raw=q('pdf-rooms-input').value.trim();if(!raw){showToast('Oda numarası girin','error');return;}const rooms=raw.split(/[\s,;]+/).map(r=>r.trim()).filter(Boolean);const btn=q('pdf-rooms-btn');const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span> Yükleniyor...';try{const all=[];for(const rno of rooms){const d=await(await api(`/rest/v1/entries?room_no=eq.${encodeURIComponent(rno)}&mode=eq.${encodeURIComponent(mode)}&order=checkin_date.desc`)).json();d.forEach(e=>all.push(e));}if(!all.length){showToast('Bu odalarda kayıt yok','error');btn.innerHTML=orig;btn.disabled=false;return;}closePdfPanel();const fname=rooms.length===1?`oda_${rooms[0]}_rapor_${today()}.pdf`:`odalar_${rooms.join('-')}_${today()}.pdf`;await exportBulkPDFFromEntries(rooms,all,fname,btn,orig);}catch(e){showToast('Hata: '+e.message,'error');btn.innerHTML=orig;btn.disabled=false;}}
 
+/* ── TOPBAR YÜKSEKLİK GÜNCELLEME ── */
+function updateTopbarHeight() {
+  const topbar = document.querySelector('.topbar');
+  if (topbar) {
+    const h = topbar.offsetHeight;
+    document.documentElement.style.setProperty('--topbar-height', h + 'px');
+  }
+}
+window.addEventListener('resize', updateTopbarHeight);
+
 /* ── SAYAÇ GRID (ELEKTRA) ── */
 let roomStatuses = {};
 let roomsWithEntries = new Set();
@@ -967,6 +1008,7 @@ async function initElektra() {
   await loadRoomsWithEntries();
   renderStats();
   renderGrid();
+  updateTopbarHeight(); // topbar değiştiyse yüksekliği güncelle
 }
 async function loadStatuses() {
   try {
@@ -991,7 +1033,10 @@ function renderStats() {
     {id:'cout', label:'C/O', class:'bg-co'}, {id:'temiz', label:'TEMİZ', class:'bg-t'},
     {id:'kirli', label:'KİRLİ', class:'bg-k'}, {id:'ooi', label:'OOI', class:'bg-ooi'}
   ];
-  q('estats').innerHTML = stats.map(s => `
+  // Artık topbar içindeki #topbar-stats hedefleniyor
+  const container = q('topbar-stats');
+  if (!container) return;
+  container.innerHTML = stats.map(s => `
     <div class="stat-badge ${s.class} ${activeStatFilter === s.id ? 'active-filter' : ''}" onclick="toggleFilter('${s.id}')">
       <span class="count">${counts[s.id]}</span>
       <span class="s-label">${s.label}</span>
@@ -1026,6 +1071,7 @@ function renderGrid() {
       grid.appendChild(cell);
     }
   }
+  updateTopbarHeight(); // grid render olduktan sonra yüksekliği tekrar kontrol et
 }
 function handleDrop(e, type) {
   e.preventDefault();
