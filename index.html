@@ -15,7 +15,9 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
-  .app{max-width:1000px;margin:0 auto;min-height:100vh;background:var(--bg)}
+  .app{max-width:450px;margin:0 auto;min-height:100vh;background:var(--bg)}
+  /* Sayaç modunda tam genişlik için */
+  .app.full-width { max-width: none; }
   .topbar{background:var(--accent);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
   .topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .topbar h1{font-size:16px;font-weight:600;color:#fff}
@@ -181,9 +183,24 @@
   .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
   .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
   .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
-  .grid-container { padding: 6px; background: var(--bg); }
-  .room-grid { display: grid; grid-template-columns: repeat(18, minmax(0,1fr)); gap: 1.5px; width: 100%; margin: 0 auto; }
-  .room-cell { aspect-ratio: 1/1; min-height: 24px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: clamp(6.5px, 2vw, 10px); font-weight: 700; letter-spacing: -0.3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.06); position: relative; overflow: hidden; padding: 0; }
+  .grid-container { padding: 0; background: var(--bg); }
+  .room-grid { display: grid; grid-template-columns: repeat(18, minmax(0,1fr)); gap: 2px; width: 100%; margin: 0 auto; }
+  .room-cell {
+    aspect-ratio: unset;
+    min-height: calc((100vh - 120px) / 15);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(10px, 2.5vw, 14px);
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+  }
   .room-flag { position: absolute; top: 1px; right: 1px; width: 5px; height: 5px; border-radius: 50%; background: #00e5ff; }
 
   /* ODA PANELİ (SAYAÇ DETAY) */
@@ -623,6 +640,8 @@ function setMode(m){
   q('mode-e').classList.toggle('active',isE);
   q('demirbas-ui').style.display=isE?'none':'block';
   q('elektra-ui').style.display=isE?'block':'none';
+  /* Sayaç modunda tam genişlik, demirbaş modunda 450px sınır */
+  document.querySelector('.app').classList.toggle('full-width', isE);
   if(!isE){if(tab===3)goTab(0);}
   openEntries.clear();
   if(lastVal)doSearch(lastVal,true);
