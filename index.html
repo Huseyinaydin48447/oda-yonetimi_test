@@ -12,14 +12,13 @@
     --accent-mid:#2d7a52;--danger:#c0392b;--danger-light:#fdf0ee;
     --amber:#b45309;--amber-light:#fef3c7;--radius:12px;--radius-sm:8px;
     --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
-    --topbar-height: 60px; /* varsayılan, JS ile güncellenir */
+    --topbar-height: 60px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
   .app{max-width:450px;margin:0 auto;min-height:100vh;background:var(--bg)}
   .app.full-width { max-width: none; }
 
-  /* TOPBAR */
   .topbar{
     background:var(--accent);position:sticky;top:0;z-index:100;
     display:flex;align-items:center;gap:10px;padding:12px 16px;
@@ -32,49 +31,6 @@
   .mode-btns{display:flex;gap:5px;flex-shrink:0;margin-left:auto;}
   .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
   .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
-
-  /* İstatistikler – topbar içinde */
-  .topbar-stats-inline {
-    display: none;
-    overflow-x: auto;
-    scrollbar-width: none;
-    gap: 8px;
-    align-items: center;
-    flex-shrink: 1;
-    min-width: 0;
-    margin-right: 8px;
-    padding: 6px 2px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(4px);
-  }
-  .topbar-stats-inline.active { display: flex; }
-
-  .stat-badge {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 6px 12px;
-    border-radius: 12px;
-    min-width: 52px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    color: #fff;
-    font-weight: 600;
-  }
-  .stat-badge .count { font-size: 16px; font-weight: 700; }
-  .stat-badge .s-label { font-size: 10px; font-weight: 600; opacity: 0.9; letter-spacing: 0.3px; }
-  .stat-badge.active-filter { border-color: #fff; transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
-
-  .bg-temiz { background: #2e7d32; }
-  .bg-kirli { background: #e65100; }
-  .bg-onayli { background: #1565c0; }
-  .bg-arizali { background: #c62828; }
-  .bg-bos { background: #fff; color: #555; border: 1px solid #ddd; }
-  .bg-bos .count, .bg-bos .s-label { color: #555; }
 
   .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;}
   .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
@@ -243,6 +199,7 @@
     position: relative;
     overflow: hidden;
     padding: 0;
+    background: #ffffff; /* tek tip arka plan */
   }
   .room-flag { position: absolute; top: 1px; right: 1px; width: 5px; height: 5px; border-radius: 50%; background: #00e5ff; }
 
@@ -293,8 +250,6 @@
       <h1 id="topbar-title">Demirbaş Takibi</h1>
       <p id="topbar-sub">Bağlanıyor...</p>
     </div>
-    <!-- Sayaç modunda görünecek olan istatistikler (JS ile doldurulacak) -->
-    <div class="topbar-stats-inline" id="topbar-stats-inline"></div>
     <div class="mode-btns">
       <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
       <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
@@ -436,7 +391,6 @@
     <div class="nav-tabs">
       <button class="nav-tab-btn active" id="tab-btn-list" onclick="switchPTab('list')">OKUMALAR</button>
       <button class="nav-tab-btn" id="tab-btn-add" onclick="switchPTab('add')">YENİ EKLE</button>
-      <button class="nav-tab-btn" id="tab-btn-status" onclick="switchPTab('status')">DURUM</button>
     </div>
     <div class="panel-scroll">
       <div id="p-list" style="display:block">
@@ -460,9 +414,6 @@
           <div id="ef-preview" class="thumb-grid"></div>
           <button id="ef-save-btn" onclick="saveElektraEntry()" class="btn-primary">OKUMAYI KAYDET</button>
         </div>
-      </div>
-      <div id="p-status" style="display:none">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto;" id="status-opts"></div>
       </div>
     </div>
   </div>
@@ -685,9 +636,7 @@ function setMode(m){
   q('mode-e').classList.toggle('active',isE);
   q('demirbas-ui').style.display=isE?'none':'block';
   q('elektra-ui').style.display=isE?'block':'none';
-  // İstatistik çubuğunu göster/gizle (topbar içindeki)
-  q('topbar-stats-inline').classList.toggle('active', isE);
-  // Tam genişlik sadece sayaç modunda
+  // istatistik çubuğu kaldırıldığı için burada bir şey yapmaya gerek yok
   document.querySelector('.app').classList.toggle('full-width', isE);
   if(!isE){if(tab===3)goTab(0);}
   openEntries.clear();
@@ -1014,31 +963,19 @@ function updateTopbarHeight() {
 window.addEventListener('resize', updateTopbarHeight);
 
 /* ── SAYAÇ GRID (ELEKTRA) ── */
-let roomStatuses = {};
 let roomsWithEntries = new Set();
 let currentRoom = null;
-let activeStatFilter = null;
 let pendingElektra = [];
 let editStates = {};
 
 async function initElektra() {
-  await loadStatuses();
   await loadRoomsWithEntries();
-  renderStats();
   renderGrid();
   updateTopbarHeight();
   try{
     const savedPanel=localStorage.getItem('openPanel');
     if(savedPanel){openPanel(parseInt(savedPanel));}
   }catch(e){}
-}
-async function loadStatuses() {
-  try {
-    const res = await api('/rest/v1/rooms?select=room_no,status');
-    const data = await res.json();
-    roomStatuses = {};
-    data.forEach(r => roomStatuses[r.room_no] = r.status);
-  } catch(e) {}
 }
 async function loadRoomsWithEntries() {
   try {
@@ -1047,44 +984,13 @@ async function loadRoomsWithEntries() {
     roomsWithEntries = new Set(data.map(d => String(d.room_no)));
   } catch(e) {}
 }
-function renderStats() {
-  const counts = { 'temiz':0, 'kirli':0, 'onayli':0, 'arizali':0, 'bos':0 };
-  Object.values(roomStatuses).forEach(s => { if(counts[s] !== undefined) counts[s]++; });
-  const stats = [
-    {id:'temiz', label:'TEMİZ', class:'bg-temiz'},
-    {id:'kirli', label:'KİRLİ', class:'bg-kirli'},
-    {id:'onayli', label:'ONAYLI', class:'bg-onayli'},
-    {id:'arizali', label:'ARIZALI', class:'bg-arizali'},
-    {id:'bos', label:'BOŞ', class:'bg-bos'}
-  ];
-  const container = q('topbar-stats-inline');
-  if (!container) return;
-  container.innerHTML = stats.map(s => `
-    <div class="stat-badge ${s.class} ${activeStatFilter === s.id ? 'active-filter' : ''}" onclick="toggleFilter('${s.id}')">
-      <span class="count">${counts[s.id]}</span>
-      <span class="s-label">${s.label}</span>
-    </div>
-  `).join('');
-}
-function toggleFilter(status) {
-  activeStatFilter = activeStatFilter === status ? null : status;
-  renderStats(); renderGrid();
-}
 function renderGrid() {
   const grid = q('egrid'); grid.innerHTML = '';
   for (let f = 1; f <= 15; f++) {
     for (let r = 1; r <= 18; r++) {
       const rno = f * 100 + r;
-      const status = roomStatuses[rno] || 'bos';
-      if(activeStatFilter && status !== activeStatFilter) continue;
       const cell = document.createElement('div');
-      let color = 'bg-bos';
-      if(status === 'temiz') color = 'bg-temiz';
-      else if(status === 'kirli') color = 'bg-kirli';
-      else if(status === 'onayli') color = 'bg-onayli';
-      else if(status === 'arizali') color = 'bg-arizali';
-      else if(status === 'bos') color = 'bg-bos';
-      cell.className = `room-cell ${color}`;
+      cell.className = 'room-cell';
       cell.textContent = rno;
       if(roomsWithEntries.has(String(rno))) {
         const flag = document.createElement('div'); flag.className = 'room-flag'; cell.appendChild(flag);
@@ -1168,11 +1074,10 @@ function closePanel() {
   try{localStorage.removeItem('openPanel');}catch(e){}
 }
 function switchPTab(t) {
-  ['list','add','status'].forEach(x => {
+  ['list','add'].forEach(x => {
     q('p-' + x).style.display = (x === t) ? 'block' : 'none';
     q('tab-btn-' + x).classList.toggle('active', x === t);
   });
-  if(t === 'status') renderStatusSelection();
 }
 async function loadEntries() {
   const wrap = q('entries-list');
@@ -1340,30 +1245,6 @@ async function deleteEntryElektra(id) {
   if(!confirm('Kayıt silinsin mi?')) return;
   await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
   showToast('Silindi'); loadEntries(); loadRoomsWithEntries(); renderGrid();
-}
-function renderStatusSelection() {
-  const statuses = [
-    {id:'temiz', label:'TEMİZ', class:'bg-temiz'},
-    {id:'kirli', label:'KİRLİ', class:'bg-kirli'},
-    {id:'onayli', label:'ONAYLI', class:'bg-onayli'},
-    {id:'arizali', label:'ARIZALI', class:'bg-arizali'},
-    {id:'bos', label:'BOŞ', class:'bg-bos'}
-  ];
-  const current = roomStatuses[currentRoom] || 'bos';
-  q('status-opts').innerHTML = statuses.map(s => `
-    <div class="stat-badge ${s.class}" style="padding:20px 10px; border-radius:12px; color:${s.id==='bos'?'#555':'#fff'}; font-weight:800; width:100%; border:${current===s.id?'2.5px solid #212529':'none'}" onclick="updateStatus('${s.id}')">
-      ${s.label}
-    </div>
-  `).join('');
-}
-async function updateStatus(s) {
-  await api('/rest/v1/rooms', {
-    method: 'POST',
-    headers: { 'Prefer': 'resolution=merge-duplicates' },
-    body: JSON.stringify({ room_no: currentRoom, status: s })
-  });
-  roomStatuses[currentRoom] = s;
-  showToast('Güncellendi'); renderStatusSelection(); renderStats(); renderGrid();
 }
 
 /* ── TOKEN / READONLY ── */
