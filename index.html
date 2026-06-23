@@ -19,11 +19,11 @@
   .app{max-width:450px;margin:0 auto;min-height:100vh;background:var(--bg)}
   .app.full-width { max-width: none; }
 
-  /* TOPBAR – tek satır, içinde istatistikler */
+  /* TOPBAR */
   .topbar{
     background:var(--accent);position:sticky;top:0;z-index:100;
     display:flex;align-items:center;gap:10px;padding:12px 16px;
-    flex-wrap: wrap; /* taşma durumunda alt satıra geçmesin diye wrap vermiyoruz, ama istatistikler yatay kaydırmalı */
+    flex-wrap: wrap;
   }
   .topbar-icon{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .topbar-title-group{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
@@ -33,25 +33,48 @@
   .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
   .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
 
-  /* İstatistikler – topbar içinde, başlığın sağında */
+  /* İstatistikler – topbar içinde */
   .topbar-stats-inline {
-    display: none; /* demirbaş modunda gizli */
+    display: none;
     overflow-x: auto;
     scrollbar-width: none;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
     flex-shrink: 1;
     min-width: 0;
     margin-right: 8px;
+    padding: 6px 2px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(4px);
   }
   .topbar-stats-inline.active { display: flex; }
 
-  .stat-badge { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 4px 8px; border-radius: 8px; min-width: 44px; cursor: pointer; border: 2px solid transparent; }
-  .stat-badge .count { font-size: 14px; font-weight: 700; color: #fff; }
-  .stat-badge .s-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.9); }
-  .bg-dt { background: #1565c0; } .bg-dk { background: #6a1a9a; } .bg-co { background: #2e7d32; }
-  .bg-t { background: #4caf50; } .bg-k { background: #ff6d00; } .bg-ooi { background: #880e4f; }
-  .bg-bos { background: #fff; color: #888; border: 1px solid #ddd; }
+  .stat-badge {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 12px;
+    min-width: 52px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    color: #fff;
+    font-weight: 600;
+  }
+  .stat-badge .count { font-size: 16px; font-weight: 700; }
+  .stat-badge .s-label { font-size: 10px; font-weight: 600; opacity: 0.9; letter-spacing: 0.3px; }
+  .stat-badge.active-filter { border-color: #fff; transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+
+  .bg-temiz { background: #2e7d32; }
+  .bg-kirli { background: #e65100; }
+  .bg-onayli { background: #1565c0; }
+  .bg-arizali { background: #c62828; }
+  .bg-bos { background: #fff; color: #555; border: 1px solid #ddd; }
+  .bg-bos .count, .bg-bos .s-label { color: #555; }
 
   .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;}
   .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
@@ -261,7 +284,7 @@
 </head>
 <body>
 <div class="app">
-  <!-- TOPBAR (tek satır) -->
+  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-icon">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
@@ -270,7 +293,7 @@
       <h1 id="topbar-title">Demirbaş Takibi</h1>
       <p id="topbar-sub">Bağlanıyor...</p>
     </div>
-    <!-- Sayaç modunda burada görünecek olan istatistikler -->
+    <!-- Sayaç modunda görünecek olan istatistikler (JS ile doldurulacak) -->
     <div class="topbar-stats-inline" id="topbar-stats-inline"></div>
     <div class="mode-btns">
       <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
@@ -394,7 +417,7 @@
     </div>
   </div>
 
-  <!-- ELEKTRA (SAYAÇ) UI – grid dışında bir şey yok, istatistikler topbar'da -->
+  <!-- ELEKTRA (SAYAÇ) UI -->
   <div id="elektra-ui" style="display:none">
     <div class="grid-container">
       <div class="room-grid" id="egrid"></div>
@@ -1004,7 +1027,6 @@ async function initElektra() {
   renderStats();
   renderGrid();
   updateTopbarHeight();
-  // Yenileme sonrası açık paneli geri yükle
   try{
     const savedPanel=localStorage.getItem('openPanel');
     if(savedPanel){openPanel(parseInt(savedPanel));}
@@ -1026,14 +1048,15 @@ async function loadRoomsWithEntries() {
   } catch(e) {}
 }
 function renderStats() {
-  const counts = { 'dolu-temiz':0, 'dolu-kirli':0, 'cout':0, 'temiz':0, 'kirli':0, 'ooi':0 };
+  const counts = { 'temiz':0, 'kirli':0, 'onayli':0, 'arizali':0, 'bos':0 };
   Object.values(roomStatuses).forEach(s => { if(counts[s] !== undefined) counts[s]++; });
   const stats = [
-    {id:'dolu-temiz', label:'DT', class:'bg-dt'}, {id:'dolu-kirli', label:'DK', class:'bg-dk'},
-    {id:'cout', label:'C/O', class:'bg-co'}, {id:'temiz', label:'TEMİZ', class:'bg-t'},
-    {id:'kirli', label:'KİRLİ', class:'bg-k'}, {id:'ooi', label:'OOI', class:'bg-ooi'}
+    {id:'temiz', label:'TEMİZ', class:'bg-temiz'},
+    {id:'kirli', label:'KİRLİ', class:'bg-kirli'},
+    {id:'onayli', label:'ONAYLI', class:'bg-onayli'},
+    {id:'arizali', label:'ARIZALI', class:'bg-arizali'},
+    {id:'bos', label:'BOŞ', class:'bg-bos'}
   ];
-  // Artık topbar içindeki #topbar-stats-inline hedefleniyor
   const container = q('topbar-stats-inline');
   if (!container) return;
   container.innerHTML = stats.map(s => `
@@ -1056,12 +1079,11 @@ function renderGrid() {
       if(activeStatFilter && status !== activeStatFilter) continue;
       const cell = document.createElement('div');
       let color = 'bg-bos';
-      if(status === 'dolu-temiz') color = 'bg-dt';
-      else if(status === 'dolu-kirli') color = 'bg-dk';
-      else if(status === 'cout') color = 'bg-co';
-      else if(status === 'temiz') color = 'bg-t';
-      else if(status === 'kirli') color = 'bg-k';
-      else if(status === 'ooi') color = 'bg-ooi';
+      if(status === 'temiz') color = 'bg-temiz';
+      else if(status === 'kirli') color = 'bg-kirli';
+      else if(status === 'onayli') color = 'bg-onayli';
+      else if(status === 'arizali') color = 'bg-arizali';
+      else if(status === 'bos') color = 'bg-bos';
       cell.className = `room-cell ${color}`;
       cell.textContent = rno;
       if(roomsWithEntries.has(String(rno))) {
@@ -1071,7 +1093,7 @@ function renderGrid() {
       grid.appendChild(cell);
     }
   }
-  updateTopbarHeight(); // grid render olduktan sonra yüksekliği tekrar kontrol et
+  updateTopbarHeight();
 }
 function handleDrop(e, type) {
   e.preventDefault();
@@ -1321,14 +1343,15 @@ async function deleteEntryElektra(id) {
 }
 function renderStatusSelection() {
   const statuses = [
-    {id:'dolu-temiz', label:'DT', class:'bg-dt'}, {id:'dolu-kirli', label:'DK', class:'bg-dk'},
-    {id:'cout', label:'C/O', class:'bg-co'}, {id:'temiz', label:'TEMİZ', class:'bg-t'},
-    {id:'kirli', label:'KİRLİ', class:'bg-k'}, {id:'ooi', label:'OOI', class:'bg-ooi'},
+    {id:'temiz', label:'TEMİZ', class:'bg-temiz'},
+    {id:'kirli', label:'KİRLİ', class:'bg-kirli'},
+    {id:'onayli', label:'ONAYLI', class:'bg-onayli'},
+    {id:'arizali', label:'ARIZALI', class:'bg-arizali'},
     {id:'bos', label:'BOŞ', class:'bg-bos'}
   ];
   const current = roomStatuses[currentRoom] || 'bos';
   q('status-opts').innerHTML = statuses.map(s => `
-    <div class="stat-badge ${s.class}" style="padding:20px 10px; border-radius:12px; color:${s.id==='bos'?'#888':'#fff'}; font-weight:800; width:100%; border:${current===s.id?'2.5px solid #212529':'none'}" onclick="updateStatus('${s.id}')">
+    <div class="stat-badge ${s.class}" style="padding:20px 10px; border-radius:12px; color:${s.id==='bos'?'#555':'#fff'}; font-weight:800; width:100%; border:${current===s.id?'2.5px solid #212529':'none'}" onclick="updateStatus('${s.id}')">
       ${s.label}
     </div>
   `).join('');
@@ -1435,7 +1458,6 @@ else{
   let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
   setMode(savedMode);checkConn();
   try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=2){goTab(sv);}else startTimer();}catch(e){startTimer();}
-  // Demirbaş modunda son aramayı geri yükle
   if(savedMode==='demirbaş'){
     try{
       const ls=localStorage.getItem('lastSearch');
@@ -1450,7 +1472,6 @@ else{
       }
     }catch(e){}
   }
-  // Scroll pozisyonunu kaydet
   window.addEventListener('scroll',()=>{
     try{sessionStorage.setItem('scrollY',String(Math.round(window.scrollY)));}catch(e){}
   },{passive:true});
