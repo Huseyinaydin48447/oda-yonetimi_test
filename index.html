@@ -689,6 +689,7 @@ function togTagEdit(el){const tr=el.closest('.tags-row'),wasOn=el.classList.cont
 /* ── ARAMA ── */
 async function doSearch(val,silent=false){
   val=String(val).trim();lastVal=val;
+  try{if(val)localStorage.setItem('lastSearch',val);else localStorage.removeItem('lastSearch');}catch(e){}
   const el=q('sresult');
   if(!val){openEntries.clear();el.innerHTML='<div class="empty">Numara girin</div>';return;}
   if(!silent)el.innerHTML='<div class="empty">Aranıyor...</div>';
@@ -1002,7 +1003,12 @@ async function initElektra() {
   await loadRoomsWithEntries();
   renderStats();
   renderGrid();
-  updateTopbarHeight(); // topbar değiştiyse yüksekliği güncelle
+  updateTopbarHeight();
+  // Yenileme sonrası açık paneli geri yükle
+  try{
+    const savedPanel=localStorage.getItem('openPanel');
+    if(savedPanel){openPanel(parseInt(savedPanel));}
+  }catch(e){}
 }
 async function loadStatuses() {
   try {
@@ -1129,11 +1135,16 @@ async function saveElektraEntry() {
 }
 async function openPanel(rno) {
   currentRoom = rno;
+  try{localStorage.setItem('openPanel',rno);}catch(e){}
   q('panel-room-title').textContent = rno;
   q('room-panel').classList.add('open');
   switchPTab('list'); loadEntries();
 }
-function closePanel() { q('room-panel').classList.remove('open'); pendingElektra = []; q('ef-preview').innerHTML = ''; editStates = {}; }
+function closePanel() {
+  q('room-panel').classList.remove('open');
+  pendingElektra = []; q('ef-preview').innerHTML = ''; editStates = {};
+  try{localStorage.removeItem('openPanel');}catch(e){}
+}
 function switchPTab(t) {
   ['list','add','status'].forEach(x => {
     q('p-' + x).style.display = (x === t) ? 'block' : 'none';
@@ -1341,7 +1352,7 @@ function buildReadonlyCard(entry, ei, isE) {
   const urls=entry.photo_urls||[];
   entryImages[ei]=urls;
   const cats=entry.category?entry.category.split(',').filter(Boolean):[];
-  const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/>${entry.type?`<div class="img-label ${entry.type}">${entry.type==='cikis'?'Çıkış':'Giriş'}</div>`:''}</div>`).join('');
+  const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
   return`<div class="entry-card">
     <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
       <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
@@ -1424,6 +1435,25 @@ else{
   let savedMode='demirbaş';try{savedMode=localStorage.getItem('activeMode')||'demirbaş';}catch(e){}
   setMode(savedMode);checkConn();
   try{const sv=parseInt(localStorage.getItem('activeTab'));if(!isNaN(sv)&&sv>=0&&sv<=2){goTab(sv);}else startTimer();}catch(e){startTimer();}
+  // Demirbaş modunda son aramayı geri yükle
+  if(savedMode==='demirbaş'){
+    try{
+      const ls=localStorage.getItem('lastSearch');
+      if(ls){
+        q('sinput').value=ls;
+        doSearch(ls,false).then(()=>{
+          try{
+            const scrollY=parseInt(sessionStorage.getItem('scrollY')||'0');
+            if(scrollY>0)setTimeout(()=>window.scrollTo(0,scrollY),200);
+          }catch(e){}
+        });
+      }
+    }catch(e){}
+  }
+  // Scroll pozisyonunu kaydet
+  window.addEventListener('scroll',()=>{
+    try{sessionStorage.setItem('scrollY',String(Math.round(window.scrollY)));}catch(e){}
+  },{passive:true});
 }
 </script>
 </body>
