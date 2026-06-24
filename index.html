@@ -31,8 +31,9 @@
   .mode-btns{display:flex;gap:5px;flex-shrink:0;margin-left:auto;}
   .mode-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7)}
   .mode-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#fff}
-  .add-meter-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:99py;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.15);color:#fff;display:none;}
-  .add-meter-btn.show{display:inline-flex;align-items:center;gap:5px;}
+  /* Sayaç Ekle butonu */
+  .add-meter-btn{padding:5px 12px;font-size:11px;font-weight:600;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);color:#fff;margin-left:4px;display:none;align-items:center;gap:4px}
+  .add-meter-btn.show{display:inline-flex}
 
   .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;}
   .nav-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
@@ -135,7 +136,7 @@
   .link-btn:active{background:var(--accent-light)}
   .edit-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;}
   .edit-btn:active{background:var(--amber-light)}
-  .del-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99py;font-size:12px;font-weight:500;border:1px solid #f5c6c2;background:var(--danger-light);color:var(--danger);cursor:pointer;font-family:'DM Sans',sans-serif;}
+  .del-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid #f5c6c2;background:var(--danger-light);color:var(--danger);cursor:pointer;font-family:'DM Sans',sans-serif;}
   .del-btn:active{background:#fae5e2}
   .compress-info{font-size:11px;color:var(--accent);background:var(--accent-light);border-radius:99px;padding:2px 10px;display:inline-flex;align-items:center;gap:4px;margin-top:6px}
   .progress-bar-wrap{height:4px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:8px;display:none}
@@ -205,15 +206,6 @@
   }
   .room-flag { position: absolute; top: 1px; right: 1px; width: 5px; height: 5px; border-radius: 50%; background: #00e5ff; }
 
-  /* ODA SEÇİM PANELİ */
-  .room-select-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1600; align-items: flex-end; justify-content: center; padding: 16px; }
-  .room-select-overlay.open { display: flex; }
-  .room-select-sheet { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 448px; padding: 20px; box-shadow: 0 -4px 32px rgba(0,0,0,.15); }
-  .room-select-sheet h3 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
-  .room-select-sheet .field { margin-bottom: 14px; }
-  .room-select-sheet input { font-size: 16px; text-align: center; }
-  .room-select-info { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 16px; }
-
   /* ODA PANELİ */
   .room-panel { position: fixed; inset: 0; background: #f8f9fa; z-index: 1500; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0, 0, 0.2, 1); }
   .room-panel.open { transform: translateY(0); }
@@ -248,6 +240,14 @@
   .ml-cikis-btn:active{background:#fde68a;}
   .wa-btn{color:#25D366;border-color:#b7f0c8;background:#eafaf0;}
   .wa-btn:active{background:#dff5e7;}
+
+  /* Sayaç Ekle Overlay (küçük oda no girişi) */
+  .meter-add-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1600;align-items:center;justify-content:center;padding:20px}
+  .meter-add-overlay.open{display:flex}
+  .meter-add-sheet{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:320px;text-align:center}
+  .meter-add-sheet h3{font-size:18px;margin-bottom:16px}
+  .meter-add-sheet input{text-align:center;font-size:22px;font-weight:600;padding:12px}
+  .meter-add-sheet .btn-primary{margin-top:12px}
 </style>
 </head>
 <body>
@@ -264,8 +264,8 @@
     <div class="mode-btns">
       <button class="mode-btn active" id="mode-d" onclick="setMode('demirbaş')">Demirbaş</button>
       <button class="mode-btn" id="mode-e" onclick="setMode('elektrik')">Sayaç</button>
-      <button class="add-meter-btn" id="add-meter-btn" onclick="openRoomSelectPanel()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <button class="add-meter-btn" id="add-meter-btn" onclick="openMeterAddDialog()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Sayaç Ekle
       </button>
     </div>
@@ -394,19 +394,6 @@
     </div>
   </div>
 
-  <!-- ODA SEÇİM PANELİ (SAYAÇ EKLE) -->
-  <div class="room-select-overlay" id="room-select-overlay" onclick="if(event.target===this)closeRoomSelectPanel()">
-    <div class="room-select-sheet">
-      <h3>Oda Seç</h3>
-      <div class="room-select-info">Elektrik sayacı eklemek istediğiniz oda numarasını girin</div>
-      <div class="field">
-        <input type="number" id="room-select-input" placeholder="Oda numarası (ör: 307)" min="101" max="1518"/>
-      </div>
-      <button class="btn btn-primary" onclick="confirmRoomSelect()">Devam Et</button>
-      <button class="btn" style="width:100%;margin-top:8px;" onclick="closeRoomSelectPanel()">İptal</button>
-    </div>
-  </div>
-
   <!-- SAYAÇ DETAY PANELİ -->
   <div class="room-panel" id="room-panel">
     <div class="panel-header">
@@ -526,6 +513,18 @@
       <div class="dl-bar-wrap"><div class="dl-bar" id="dl-bar"></div></div>
       <div class="dl-stats"><span id="dl-stats-left">0 / 0 fotoğraf</span><span id="dl-stats-right">Hazırlanıyor...</span></div>
       <div class="dl-step" id="dl-step"></div>
+    </div>
+  </div>
+
+  <!-- Sayaç Ekle Dialog (YENİ) -->
+  <div class="meter-add-overlay" id="meter-add-overlay" onclick="if(event.target===this)closeMeterAddDialog()">
+    <div class="meter-add-sheet">
+      <h3>Sayaç Ekle</h3>
+      <div class="field">
+        <span class="label">Oda Numarası</span>
+        <input type="number" id="meter-add-room" placeholder="örn: 307" inputmode="numeric">
+      </div>
+      <button class="btn btn-primary" onclick="goMeterAdd()">Devam</button>
     </div>
   </div>
 
@@ -662,9 +661,10 @@ function setMode(m){
   selTags=[];
   q('mode-d').classList.toggle('active',!isE);
   q('mode-e').classList.toggle('active',isE);
-  q('add-meter-btn').classList.toggle('show',isE);
   q('demirbas-ui').style.display=isE?'none':'block';
   q('elektra-ui').style.display=isE?'block':'none';
+  // Sayaç Ekle butonu sadece sayaç modunda görünsün
+  q('add-meter-btn').classList.toggle('show', isE);
   document.querySelector('.app').classList.toggle('full-width', isE);
   if(!isE){if(tab===3)goTab(0);}
   openEntries.clear();
@@ -990,25 +990,6 @@ function updateTopbarHeight() {
 }
 window.addEventListener('resize', updateTopbarHeight);
 
-/* ── ODA SEÇİM PANELİ (SAYAÇ EKLE) ── */
-function openRoomSelectPanel(){
-  q('room-select-input').value='';
-  q('room-select-overlay').classList.add('open');
-  setTimeout(()=>q('room-select-input').focus(),300);
-}
-function closeRoomSelectPanel(){
-  q('room-select-overlay').classList.remove('open');
-}
-function confirmRoomSelect(){
-  const roomNo=q('room-select-input').value.trim();
-  if(!roomNo){showToast('Oda numarası girin','error');return;}
-  const num=parseInt(roomNo);
-  if(isNaN(num)||num<101||num>1518){showToast('Geçerli oda numarası girin (101-1518)','error');return;}
-  closeRoomSelectPanel();
-  openPanel(num);
-}
-q('room-select-input').addEventListener('keypress',function(e){if(e.key==='Enter')confirmRoomSelect();});
-
 /* ── SAYAÇ GRID (ELEKTRA) ── */
 let roomsWithEntries = new Set();
 let currentRoom = null;
@@ -1292,6 +1273,24 @@ async function deleteEntryElektra(id) {
   if(!confirm('Kayıt silinsin mi?')) return;
   await api(`/rest/v1/entries?id=eq.${id}`, { method: 'DELETE' });
   showToast('Silindi'); loadEntries(); loadRoomsWithEntries(); renderGrid();
+}
+
+/* ── SAYAÇ EKLE DIALOG (YENİ) ── */
+function openMeterAddDialog(){
+  q('meter-add-overlay').classList.add('open');
+  q('meter-add-room').value = '';
+  q('meter-add-room').focus();
+}
+function closeMeterAddDialog(){
+  q('meter-add-overlay').classList.remove('open');
+}
+function goMeterAdd(){
+  const rno = q('meter-add-room').value.trim();
+  if(!rno){showToast('Oda numarası girin','error'); return;}
+  closeMeterAddDialog();
+  openPanel(parseInt(rno));
+  // Doğrudan "YENİ EKLE" sekmesine geç
+  switchPTab('add');
 }
 
 /* ── TOKEN / READONLY ── */
