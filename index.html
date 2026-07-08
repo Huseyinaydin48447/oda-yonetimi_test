@@ -429,7 +429,6 @@
       <div onclick="closePanel()" style="cursor:pointer;font-size:24px">✕</div>
     </div>
     <div class="panel-scroll" id="panel-scroll">
-      <!-- Ana menü (kartlar) -->
       <div id="panel-main-menu" style="display:flex; flex-direction:column; gap:16px; padding:10px;">
         <div class="panel-menu-card" onclick="showMeterView()">
           <div class="panel-menu-icon" style="background: var(--accent-light);">
@@ -462,7 +461,6 @@
         </div>
       </div>
 
-      <!-- Sayaç görünümü -->
       <div id="panel-meter-view" style="display:none;">
         <div style="margin-bottom:15px; display:flex; gap:8px;">
           <button class="btn" onclick="addMeterFromPanel()" style="flex:1;">📸 Yeni Okuma Ekle</button>
@@ -471,7 +469,6 @@
         <div class="meter-dashboard" id="entries-list"></div>
       </div>
 
-      <!-- Plaka görünümü -->
       <div id="panel-plaka-view" style="display:none;">
         <div style="margin-bottom:15px; display:flex; gap:8px;">
           <button class="btn" onclick="showPlakaForm()" style="flex:1;">➕ Plaka Ekle</button>
@@ -1163,7 +1160,6 @@ function openPanel(rno) {
   try{localStorage.setItem('openPanel',rno);}catch(e){}
   q('panel-room-title').textContent = rno;
   q('room-panel').classList.add('open');
-  // En son hangi sekmede kaldıysak onu aç
   const lastView = localStorage.getItem('panelView') || 'menu';
   if (lastView === 'meter') showMeterView();
   else if (lastView === 'plaka') showPlakaView();
@@ -1379,12 +1375,13 @@ async function createPlakaLink(id) {
     const entry = await fetchEntry(id);
     if(!entry) return;
     const token = genToken();
+    // Plaka linklerinde entry_type boş bırakıyoruz, böylece readonly görünümde type filtresi olmaz.
     await api('/rest/v1/tokens', {
       method: 'POST',
       headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room_no: String(currentRoom), mod: 'plaka', token, entry_date: entry.checkin_date, entry_type: 'plaka' })
+      body: JSON.stringify({ room_no: String(currentRoom), mod: 'plaka', token, entry_date: entry.checkin_date, entry_type: '' })
     });
-    const url = `${location.origin+location.pathname}?oda=${currentRoom}&mod=plaka&tarih=${entry.checkin_date}&token=${token}&type=plaka`;
+    const url = `${location.origin+location.pathname}?oda=${currentRoom}&mod=plaka&tarih=${entry.checkin_date}&token=${token}`;
     navigator.clipboard.writeText(url).then(() => showToast('Link kopyalandı!', 'success'));
   } catch(e) { showToast('Hata', 'error'); }
 }
@@ -1471,7 +1468,6 @@ async function doPlakaSearch() {
   }
   resultsDiv.innerHTML = '<div class="empty">Aranıyor...</div>';
   try {
-    // Supabase'de mode='plaka' olan kayıtlar içinde category alanında LIKE araması
     const res = await api(`/rest/v1/entries?mode=eq.plaka&category=ilike.*${encodeURIComponent(query)}*&order=checkin_date.desc`);
     const data = await res.json();
     if (!data || !data.length) {
@@ -1513,14 +1509,18 @@ const _p=new URLSearchParams(location.search);
 const _oda=_p.get('oda'),_mod=_p.get('mod'),_token=_p.get('token'),_tarih=_p.get('tarih'),_type=_p.get('type');
 
 function showAccessError(){document.querySelector('.nav').style.display='none';document.querySelector('.mode-btns').style.display='none';q('topbar-title').textContent='Erişim Yok';q('s1').remove();q('s2').remove();document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';q('sresult').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:32px"><div style="font-size:17px;font-weight:500;margin-bottom:8px">Bu sayfaya erişim yok</div><div style="font-size:13px;color:var(--muted)">Geçersiz veya süresi dolmuş link.</div></div>`;}
-function buildReadonlyCard(entry, ei, isE) {
+
+function buildReadonlyCard(entry, ei, isE, mod='') {
   const urls=entry.photo_urls||[];
   entryImages[ei]=urls;
   const cats=entry.category?entry.category.split(',').filter(Boolean):[];
   const imgs=urls.map((u,i)=>`<div class="img-thumb" onclick="openLb(${ei},${i})"><img src="${u}" loading="lazy"/></div>`).join('');
+  let badgeText = 'Giriş';
+  if (mod === 'plaka') badgeText = 'Plaka';
+  else if (entry.type === 'cikis') badgeText = 'Çıkış';
   return`<div class="entry-card">
     <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
-      <div class="date-badge${isE?' e':''}">${entry.type==='cikis'?'Çıkış':'Giriş'} · ${fmtDate(entry.checkin_date)}</div>
+      <div class="date-badge${isE?' e':''}">${badgeText} · ${fmtDate(entry.checkin_date)}</div>
       <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
       <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
@@ -1533,16 +1533,20 @@ function buildReadonlyCard(entry, ei, isE) {
     </div>
   </div>`;
 }
+
 async function showReadonlyEntry(oda, mod, tarih, entryType) {
+  // Plaka modu için label ve badge ayarları
+  const label = mod === 'elektrik' ? 'Sayaç' : (mod === 'plaka' ? 'Plaka' : 'Oda');
+  const isE = mod === 'elektrik' || mod === 'plaka'; // amber badge için
+  q('topbar-title').textContent = `${label} ${oda}`;
+  q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
+
   if (entryType === 'pair') {
     const tokenData = await api(
       `/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&select=paired_date`
     ).then(r => r.json()).catch(() => []);
     const cikisDate = tokenData[0]?.paired_date;
     if (!cikisDate) { showAccessError(); return; }
-    const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
-    const isE = mod === 'elektrik';
-    q('topbar-title').textContent = `${label} ${oda}`;
     q('topbar-sub').textContent = `${fmtDate(tarih)} – ${fmtDate(cikisDate)} · Salt okunur`;
     const el = q('sresult');
     el.innerHTML = '<div class="empty">Yükleniyor...</div>';
@@ -1557,29 +1561,28 @@ async function showReadonlyEntry(oda, mod, tarih, entryType) {
       let ei = 0; entryImages = {}; entryData = {};
       const totalP = (giris?.photo_urls?.length || 0) + (cikis?.photo_urls?.length || 0);
       let html = `<div class="room-header"><div class="room-num e">${oda}</div><div class="room-summary"><strong>${label} ${oda}</strong><span>${fmtDate(tarih)} – ${fmtDate(cikisDate)} · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
-      const girisEl = giris ? buildReadonlyCard(giris, ei++, isE) : '';
-      const cikisEl = cikis ? buildReadonlyCard(cikis, ei++, isE) : '';
+      const girisEl = giris ? buildReadonlyCard(giris, ei++, isE, mod) : '';
+      const cikisEl = cikis ? buildReadonlyCard(cikis, ei++, isE, mod) : '';
       html += `<div style="margin-top:14px;"><div class="entries-grid">${girisEl}${cikisEl}</div></div>`;
       el.innerHTML = html;
     } catch(e) { el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>'; }
     return;
   }
-  const label = mod === 'elektrik' ? 'Sayaç' : 'Oda';
-  const isE = mod === 'elektrik';
-  q('topbar-title').textContent = `${label} ${oda}`;
-  q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
+
+  // Normal tekil kayıt (demirbaş, elektrik, plaka)
   const el = q('sresult');
   el.innerHTML = '<div class="empty">Yükleniyor...</div>';
   try {
     let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
-    if (entryType) url += `&type=eq.${encodeURIComponent(entryType)}`;
+    // entryType varsa ve pair değilse type filtresi ekleyelim, ama plaka için boş geliyor zaten
+    if (entryType && entryType !== 'pair') url += `&type=eq.${encodeURIComponent(entryType)}`;
     const res = await api(url);
     const data = await res.json();
     if (!data.length) { el.innerHTML = `<div class="empty">Bu tarihe ait kayıt bulunamadı</div>`; return; }
     const totalP = data.reduce((s,e) => s + (e.photo_urls||[]).length, 0);
     let html = `<div class="room-header"><div class="room-num${isE?' e':''}">${oda}</div><div class="room-summary"><strong>${label} ${oda} · ${fmtDate(tarih)}</strong><span>${data.length} kayıt · ${totalP} fotoğraf · Salt Okunur</span></div></div>`;
     let ei = 0; entryImages = {}; entryData = {};
-    data.forEach(entry => { html += buildReadonlyCard(entry, ei++, isE); });
+    data.forEach(entry => { html += buildReadonlyCard(entry, ei++, isE, mod); });
     el.innerHTML = html;
   } catch(e) { el.innerHTML = '<div class="empty">Bağlantı hatası: ' + e.message + '</div>'; }
 }
@@ -1591,7 +1594,9 @@ if(_oda&&_token){
   q('s1').remove();q('s2').remove();
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
-  const _m=_mod==='elektrik'?'elektrik':'demirbaş';mode=_m;
+  // _mod plaka olabilir, onu da doğru mod olarak ata
+  const _m = _mod==='elektrik' ? 'elektrik' : (_mod==='plaka' ? 'plaka' : 'demirbaş');
+  mode=_m;
   api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
     .then(r=>r.json()).then(data=>{if(!data||!data.length){showAccessError();return;}const tr=data[0];if(_tarih){if(tr.entry_date&&tr.entry_date!==_tarih){showAccessError();return;}showReadonlyEntry(_oda, _m, _tarih, _type);}else{showReadonlyEntry(_oda,_m,tr.entry_date||today());}}).catch(()=>showAccessError());
 }else if(_oda&&!_token){showAccessError();}
