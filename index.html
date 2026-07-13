@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>Oda Yönetimi · Demirbaş &amp; Elektrik</title>
+<title>Oda Yönetimi · Demirbaş & Elektrik</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
   :root {
@@ -269,6 +269,7 @@
     border: 1px solid var(--border); margin-bottom: 8px; cursor: pointer;
   }
   .plaka-result-item:active { background: var(--surface2); }
+  .phone-link { color: #25D366; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
 </style>
 </head>
 <body>
@@ -480,6 +481,7 @@
           <div class="field"><label>Oda Numarası</label><input type="text" id="plaka-room" disabled/></div>
           <div class="field"><label>Tarih</label><input type="date" id="plaka-date"/></div>
           <div class="field"><label>Plaka</label><input type="text" id="plaka-no" placeholder="34 ABC 123"/></div>
+          <div class="field"><label>Telefon (isteğe bağlı)</label><input type="tel" id="plaka-phone" placeholder="05XX XXX XX XX"/></div>
           <div class="field"><label>Açıklama</label><textarea id="plaka-note" rows="2" placeholder="Açıklama..."></textarea></div>
           <div class="field">
             <label>Fotoğraf (opsiyonel)</label>
@@ -1246,7 +1248,16 @@ async function deleteMeterEntry(id) {
   showToast('Silindi'); loadMeterEntries(); loadRoomsWithEntries(); renderGrid();
 }
 
-/* ── PLAKA GÖRÜNÜMÜ ── */
+/* ── PLAKA GÖRÜNÜMÜ (TELEFON DESTEĞİ İLE) ── */
+function parsePlakaNote(note) {
+  if (!note) return { aciklama: '', telefon: '' };
+  if (note.includes('|||')) {
+    const parts = note.split('|||');
+    return { aciklama: parts[0] || '', telefon: parts[1] || '' };
+  }
+  return { aciklama: note, telefon: '' };
+}
+
 async function loadPlakaEntries() {
   const wrap = q('plaka-list');
   wrap.innerHTML = '<div style="padding:20px; text-align:center">Yükleniyor...</div>';
@@ -1256,11 +1267,17 @@ async function loadPlakaEntries() {
     if(!data.length) { wrap.innerHTML = '<div style="padding:20px; text-align:center; color:#888">Henüz plaka kaydı yok.</div>'; return; }
     wrap.innerHTML = data.map(e => {
       const plaka = e.category || '';
+      const { aciklama, telefon } = parsePlakaNote(e.note);
+      const phoneHtml = telefon ? `<a href="tel:${telefon.replace(/\s/g,'')}" class="phone-link" onclick="event.stopPropagation()">📞 ${telefon}</a>` : '';
       return `
       <div class="entry-card" style="margin-bottom:8px;">
         <div class="entry-head" style="cursor:default;">
           <div class="date-badge e">📅 ${fmtDate(e.checkin_date)}</div>
-          <div class="entry-meta"><div class="nt">🚗 ${plaka || 'Plaka yok'}</div><div class="cat">${e.note||''}</div></div>
+          <div class="entry-meta">
+            <div class="nt">🚗 ${plaka || 'Plaka yok'}</div>
+            <div class="cat">${aciklama || ''}</div>
+            ${phoneHtml ? `<div class="cat">${phoneHtml}</div>` : ''}
+          </div>
           <span class="entry-count">${(e.photo_urls||[]).length} foto</span>
         </div>
         <div class="entry-footer"><div class="entry-footer-actions">
@@ -1277,6 +1294,7 @@ function showPlakaForm(editId = null) {
   q('plaka-room').value = currentRoom;
   q('plaka-date').value = today();
   q('plaka-no').value = '';
+  q('plaka-phone').value = '';
   q('plaka-note').value = '';
   q('plaka-photo').value = '';
   q('plaka-photo-preview').innerHTML = '';
@@ -1288,7 +1306,9 @@ function showPlakaForm(editId = null) {
       if(entry) {
         q('plaka-date').value = entry.checkin_date || '';
         q('plaka-no').value = entry.category || '';
-        q('plaka-note').value = entry.note || '';
+        const { aciklama, telefon } = parsePlakaNote(entry.note);
+        q('plaka-note').value = aciklama || '';
+        q('plaka-phone').value = telefon || '';
         if(entry.photo_urls && entry.photo_urls.length) {
           q('plaka-photo-preview').innerHTML = entry.photo_urls.map(u => `<div class="thumb-item"><img src="${u}"></div>`).join('');
         }
@@ -1307,8 +1327,10 @@ async function savePlaka() {
   const id = q('plaka-edit-id').value;
   const date = q('plaka-date').value;
   const plakaNo = q('plaka-no').value.trim();
-  const note = q('plaka-note').value.trim();
+  const telefon = q('plaka-phone').value.trim();
+  const aciklama = q('plaka-note').value.trim();
   if (!date || !plakaNo) { showToast('Tarih ve plaka zorunlu', 'error'); return; }
+  const combinedNote = aciklama + (telefon ? '|||' + telefon : '');
   const btn = q('plaka-save-btn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span>';
   try {
     let photo_urls = [];
@@ -1324,7 +1346,7 @@ async function savePlaka() {
       mode: 'plaka',
       checkin_date: date,
       category: plakaNo,
-      note: note,
+      note: combinedNote,
       photo_urls: photo_urls
     };
     if (id) {
@@ -1375,7 +1397,6 @@ async function createPlakaLink(id) {
     const entry = await fetchEntry(id);
     if(!entry) return;
     const token = genToken();
-    // Plaka linklerinde entry_type boş bırakıyoruz, böylece readonly görünümde type filtresi olmaz.
     await api('/rest/v1/tokens', {
       method: 'POST',
       headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' },
@@ -1449,7 +1470,7 @@ async function saveQuickAddEntry() {
   }
 }
 
-/* ── PLAKA ARAMA (YENİ) ── */
+/* ── PLAKA ARAMA (TELEFON DESTEĞİ İLE) ── */
 function openPlakaSearch() {
   q('plaka-search-overlay').classList.add('open');
   q('plaka-search-input').value = '';
@@ -1477,13 +1498,16 @@ async function doPlakaSearch() {
     resultsDiv.innerHTML = data.map(entry => {
       const plaka = entry.category || '';
       const date = fmtDate(entry.checkin_date);
-      const note = entry.note || '';
+      const { aciklama, telefon } = parsePlakaNote(entry.note);
+      const phoneHtml = telefon ? `<div><a href="tel:${telefon.replace(/\s/g,'')}" class="phone-link">📞 ${telefon}</a></div>` : '';
+      const noteHtml = aciklama ? `<div style="font-size:12px;color:var(--text);margin-top:2px;">${aciklama}</div>` : '';
       return `
         <div class="plaka-result-item" onclick="goToRoomFromPlaka('${entry.room_no}')">
           <div>
             <div style="font-weight:600;font-size:15px;">🚗 ${plaka}</div>
             <div style="font-size:12px;color:var(--muted);">Oda ${entry.room_no} · ${date}</div>
-            ${note ? `<div style="font-size:12px;color:var(--text);margin-top:2px;">${note}</div>` : ''}
+            ${noteHtml}
+            ${phoneHtml}
           </div>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
         </div>
@@ -1518,10 +1542,15 @@ function buildReadonlyCard(entry, ei, isE, mod='') {
   let badgeText = 'Giriş';
   if (mod === 'plaka') badgeText = 'Plaka';
   else if (entry.type === 'cikis') badgeText = 'Çıkış';
+  let noteDisplay = entry.note || '';
+  if (mod === 'plaka') {
+    const { aciklama, telefon } = parsePlakaNote(entry.note);
+    noteDisplay = aciklama + (telefon ? ' · 📞 ' + telefon : '');
+  }
   return`<div class="entry-card">
     <div class="entry-head" data-ei="${ei}" onclick="toggleEntry(this)">
       <div class="date-badge${isE?' e':''}">${badgeText} · ${fmtDate(entry.checkin_date)}</div>
-      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${entry.note?`<div class="nt">${entry.note}</div>`:''}</div>
+      <div class="entry-meta">${cats.length?`<div class="cat">${cats.join(' · ')}</div>`:''}${noteDisplay?`<div class="nt">${noteDisplay}</div>`:''}</div>
       <span class="entry-count">${urls.length} foto</span>
       <svg class="chevron open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
@@ -1535,9 +1564,8 @@ function buildReadonlyCard(entry, ei, isE, mod='') {
 }
 
 async function showReadonlyEntry(oda, mod, tarih, entryType) {
-  // Plaka modu için label ve badge ayarları
   const label = mod === 'elektrik' ? 'Sayaç' : (mod === 'plaka' ? 'Plaka' : 'Oda');
-  const isE = mod === 'elektrik' || mod === 'plaka'; // amber badge için
+  const isE = mod === 'elektrik' || mod === 'plaka';
   q('topbar-title').textContent = `${label} ${oda}`;
   q('topbar-sub').textContent = `${fmtDate(tarih)} · Salt okunur`;
 
@@ -1569,12 +1597,10 @@ async function showReadonlyEntry(oda, mod, tarih, entryType) {
     return;
   }
 
-  // Normal tekil kayıt (demirbaş, elektrik, plaka)
   const el = q('sresult');
   el.innerHTML = '<div class="empty">Yükleniyor...</div>';
   try {
     let url = `/rest/v1/entries?room_no=eq.${encodeURIComponent(oda)}&checkin_date=eq.${encodeURIComponent(tarih)}&mode=eq.${encodeURIComponent(mod)}&order=checkin_date.desc`;
-    // entryType varsa ve pair değilse type filtresi ekleyelim, ama plaka için boş geliyor zaten
     if (entryType && entryType !== 'pair') url += `&type=eq.${encodeURIComponent(entryType)}`;
     const res = await api(url);
     const data = await res.json();
@@ -1594,7 +1620,6 @@ if(_oda&&_token){
   q('s1').remove();q('s2').remove();
   document.querySelector('#s0 > div:first-child').style.display='none';q('stab-room-content').style.display='none';q('stab-date-content').style.display='none';
   q('sresult').innerHTML='<div class="empty">Doğrulanıyor...</div>';
-  // _mod plaka olabilir, onu da doğru mod olarak ata
   const _m = _mod==='elektrik' ? 'elektrik' : (_mod==='plaka' ? 'plaka' : 'demirbaş');
   mode=_m;
   api(`/rest/v1/tokens?token=eq.${encodeURIComponent(_token)}&room_no=eq.${encodeURIComponent(_oda)}&mod=eq.${encodeURIComponent(_m)}&select=id,entry_date,paired_date`)
